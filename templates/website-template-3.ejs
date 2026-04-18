@@ -1,0 +1,98 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title><%= businessName %> | <%= tagline %></title>
+  <link rel="stylesheet" href="style.css">
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;700;900&family=JetBrains+Mono:wght@400;700&display=swap" rel="stylesheet">
+</head>
+<body class="tmpl-dev-body">
+  <div class="tmpl-dev-bg-glow"></div>
+
+  <nav class="tmpl-dev-nav">
+    <div class="tmpl-dev-container tmpl-dev-nav-flex">
+      <div class="tmpl-dev-logo">
+        <span class="tmpl-dev-accent">const</span> <%= businessName.replace(/\s+/g, '') %> <span class="tmpl-dev-accent">=</span> 
+      </div>
+      <ul class="tmpl-dev-links">
+        <li><a href="#about">~/about</a></li>
+        <li><a href="#projects">~/projects</a></li>
+        <li><a href="#contact" class="tmpl-dev-btn-outline">initiateContact()</a></li>
+      </ul>
+    </div>
+  </nav>
+
+  <header class="tmpl-dev-hero">
+    <div class="tmpl-dev-container">
+      <div class="tmpl-dev-badge">
+        <span class="tmpl-dev-pulse"></span> SYSTEM STATUS: <%= tone.toUpperCase() %>
+      </div>
+      <h1 class="tmpl-dev-title"><%= businessName %></h1>
+      <h2 class="tmpl-dev-tagline">&gt; <%= tagline %><span class="tmpl-dev-cursor">_</span></h2>
+      <p class="tmpl-dev-hero-desc"><%= about %></p>
+      <a href="#projects" class="tmpl-dev-btn-primary">View Output.log</a>
+    </div>
+  </header>
+
+  <section id="projects" class="tmpl-dev-section">
+    <div class="tmpl-dev-container">
+      <div class="tmpl-dev-section-header">
+        <h3 class="tmpl-dev-section-title">/* Technical Capabilities */</h3>
+      </div>
+      
+      <div class="tmpl-dev-grid">
+        <% products.forEach((product, index) => { %>
+          <div class="tmpl-dev-card">
+            <div class="tmpl-dev-card-header">
+              <span class="tmpl-dev-card-id">0x0<%= index + 1 %></span>
+              <div class="tmpl-dev-card-dots">
+                <span></span><span></span><span></span>
+              </div>
+            </div>
+            <h4 class="tmpl-dev-card-title"><%= product %></h4>
+            <p class="tmpl-dev-card-desc">Executing high-performance modules and deploying scalable architecture for <%= product.toLowerCase() %> workflows.</p>
+            <div class="tmpl-dev-card-footer">
+              <span class="tmpl-dev-tag">System.Ready</span>
+            </div>
+          </div>
+        <% }); %>
+      </div>
+    </div>
+  </section>
+
+  <section id="contact" class="tmpl-dev-section tmpl-dev-border-top">
+    <div class="tmpl-dev-container">
+      <div class="tmpl-dev-contact-wrapper">
+        <div class="tmpl-dev-contact-text">
+          <h3 class="tmpl-dev-section-title">/* Initialize Connection */</h3>
+          <p>Awaiting inputs. Open a socket to discuss your next project, architecture, or collaboration.</p>
+        </div>
+        <form class="tmpl-dev-form">
+          <div class="tmpl-dev-input-group">
+            <label>std::string name;</label>
+            <input type="text" required placeholder="Enter your name">
+          </div>
+          <div class="tmpl-dev-input-group">
+            <label>std::string email;</label>
+            <input type="email" required placeholder="Enter your email">
+          </div>
+          <div class="tmpl-dev-input-group">
+            <label>std::string payload;</label>
+            <textarea required rows="4" placeholder="Transmit message..."></textarea>
+          </div>
+          <button type="submit" class="tmpl-dev-btn-primary tmpl-dev-full-width">POST /api/message</button>
+        </form>
+      </div>
+    </div>
+  </section>
+
+  <footer class="tmpl-dev-footer">
+    <div class="tmpl-dev-container">
+      <p>&copy; <%= year %> <%= businessName %>. Compiled successfully.</p>
+    </div>
+  </footer>
+
+  <script src="script.js"></script>
+</body>
+</html>

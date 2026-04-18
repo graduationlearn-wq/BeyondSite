@@ -1,0 +1,115 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title><%= businessName %> | <%= tagline %></title>
+  <link rel="stylesheet" href="style.css">
+  <link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@400;500;600;700&display=swap" rel="stylesheet">
+</head>
+<body class="tmpl-web3-body">
+  <div class="tmpl-web3-orb orb-1"></div>
+  <div class="tmpl-web3-orb orb-2"></div>
+
+  <nav class="tmpl-web3-nav">
+    <div class="tmpl-web3-container tmpl-web3-nav-flex">
+      <div class="tmpl-web3-logo"><%= businessName %></div>
+      <ul class="tmpl-web3-links">
+        <li><a href="#about">About</a></li>
+        <li><a href="#features">Features</a></li>
+        <li><a href="#contact" class="tmpl-web3-btn-glow">Launch App</a></li>
+      </ul>
+    </div>
+  </nav>
+
+  <header class="tmpl-web3-hero">
+    <div class="tmpl-web3-container tmpl-web3-hero-content">
+      <div class="tmpl-web3-badge">
+        <span class="tmpl-web3-badge-dot"></span> Next-Gen <%= tone %> Protocol
+      </div>
+      <h1 class="tmpl-web3-title">
+        The Future of <br>
+        <span class="tmpl-web3-gradient-text"><%= businessName %></span>
+      </h1>
+      <p class="tmpl-web3-tagline"><%= tagline %></p>
+      <div class="tmpl-web3-hero-actions">
+        <a href="#features" class="tmpl-web3-btn-glow large">Explore Ecosystem</a>
+        <a href="#about" class="tmpl-web3-btn-ghost">Read Whitepaper</a>
+      </div>
+    </div>
+  </header>
+
+  <section id="about" class="tmpl-web3-section">
+    <div class="tmpl-web3-container">
+      <div class="tmpl-web3-glass-panel">
+        <div class="tmpl-web3-glass-content">
+          <h2 class="tmpl-web3-section-title">Decentralized & Driven</h2>
+          <p class="tmpl-web3-desc"><%= about %></p>
+          <div class="tmpl-web3-stats">
+            <div class="tmpl-web3-stat">
+              <h4>99.9%</h4>
+              <p>Uptime</p>
+            </div>
+            <div class="tmpl-web3-stat">
+              <h4>&lt;10ms</h4>
+              <p>Latency</p>
+            </div>
+            <div class="tmpl-web3-stat">
+              <h4>Web3</h4>
+              <p>Native</p>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <section id="features" class="tmpl-web3-section">
+    <div class="tmpl-web3-container">
+      <div class="tmpl-web3-section-header">
+        <h2 class="tmpl-web3-section-title">Core <span class="tmpl-web3-gradient-text">Infrastructure</span></h2>
+        <p class="tmpl-web3-desc">Built for scale, security, and next-generation performance.</p>
+      </div>
+      
+      <div class="tmpl-web3-grid">
+        <% products.forEach((product, index) => { %>
+          <div class="tmpl-web3-card">
+            <div class="tmpl-web3-card-icon">✦</div>
+            <h3 class="tmpl-web3-card-title"><%= product %></h3>
+            <p class="tmpl-web3-card-desc">Seamless integration and unparalleled efficiency leveraging our proprietary <%= product.toLowerCase() %> architecture.</p>
+            <div class="tmpl-web3-card-border"></div>
+          </div>
+        <% }); %>
+      </div>
+    </div>
+  </section>
+
+  <section id="contact" class="tmpl-web3-section">
+    <div class="tmpl-web3-container">
+      <div class="tmpl-web3-cta-box">
+        <h2 class="tmpl-web3-section-title">Join the Network</h2>
+        <p class="tmpl-web3-desc">Connect with our team to start building the future today.</p>
+        
+        <form class="tmpl-web3-form">
+          <div class="tmpl-web3-form-row">
+            <input type="text" placeholder="Wallet ID or Name" required>
+            <input type="email" placeholder="Email Address" required>
+          </div>
+          <button type="submit" class="tmpl-web3-btn-glow full-width">Initialize Connection</button>
+        </form>
+      </div>
+    </div>
+  </section>
+
+  <footer class="tmpl-web3-footer">
+    <div class="tmpl-web3-container">
+      <div class="tmpl-web3-footer-flex">
+        <div class="tmpl-web3-logo"><%= businessName %></div>
+        <p class="tmpl-web3-copyright">&copy; <%= year %> <%= businessName %> Network. All rights reserved.</p>
+      </div>
+    </div>
+  </footer>
+
+  <script src="script.js"></script>
+</body>
+</html>

@@ -1,0 +1,142 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title><%= businessName %> | Local Experts</title>
+  <link rel="stylesheet" href="style.css">
+  <link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;700&display=swap" rel="stylesheet">
+</head>
+<body class="tmpl-local-body">
+  <div class="tmpl-local-topbar">
+    <div class="tmpl-local-container tmpl-local-topbar-flex">
+      <span>📍 Proudly serving our local community</span>
+      <span>⭐ 5-Star <%= tone.charAt(0).toUpperCase() + tone.slice(1) %> Service</span>
+    </div>
+  </div>
+
+  <nav class="tmpl-local-nav">
+    <div class="tmpl-local-container tmpl-local-nav-flex">
+      <div class="tmpl-local-logo"><%= businessName %></div>
+      <ul class="tmpl-local-links">
+        <li><a href="#about">Our Story</a></li>
+        <li><a href="#services">Services</a></li>
+        <li><a href="#contact" class="tmpl-local-btn-primary">Book Appointment</a></li>
+      </ul>
+    </div>
+  </nav>
+
+  <header class="tmpl-local-hero">
+    <div class="tmpl-local-container tmpl-local-hero-grid">
+      <div class="tmpl-local-hero-text">
+        <h1 class="tmpl-local-title"><%= businessName %></h1>
+        <p class="tmpl-local-tagline"><%= tagline %></p>
+        <p class="tmpl-local-hero-desc">Your trusted local experts delivering top-tier solutions with a personal touch. Discover the difference of working with professionals who care.</p>
+        <div class="tmpl-local-actions">
+          <a href="#contact" class="tmpl-local-btn-primary large">Get a Free Quote</a>
+          <a href="#services" class="tmpl-local-btn-outline large">Explore Services</a>
+        </div>
+      </div>
+      <div class="tmpl-local-hero-image">
+        <div class="tmpl-local-image-placeholder">
+          <div class="tmpl-local-shape-1"></div>
+          <div class="tmpl-local-shape-2"></div>
+          <span class="tmpl-local-image-text"><%= businessName.charAt(0) %></span>
+        </div>
+      </div>
+    </div>
+  </header>
+
+  <section id="services" class="tmpl-local-section tmpl-local-bg-light">
+    <div class="tmpl-local-container">
+      <div class="tmpl-local-section-header center">
+        <span class="tmpl-local-badge">What We Do</span>
+        <h2 class="tmpl-local-section-title">Our Premium Services</h2>
+        <div class="tmpl-local-divider"></div>
+      </div>
+      
+      <div class="tmpl-local-services-grid">
+        <% products.forEach((product) => { %>
+          <div class="tmpl-local-service-card">
+            <div class="tmpl-local-card-icon">
+              <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M22 11.08V12a10 10 0 1 1-5.93-9.14"></path><polyline points="22 4 12 14.01 9 11.01"></polyline></svg>
+            </div>
+            <h3 class="tmpl-local-card-title"><%= product %></h3>
+            <p class="tmpl-local-card-desc">Reliable, high-quality <%= product.toLowerCase() %> services tailored to meet your exact needs and exceed expectations.</p>
+            <a href="#contact" class="tmpl-local-card-link">Request Service &rarr;</a>
+          </div>
+        <% }); %>
+      </div>
+    </div>
+  </section>
+
+  <section id="about" class="tmpl-local-section">
+    <div class="tmpl-local-container tmpl-local-about-grid">
+      <div class="tmpl-local-about-content">
+        <span class="tmpl-local-badge">About Us</span>
+        <h2 class="tmpl-local-section-title">Committed to our community.</h2>
+        <div class="tmpl-local-divider"></div>
+        <p class="tmpl-local-body-text"><%= about %></p>
+        <ul class="tmpl-local-checklist">
+          <li>✓ Fully licensed and insured professionals</li>
+          <li>✓ 100% satisfaction guarantee on all work</li>
+          <li>✓ Transparent pricing with no hidden fees</li>
+        </ul>
+      </div>
+      <div class="tmpl-local-hours-card">
+        <h3>Business Hours</h3>
+        <ul class="tmpl-local-hours-list">
+          <li><span>Monday - Friday</span><span>8:00 AM - 6:00 PM</span></li>
+          <li><span>Saturday</span><span>9:00 AM - 4:00 PM</span></li>
+          <li><span>Sunday</span><span>Closed</span></li>
+        </ul>
+        <div class="tmpl-local-help-box">
+          <p>Need emergency assistance?</p>
+          <h4>Available 24/7</h4>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <section id="contact" class="tmpl-local-section tmpl-local-bg-navy">
+    <div class="tmpl-local-container">
+      <div class="tmpl-local-contact-wrapper">
+        <div class="tmpl-local-contact-info">
+          <h2 class="tmpl-local-section-title text-white">Let's get started.</h2>
+          <p class="tmpl-local-body-text text-light">Fill out the form below and one of our friendly team members will get back to you immediately to schedule your consultation.</p>
+        </div>
+        <form class="tmpl-local-form">
+          <div class="tmpl-local-form-grid">
+            <div class="tmpl-local-input-group">
+              <label>First Name</label>
+              <input type="text" required>
+            </div>
+            <div class="tmpl-local-input-group">
+              <label>Last Name</label>
+              <input type="text" required>
+            </div>
+          </div>
+          <div class="tmpl-local-input-group">
+            <label>Email Address</label>
+            <input type="email" required>
+          </div>
+          <div class="tmpl-local-input-group">
+            <label>How can we help you?</label>
+            <textarea rows="4" required></textarea>
+          </div>
+          <button type="submit" class="tmpl-local-btn-accent full-width">Send Message</button>
+        </form>
+      </div>
+    </div>
+  </section>
+
+  <footer class="tmpl-local-footer">
+    <div class="tmpl-local-container tmpl-local-footer-flex">
+      <div class="tmpl-local-logo"><%= businessName %></div>
+      <p>&copy; <%= year %> <%= businessName %>. All rights reserved.</p>
+    </div>
+  </footer>
+
+  <script src="script.js"></script>
+</body>
+</html>

@@ -1,0 +1,108 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title><%= businessName %> | <%= tagline %></title>
+  <link rel="stylesheet" href="style.css">
+  <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+</head>
+<body class="premium-template-body">
+  <nav class="premium-nav">
+    <div class="premium-container nav-flex">
+      <div class="premium-logo"><%= businessName %></div>
+      <ul class="premium-nav-links">
+        <li><a href="#about">About</a></li>
+        <li><a href="#services">Services</a></li>
+        <li><a href="#contact" class="premium-btn-nav">Get in Touch</a></li>
+      </ul>
+    </div>
+  </nav>
+
+  <header class="premium-hero">
+    <div class="premium-hero-bg"></div>
+    <div class="premium-container">
+      <div class="premium-hero-content">
+        <div class="premium-badge"><%= tone.charAt(0).toUpperCase() + tone.slice(1) %> Solutions</div>
+        <h1 class="premium-title"><%= businessName %></h1>
+        <p class="premium-tagline"><%= tagline %></p>
+        <div class="premium-hero-actions">
+          <button class="premium-btn-primary" onclick="document.getElementById('services').scrollIntoView({behavior:'smooth'})">Explore Services</button>
+        </div>
+      </div>
+    </div>
+  </header>
+
+  <section id="about" class="premium-section">
+    <div class="premium-container">
+      <div class="premium-grid-2">
+        <div class="premium-about-text">
+          <h2 class="premium-section-title">Who We Are</h2>
+          <div class="premium-title-underline"></div>
+          <p class="premium-body-text"><%= about %></p>
+        </div>
+        <div class="premium-about-visual">
+          <div class="premium-glass-card">
+            <div class="glass-icon">✨</div>
+            <h3>Committed to Excellence</h3>
+            <p>Delivering high-quality results tailored to your specific needs and industry standards.</p>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <section id="services" class="premium-section premium-bg-alt">
+    <div class="premium-container">
+      <div class="premium-section-header">
+        <h2 class="premium-section-title">What We Offer</h2>
+        <div class="premium-title-underline center"></div>
+        <p class="premium-subtitle">Comprehensive solutions designed for maximum growth and efficiency.</p>
+      </div>
+      <div class="premium-services-grid">
+        <% products.forEach((product, index) => { %>
+          <div class="premium-service-card">
+            <div class="premium-service-number">0<%= index + 1 %></div>
+            <h3 class="premium-service-title"><%= product %></h3>
+            <p class="premium-service-desc">Experience excellence with our <%= product.toLowerCase() %> services, crafted specifically for your goals.</p>
+          </div>
+        <% }); %>
+      </div>
+    </div>
+  </section>
+
+  <section id="contact" class="premium-section">
+    <div class="premium-container">
+      <div class="premium-contact-wrapper">
+        <div class="premium-contact-info">
+          <h2 class="premium-section-title">Ready to start?</h2>
+          <p class="premium-body-text">Let's work together to achieve your goals. Reach out today and our team will get back to you within 24 hours.</p>
+        </div>
+        <form class="premium-contact-form">
+          <div class="premium-form-group">
+            <input type="text" placeholder="Your Name" required>
+          </div>
+          <div class="premium-form-group">
+            <input type="email" placeholder="Your Email" required>
+          </div>
+          <div class="premium-form-group">
+            <textarea placeholder="How can we help?" rows="4" required></textarea>
+          </div>
+          <button type="submit" class="premium-btn-primary full-width">Send Message</button>
+        </form>
+      </div>
+    </div>
+  </section>
+
+  <footer class="premium-footer">
+    <div class="premium-container">
+      <div class="premium-footer-content">
+        <div class="premium-logo"><%= businessName %></div>
+        <p>&copy; <%= year %> <%= businessName %>. All rights reserved.</p>
+      </div>
+    </div>
+  </footer>
+
+  <script src="script.js"></script>
+</body>
+</html>

@@ -1,0 +1,311 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>WebSite Builder - Professional Website Generator</title>
+  <link rel="stylesheet" href="style.css">
+</head>
+<body class="form-page">
+  <div class="stars"></div>
+  
+  <div class="main-container">
+    <nav class="navbar">
+      <div class="navbar-content">
+        <div class="logo">
+          <span class="logo-icon">⚡</span>
+          <span class="logo-text">WebSite Builder</span>
+        </div>
+        <div class="navbar-right">
+          <div class="nav-badge">AI Powered</div>
+          <a href="/login" class="btn-nav-login">Login</a>
+        </div>
+      </div>
+    </nav>
+
+    <div class="hero-section">
+      <div class="hero-content">
+        <div class="hero-badge">Build Faster with AI</div>
+        <h1 class="hero-title">Professional Websites<br>in Minutes</h1>
+        <p class="hero-subtitle">Create stunning, professional websites without coding. Let AI help you build the perfect online presence.</p>
+      </div>
+      <div class="hero-shape"></div>
+    </div>
+
+    <div class="container">
+      <main>
+        <!-- Step 1 -->
+        <section class="form-section active" id="step1">
+          <div class="section-header">
+            <div class="step-badge">Step 1 of 3</div>
+            <h2>Tell Us About Your Business</h2>
+            <p>Share your business details to get started</p>
+          </div>
+          
+          <form id="inputForm" class="form-modern">
+            <div class="form-group">
+              <label for="businessName">Business Name</label>
+              <div class="input-box">
+                <input 
+                  type="text" 
+                  id="businessName" 
+                  name="businessName" 
+                  placeholder="e.g., Luna Creative Studio" 
+                  required
+                >
+                <span class="input-highlight"></span>
+              </div>
+            </div>
+
+            <div class="form-group">
+              <label for="tagline">Tagline</label>
+              <div class="input-box">
+                <input 
+                  type="text" 
+                  id="tagline" 
+                  name="tagline" 
+                  placeholder="e.g., Design That Inspires" 
+                  required
+                >
+                <span class="input-highlight"></span>
+              </div>
+              <small>A memorable phrase that defines your business</small>
+            </div>
+
+            <div class="form-group">
+              <label>Choose Your Template</label>
+              <div class="template-grid">
+                <label class="template-box">
+                  <input type="radio" name="template" value="template-1" checked hidden>
+                  <div class="template-content">
+                    <div class="template-preview template-modern"></div>
+                    <div class="template-label">
+                      <h4>Modern SaaS</h4>
+                      <p>Bold & Contemporary</p>
+                    </div>
+                    <span class="checkmark">✓</span>
+                  </div>
+                </label>
+
+                <label class="template-box">
+                  <input type="radio" name="template" value="template-2" hidden>
+                  <div class="template-content">
+                    <div class="template-preview template-elegant"></div>
+                    <div class="template-label">
+                      <h4>Agency</h4>
+                      <p>Professional & Minimal</p>
+                    </div>
+                    <span class="checkmark">✓</span>
+                  </div>
+                </label>
+
+                <label class="template-box">
+                  <input type="radio" name="template" value="template-3" hidden>
+                  <div class="template-content">
+                    <div class="template-preview template-dev"></div>
+                    <div class="template-label">
+                      <h4>Developer</h4>
+                      <p>Dark & Terminal</p>
+                    </div>
+                    <span class="checkmark">✓</span>
+                  </div>
+                </label>
+
+                <label class="template-box">
+                  <input type="radio" name="template" value="template-4" hidden>
+                  <div class="template-content">
+                    <div class="template-preview template-web3"></div>
+                    <div class="template-label">
+                      <h4>Web3 / Tech</h4>
+                      <p>Neon & Futuristic</p>
+                    </div>
+                    <span class="checkmark">✓</span>
+                  </div>
+                </label>
+
+                <label class="template-box">
+                  <input type="radio" name="template" value="template-5" hidden>
+                  <div class="template-content">
+                    <div class="template-preview template-local"></div>
+                    <div class="template-label">
+                      <h4>Local Business</h4>
+                      <p>Clean & Trustworthy</p>
+                    </div>
+                    <span class="checkmark">✓</span>
+                  </div>
+                </label>
+              </div>
+            </div>
+
+            <div class="form-group">
+              <label for="description">Business Description</label>
+              <div class="input-box textarea-box">
+                <textarea 
+                  id="description" 
+                  name="description" 
+                  placeholder="Tell us about your business, what you do, and who you serve..." 
+                  rows="5"
+                  required
+                ></textarea>
+                <span class="input-highlight"></span>
+              </div>
+              <small>Example: We create custom web designs for small businesses</small>
+            </div>
+
+            <button type="submit" class="btn btn-primary btn-lg">
+              <span>Generate with AI</span>
+              <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                <path d="M5 12h14M12 5l7 7-7 7"/>
+              </svg>
+            </button>
+          </form>
+        </section>
+
+        <!-- Step 2 -->
+        <section class="form-section" id="step2" style="display: none;">
+          <div class="section-header">
+            <div class="step-badge">Step 2 of 3</div>
+            <h2>Customize Your Content</h2>
+            <p>Review and refine the AI suggestions</p>
+          </div>
+
+          <div id="loadingState" class="loading-state" style="display: none;">
+            <div class="loader">
+              <div class="loader-dot"></div>
+              <div class="loader-dot"></div>
+              <div class="loader-dot"></div>
+            </div>
+            <p>AI is analyzing your business...</p>
+          </div>
+
+          <form id="editForm" class="form-modern" style="display: none;">
+            <div class="form-group">
+              <label for="about">About Your Business</label>
+              <div class="input-box textarea-box">
+                <textarea 
+                  id="about" 
+                  name="about" 
+                  rows="4"
+                  placeholder="Tell your business story..."
+                ></textarea>
+                <span class="input-highlight"></span>
+              </div>
+            </div>
+
+            <div class="form-group">
+              <label for="products">Products/Services</label>
+              <div class="input-box textarea-box">
+                <textarea 
+                  id="products" 
+                  name="products" 
+                  rows="3"
+                  placeholder="Separate with commas"
+                ></textarea>
+                <span class="input-highlight"></span>
+              </div>
+            </div>
+
+            <div class="form-group">
+              <label for="tone">Website Tone</label>
+              <div class="select-box">
+                <select id="tone" name="tone">
+                  <option value="professional">Professional</option>
+                  <option value="friendly">Friendly</option>
+                  <option value="luxury">Luxury</option>
+                  <option value="casual">Casual</option>
+                </select>
+              </div>
+            </div>
+
+            <div class="button-group">
+              <button type="button" class="btn btn-secondary" onclick="goBackStep()">
+                ← Go Back
+              </button>
+              <button type="button" class="btn btn-primary btn-lg" onclick="showPreview()">
+                <span>Preview Website</span>
+                <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                  <path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"/>
+                  <circle cx="12" cy="12" r="3"/>
+                </svg>
+              </button>
+            </div>
+          </form>
+        </section>
+
+        <!-- Step 3 -->
+        <section class="form-section" id="step3" style="display: none;">
+          <div class="section-header">
+            <div class="step-badge">Step 3 of 3</div>
+            <h2>Preview & Download</h2>
+            <p>See how your website looks before downloading</p>
+          </div>
+
+          <div class="preview-controls">
+            <button type="button" class="btn btn-secondary" onclick="goBackStep()">
+              ← Back
+            </button>
+            <button type="button" class="btn btn-success btn-lg" onclick="downloadWebsite()">
+              <span>Download Website</span>
+              <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/>
+                <polyline points="7 10 12 15 17 10"/>
+                <line x1="12" y1="15" x2="12" y2="3"/>
+              </svg>
+            </button>
+          </div>
+
+          <div class="preview-container">
+            <iframe id="previewFrame" class="preview-frame"></iframe>
+          </div>
+
+          <div class="preview-controls">
+            <button type="button" class="btn btn-secondary" onclick="goBackStep()">
+              ← Back
+            </button>
+            <button type="button" class="btn btn-success btn-lg" onclick="downloadWebsite()">
+              <span>Download Website</span>
+              <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/>
+                <polyline points="7 10 12 15 17 10"/>
+                <line x1="12" y1="15" x2="12" y2="3"/>
+              </svg>
+            </button>
+          </div>
+        </section>
+
+        <!-- Success State -->
+        <section class="form-section" id="successStep" style="display: none;">
+          <div class="success-container">
+            <div class="success-icon">✓</div>
+            <h2>Website Generated!</h2>
+            <p>Your website is ready to download and deploy</p>
+            <div class="success-details">
+              <div class="detail-item">
+                <span class="detail-icon">📦</span>
+                <span>Complete HTML/CSS package</span>
+              </div>
+              <div class="detail-item">
+                <span class="detail-icon">🎨</span>
+                <span>Responsive design included</span>
+              </div>
+              <div class="detail-item">
+                <span class="detail-icon">⚡</span>
+                <span>Ready to upload immediately</span>
+              </div>
+            </div>
+            <button type="button" class="btn btn-primary btn-lg" onclick="resetForm()">
+              Create Another Website
+            </button>
+          </div>
+        </section>
+      </main>
+    </div>
+
+    <footer class="footer">
+      <p>© 2024 WebSite Builder. Crafted with ❤️ for creators</p>
+    </footer>
+  </div>
+
+  <script src="script.js"></script>
+</body>
+</html>

@@ -1,0 +1,20 @@
+# Dependencies
+node_modules/
+
+# Environment variables (NEVER commit your Gemini API key)
+.env
+
+# Generated website output files
+generated/
+
+# OS files
+.DS_Store
+Thumbs.db
+
+# Editor folders
+.vscode/
+.idea/
+
+# Logs
+*.log
+npm-debug.log*
