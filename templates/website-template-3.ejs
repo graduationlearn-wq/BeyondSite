@@ -4,95 +4,1271 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title><%= businessName %> | <%= tagline %></title>
-  <link rel="stylesheet" href="style.css">
-  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;700;900&family=JetBrains+Mono:wght@400;700&display=swap" rel="stylesheet">
-</head>
-<body class="tmpl-dev-body">
-  <div class="tmpl-dev-bg-glow"></div>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:ital,wght@0,300;0,400;0,500;0,700;1,300&family=Inter:wght@300;400;500;600&display=swap" rel="stylesheet">
+  <style>
+    *, *::before, *::after { margin: 0; padding: 0; box-sizing: border-box; }
 
-  <nav class="tmpl-dev-nav">
-    <div class="tmpl-dev-container tmpl-dev-nav-flex">
-      <div class="tmpl-dev-logo">
-        <span class="tmpl-dev-accent">const</span> <%= businessName.replace(/\s+/g, '') %> <span class="tmpl-dev-accent">=</span> 
-      </div>
-      <ul class="tmpl-dev-links">
-        <li><a href="#about">~/about</a></li>
-        <li><a href="#projects">~/projects</a></li>
-        <li><a href="#contact" class="tmpl-dev-btn-outline">initiateContact()</a></li>
-      </ul>
+    :root {
+      --black:     #000000;
+      --bg:        #080b08;
+      --surface:   #0d110d;
+      --panel:     #111611;
+      --border:    rgba(0,255,65,.1);
+      --border-md: rgba(0,255,65,.2);
+      --border-hi: rgba(0,255,65,.45);
+      --green:     #00ff41;
+      --green-dim: rgba(0,255,65,.55);
+      --green-glow:rgba(0,255,65,.12);
+      --cyan:      #00d4ff;
+      --cyan-dim:  rgba(0,212,255,.5);
+      --yellow:    #f0c040;
+      --red:       #ff5f56;
+      --orange:    #ffbd2e;
+      --text:      #c8d8c8;
+      --muted:     rgba(200,216,200,.5);
+      --dim:       rgba(200,216,200,.25);
+      --mono:      'JetBrains Mono', 'Fira Code', monospace;
+      --sans:      'Inter', system-ui, sans-serif;
+    }
+
+    html { scroll-behavior: smooth; }
+
+    body {
+      font-family: var(--sans);
+      background: var(--bg);
+      color: var(--text);
+      line-height: 1.65;
+      overflow-x: hidden;
+      -webkit-font-smoothing: antialiased;
+    }
+
+    /* ── SCANLINE OVERLAY ─── */
+    body::before {
+      content: '';
+      position: fixed; inset: 0;
+      pointer-events: none; z-index: 997;
+      background: repeating-linear-gradient(
+        0deg,
+        transparent,
+        transparent 2px,
+        rgba(0,0,0,.03) 2px,
+        rgba(0,0,0,.03) 4px
+      );
+    }
+
+    /* ── NOISE + VIGNETTE ─── */
+    body::after {
+      content: '';
+      position: fixed; inset: 0;
+      pointer-events: none; z-index: 996;
+      background:
+        radial-gradient(ellipse 80% 60% at 50% 0%, rgba(0,255,65,.04) 0%, transparent 70%),
+        radial-gradient(ellipse 100% 50% at 50% 100%, rgba(0,0,0,.5) 0%, transparent 60%);
+    }
+
+    /* ── MATRIX RAIN BG ─── */
+    #matrix-canvas {
+      position: fixed; inset: 0;
+      pointer-events: none;
+      z-index: 0;
+      opacity: .04;
+    }
+
+    /* ── NAVIGATION ─── */
+    .nav {
+      position: fixed; top: 0; left: 0; right: 0;
+      z-index: 500;
+      height: 56px;
+      display: flex; align-items: center;
+      border-bottom: 1px solid var(--border);
+      background: rgba(8,11,8,.9);
+      backdrop-filter: blur(12px);
+      padding: 0 48px;
+    }
+    .nav-traffic {
+      display: flex; gap: 6px; margin-right: 24px;
+    }
+    .nav-traffic span {
+      width: 12px; height: 12px;
+      border-radius: 50%;
+    }
+    .nav-traffic .t-red    { background: var(--red); }
+    .nav-traffic .t-orange { background: var(--orange); }
+    .nav-traffic .t-green  { background: #27c93f; }
+    .nav-bar-title {
+      font-family: var(--mono);
+      font-size: .72rem;
+      color: var(--muted);
+      flex: 1;
+      text-align: center;
+      letter-spacing: .05em;
+    }
+    .nav-bar-title .hl { color: var(--green); }
+    .nav-links {
+      display: flex; gap: 28px;
+      list-style: none; align-items: center;
+    }
+    .nav-links a {
+      font-family: var(--mono);
+      font-size: .72rem;
+      color: var(--muted);
+      text-decoration: none;
+      letter-spacing: .04em;
+      transition: color .2s;
+    }
+    .nav-links a:hover { color: var(--green); }
+    .nav-links .nav-cta {
+      color: var(--green) !important;
+      border: 1px solid var(--border-md);
+      padding: 6px 18px;
+      transition: background .2s, border-color .2s !important;
+    }
+    .nav-links .nav-cta:hover { background: var(--green-glow); border-color: var(--border-hi) !important; }
+
+    /* ── HERO ─── */
+    .hero {
+      position: relative; z-index: 2;
+      min-height: 100vh;
+      display: flex; flex-direction: column;
+      justify-content: center;
+      padding: 80px 48px 60px;
+    }
+    .hero-prompt {
+      font-family: var(--mono);
+      font-size: .75rem;
+      color: var(--muted);
+      margin-bottom: 8px;
+      letter-spacing: .04em;
+    }
+    .hero-prompt .path { color: var(--cyan); }
+    .hero-prompt .dollar { color: var(--green); }
+    .hero-headline {
+      font-family: var(--mono);
+      font-size: clamp(2.8rem, 6vw, 6.5rem);
+      font-weight: 700;
+      line-height: 1.05;
+      letter-spacing: -.02em;
+      margin-bottom: 8px;
+    }
+    .hero-headline .txt-green { color: var(--green); text-shadow: 0 0 28px rgba(0,255,65,.4); }
+    .hero-headline .txt-cyan  { color: var(--cyan); }
+    .hero-headline .txt-dim   { color: var(--dim); }
+    .hero-typing-line {
+      font-family: var(--mono);
+      font-size: clamp(1rem, 2.2vw, 1.6rem);
+      color: var(--muted);
+      font-weight: 300;
+      margin-bottom: 48px;
+      min-height: 2em;
+    }
+    .hero-cursor {
+      display: inline-block;
+      width: .55em; height: 1.1em;
+      background: var(--green);
+      vertical-align: text-bottom;
+      animation: blink .9s step-end infinite;
+      box-shadow: 0 0 8px rgba(0,255,65,.6);
+    }
+    @keyframes blink { 0%,100%{opacity:1} 50%{opacity:0} }
+
+    .hero-actions {
+      display: flex; gap: 16px; align-items: center;
+      margin-bottom: 64px;
+    }
+    .btn-primary {
+      display: inline-flex; align-items: center; gap: 8px;
+      font-family: var(--mono);
+      font-size: .78rem;
+      font-weight: 500;
+      letter-spacing: .06em;
+      padding: 14px 32px;
+      background: var(--green);
+      color: var(--black);
+      border: none; cursor: pointer;
+      text-decoration: none;
+      transition: box-shadow .25s, transform .15s;
+    }
+    .btn-primary:hover { box-shadow: 0 0 32px rgba(0,255,65,.35); transform: translateY(-2px); }
+    .btn-ghost {
+      display: inline-flex; align-items: center; gap: 8px;
+      font-family: var(--mono);
+      font-size: .78rem;
+      letter-spacing: .06em;
+      padding: 13px 28px;
+      background: transparent;
+      color: var(--green);
+      border: 1px solid var(--border-md);
+      text-decoration: none;
+      transition: background .2s, border-color .2s;
+    }
+    .btn-ghost:hover { background: var(--green-glow); border-color: var(--border-hi); }
+
+    .hero-meta {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 1px;
+      background: var(--border);
+      border: 1px solid var(--border);
+      max-width: 680px;
+    }
+    .hero-meta-item {
+      background: var(--surface);
+      padding: 18px 24px;
+    }
+    .meta-label {
+      font-family: var(--mono);
+      font-size: .65rem;
+      color: var(--dim);
+      letter-spacing: .1em;
+      text-transform: uppercase;
+      margin-bottom: 4px;
+    }
+    .meta-val {
+      font-family: var(--mono);
+      font-size: .85rem;
+      color: var(--green);
+      font-weight: 500;
+    }
+
+    /* ── STATUS BAR ─── */
+    .statusbar {
+      position: relative; z-index: 2;
+      background: var(--green);
+      padding: 10px 0;
+      overflow: hidden;
+    }
+    .statusbar-track {
+      display: flex; width: max-content;
+      animation: statusScroll 30s linear infinite;
+    }
+    .statusbar-item {
+      display: flex; align-items: center; gap: 20px;
+      padding: 0 40px;
+      font-family: var(--mono);
+      font-size: .7rem;
+      font-weight: 700;
+      color: var(--black);
+      letter-spacing: .1em;
+      text-transform: uppercase;
+      white-space: nowrap;
+    }
+    .statusbar-item::after { content: '//'; opacity: .4; }
+    @keyframes statusScroll {
+      from { transform: translateX(0); }
+      to   { transform: translateX(-50%); }
+    }
+
+    /* ── SECTION GLOBALS ─── */
+    section { position: relative; z-index: 2; }
+    .container { max-width: 1200px; margin: 0 auto; padding: 0 48px; }
+    .section-pad { padding: 110px 0; }
+
+    /* Terminal window chrome */
+    .term-window {
+      border: 1px solid var(--border);
+      background: var(--surface);
+      overflow: hidden;
+    }
+    .term-chrome {
+      display: flex; align-items: center; gap: 8px;
+      padding: 10px 16px;
+      background: var(--panel);
+      border-bottom: 1px solid var(--border);
+    }
+    .term-dot { width: 10px; height: 10px; border-radius: 50%; }
+    .term-dot.r { background: var(--red); }
+    .term-dot.o { background: var(--orange); }
+    .term-dot.g { background: #27c93f; }
+    .term-title {
+      flex: 1; text-align: center;
+      font-family: var(--mono);
+      font-size: .68rem;
+      color: var(--muted);
+      letter-spacing: .06em;
+    }
+    .term-body { padding: 28px 32px; }
+
+    .section-comment {
+      font-family: var(--mono);
+      font-size: .78rem;
+      color: rgba(0,255,65,.45);
+      font-style: italic;
+      margin-bottom: 8px;
+      letter-spacing: .03em;
+    }
+    .section-title {
+      font-family: var(--mono);
+      font-size: clamp(1.8rem, 3.5vw, 3rem);
+      font-weight: 700;
+      line-height: 1.1;
+      letter-spacing: -.02em;
+      color: var(--text);
+      margin-bottom: 8px;
+    }
+    .section-title .hl { color: var(--green); }
+
+    .reveal {
+      opacity: 0;
+      transform: translateY(30px);
+      transition: opacity .7s ease, transform .7s ease;
+    }
+    .reveal.visible { opacity: 1; transform: translateY(0); }
+    .reveal-delay-1 { transition-delay: .1s; }
+    .reveal-delay-2 { transition-delay: .2s; }
+    .reveal-delay-3 { transition-delay: .3s; }
+
+    /* ── ABOUT ─── */
+    .about { background: var(--bg); border-top: 1px solid var(--border); border-bottom: 1px solid var(--border); }
+    .about-grid { display: grid; grid-template-columns: 1.1fr 1fr; gap: 56px; align-items: start; }
+    .about-code {
+      font-family: var(--mono);
+      font-size: .85rem;
+      line-height: 1.9;
+      color: var(--text);
+    }
+    .code-kw   { color: #ff79c6; }
+    .code-fn   { color: var(--cyan); }
+    .code-str  { color: var(--yellow); }
+    .code-cmt  { color: rgba(0,255,65,.45); font-style: italic; }
+    .code-var  { color: var(--green); }
+    .code-num  { color: #bd93f9; }
+    .code-indent { padding-left: 24px; }
+    .about-right { display: flex; flex-direction: column; gap: 16px; }
+    .stack-item { border: 1px solid var(--border); background: var(--surface); padding: 16px 20px; }
+    .stack-label {
+      font-family: var(--mono);
+      font-size: .72rem;
+      color: var(--muted);
+      letter-spacing: .08em;
+      display: flex; justify-content: space-between; margin-bottom: 10px;
+    }
+    .stack-label span { color: var(--green); }
+    .stack-bar { height: 3px; background: var(--border); position: relative; overflow: hidden; }
+    .stack-fill {
+      position: absolute; left: 0; top: 0; height: 100%;
+      background: linear-gradient(90deg, var(--green), var(--cyan));
+      box-shadow: 0 0 8px rgba(0,255,65,.5);
+      width: 0;
+      transition: width 1.2s cubic-bezier(.16,1,.3,1);
+    }
+    .stack-fill.loaded { /* width set via JS */ }
+
+    /* ── SERVICES ─── */
+    .services { background: var(--surface); }
+    .services-header { margin-bottom: 56px; }
+    .services-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+      gap: 1px;
+      background: var(--border);
+      border: 1px solid var(--border);
+    }
+    .service-card {
+      background: var(--bg);
+      padding: 40px 32px;
+      position: relative;
+      overflow: hidden;
+      transition: background .25s;
+      cursor: default;
+    }
+    .service-card:hover { background: var(--surface); }
+    .service-card::after {
+      content: '';
+      position: absolute; top: 0; left: 0;
+      width: 100%; height: 2px;
+      background: linear-gradient(90deg, var(--green), var(--cyan));
+      transform: scaleX(0); transform-origin: left;
+      transition: transform .35s ease;
+    }
+    .service-card:hover::after { transform: scaleX(1); }
+    .service-id {
+      font-family: var(--mono);
+      font-size: .65rem;
+      color: var(--green);
+      letter-spacing: .12em;
+      margin-bottom: 16px;
+      opacity: .7;
+    }
+    .service-name {
+      font-family: var(--mono);
+      font-size: 1.1rem;
+      font-weight: 700;
+      color: var(--text);
+      margin-bottom: 14px;
+      letter-spacing: -.01em;
+    }
+    .service-desc {
+      font-size: .85rem;
+      color: var(--muted);
+      line-height: 1.75;
+      font-weight: 300;
+      margin-bottom: 20px;
+    }
+    .service-tag {
+      display: inline-block;
+      font-family: var(--mono);
+      font-size: .63rem;
+      letter-spacing: .1em;
+      padding: 4px 10px;
+      border: 1px solid var(--border-md);
+      color: var(--green-dim);
+    }
+
+    /* ── PROCESS ─── */
+    .process { background: var(--bg); border-top: 1px solid var(--border); border-bottom: 1px solid var(--border); }
+    .process-header { margin-bottom: 64px; }
+    .git-log { display: flex; flex-direction: column; gap: 0; }
+    .git-entry {
+      display: grid;
+      grid-template-columns: 180px 1px 1fr;
+      gap: 0 32px;
+      position: relative;
+    }
+    .git-meta {
+      padding: 0 0 48px;
+      text-align: right;
+    }
+    .git-hash {
+      font-family: var(--mono);
+      font-size: .7rem;
+      color: var(--yellow);
+      letter-spacing: .06em;
+      display: block;
+      margin-bottom: 4px;
+    }
+    .git-date {
+      font-family: var(--mono);
+      font-size: .65rem;
+      color: var(--dim);
+    }
+    .git-spine {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      padding-bottom: 0;
+    }
+    .git-node {
+      width: 14px; height: 14px;
+      border: 2px solid var(--green);
+      border-radius: 50%;
+      background: var(--bg);
+      box-shadow: 0 0 10px rgba(0,255,65,.4);
+      flex-shrink: 0;
+      z-index: 1;
+      margin-top: 4px;
+    }
+    .git-line {
+      flex: 1;
+      width: 1px;
+      background: var(--border);
+    }
+    .git-entry:last-child .git-line { display: none; }
+    .git-content { padding: 0 0 48px; }
+    .git-title {
+      font-family: var(--mono);
+      font-size: 1rem;
+      font-weight: 700;
+      color: var(--text);
+      margin-bottom: 8px;
+      letter-spacing: -.01em;
+    }
+    .git-body {
+      font-size: .88rem;
+      color: var(--muted);
+      line-height: 1.75;
+      font-weight: 300;
+      max-width: 500px;
+    }
+    .git-tag {
+      display: inline-block;
+      font-family: var(--mono);
+      font-size: .63rem;
+      padding: 3px 8px;
+      border: 1px solid rgba(0,212,255,.25);
+      color: var(--cyan-dim);
+      margin-top: 10px;
+    }
+
+    /* ── NUMBERS ─── */
+    .numbers {
+      background: var(--surface);
+      border-top: 1px solid var(--border);
+      border-bottom: 1px solid var(--border);
+    }
+    .numbers-grid {
+      display: grid;
+      grid-template-columns: repeat(4, 1fr);
+      gap: 1px;
+      background: var(--border);
+    }
+    .num-item {
+      background: var(--bg);
+      padding: 64px 40px;
+      text-align: center;
+      transition: background .25s;
+    }
+    .num-item:hover { background: var(--surface); }
+    .num-val {
+      font-family: var(--mono);
+      font-size: clamp(2.5rem, 4.5vw, 4rem);
+      font-weight: 700;
+      color: var(--green);
+      text-shadow: 0 0 20px rgba(0,255,65,.4);
+      line-height: 1;
+      margin-bottom: 10px;
+    }
+    .num-label {
+      font-family: var(--mono);
+      font-size: .68rem;
+      color: var(--muted);
+      letter-spacing: .1em;
+      text-transform: uppercase;
+    }
+
+    /* ── TESTIMONIALS ─── */
+    .testimonials { background: var(--bg); }
+    .testi-header { margin-bottom: 56px; }
+    .testi-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 1px; background: var(--border); border: 1px solid var(--border); }
+    .testi-card {
+      background: var(--surface);
+      padding: 36px 32px;
+      transition: background .25s;
+    }
+    .testi-card:hover { background: var(--panel); }
+    .testi-output-line {
+      font-family: var(--mono);
+      font-size: .65rem;
+      color: var(--dim);
+      letter-spacing: .08em;
+      margin-bottom: 16px;
+      display: flex; align-items: center; gap: 8px;
+    }
+    .testi-output-line::before {
+      content: '//';
+      color: var(--green);
+      opacity: .6;
+    }
+    .testi-stars { color: var(--yellow); font-size: .8rem; letter-spacing: 2px; margin-bottom: 14px; }
+    .testi-quote {
+      font-size: .88rem;
+      color: var(--muted);
+      line-height: 1.85;
+      font-weight: 300;
+      font-style: italic;
+      margin-bottom: 24px;
+      border-left: 2px solid var(--border-md);
+      padding-left: 16px;
+    }
+    .testi-author { display: flex; align-items: center; gap: 12px; }
+    .testi-avatar {
+      width: 38px; height: 38px;
+      border: 1px solid var(--border-md);
+      display: flex; align-items: center; justify-content: center;
+      font-family: var(--mono);
+      font-size: .72rem;
+      font-weight: 700;
+      color: var(--green);
+      flex-shrink: 0;
+    }
+    .testi-name { font-family: var(--mono); font-size: .8rem; color: var(--text); font-weight: 600; display: block; }
+    .testi-role { font-size: .75rem; color: var(--dim); display: block; margin-top: 2px; }
+
+    /* ── CTA BAND ─── */
+    .cta-band {
+      position: relative; z-index: 2;
+      background: var(--green);
+      padding: 88px 48px;
+      display: flex; align-items: center; justify-content: space-between; gap: 40px;
+      overflow: hidden;
+    }
+    .cta-band::before {
+      content: 'EXECUTE()';
+      position: absolute;
+      right: 320px; top: 50%;
+      transform: translateY(-50%);
+      font-family: var(--mono);
+      font-size: 8rem;
+      font-weight: 700;
+      color: rgba(0,0,0,.05);
+      letter-spacing: -.04em;
+      white-space: nowrap;
+      pointer-events: none;
+    }
+    .cta-text { position: relative; z-index: 1; }
+    .cta-title {
+      font-family: var(--mono);
+      font-size: clamp(1.6rem, 3.5vw, 2.8rem);
+      font-weight: 700;
+      color: var(--black);
+      letter-spacing: -.02em;
+      margin-bottom: 8px;
+    }
+    .cta-sub { font-size: .9rem; color: rgba(0,0,0,.6); font-weight: 400; }
+    .btn-dark {
+      position: relative; z-index: 1;
+      display: inline-flex; align-items: center; gap: 8px;
+      font-family: var(--mono);
+      font-size: .78rem;
+      font-weight: 700;
+      letter-spacing: .08em;
+      padding: 16px 36px;
+      background: var(--black);
+      color: var(--green);
+      border: none; cursor: pointer;
+      text-decoration: none;
+      white-space: nowrap;
+      transition: box-shadow .25s;
+    }
+    .btn-dark:hover { box-shadow: 0 0 28px rgba(0,0,0,.5); }
+
+    /* ── CONTACT ─── */
+    .contact { background: var(--surface); border-top: 1px solid var(--border); }
+    .contact-inner { display: grid; grid-template-columns: 1fr 1.4fr; gap: 80px; align-items: start; }
+    .contact-left .section-title { margin-bottom: 20px; }
+    .contact-desc { font-size: .9rem; color: var(--muted); line-height: 1.8; font-weight: 300; margin-bottom: 40px; }
+    .contact-info { display: flex; flex-direction: column; gap: 0; }
+    .info-row {
+      display: flex; align-items: flex-start; gap: 16px;
+      padding: 16px 0;
+      border-bottom: 1px solid var(--border);
+      font-family: var(--mono);
+      font-size: .8rem;
+    }
+    .info-key { color: var(--cyan); min-width: 100px; }
+    .info-val { color: var(--muted); }
+
+    /* Terminal form */
+    .term-form { font-family: var(--mono); }
+    .form-field {
+      display: flex; flex-direction: column; gap: 6px;
+      margin-bottom: 16px;
+    }
+    .form-field label {
+      font-family: var(--mono);
+      font-size: .68rem;
+      letter-spacing: .1em;
+      color: var(--green);
+      display: flex; align-items: center; gap: 8px;
+    }
+    .form-field label::before { content: '$'; opacity: .6; }
+    .form-field input,
+    .form-field textarea,
+    .form-field select {
+      background: var(--bg);
+      border: 1px solid var(--border);
+      color: var(--text);
+      padding: 12px 16px;
+      font-family: var(--mono);
+      font-size: .85rem;
+      font-weight: 400;
+      outline: none;
+      transition: border-color .2s, box-shadow .2s;
+      -webkit-appearance: none;
+    }
+    .form-field input::placeholder,
+    .form-field textarea::placeholder { color: var(--dim); }
+    .form-field input:focus,
+    .form-field textarea:focus,
+    .form-field select:focus {
+      border-color: var(--border-hi);
+      box-shadow: 0 0 0 1px rgba(0,255,65,.1);
+    }
+    .form-field textarea { resize: vertical; min-height: 120px; }
+    .form-row { display: grid; grid-template-columns: 1fr 1fr; gap: 14px; }
+    .form-submit {
+      width: 100%;
+      background: var(--green);
+      color: var(--black);
+      border: none;
+      padding: 14px 32px;
+      font-family: var(--mono);
+      font-size: .78rem;
+      font-weight: 700;
+      letter-spacing: .1em;
+      cursor: pointer;
+      transition: box-shadow .25s;
+    }
+    .form-submit:hover { box-shadow: 0 0 24px rgba(0,255,65,.3); }
+
+    /* ── FOOTER ─── */
+    .footer { background: var(--black); border-top: 1px solid var(--border); position: relative; z-index: 2; }
+    .footer-top {
+      display: grid;
+      grid-template-columns: 2fr 1fr 1fr 1fr;
+      gap: 56px;
+      padding: 72px 0 56px;
+    }
+    .footer-brand {
+      font-family: var(--mono);
+      font-size: 1.4rem;
+      font-weight: 700;
+      color: var(--green);
+      text-shadow: 0 0 16px rgba(0,255,65,.3);
+      display: block;
+      margin-bottom: 14px;
+    }
+    .footer-tagline { font-family: var(--mono); font-size: .78rem; color: var(--dim); line-height: 1.7; max-width: 240px; }
+    .footer-col-title { font-family: var(--mono); font-size: .65rem; letter-spacing: .14em; text-transform: uppercase; color: rgba(0,255,65,.5); margin-bottom: 20px; }
+    .footer-links { list-style: none; display: flex; flex-direction: column; gap: 10px; }
+    .footer-links a { font-family: var(--mono); font-size: .8rem; color: var(--muted); text-decoration: none; transition: color .2s; }
+    .footer-links a:hover { color: var(--green); }
+    .footer-bottom {
+      border-top: 1px solid var(--border);
+      padding: 24px 0;
+      display: flex; justify-content: space-between; align-items: center;
+      font-family: var(--mono);
+      font-size: .7rem;
+      color: var(--dim);
+    }
+    .footer-bottom a { color: var(--dim); text-decoration: none; transition: color .2s; }
+    .footer-bottom a:hover { color: var(--muted); }
+    .footer-bottom-links { display: flex; gap: 20px; }
+
+    /* ── RESPONSIVE ─── */
+    @media (max-width: 1024px) {
+      .container { padding: 0 28px; }
+      .nav { padding: 0 28px; }
+      .hero { padding: 80px 28px 60px; }
+      .cta-band { padding: 64px 28px; }
+      .about-grid { grid-template-columns: 1fr; }
+      .contact-inner { grid-template-columns: 1fr; gap: 48px; }
+      .numbers-grid { grid-template-columns: repeat(2, 1fr); }
+      .testi-grid { grid-template-columns: 1fr 1fr; }
+      .testi-card:last-child { display: none; }
+      .footer-top { grid-template-columns: 1fr 1fr; }
+      .cta-band { flex-direction: column; align-items: flex-start; }
+    }
+    @media (max-width: 640px) {
+      .nav-links li:not(:last-child) { display: none; }
+      .hero-headline { font-size: 2.6rem; }
+      .hero-meta { grid-template-columns: 1fr; }
+      .hero-actions { flex-direction: column; align-items: flex-start; }
+      .numbers-grid { grid-template-columns: 1fr 1fr; }
+      .testi-grid { grid-template-columns: 1fr; }
+      .testi-card:last-child { display: block; }
+      .footer-top { grid-template-columns: 1fr; gap: 32px; }
+      .form-row { grid-template-columns: 1fr; }
+      .git-entry { grid-template-columns: 80px 1px 1fr; gap: 0 18px; }
+    }
+  </style>
+</head>
+<body>
+
+  <!-- MATRIX RAIN CANVAS -->
+  <canvas id="matrix-canvas"></canvas>
+
+  <!-- NAVIGATION -->
+  <nav class="nav">
+    <div class="nav-traffic">
+      <span class="t-red"></span>
+      <span class="t-orange"></span>
+      <span class="t-green"></span>
     </div>
+    <div class="nav-bar-title">
+      <span class="hl">~/</span><%= businessName.toLowerCase().replace(/\s+/g,'') %>
+      <span class="hl"> — </span>zsh
+    </div>
+    <ul class="nav-links">
+      <li><a href="#about">~/about</a></li>
+      <li><a href="#services">~/services</a></li>
+      <li><a href="#process">~/process</a></li>
+      <li><a href="#contact" class="nav-cta">init_contact()</a></li>
+    </ul>
   </nav>
 
-  <header class="tmpl-dev-hero">
-    <div class="tmpl-dev-container">
-      <div class="tmpl-dev-badge">
-        <span class="tmpl-dev-pulse"></span> SYSTEM STATUS: <%= tone.toUpperCase() %>
-      </div>
-      <h1 class="tmpl-dev-title"><%= businessName %></h1>
-      <h2 class="tmpl-dev-tagline">&gt; <%= tagline %><span class="tmpl-dev-cursor">_</span></h2>
-      <p class="tmpl-dev-hero-desc"><%= about %></p>
-      <a href="#projects" class="tmpl-dev-btn-primary">View Output.log</a>
+  <!-- HERO -->
+  <section id="home" class="hero">
+    <div class="hero-prompt">
+      <span class="path">user@<%= businessName.toLowerCase().replace(/\s+/g,'') %>:~</span>
+      <span class="dollar"> $ </span>./launch.sh --mode=<%= tone %>
     </div>
-  </header>
-
-  <section id="projects" class="tmpl-dev-section">
-    <div class="tmpl-dev-container">
-      <div class="tmpl-dev-section-header">
-        <h3 class="tmpl-dev-section-title">/* Technical Capabilities */</h3>
+    <h1 class="hero-headline">
+      <span class="txt-dim">// </span><span class="txt-green"><%= businessName %></span>
+    </h1>
+    <div class="hero-typing-line" id="heroType">&nbsp;<span class="hero-cursor"></span></div>
+    <div class="hero-actions">
+      <a href="#services" class="btn-primary">▶ run services.sh</a>
+      <a href="#about" class="btn-ghost">cat README.md</a>
+    </div>
+    <div class="hero-meta">
+      <div class="hero-meta-item">
+        <div class="meta-label">STATUS</div>
+        <div class="meta-val">● ONLINE</div>
       </div>
-      
-      <div class="tmpl-dev-grid">
-        <% products.forEach((product, index) => { %>
-          <div class="tmpl-dev-card">
-            <div class="tmpl-dev-card-header">
-              <span class="tmpl-dev-card-id">0x0<%= index + 1 %></span>
-              <div class="tmpl-dev-card-dots">
-                <span></span><span></span><span></span>
+      <div class="hero-meta-item">
+        <div class="meta-label">MODULES</div>
+        <div class="meta-val"><%= products.length %> loaded</div>
+      </div>
+      <div class="hero-meta-item">
+        <div class="meta-label">BUILD</div>
+        <div class="meta-val">v<%= year %>.stable</div>
+      </div>
+    </div>
+  </section>
+
+  <!-- STATUS BAR -->
+  <div class="statusbar">
+    <div class="statusbar-track" id="statusbar">
+      <% const statItems = [...products, ...products, ...products, ...products]; %>
+      <% statItems.forEach(function(p){ %>
+        <span class="statusbar-item"><%= p %></span>
+      <% }); %>
+    </div>
+  </div>
+
+  <!-- ABOUT -->
+  <section id="about" class="about section-pad">
+    <div class="container">
+      <div class="about-grid">
+        <div class="reveal">
+          <div class="term-window">
+            <div class="term-chrome">
+              <span class="term-dot r"></span>
+              <span class="term-dot o"></span>
+              <span class="term-dot g"></span>
+              <span class="term-title">about.ts — <%= businessName %></span>
+            </div>
+            <div class="term-body">
+              <div class="about-code">
+                <div><span class="code-cmt">// About <%= businessName %></span></div>
+                <br>
+                <div><span class="code-kw">const</span> <span class="code-var">company</span> = {</div>
+                <div class="code-indent"><span class="code-fn">name</span>: <span class="code-str">"<%= businessName %>"</span>,</div>
+                <div class="code-indent"><span class="code-fn">tagline</span>: <span class="code-str">"<%= tagline %>"</span>,</div>
+                <div class="code-indent"><span class="code-fn">founded</span>: <span class="code-num"><%= year %></span>,</div>
+                <div class="code-indent"><span class="code-fn">mode</span>: <span class="code-str">"<%= tone %>"</span>,</div>
+                <div class="code-indent"><span class="code-fn">services</span>: [</div>
+                <% products.forEach(function(p){ %>
+                <div class="code-indent" style="padding-left:48px"><span class="code-str">"<%= p %>"</span>,</div>
+                <% }); %>
+                <div class="code-indent">],</div>
+                <div>};</div>
+                <br>
+                <div><span class="code-cmt">/**</span></div>
+                <div><span class="code-cmt"> * <%= about %></span></div>
+                <div><span class="code-cmt"> */</span></div>
+                <br>
+                <div><span class="code-kw">export default</span> <span class="code-var">company</span>;</div>
               </div>
             </div>
-            <h4 class="tmpl-dev-card-title"><%= product %></h4>
-            <p class="tmpl-dev-card-desc">Executing high-performance modules and deploying scalable architecture for <%= product.toLowerCase() %> workflows.</p>
-            <div class="tmpl-dev-card-footer">
-              <span class="tmpl-dev-tag">System.Ready</span>
-            </div>
           </div>
+        </div>
+        <div class="about-right reveal reveal-delay-1">
+          <div class="section-comment">// core competencies</div>
+          <h2 class="section-title">What runs<br>in our <span class="hl">stack.</span></h2>
+          <p style="font-size:.88rem;color:var(--muted);margin:16px 0 32px;font-weight:300;line-height:1.8">
+            Battle-tested expertise across every module we ship. Each capability is production-grade and ready to deploy for your project.
+          </p>
+          <% const bars = [92, 88, 95, 85, 90, 78]; %>
+          <% products.forEach(function(p, i){ %>
+          <div class="stack-item">
+            <div class="stack-label"><%= p %><span><%= bars[i % bars.length] %>%</span></div>
+            <div class="stack-bar"><div class="stack-fill" data-width="<%= bars[i % bars.length] %>"></div></div>
+          </div>
+          <% }); %>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- SERVICES -->
+  <section id="services" class="services section-pad">
+    <div class="container">
+      <div class="services-header reveal">
+        <div class="section-comment">// ls -la ./services/</div>
+        <h2 class="section-title">Technical <span class="hl">Capabilities</span></h2>
+        <p style="font-size:.88rem;color:var(--muted);margin-top:12px;font-weight:300;max-width:520px;line-height:1.8">
+          Every service is a production-ready module built for real-world performance and scalability.
+        </p>
+      </div>
+      <div class="services-grid">
+        <% products.forEach(function(p, i){ %>
+        <div class="service-card reveal reveal-delay-<%= i % 3 %>">
+          <div class="service-id">MODULE_0<%= i + 1 %>.ts</div>
+          <h3 class="service-name"><%= p %></h3>
+          <p class="service-desc">High-performance <%= p.toLowerCase() %> module engineered for scale. Built with precision, deployed with confidence.</p>
+          <span class="service-tag">STATUS: ACTIVE</span>
+        </div>
         <% }); %>
       </div>
     </div>
   </section>
 
-  <section id="contact" class="tmpl-dev-section tmpl-dev-border-top">
-    <div class="tmpl-dev-container">
-      <div class="tmpl-dev-contact-wrapper">
-        <div class="tmpl-dev-contact-text">
-          <h3 class="tmpl-dev-section-title">/* Initialize Connection */</h3>
-          <p>Awaiting inputs. Open a socket to discuss your next project, architecture, or collaboration.</p>
+  <!-- PROCESS -->
+  <section id="process" class="process section-pad">
+    <div class="container">
+      <div class="process-header reveal">
+        <div class="section-comment">// git log --oneline --graph</div>
+        <h2 class="section-title">How We <span class="hl">Execute</span></h2>
+      </div>
+      <div class="git-log">
+        <div class="git-entry reveal">
+          <div class="git-meta">
+            <span class="git-hash">a1f3e9c</span>
+            <span class="git-date">PHASE 01</span>
+          </div>
+          <div class="git-spine"><div class="git-node"></div><div class="git-line"></div></div>
+          <div class="git-content">
+            <h3 class="git-title">init: Discovery & Scoping</h3>
+            <p class="git-body">We run a deep diagnostic on your business — goals, constraints, competitive landscape, and the outcome metrics that actually matter.</p>
+            <span class="git-tag">branch: discovery</span>
+          </div>
         </div>
-        <form class="tmpl-dev-form">
-          <div class="tmpl-dev-input-group">
-            <label>std::string name;</label>
-            <input type="text" required placeholder="Enter your name">
+        <div class="git-entry reveal reveal-delay-1">
+          <div class="git-meta">
+            <span class="git-hash">b8d2c4f</span>
+            <span class="git-date">PHASE 02</span>
           </div>
-          <div class="tmpl-dev-input-group">
-            <label>std::string email;</label>
-            <input type="email" required placeholder="Enter your email">
+          <div class="git-spine"><div class="git-node"></div><div class="git-line"></div></div>
+          <div class="git-content">
+            <h3 class="git-title">feat: Strategy Architecture</h3>
+            <p class="git-body">We design a bespoke execution blueprint grounded in data. Every decision is documented, reasoned, and tied to outcomes — not assumptions.</p>
+            <span class="git-tag">branch: strategy</span>
           </div>
-          <div class="tmpl-dev-input-group">
-            <label>std::string payload;</label>
-            <textarea required rows="4" placeholder="Transmit message..."></textarea>
+        </div>
+        <div class="git-entry reveal reveal-delay-2">
+          <div class="git-meta">
+            <span class="git-hash">c5a7b1d</span>
+            <span class="git-date">PHASE 03</span>
           </div>
-          <button type="submit" class="tmpl-dev-btn-primary tmpl-dev-full-width">POST /api/message</button>
-        </form>
+          <div class="git-spine"><div class="git-node"></div><div class="git-line"></div></div>
+          <div class="git-content">
+            <h3 class="git-title">build: Precision Execution</h3>
+            <p class="git-body">Our team ships fast without cutting corners. Transparent status updates, on-time delivery, and zero compromise on quality at each sprint.</p>
+            <span class="git-tag">branch: production</span>
+          </div>
+        </div>
+        <div class="git-entry reveal reveal-delay-3">
+          <div class="git-meta">
+            <span class="git-hash">d9e1f6a</span>
+            <span class="git-date">PHASE 04</span>
+          </div>
+          <div class="git-spine"><div class="git-node"></div><div class="git-line"></div></div>
+          <div class="git-content">
+            <h3 class="git-title">deploy: Growth & Optimization</h3>
+            <p class="git-body">Post-launch, we monitor, iterate, and compound — ensuring your investment appreciates over time with continuous performance refinement.</p>
+            <span class="git-tag">branch: main ← merged</span>
+          </div>
+        </div>
       </div>
     </div>
   </section>
 
-  <footer class="tmpl-dev-footer">
-    <div class="tmpl-dev-container">
-      <p>&copy; <%= year %> <%= businessName %>. Compiled successfully.</p>
+  <!-- NUMBERS -->
+  <div class="numbers">
+    <div class="numbers-grid container" style="padding:0">
+      <div class="num-item reveal">
+        <div class="num-val" data-target="500" data-suffix="+">0+</div>
+        <div class="num-label">// projects_shipped</div>
+      </div>
+      <div class="num-item reveal reveal-delay-1">
+        <div class="num-val" data-target="99" data-suffix="%">0%</div>
+        <div class="num-label">// client_retention</div>
+      </div>
+      <div class="num-item reveal reveal-delay-2">
+        <div class="num-val" data-target="12" data-suffix="yr">0yr</div>
+        <div class="num-label">// years_in_production</div>
+      </div>
+      <div class="num-item reveal reveal-delay-3">
+        <div class="num-val" data-target="24" data-suffix="hr">0hr</div>
+        <div class="num-label">// response_time</div>
+      </div>
+    </div>
+  </div>
+
+  <!-- TESTIMONIALS -->
+  <section id="testimonials" class="testimonials section-pad">
+    <div class="container">
+      <div class="testi-header reveal">
+        <div class="section-comment">// console.log(clientFeedback)</div>
+        <h2 class="section-title">Client <span class="hl">Output</span></h2>
+      </div>
+      <div class="testi-grid">
+        <div class="testi-card reveal">
+          <div class="testi-output-line">stdout · review_001.log</div>
+          <div class="testi-stars">★★★★★</div>
+          <p class="testi-quote">"Working with this team was like finding a senior engineer who truly cares about the outcome. Methodical, precise, and exceptional at every level."</p>
+          <div class="testi-author">
+            <div class="testi-avatar">MR</div>
+            <div><span class="testi-name">Michael R.</span><span class="testi-role">Director of Operations</span></div>
+          </div>
+        </div>
+        <div class="testi-card reveal reveal-delay-1">
+          <div class="testi-output-line">stdout · review_002.log</div>
+          <div class="testi-stars">★★★★★</div>
+          <p class="testi-quote">"Rare to find a team that ships fast AND thinks deeply. They anticipated every edge case before we could even file the issue. That's mastery."</p>
+          <div class="testi-author">
+            <div class="testi-avatar">SL</div>
+            <div><span class="testi-name">Sarah L.</span><span class="testi-role">Founder & CEO</span></div>
+          </div>
+        </div>
+        <div class="testi-card reveal reveal-delay-2">
+          <div class="testi-output-line">stdout · review_003.log</div>
+          <div class="testi-stars">★★★★★</div>
+          <p class="testi-quote">"The documentation alone was worth the engagement. Every decision was traceable, every output was clean. This is engineering at its best."</p>
+          <div class="testi-author">
+            <div class="testi-avatar">JK</div>
+            <div><span class="testi-name">James K.</span><span class="testi-role">Head of Strategy</span></div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- CTA BAND -->
+  <div class="cta-band reveal">
+    <div class="cta-text">
+      <h2 class="cta-title">Ready to ship<br>something great?</h2>
+      <p class="cta-sub">Open a connection with <%= businessName %>. We respond within 24 hours.</p>
+    </div>
+    <a href="#contact" class="btn-dark">$ ./start_project.sh →</a>
+  </div>
+
+  <!-- CONTACT -->
+  <section id="contact" class="contact section-pad">
+    <div class="container">
+      <div class="contact-inner">
+        <div class="contact-left reveal">
+          <div class="section-comment">// POST /api/contact</div>
+          <h2 class="section-title">Initialize<br><span class="hl">Connection</span></h2>
+          <p class="contact-desc">Send a request and we'll begin the handshake. Every project starts with a conversation — tell us what you're building.</p>
+          <div class="contact-info">
+            <div class="info-row">
+              <span class="info-key">uptime:</span>
+              <span class="info-val">Mon–Fri, 09:00–18:00</span>
+            </div>
+            <div class="info-row">
+              <span class="info-key">latency:</span>
+              <span class="info-val">&lt; 24hr response, guaranteed</span>
+            </div>
+            <div class="info-row">
+              <span class="info-key">protocol:</span>
+              <span class="info-val">Strict confidentiality (TLS)</span>
+            </div>
+            <div class="info-row">
+              <span class="info-key">auth:</span>
+              <span class="info-val">No spam, no upsells</span>
+            </div>
+          </div>
+        </div>
+        <div class="reveal reveal-delay-1">
+          <div class="term-window">
+            <div class="term-chrome">
+              <span class="term-dot r"></span>
+              <span class="term-dot o"></span>
+              <span class="term-dot g"></span>
+              <span class="term-title">contact_form.sh</span>
+            </div>
+            <div class="term-body">
+              <form class="term-form" data-contact>
+                <div class="form-row">
+                  <div class="form-field">
+                    <label>first_name</label>
+                    <input type="text" placeholder="Jane" required>
+                  </div>
+                  <div class="form-field">
+                    <label>last_name</label>
+                    <input type="text" placeholder="Smith" required>
+                  </div>
+                </div>
+                <div class="form-field">
+                  <label>email</label>
+                  <input type="email" placeholder="jane@company.com" required>
+                </div>
+                <div class="form-field">
+                  <label>service_type</label>
+                  <select>
+                    <option value="" disabled selected>-- select module --</option>
+                    <% products.forEach(function(p){ %><option value="<%= p %>"><%= p %></option><% }); %>
+                    <option value="other">other / multiple</option>
+                  </select>
+                </div>
+                <div class="form-field">
+                  <label>payload</label>
+                  <textarea placeholder="Describe your project, timeline, and requirements..." required></textarea>
+                </div>
+                <button type="submit" class="form-submit">▶ POST request</button>
+              </form>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- FOOTER -->
+  <footer class="footer">
+    <div class="container">
+      <div class="footer-top">
+        <div>
+          <span class="footer-brand"><%= businessName.toLowerCase().replace(/\s+/g,'_') %>/</span>
+          <p class="footer-tagline"><span style="color:var(--green-dim)">$</span> <%= tagline %></p>
+        </div>
+        <div>
+          <p class="footer-col-title">// navigation</p>
+          <ul class="footer-links">
+            <li><a href="#home">~/home</a></li>
+            <li><a href="#about">~/about</a></li>
+            <li><a href="#services">~/services</a></li>
+            <li><a href="#process">~/process</a></li>
+          </ul>
+        </div>
+        <div>
+          <p class="footer-col-title">// modules</p>
+          <ul class="footer-links">
+            <% products.forEach(function(p){ %><li><a href="#services"><%= p.toLowerCase().replace(/\s+/g,'_') %></a></li><% }); %>
+          </ul>
+        </div>
+        <div>
+          <p class="footer-col-title">// system</p>
+          <ul class="footer-links">
+            <li><a href="#contact">contact.sh</a></li>
+            <li><a href="#about">careers.md</a></li>
+            <li><a href="#">privacy.txt</a></li>
+            <li><a href="#">terms.txt</a></li>
+          </ul>
+        </div>
+      </div>
+      <div class="footer-bottom">
+        <span><span style="color:var(--green-dim)">©</span> <%= year %> <%= businessName %>. All systems operational.</span>
+        <div class="footer-bottom-links">
+          <a href="#">privacy</a>
+          <a href="#">terms</a>
+          <a href="#">cookies</a>
+        </div>
+      </div>
     </div>
   </footer>
 
-  <script src="script.js"></script>
+  <script>
+    // ── MATRIX RAIN
+    (function() {
+      const canvas = document.getElementById('matrix-canvas');
+      const ctx = canvas.getContext('2d');
+      let W, H, cols, drops;
+      const chars = '01アイウエオカキクケコ<>{}()=+'.split('');
+      function resize() {
+        W = canvas.width = window.innerWidth;
+        H = canvas.height = window.innerHeight;
+        cols = Math.floor(W / 20);
+        drops = Array(cols).fill(1);
+      }
+      resize();
+      window.addEventListener('resize', resize);
+      setInterval(() => {
+        ctx.fillStyle = 'rgba(8,11,8,0.05)';
+        ctx.fillRect(0,0,W,H);
+        ctx.fillStyle = '#00ff41';
+        ctx.font = '14px JetBrains Mono, monospace';
+        drops.forEach((y, i) => {
+          ctx.fillText(chars[Math.floor(Math.random()*chars.length)], i*20, y*20);
+          if (y*20 > H && Math.random() > .975) drops[i] = 0;
+          drops[i]++;
+        });
+      }, 60);
+    })();
+
+    // ── TYPING HERO
+    const typeEl = document.getElementById('heroType');
+    const phrases = [
+      '<%= tagline %>',
+      '> Precision execution. Every time.',
+      '> <%= products[0] || "Excellence" %>. Deployed.',
+      '> Your vision. Our architecture.',
+    ];
+    let pi = 0, ci = 0, deleting = false;
+    function type() {
+      const phrase = phrases[pi];
+      const cursor = '<span class="hero-cursor"></span>';
+      if (!deleting) {
+        ci++;
+        typeEl.innerHTML = phrase.slice(0, ci) + cursor;
+        if (ci === phrase.length) { deleting = true; setTimeout(type, 2200); return; }
+        setTimeout(type, 42);
+      } else {
+        ci--;
+        typeEl.innerHTML = phrase.slice(0, ci) + cursor;
+        if (ci === 0) { deleting = false; pi = (pi + 1) % phrases.length; setTimeout(type, 500); return; }
+        setTimeout(type, 22);
+      }
+    }
+    setTimeout(type, 800);
+
+    // ── SCROLL REVEAL
+    const revObs = new IntersectionObserver(entries => {
+      entries.forEach(e => { if (e.isIntersecting) { e.target.classList.add('visible'); revObs.unobserve(e.target); }});
+    }, { threshold: 0.06, rootMargin: '0px 0px -40px 0px' });
+    document.querySelectorAll('.reveal').forEach(el => revObs.observe(el));
+
+    // ── COUNTER
+    function counter(el, target, suffix) {
+      const dur = 1600, start = performance.now();
+      (function tick(now) {
+        const p = Math.min((now - start)/dur, 1);
+        el.textContent = Math.floor((1 - Math.pow(1-p,3)) * target) + suffix;
+        if (p < 1) requestAnimationFrame(tick);
+        else el.textContent = target + suffix;
+      })(start);
+    }
+    const cntObs = new IntersectionObserver(entries => {
+      entries.forEach(e => {
+        if (e.isIntersecting) {
+          counter(e.target, +e.target.dataset.target, e.target.dataset.suffix||'');
+          cntObs.unobserve(e.target);
+        }
+      });
+    }, { threshold: .5 });
+    document.querySelectorAll('[data-target]').forEach(el => cntObs.observe(el));
+
+    // ── PROGRESS BARS
+    const barObs = new IntersectionObserver(entries => {
+      entries.forEach(e => {
+        if (e.isIntersecting) {
+          e.target.querySelectorAll('.stack-fill').forEach(bar => {
+            bar.style.width = bar.dataset.width + '%';
+          });
+          barObs.unobserve(e.target);
+        }
+      });
+    }, { threshold: .3 });
+    document.querySelectorAll('.about-right').forEach(el => barObs.observe(el));
+
+    // ── SMOOTH SCROLL
+    document.querySelectorAll('a[href^="#"]').forEach(a => {
+      a.addEventListener('click', e => {
+        const t = document.querySelector(a.getAttribute('href'));
+        if (t) { e.preventDefault(); t.scrollIntoView({ behavior: 'smooth', block: 'start' }); }
+      });
+    });
+
+    // ── STATUS BAR HOVER PAUSE
+    const sb = document.getElementById('statusbar');
+    if (sb) {
+      sb.addEventListener('mouseenter', () => sb.style.animationPlayState = 'paused');
+      sb.addEventListener('mouseleave', () => sb.style.animationPlayState = 'running');
+    }
+
+    // ── CONTACT FORM
+    const form = document.querySelector('[data-contact]');
+    if (form) {
+      form.addEventListener('submit', e => {
+        e.preventDefault();
+        const btn = form.querySelector('.form-submit');
+        btn.textContent = '▷ transmitting...';
+        btn.disabled = true;
+        setTimeout(() => {
+          const ok = document.createElement('div');
+          ok.style.cssText = 'background:rgba(0,255,65,.08);border:1px solid rgba(0,255,65,.25);color:#00ff41;padding:14px 18px;font-family:var(--mono);font-size:.8rem;letter-spacing:.04em;margin-bottom:16px;';
+          ok.textContent = '✓ [200 OK] Message transmitted. Handshake in progress.';
+          form.insertAdjacentElement('beforebegin', ok);
+          form.reset();
+          btn.textContent = '▶ POST request';
+          btn.disabled = false;
+          setTimeout(() => ok.remove(), 5500);
+        }, 900);
+      });
+    }
+  </script>
 </body>
 </html>

@@ -1,0 +1,1243 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title><%= businessName %> — <%= tagline %></title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,700;0,900;1,700&family=DM+Sans:wght@300;400;500&display=swap" rel="stylesheet">
+  <style>
+    *, *::before, *::after { margin: 0; padding: 0; box-sizing: border-box; }
+
+    :root {
+      --ink:        #0d0d0d;
+      --ink-soft:   #3a3a3a;
+      --ink-muted:  #888;
+      --paper:      #f5f0e8;
+      --paper-mid:  #ede8db;
+      --paper-dark: #d9d2c3;
+      --rule:       #c8bfae;
+      --accent:     #c0392b;
+      --accent-2:   #1a5276;
+      --white:      #fff;
+      --serif: 'Playfair Display', Georgia, serif;
+      --sans:  'DM Sans', system-ui, sans-serif;
+    }
+
+    html { scroll-behavior: smooth; }
+
+    body {
+      font-family: var(--sans);
+      background: var(--paper);
+      color: var(--ink);
+      line-height: 1.6;
+      overflow-x: hidden;
+      -webkit-font-smoothing: antialiased;
+    }
+
+    body::before {
+      content: '';
+      position: fixed;
+      inset: 0;
+      pointer-events: none;
+      z-index: 999;
+      opacity: .028;
+      background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 512 512' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E");
+      background-size: 180px;
+    }
+
+    /* ── MASTHEAD ─────────────────────────────────────────────── */
+    .mast {
+      border-bottom: 3px double var(--rule);
+      position: sticky;
+      top: 0;
+      z-index: 100;
+      background: var(--paper);
+      transition: box-shadow .3s;
+    }
+
+    .mast-dateline {
+      border-bottom: 1px solid var(--rule);
+      padding: 6px 48px;
+      display: flex;
+      justify-content: space-between;
+      font-size: .72rem;
+      letter-spacing: .1em;
+      text-transform: uppercase;
+      color: var(--ink-muted);
+    }
+
+    .mast-main {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: 14px 48px;
+    }
+
+    .mast-brand {
+      font-family: var(--serif);
+      font-size: 2rem;
+      font-weight: 900;
+      letter-spacing: -.02em;
+      color: var(--ink);
+      text-decoration: none;
+    }
+
+    .mast-nav {
+      display: flex;
+      gap: 32px;
+      list-style: none;
+      align-items: center;
+    }
+
+    .mast-nav a {
+      font-size: .78rem;
+      letter-spacing: .12em;
+      text-transform: uppercase;
+      text-decoration: none;
+      color: var(--ink-soft);
+      font-weight: 500;
+      position: relative;
+      padding-bottom: 2px;
+      transition: color .2s;
+    }
+
+    .mast-nav a::after {
+      content: '';
+      position: absolute;
+      bottom: -2px; left: 0;
+      width: 0; height: 1px;
+      background: var(--accent);
+      transition: width .3s ease;
+    }
+
+    .mast-nav a:hover { color: var(--accent); }
+    .mast-nav a:hover::after { width: 100%; }
+
+    .mast-nav .nav-cta {
+      background: var(--ink);
+      color: var(--paper) !important;
+      padding: 8px 20px;
+      font-size: .72rem;
+      letter-spacing: .12em;
+      transition: background .25s !important;
+    }
+
+    .mast-nav .nav-cta::after { display: none; }
+    .mast-nav .nav-cta:hover { background: var(--accent) !important; }
+
+    /* ── HERO ─────────────────────────────────────────────────── */
+    .hero {
+      display: grid;
+      grid-template-columns: 1fr 1px 1fr;
+      min-height: 82vh;
+      border-bottom: 2px solid var(--rule);
+      padding: 0 48px;
+    }
+
+    .hero-left {
+      padding: 60px 48px 60px 0;
+      display: flex;
+      flex-direction: column;
+      justify-content: space-between;
+    }
+
+    .hero-issue {
+      font-size: .72rem;
+      letter-spacing: .18em;
+      text-transform: uppercase;
+      color: var(--accent);
+      font-weight: 500;
+      margin-bottom: 28px;
+      display: flex;
+      align-items: center;
+      gap: 10px;
+    }
+
+    .hero-issue::before {
+      content: '';
+      display: block;
+      width: 32px; height: 1px;
+      background: var(--accent);
+    }
+
+    .hero-headline {
+      font-family: var(--serif);
+      font-size: clamp(3.2rem, 5.5vw, 5.5rem);
+      line-height: 1.04;
+      font-weight: 900;
+      letter-spacing: -.03em;
+      color: var(--ink);
+      margin-bottom: 28px;
+    }
+
+    .hero-headline em { font-style: italic; color: var(--accent); }
+
+    .hero-deck {
+      font-size: 1.15rem;
+      color: var(--ink-soft);
+      line-height: 1.7;
+      font-weight: 300;
+      max-width: 480px;
+      border-left: 3px solid var(--accent);
+      padding-left: 20px;
+      margin-bottom: 40px;
+    }
+
+    .hero-actions { display: flex; gap: 16px; align-items: center; }
+
+    .btn-primary {
+      background: var(--ink);
+      color: var(--paper);
+      padding: 14px 32px;
+      font-family: var(--sans);
+      font-size: .8rem;
+      letter-spacing: .12em;
+      text-transform: uppercase;
+      font-weight: 500;
+      border: none;
+      cursor: pointer;
+      text-decoration: none;
+      display: inline-block;
+      transition: background .25s, transform .15s;
+    }
+
+    .btn-primary:hover { background: var(--accent); transform: translateY(-1px); }
+
+    .btn-ghost {
+      font-size: .8rem;
+      letter-spacing: .1em;
+      text-transform: uppercase;
+      color: var(--ink-muted);
+      text-decoration: none;
+      font-weight: 500;
+      border-bottom: 1px solid var(--rule);
+      padding-bottom: 2px;
+      transition: color .2s, border-color .2s;
+    }
+
+    .btn-ghost:hover { color: var(--accent); border-color: var(--accent); }
+
+    .hero-divider { background: var(--rule); width: 1px; }
+
+    .hero-right {
+      padding: 60px 0 60px 48px;
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      gap: 32px;
+    }
+
+    .hero-drop-cap {
+      font-family: var(--serif);
+      font-size: clamp(7rem, 14vw, 13rem);
+      line-height: .85;
+      font-weight: 900;
+      color: var(--paper-dark);
+      letter-spacing: -.05em;
+      pointer-events: none;
+      user-select: none;
+      margin-bottom: -24px;
+    }
+
+    .hero-stat-row {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 1px;
+      background: var(--rule);
+      border: 1px solid var(--rule);
+    }
+
+    .hero-stat { background: var(--paper); padding: 24px 20px; text-align: center; }
+
+    .hero-stat-num {
+      font-family: var(--serif);
+      font-size: 2.2rem;
+      font-weight: 900;
+      color: var(--ink);
+      line-height: 1;
+      display: block;
+    }
+
+    .hero-stat-label {
+      font-size: .7rem;
+      letter-spacing: .12em;
+      text-transform: uppercase;
+      color: var(--ink-muted);
+      margin-top: 4px;
+      display: block;
+    }
+
+    .hero-pull-quote {
+      border-top: 2px solid var(--ink);
+      border-bottom: 1px solid var(--rule);
+      padding: 24px 0;
+      font-family: var(--serif);
+      font-style: italic;
+      font-size: 1.3rem;
+      color: var(--ink-soft);
+      line-height: 1.5;
+    }
+
+    /* ── SECTION RULE HEADER ──────────────────────────────────── */
+    .section-rule { padding: 64px 48px 0; }
+
+    .section-rule-line {
+      display: flex;
+      align-items: center;
+      gap: 20px;
+      margin-bottom: 40px;
+    }
+
+    .section-rule-line h2 {
+      font-family: var(--serif);
+      font-size: 1.1rem;
+      font-weight: 700;
+      letter-spacing: .06em;
+      white-space: nowrap;
+      text-transform: uppercase;
+    }
+
+    .section-rule-line::before {
+      content: '';
+      width: 40px; height: 1px;
+      background: var(--ink);
+      flex-shrink: 0;
+    }
+
+    .section-rule-line::after {
+      content: '';
+      flex: 1; height: 1px;
+      background: var(--ink);
+    }
+
+    /* ── SERVICES GRID ────────────────────────────────────────── */
+    .services-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
+      gap: 1px;
+      background: var(--rule);
+      border: 1px solid var(--rule);
+      margin: 0 48px;
+    }
+
+    .service-card {
+      background: var(--paper);
+      padding: 36px 32px;
+      position: relative;
+      overflow: hidden;
+      cursor: default;
+      transition: background .3s;
+    }
+
+    .service-card::before {
+      content: '';
+      position: absolute;
+      top: 0; left: 0;
+      width: 3px; height: 0;
+      background: var(--accent);
+      transition: height .4s ease;
+    }
+
+    .service-card:hover { background: var(--paper-mid); }
+    .service-card:hover::before { height: 100%; }
+
+    .service-num {
+      font-family: var(--serif);
+      font-size: 3rem;
+      font-weight: 900;
+      color: var(--paper-dark);
+      line-height: 1;
+      margin-bottom: 16px;
+      display: block;
+      transition: color .3s;
+    }
+
+    .service-title {
+      font-family: var(--serif);
+      font-size: 1.3rem;
+      font-weight: 700;
+      color: var(--ink);
+      margin-bottom: 10px;
+      line-height: 1.2;
+    }
+
+    .service-body {
+      font-size: .88rem;
+      color: var(--ink-soft);
+      line-height: 1.65;
+      font-weight: 300;
+    }
+
+    .service-link {
+      display: inline-block;
+      margin-top: 16px;
+      font-size: .72rem;
+      letter-spacing: .1em;
+      text-transform: uppercase;
+      color: var(--accent);
+      text-decoration: none;
+      font-weight: 500;
+      border-bottom: 1px solid transparent;
+      transition: border-color .2s;
+    }
+
+    .service-link:hover { border-color: var(--accent); }
+
+    /* ── MARQUEE STRIP ────────────────────────────────────────── */
+    .marquee-strip {
+      border-top: 1px solid var(--rule);
+      border-bottom: 1px solid var(--rule);
+      margin-top: 64px;
+      overflow: hidden;
+      background: var(--ink);
+      padding: 14px 0;
+      white-space: nowrap;
+    }
+
+    .marquee-track {
+      display: inline-flex;
+      animation: marquee 28s linear infinite;
+    }
+
+    .marquee-item {
+      font-size: .72rem;
+      letter-spacing: .18em;
+      text-transform: uppercase;
+      color: rgba(245,240,232,.5);
+      font-weight: 500;
+      padding: 0 40px;
+      border-right: 1px solid rgba(255,255,255,.1);
+    }
+
+    .marquee-item span { color: var(--accent); margin-right: 12px; }
+
+    @keyframes marquee {
+      from { transform: translateX(0); }
+      to   { transform: translateX(-50%); }
+    }
+
+    /* ── PROCESS ──────────────────────────────────────────────── */
+    .process { padding: 0 48px 64px; }
+
+    .process-grid {
+      display: grid;
+      grid-template-columns: repeat(4, 1fr);
+      gap: 1px;
+      background: var(--rule);
+      border: 1px solid var(--rule);
+    }
+
+    .process-step {
+      background: var(--paper);
+      padding: 40px 28px;
+      transition: background .3s;
+    }
+
+    .process-step:hover { background: var(--paper-mid); }
+
+    .process-step-num {
+      font-family: var(--serif);
+      font-size: .85rem;
+      font-weight: 700;
+      color: var(--accent);
+      letter-spacing: .1em;
+      margin-bottom: 20px;
+      display: block;
+    }
+
+    .process-step-title {
+      font-family: var(--serif);
+      font-size: 1.25rem;
+      font-weight: 700;
+      margin-bottom: 12px;
+      line-height: 1.2;
+    }
+
+    .process-step-body {
+      font-size: .85rem;
+      color: var(--ink-soft);
+      line-height: 1.65;
+      font-weight: 300;
+    }
+
+    /* ── ABOUT ────────────────────────────────────────────────── */
+    .about {
+      margin: 0 48px 64px;
+      background: var(--ink);
+      color: var(--paper);
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+    }
+
+    .about-left {
+      padding: 64px 56px;
+      border-right: 1px solid rgba(255,255,255,.1);
+    }
+
+    .about-eyebrow {
+      font-size: .72rem;
+      letter-spacing: .18em;
+      text-transform: uppercase;
+      color: var(--accent);
+      margin-bottom: 24px;
+      font-weight: 500;
+    }
+
+    .about-headline {
+      font-family: var(--serif);
+      font-size: clamp(2rem, 3.5vw, 3.2rem);
+      font-weight: 700;
+      line-height: 1.15;
+      margin-bottom: 28px;
+      letter-spacing: -.02em;
+    }
+
+    .about-body {
+      font-size: .95rem;
+      color: rgba(245,240,232,.7);
+      line-height: 1.75;
+      font-weight: 300;
+      margin-bottom: 32px;
+    }
+
+    .about-meta {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 1px;
+      background: rgba(255,255,255,.08);
+      border: 1px solid rgba(255,255,255,.08);
+    }
+
+    .about-meta-item { background: rgba(255,255,255,.03); padding: 20px 18px; }
+
+    .about-meta-label {
+      font-size: .68rem;
+      letter-spacing: .14em;
+      text-transform: uppercase;
+      color: rgba(245,240,232,.4);
+      margin-bottom: 6px;
+      display: block;
+    }
+
+    .about-meta-val {
+      font-family: var(--serif);
+      font-size: 1.3rem;
+      font-weight: 700;
+      color: var(--paper);
+    }
+
+    .about-right {
+      padding: 64px 56px;
+      display: flex;
+      flex-direction: column;
+      justify-content: space-between;
+    }
+
+    .about-values { list-style: none; display: flex; flex-direction: column; }
+
+    .about-values li {
+      padding: 18px 0;
+      border-bottom: 1px solid rgba(255,255,255,.08);
+      display: flex;
+      align-items: flex-start;
+      gap: 16px;
+      font-size: .9rem;
+      color: rgba(245,240,232,.8);
+      font-weight: 300;
+      line-height: 1.5;
+    }
+
+    .about-values li:last-child { border-bottom: none; }
+
+    .about-values li::before {
+      content: '✦';
+      color: var(--accent);
+      font-size: .7rem;
+      flex-shrink: 0;
+      margin-top: 3px;
+    }
+
+    .about-cta-block {
+      margin-top: 40px;
+      padding-top: 32px;
+      border-top: 1px solid rgba(255,255,255,.1);
+    }
+
+    .about-cta-block p { font-size: .85rem; color: rgba(245,240,232,.5); margin-bottom: 16px; }
+
+    .btn-outline-light {
+      display: inline-block;
+      padding: 12px 28px;
+      border: 1px solid rgba(245,240,232,.4);
+      color: var(--paper);
+      font-size: .75rem;
+      letter-spacing: .12em;
+      text-transform: uppercase;
+      text-decoration: none;
+      font-weight: 500;
+      transition: background .25s, border-color .25s;
+    }
+
+    .btn-outline-light:hover { background: var(--accent); border-color: var(--accent); }
+
+    /* ── TESTIMONIALS ─────────────────────────────────────────── */
+    .testimonials { padding: 0 48px 64px; }
+
+    .testi-grid {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 1px;
+      background: var(--rule);
+      border: 1px solid var(--rule);
+    }
+
+    .testi-card {
+      background: var(--paper);
+      padding: 40px 32px;
+      display: flex;
+      flex-direction: column;
+      gap: 20px;
+      transition: background .3s;
+    }
+
+    .testi-card:hover { background: var(--paper-mid); }
+
+    .testi-stars { color: var(--accent); font-size: .85rem; letter-spacing: 3px; }
+
+    .testi-quote {
+      font-family: var(--serif);
+      font-style: italic;
+      font-size: 1.05rem;
+      color: var(--ink-soft);
+      line-height: 1.6;
+      flex: 1;
+    }
+
+    .testi-author {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      padding-top: 16px;
+      border-top: 1px solid var(--rule);
+    }
+
+    .testi-avatar {
+      width: 36px; height: 36px;
+      background: var(--ink);
+      border-radius: 50%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-family: var(--serif);
+      font-weight: 700;
+      color: var(--paper);
+      font-size: .85rem;
+      flex-shrink: 0;
+    }
+
+    .testi-name { font-size: .82rem; font-weight: 500; color: var(--ink); display: block; }
+    .testi-role { font-size: .75rem; color: var(--ink-muted); display: block; }
+
+    /* ── CTA BAND ─────────────────────────────────────────────── */
+    .cta-band {
+      margin: 0 48px 64px;
+      background: var(--accent);
+      padding: 56px 64px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 40px;
+    }
+
+    .cta-band-text h2 {
+      font-family: var(--serif);
+      font-size: clamp(1.6rem, 2.8vw, 2.4rem);
+      font-weight: 900;
+      color: var(--white);
+      line-height: 1.15;
+      margin-bottom: 8px;
+      letter-spacing: -.02em;
+    }
+
+    .cta-band-text p { font-size: .9rem; color: rgba(255,255,255,.75); font-weight: 300; }
+
+    .btn-white {
+      background: var(--white);
+      color: var(--accent);
+      padding: 16px 36px;
+      font-size: .8rem;
+      letter-spacing: .12em;
+      text-transform: uppercase;
+      font-weight: 700;
+      text-decoration: none;
+      white-space: nowrap;
+      flex-shrink: 0;
+      transition: background .25s, color .25s;
+    }
+
+    .btn-white:hover { background: var(--ink); color: var(--white); }
+
+    /* ── CONTACT ──────────────────────────────────────────────── */
+    .contact { padding: 64px 48px; border-top: 3px double var(--rule); }
+
+    .contact-inner {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 80px;
+      align-items: start;
+    }
+
+    .contact-left .section-label {
+      font-size: .72rem;
+      letter-spacing: .18em;
+      text-transform: uppercase;
+      color: var(--accent);
+      font-weight: 500;
+      margin-bottom: 20px;
+    }
+
+    .contact-headline {
+      font-family: var(--serif);
+      font-size: clamp(2rem, 3vw, 3rem);
+      font-weight: 900;
+      line-height: 1.1;
+      margin-bottom: 20px;
+      letter-spacing: -.02em;
+    }
+
+    .contact-body {
+      font-size: .95rem;
+      color: var(--ink-soft);
+      line-height: 1.7;
+      font-weight: 300;
+      margin-bottom: 32px;
+    }
+
+    .contact-info-items { display: flex; flex-direction: column; gap: 12px; }
+
+    .contact-info-item {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      font-size: .85rem;
+      color: var(--ink-soft);
+    }
+
+    .contact-info-item::before {
+      content: '';
+      width: 20px; height: 1px;
+      background: var(--accent);
+      flex-shrink: 0;
+    }
+
+    .contact-form { display: flex; flex-direction: column; gap: 0; }
+
+    .form-row {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 1px;
+      background: var(--rule);
+      border: 1px solid var(--rule);
+      border-bottom: none;
+    }
+
+    .form-field { background: var(--paper); }
+
+    .form-field label {
+      display: block;
+      padding: 14px 20px 4px;
+      font-size: .68rem;
+      letter-spacing: .12em;
+      text-transform: uppercase;
+      color: var(--ink-muted);
+      font-weight: 500;
+    }
+
+    .form-field input,
+    .form-field textarea {
+      width: 100%;
+      background: transparent;
+      border: none;
+      outline: none;
+      padding: 4px 20px 14px;
+      font-family: var(--sans);
+      font-size: .9rem;
+      color: var(--ink);
+      resize: none;
+    }
+
+    .form-field-full {
+      background: var(--paper);
+      border: 1px solid var(--rule);
+      border-bottom: none;
+    }
+
+    .contact-form .btn-primary { width: 100%; padding: 18px; text-align: center; font-size: .78rem; }
+
+    /* ── FOOTER ───────────────────────────────────────────────── */
+    .site-footer { background: var(--ink); color: var(--paper); border-top: 3px solid var(--accent); }
+
+    .footer-top {
+      display: grid;
+      grid-template-columns: 2fr 1fr 1fr;
+      padding: 56px 48px;
+      gap: 48px;
+      border-bottom: 1px solid rgba(255,255,255,.08);
+    }
+
+    .footer-brand {
+      font-family: var(--serif);
+      font-size: 2rem;
+      font-weight: 900;
+      letter-spacing: -.02em;
+      display: block;
+      margin-bottom: 16px;
+    }
+
+    .footer-brand-desc {
+      font-size: .85rem;
+      color: rgba(245,240,232,.5);
+      font-weight: 300;
+      line-height: 1.6;
+    }
+
+    .footer-col-title {
+      font-size: .72rem;
+      letter-spacing: .16em;
+      text-transform: uppercase;
+      color: rgba(245,240,232,.4);
+      margin-bottom: 20px;
+      font-weight: 500;
+    }
+
+    .footer-links { list-style: none; display: flex; flex-direction: column; gap: 10px; }
+
+    .footer-links a {
+      font-size: .85rem;
+      color: rgba(245,240,232,.6);
+      text-decoration: none;
+      font-weight: 300;
+      transition: color .2s;
+    }
+
+    .footer-links a:hover { color: var(--accent); }
+
+    .footer-bottom {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: 20px 48px;
+    }
+
+    .footer-copy { font-size: .75rem; color: rgba(245,240,232,.3); letter-spacing: .05em; }
+    .footer-tagline { font-family: var(--serif); font-style: italic; font-size: .85rem; color: rgba(245,240,232,.25); }
+
+    /* ── SCROLL REVEAL ────────────────────────────────────────── */
+    .reveal {
+      opacity: 0;
+      transform: translateY(24px);
+      transition: opacity .65s ease, transform .65s ease;
+    }
+
+    .reveal.visible { opacity: 1; transform: none; }
+    .reveal-delay-1 { transition-delay: .1s; }
+    .reveal-delay-2 { transition-delay: .2s; }
+    .reveal-delay-3 { transition-delay: .3s; }
+    .reveal-delay-4 { transition-delay: .4s; }
+
+    /* ── RESPONSIVE ───────────────────────────────────────────── */
+    @media (max-width: 1024px) {
+      .process-grid { grid-template-columns: repeat(2, 1fr); }
+      .testi-grid   { grid-template-columns: repeat(2, 1fr); }
+      .footer-top   { grid-template-columns: 1fr 1fr; }
+    }
+
+    @media (max-width: 900px) {
+      .mast-dateline, .mast-main { padding: 10px 24px; }
+      .hero { grid-template-columns: 1fr; padding: 0 24px; min-height: auto; }
+      .hero-divider { display: none; }
+      .hero-left  { padding: 48px 0 32px; }
+      .hero-right { padding: 0 0 48px; }
+      .hero-drop-cap { font-size: 8rem; }
+      .section-rule { padding: 48px 24px 0; }
+      .services-grid { margin: 0 24px; }
+      .process { padding: 0 24px 48px; }
+      .process-grid { grid-template-columns: 1fr; }
+      .about { margin: 0 24px 48px; grid-template-columns: 1fr; }
+      .about-left { border-right: none; border-bottom: 1px solid rgba(255,255,255,.1); padding: 48px 32px; }
+      .about-right { padding: 48px 32px; }
+      .testimonials { padding: 0 24px 48px; }
+      .testi-grid { grid-template-columns: 1fr; }
+      .cta-band { margin: 0 24px 48px; padding: 40px 32px; flex-direction: column; align-items: flex-start; }
+      .contact { padding: 48px 24px; }
+      .contact-inner { grid-template-columns: 1fr; gap: 40px; }
+      .form-row { grid-template-columns: 1fr; }
+      .footer-top { padding: 40px 24px; grid-template-columns: 1fr; }
+      .footer-bottom { padding: 16px 24px; flex-direction: column; gap: 8px; text-align: center; }
+    }
+  </style>
+</head>
+<body>
+
+  <!-- MASTHEAD -->
+  <header class="mast" id="home">
+    <div class="mast-dateline">
+      <span><%= tone.charAt(0).toUpperCase() + tone.slice(1) %> · Est. <%= year %></span>
+      <span>Excellence in Every Detail</span>
+    </div>
+    <nav class="mast-main">
+      <a href="#home" class="mast-brand"><%= businessName %></a>
+      <ul class="mast-nav">
+        <li><a href="#services">Services</a></li>
+        <li><a href="#process">Process</a></li>
+        <li><a href="#about">About</a></li>
+        <li><a href="#contact" class="nav-cta">Contact Us</a></li>
+      </ul>
+    </nav>
+  </header>
+
+  <!-- HERO -->
+  <section class="hero">
+    <div class="hero-left reveal">
+      <div>
+        <p class="hero-issue"><%= tone.charAt(0).toUpperCase() + tone.slice(1) %> Solutions</p>
+        <h1 class="hero-headline">
+          <%= businessName.split(' ').slice(0, -1).join(' ') || businessName %>
+          <% if(businessName.split(' ').length > 1) { %>
+            <em><%= businessName.split(' ').slice(-1)[0] %></em>
+          <% } %>
+        </h1>
+        <p class="hero-deck"><%= tagline %></p>
+      </div>
+      <div class="hero-actions">
+        <a href="#services" class="btn-primary">Explore Services</a>
+        <a href="#about" class="btn-ghost">Our Story</a>
+      </div>
+    </div>
+
+    <div class="hero-divider"></div>
+
+    <div class="hero-right reveal reveal-delay-1">
+      <div class="hero-drop-cap"><%= businessName.charAt(0) %></div>
+      <div class="hero-stat-row">
+        <div class="hero-stat">
+          <span class="hero-stat-num"><%= products.length %></span>
+          <span class="hero-stat-label">Services</span>
+        </div>
+        <div class="hero-stat">
+          <span class="hero-stat-num">100%</span>
+          <span class="hero-stat-label">Committed</span>
+        </div>
+        <div class="hero-stat">
+          <span class="hero-stat-num">24/7</span>
+          <span class="hero-stat-label">Support</span>
+        </div>
+      </div>
+      <blockquote class="hero-pull-quote">
+        "The measure of excellence is in the detail — and the detail is everything."
+      </blockquote>
+    </div>
+  </section>
+
+  <!-- SERVICES -->
+  <section id="services">
+    <div class="section-rule">
+      <div class="section-rule-line"><h2>What We Offer</h2></div>
+    </div>
+    <div class="services-grid">
+      <% products.forEach(function(product, i) { %>
+        <div class="service-card reveal reveal-delay-<%= Math.min(i + 1, 4) %>">
+          <span class="service-num">0<%= i + 1 %></span>
+          <h3 class="service-title"><%= product %></h3>
+          <p class="service-body">Delivering premium <%= product.toLowerCase() %> solutions crafted with precision and a relentless focus on outcomes that move the needle.</p>
+          <a href="#contact" class="service-link">Enquire →</a>
+        </div>
+      <% }); %>
+    </div>
+  </section>
+
+  <!-- MARQUEE -->
+  <div class="marquee-strip">
+    <div class="marquee-track">
+      <% const marqueeItems = [...products, ...products, ...products, ...products]; %>
+      <% marqueeItems.forEach(function(p) { %>
+        <span class="marquee-item"><span>✦</span><%= p %></span>
+      <% }); %>
+    </div>
+  </div>
+
+  <!-- PROCESS -->
+  <section id="process">
+    <div class="section-rule">
+      <div class="section-rule-line"><h2>How We Work</h2></div>
+    </div>
+    <div class="process reveal">
+      <div class="process-grid">
+        <div class="process-step">
+          <span class="process-step-num">Step 01</span>
+          <h3 class="process-step-title">Discovery & Scoping</h3>
+          <p class="process-step-body">We begin by listening. A deep-dive consultation to understand your goals, constraints, and the outcomes that matter most to you and your organisation.</p>
+        </div>
+        <div class="process-step">
+          <span class="process-step-num">Step 02</span>
+          <h3 class="process-step-title">Strategy & Planning</h3>
+          <p class="process-step-body">Every engagement is backed by a bespoke plan. We map the path from where you are to where you need to be, with clear milestones and accountability.</p>
+        </div>
+        <div class="process-step">
+          <span class="process-step-num">Step 03</span>
+          <h3 class="process-step-title">Execution & Delivery</h3>
+          <p class="process-step-body">Our team executes with discipline. Regular updates, transparent communication, and a commitment to delivering on time and within scope — every time.</p>
+        </div>
+        <div class="process-step">
+          <span class="process-step-num">Step 04</span>
+          <h3 class="process-step-title">Review & Growth</h3>
+          <p class="process-step-body">We don't disappear at delivery. Post-project reviews, performance tracking, and ongoing support ensure results compound over time.</p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ABOUT -->
+  <section id="about">
+    <div class="section-rule">
+      <div class="section-rule-line"><h2>Our Story</h2></div>
+    </div>
+    <div class="about reveal">
+      <div class="about-left">
+        <p class="about-eyebrow">Who We Are</p>
+        <h2 class="about-headline">Built on principle.<br>Driven by purpose.</h2>
+        <p class="about-body"><%= about %></p>
+        <div class="about-meta">
+          <div class="about-meta-item">
+            <span class="about-meta-label">Founded</span>
+            <span class="about-meta-val"><%= year %></span>
+          </div>
+          <div class="about-meta-item">
+            <span class="about-meta-label">Services</span>
+            <span class="about-meta-val"><%= products.length %></span>
+          </div>
+          <div class="about-meta-item">
+            <span class="about-meta-label">Focus</span>
+            <span class="about-meta-val"><%= tone.charAt(0).toUpperCase() + tone.slice(1) %></span>
+          </div>
+          <div class="about-meta-item">
+            <span class="about-meta-label">Commitment</span>
+            <span class="about-meta-val">100%</span>
+          </div>
+        </div>
+      </div>
+      <div class="about-right">
+        <ul class="about-values">
+          <li>Uncompromising quality in every client engagement we undertake</li>
+          <li>Transparent, honest relationships built on trust and open communication</li>
+          <li>Results measured in outcomes and impact, not hours or activity</li>
+          <li>Continuous improvement embedded as a core operating practice</li>
+          <li>Long-term partnerships, not transactional project work</li>
+        </ul>
+        <div class="about-cta-block">
+          <p>Ready to begin something great together?</p>
+          <a href="#contact" class="btn-outline-light">Start a Conversation</a>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- TESTIMONIALS -->
+  <section id="testimonials">
+    <div class="section-rule">
+      <div class="section-rule-line"><h2>Client Voices</h2></div>
+    </div>
+    <div class="testimonials">
+      <div class="testi-grid">
+        <div class="testi-card reveal">
+          <div class="testi-stars">★★★★★</div>
+          <p class="testi-quote">"Working with this team transformed the way we approach our market. The depth of expertise and genuine care for results is rare — and it showed in every deliverable."</p>
+          <div class="testi-author">
+            <div class="testi-avatar">MR</div>
+            <div>
+              <span class="testi-name">Michael R.</span>
+              <span class="testi-role">Director of Operations</span>
+            </div>
+          </div>
+        </div>
+        <div class="testi-card reveal reveal-delay-1">
+          <div class="testi-stars">★★★★★</div>
+          <p class="testi-quote">"From first conversation to final delivery, the professionalism was consistent and the results exceeded what we thought was possible. Highly recommended without reservation."</p>
+          <div class="testi-author">
+            <div class="testi-avatar">SL</div>
+            <div>
+              <span class="testi-name">Sarah L.</span>
+              <span class="testi-role">Founder & CEO</span>
+            </div>
+          </div>
+        </div>
+        <div class="testi-card reveal reveal-delay-2">
+          <div class="testi-stars">★★★★★</div>
+          <p class="testi-quote">"The attention to detail is what sets them apart. Every question was answered before we thought to ask it. This is what a true professional partnership feels like."</p>
+          <div class="testi-author">
+            <div class="testi-avatar">JK</div>
+            <div>
+              <span class="testi-name">James K.</span>
+              <span class="testi-role">Head of Strategy</span>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- CTA BAND -->
+  <div class="cta-band reveal">
+    <div class="cta-band-text">
+      <h2>Ready to elevate your business?</h2>
+      <p>Join the clients who trust us to deliver — consistently, expertly, and on time.</p>
+    </div>
+    <a href="#contact" class="btn-white">Get in Touch</a>
+  </div>
+
+  <!-- CONTACT -->
+  <section id="contact" class="contact">
+    <div class="contact-inner">
+      <div class="contact-left reveal">
+        <p class="section-label">Get In Touch</p>
+        <h2 class="contact-headline">Let's build something remarkable.</h2>
+        <p class="contact-body">Reach out and a member of our team will respond within one business day. We look forward to understanding what you're trying to achieve.</p>
+        <div class="contact-info-items">
+          <div class="contact-info-item">Available Monday to Friday, 9am – 6pm</div>
+          <div class="contact-info-item">Response guaranteed within 24 hours</div>
+          <div class="contact-info-item">All enquiries treated in strict confidence</div>
+        </div>
+      </div>
+      <div class="reveal reveal-delay-1">
+        <form class="contact-form" data-contact>
+          <div class="form-row">
+            <div class="form-field">
+              <label>First Name</label>
+              <input type="text" placeholder="Jane" required>
+            </div>
+            <div class="form-field">
+              <label>Last Name</label>
+              <input type="text" placeholder="Smith" required>
+            </div>
+          </div>
+          <div class="form-field-full">
+            <div class="form-field">
+              <label>Email Address</label>
+              <input type="email" placeholder="jane@company.com" required>
+            </div>
+          </div>
+          <div class="form-field-full">
+            <div class="form-field">
+              <label>Service of Interest</label>
+              <input type="text" placeholder="<%= products[0] || 'Tell us what you need' %>">
+            </div>
+          </div>
+          <div class="form-field-full">
+            <div class="form-field">
+              <label>Your Message</label>
+              <textarea rows="5" placeholder="Tell us about your project, timeline, and goals…" required></textarea>
+            </div>
+          </div>
+          <button type="submit" class="btn-primary">Send Message</button>
+        </form>
+      </div>
+    </div>
+  </section>
+
+  <!-- FOOTER -->
+  <footer class="site-footer">
+    <div class="footer-top">
+      <div class="footer-brand-col">
+        <span class="footer-brand"><%= businessName %></span>
+        <p class="footer-brand-desc"><%= tagline %> — built on trust, driven by results.</p>
+      </div>
+      <div>
+        <p class="footer-col-title">Navigation</p>
+        <ul class="footer-links">
+          <li><a href="#home">Home</a></li>
+          <li><a href="#services">Services</a></li>
+          <li><a href="#process">Process</a></li>
+          <li><a href="#about">About</a></li>
+          <li><a href="#contact">Contact</a></li>
+        </ul>
+      </div>
+      <div>
+        <p class="footer-col-title">Services</p>
+        <ul class="footer-links">
+          <% products.forEach(function(p) { %>
+            <li><a href="#services"><%= p %></a></li>
+          <% }); %>
+        </ul>
+      </div>
+    </div>
+    <div class="footer-bottom">
+      <span class="footer-copy">© <%= year %> <%= businessName %>. All rights reserved.</span>
+      <span class="footer-tagline">"Excellence in every detail."</span>
+    </div>
+  </footer>
+
+  <script>
+    // ── SMOOTH SCROLL
+    document.querySelectorAll('a[href^="#"]').forEach(a => {
+      a.addEventListener('click', e => {
+        const target = document.querySelector(a.getAttribute('href'));
+        if (target) { e.preventDefault(); target.scrollIntoView({ behavior: 'smooth', block: 'start' }); }
+      });
+    });
+
+    // ── SCROLL REVEAL
+    const revealObserver = new IntersectionObserver((entries) => {
+      entries.forEach(entry => {
+        if (entry.isIntersecting) { entry.target.classList.add('visible'); revealObserver.unobserve(entry.target); }
+      });
+    }, { threshold: 0.07, rootMargin: '0px 0px -50px 0px' });
+
+    document.querySelectorAll('.reveal').forEach(el => revealObserver.observe(el));
+    setTimeout(() => document.querySelectorAll('.hero .reveal').forEach(el => el.classList.add('visible')), 80);
+
+    // ── CONTACT FORM
+    const contactForm = document.querySelector('[data-contact]');
+    if (contactForm) {
+      contactForm.addEventListener('submit', e => {
+        e.preventDefault();
+        const btn = contactForm.querySelector('button[type="submit"]');
+        btn.textContent = 'Sending…';
+        btn.style.background = '#888';
+        btn.disabled = true;
+        setTimeout(() => {
+          const notice = document.createElement('div');
+          notice.style.cssText = 'background:#1a5276;color:#f5f0e8;padding:16px 20px;font-size:.85rem;letter-spacing:.04em;margin-bottom:1px;';
+          notice.textContent = '✓ Message received — we will be in touch shortly.';
+          contactForm.insertAdjacentElement('beforebegin', notice);
+          contactForm.reset();
+          btn.textContent = 'Send Message';
+          btn.style.background = '';
+          btn.disabled = false;
+          setTimeout(() => notice.remove(), 5000);
+        }, 900);
+      });
+    }
+
+    // ── STICKY NAV SHADOW
+    const mast = document.querySelector('.mast');
+    window.addEventListener('scroll', () => {
+      mast.style.boxShadow = window.scrollY > 20 ? '0 2px 20px rgba(13,13,13,.08)' : 'none';
+    }, { passive: true });
+
+    // ── SERVICE CARD HOVER
+    document.querySelectorAll('.service-card').forEach(card => {
+      const num = card.querySelector('.service-num');
+      card.addEventListener('mouseenter', () => num.style.color = 'var(--paper-mid)');
+      card.addEventListener('mouseleave', () => num.style.color = 'var(--paper-dark)');
+    });
+
+    // ── MARQUEE PAUSE ON HOVER
+    const track = document.querySelector('.marquee-track');
+    if (track) {
+      track.addEventListener('mouseenter', () => track.style.animationPlayState = 'paused');
+      track.addEventListener('mouseleave', () => track.style.animationPlayState = 'running');
+    }
+  </script>
+</body>
+</html>

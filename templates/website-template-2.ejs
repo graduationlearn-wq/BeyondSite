@@ -4,105 +4,1247 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title><%= businessName %> | <%= tagline %></title>
-  <link rel="stylesheet" href="style.css">
-  <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link href="https://fonts.googleapis.com/css2?family=Syne:wght@400;700;800&family=Plus+Jakarta+Sans:wght@300;400;500;600&display=swap" rel="stylesheet">
+  <style>
+    *, *::before, *::after { margin: 0; padding: 0; box-sizing: border-box; }
+
+    :root {
+      --void:      #080810;
+      --deep:      #0e0e1a;
+      --surface:   #14141f;
+      --border:    rgba(255,255,255,.07);
+      --text:      #f0eee8;
+      --muted:     rgba(240,238,232,.45);
+      --dim:       rgba(240,238,232,.2);
+      --gold:      #c9a84c;
+      --gold-lt:   #e8c96a;
+      --gold-glow: rgba(201,168,76,.18);
+      --teal:      #2dd4bf;
+      --sans:      'Plus Jakarta Sans', system-ui, sans-serif;
+      --display:   'Syne', var(--sans);
+    }
+
+    html { scroll-behavior: smooth; }
+
+    body {
+      font-family: var(--sans);
+      background: var(--void);
+      color: var(--text);
+      line-height: 1.65;
+      overflow-x: hidden;
+      -webkit-font-smoothing: antialiased;
+      cursor: none;
+    }
+
+    /* ── CUSTOM CURSOR ─── */
+    #cursor-dot {
+      position: fixed;
+      width: 8px; height: 8px;
+      background: var(--gold);
+      border-radius: 50%;
+      pointer-events: none;
+      z-index: 9999;
+      transform: translate(-50%, -50%);
+      transition: transform .08s, width .2s, height .2s, background .2s;
+    }
+    #cursor-ring {
+      position: fixed;
+      width: 36px; height: 36px;
+      border: 1px solid rgba(201,168,76,.5);
+      border-radius: 50%;
+      pointer-events: none;
+      z-index: 9998;
+      transform: translate(-50%, -50%);
+      transition: transform .18s ease, width .25s, height .25s, border-color .2s;
+    }
+    body:has(a:hover) #cursor-dot,
+    body:has(button:hover) #cursor-dot { width: 12px; height: 12px; background: var(--gold-lt); }
+    body:has(a:hover) #cursor-ring,
+    body:has(button:hover) #cursor-ring { width: 56px; height: 56px; border-color: var(--gold); }
+
+    /* ── NOISE OVERLAY ─── */
+    body::after {
+      content: '';
+      position: fixed; inset: 0;
+      pointer-events: none; z-index: 998;
+      opacity: .025;
+      background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 512 512' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='.85' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E");
+      background-size: 200px;
+    }
+
+    /* ── GRADIENT ORBS ─── */
+    .orb {
+      position: fixed;
+      border-radius: 50%;
+      pointer-events: none;
+      z-index: 0;
+      filter: blur(80px);
+      opacity: .55;
+      animation: orbDrift 18s ease-in-out infinite alternate;
+    }
+    .orb-1 { width: 600px; height: 600px; background: radial-gradient(circle, rgba(201,168,76,.22) 0%, transparent 70%); top: -200px; left: -100px; animation-duration: 20s; }
+    .orb-2 { width: 500px; height: 500px; background: radial-gradient(circle, rgba(45,212,191,.12) 0%, transparent 70%); bottom: 0; right: -150px; animation-duration: 25s; animation-delay: -8s; }
+    .orb-3 { width: 350px; height: 350px; background: radial-gradient(circle, rgba(201,168,76,.1) 0%, transparent 70%); top: 50%; left: 50%; animation-duration: 30s; animation-delay: -15s; }
+
+    @keyframes orbDrift {
+      0%   { transform: translate(0,0) scale(1); }
+      33%  { transform: translate(60px,-40px) scale(1.08); }
+      66%  { transform: translate(-30px,60px) scale(.95); }
+      100% { transform: translate(40px,30px) scale(1.05); }
+    }
+
+    /* ── NAVIGATION ─── */
+    .nav {
+      position: fixed; top: 0; left: 0; right: 0;
+      z-index: 500;
+      padding: 0 56px;
+      display: flex; align-items: center; justify-content: space-between;
+      height: 72px;
+      border-bottom: 1px solid transparent;
+      transition: background .4s, border-color .4s, backdrop-filter .4s;
+    }
+    .nav.scrolled {
+      background: rgba(8,8,16,.82);
+      backdrop-filter: blur(18px);
+      border-color: var(--border);
+    }
+    .nav-logo {
+      font-family: var(--display);
+      font-size: 1.35rem;
+      font-weight: 800;
+      letter-spacing: -.02em;
+      color: var(--text);
+      text-decoration: none;
+    }
+    .nav-logo span { color: var(--gold); }
+    .nav-links {
+      display: flex; gap: 36px;
+      list-style: none; align-items: center;
+    }
+    .nav-links a {
+      font-size: .8rem;
+      letter-spacing: .1em;
+      text-transform: uppercase;
+      font-weight: 500;
+      color: var(--muted);
+      text-decoration: none;
+      transition: color .2s;
+    }
+    .nav-links a:hover { color: var(--text); }
+    .nav-cta {
+      display: inline-flex; align-items: center; gap: 8px;
+      background: transparent;
+      border: 1px solid var(--gold);
+      color: var(--gold) !important;
+      padding: 9px 22px;
+      font-size: .75rem !important;
+      letter-spacing: .1em;
+      text-transform: uppercase;
+      font-weight: 600 !important;
+      text-decoration: none;
+      transition: background .25s, color .25s !important;
+    }
+    .nav-cta:hover { background: var(--gold) !important; color: var(--void) !important; }
+
+    /* ── HERO ─── */
+    .hero {
+      position: relative;
+      min-height: 100vh;
+      display: flex; align-items: center;
+      padding: 120px 56px 80px;
+      overflow: hidden;
+    }
+    .hero-inner {
+      position: relative; z-index: 2;
+      max-width: 900px;
+    }
+    .hero-eyebrow {
+      display: inline-flex; align-items: center; gap: 10px;
+      font-size: .72rem;
+      letter-spacing: .22em;
+      text-transform: uppercase;
+      color: var(--gold);
+      font-weight: 600;
+      margin-bottom: 32px;
+    }
+    .hero-eyebrow::before {
+      content: '';
+      width: 40px; height: 1px;
+      background: var(--gold);
+    }
+    .hero-headline {
+      font-family: var(--display);
+      font-size: clamp(3.8rem, 7.5vw, 8rem);
+      font-weight: 800;
+      line-height: .95;
+      letter-spacing: -.04em;
+      margin-bottom: 32px;
+    }
+    .hero-headline .line { display: block; overflow: hidden; }
+    .hero-headline .word {
+      display: inline-block;
+      animation: wordIn .9s cubic-bezier(.16,1,.3,1) both;
+    }
+    .hero-headline .word:nth-child(1) { animation-delay: .1s; }
+    .hero-headline .word:nth-child(2) { animation-delay: .2s; }
+    .hero-headline .word:nth-child(3) { animation-delay: .3s; }
+    @keyframes wordIn {
+      from { transform: translateY(105%); opacity: 0; }
+      to   { transform: translateY(0);    opacity: 1; }
+    }
+    .hero-headline .highlight {
+      background: linear-gradient(135deg, var(--gold) 0%, var(--gold-lt) 50%, var(--gold) 100%);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      background-clip: text;
+    }
+    .hero-sub {
+      font-size: 1.1rem;
+      color: var(--muted);
+      font-weight: 300;
+      max-width: 560px;
+      line-height: 1.75;
+      margin-bottom: 48px;
+      animation: fadeUp .8s .5s both;
+    }
+    .hero-actions {
+      display: flex; gap: 16px; align-items: center;
+      animation: fadeUp .8s .65s both;
+    }
+    @keyframes fadeUp {
+      from { opacity: 0; transform: translateY(20px); }
+      to   { opacity: 1; transform: translateY(0); }
+    }
+    .btn-gold {
+      display: inline-flex; align-items: center; gap: 10px;
+      background: var(--gold);
+      color: var(--void);
+      padding: 16px 36px;
+      font-family: var(--sans);
+      font-size: .8rem;
+      letter-spacing: .1em;
+      text-transform: uppercase;
+      font-weight: 700;
+      border: none; cursor: none;
+      text-decoration: none;
+      transition: background .25s, box-shadow .25s, transform .15s;
+    }
+    .btn-gold:hover { background: var(--gold-lt); box-shadow: 0 0 36px var(--gold-glow); transform: translateY(-2px); }
+    .btn-outline {
+      display: inline-flex; align-items: center; gap: 10px;
+      background: transparent;
+      color: var(--text);
+      padding: 16px 32px;
+      font-size: .8rem;
+      letter-spacing: .1em;
+      text-transform: uppercase;
+      font-weight: 500;
+      border: 1px solid var(--border);
+      cursor: none;
+      text-decoration: none;
+      transition: border-color .25s, color .25s;
+    }
+    .btn-outline:hover { border-color: rgba(255,255,255,.35); color: var(--text); }
+
+    .hero-scroll {
+      position: absolute;
+      bottom: 40px; left: 56px;
+      display: flex; align-items: center; gap: 12px;
+      font-size: .7rem;
+      letter-spacing: .15em;
+      text-transform: uppercase;
+      color: var(--dim);
+      animation: fadeUp .8s .8s both;
+    }
+    .hero-scroll-line {
+      width: 48px; height: 1px;
+      background: var(--dim);
+      position: relative; overflow: hidden;
+    }
+    .hero-scroll-line::after {
+      content: '';
+      position: absolute; left: -100%; top: 0;
+      width: 100%; height: 100%;
+      background: var(--gold);
+      animation: scanLine 2s linear infinite;
+    }
+    @keyframes scanLine {
+      to { left: 100%; }
+    }
+    .hero-badge {
+      position: absolute;
+      right: 80px; top: 50%;
+      transform: translateY(-50%);
+      width: 150px; height: 150px;
+      animation: rotateBadge 20s linear infinite, fadeUp .8s .9s both;
+    }
+    .hero-badge svg { width: 100%; height: 100%; }
+    @keyframes rotateBadge {
+      to { transform: translateY(-50%) rotate(360deg); }
+    }
+
+    /* ── TICKER ─── */
+    .ticker {
+      position: relative; z-index: 2;
+      border-top: 1px solid var(--border);
+      border-bottom: 1px solid var(--border);
+      background: var(--surface);
+      padding: 16px 0;
+      overflow: hidden;
+    }
+    .ticker-track {
+      display: flex; gap: 0;
+      animation: tickerScroll 22s linear infinite;
+      width: max-content;
+    }
+    .ticker-item {
+      display: flex; align-items: center; gap: 24px;
+      padding: 0 40px;
+      font-size: .75rem;
+      letter-spacing: .12em;
+      text-transform: uppercase;
+      color: var(--muted);
+      font-weight: 500;
+      white-space: nowrap;
+    }
+    .ticker-item::after {
+      content: '◆';
+      color: var(--gold);
+      font-size: .5rem;
+    }
+    @keyframes tickerScroll {
+      from { transform: translateX(0); }
+      to   { transform: translateX(-50%); }
+    }
+
+    /* ── SECTION GLOBALS ─── */
+    section { position: relative; z-index: 2; }
+    .container { max-width: 1240px; margin: 0 auto; padding: 0 56px; }
+    .section-pad { padding: 120px 0; }
+    .section-label {
+      display: inline-flex; align-items: center; gap: 10px;
+      font-size: .68rem;
+      letter-spacing: .22em;
+      text-transform: uppercase;
+      color: var(--gold);
+      font-weight: 600;
+      margin-bottom: 20px;
+    }
+    .section-label::before {
+      content: '';
+      width: 28px; height: 1px;
+      background: var(--gold);
+    }
+    .section-title {
+      font-family: var(--display);
+      font-size: clamp(2.2rem, 4.5vw, 3.8rem);
+      font-weight: 800;
+      line-height: 1.05;
+      letter-spacing: -.03em;
+    }
+    .reveal {
+      opacity: 0;
+      transform: translateY(40px);
+      transition: opacity .8s ease, transform .8s ease;
+    }
+    .reveal.visible { opacity: 1; transform: translateY(0); }
+    .reveal-delay-1 { transition-delay: .12s; }
+    .reveal-delay-2 { transition-delay: .24s; }
+    .reveal-delay-3 { transition-delay: .36s; }
+
+    /* ── ABOUT ─── */
+    .about { background: var(--deep); border-top: 1px solid var(--border); border-bottom: 1px solid var(--border); }
+    .about-grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 80px;
+      align-items: center;
+    }
+    .about-left .section-title { margin-bottom: 24px; }
+    .about-body {
+      color: var(--muted);
+      font-size: 1.05rem;
+      line-height: 1.85;
+      font-weight: 300;
+      margin-bottom: 36px;
+    }
+    .about-tags { display: flex; flex-wrap: wrap; gap: 10px; }
+    .about-tag {
+      background: rgba(201,168,76,.1);
+      border: 1px solid rgba(201,168,76,.2);
+      color: var(--gold);
+      font-size: .72rem;
+      letter-spacing: .1em;
+      text-transform: uppercase;
+      font-weight: 600;
+      padding: 7px 16px;
+    }
+    .about-visual {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 16px;
+    }
+    .about-stat-card {
+      background: var(--surface);
+      border: 1px solid var(--border);
+      padding: 32px 28px;
+      transition: border-color .3s, transform .3s;
+    }
+    .about-stat-card:hover { border-color: rgba(201,168,76,.3); transform: translateY(-4px); }
+    .about-stat-card:nth-child(2) { margin-top: 32px; }
+    .about-stat-card:nth-child(4) { margin-top: -32px; }
+    .stat-num {
+      font-family: var(--display);
+      font-size: 2.8rem;
+      font-weight: 800;
+      color: var(--gold);
+      line-height: 1;
+      margin-bottom: 6px;
+    }
+    .stat-label {
+      font-size: .75rem;
+      letter-spacing: .08em;
+      text-transform: uppercase;
+      color: var(--muted);
+      font-weight: 500;
+    }
+
+    /* ── SERVICES ─── */
+    .services { background: var(--void); }
+    .services-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: flex-end;
+      margin-bottom: 72px;
+    }
+    .services-header .section-title { max-width: 500px; }
+    .services-meta {
+      font-size: .85rem;
+      color: var(--muted);
+      font-weight: 300;
+      max-width: 280px;
+      text-align: right;
+      line-height: 1.7;
+    }
+    .services-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+      gap: 1px;
+      background: var(--border);
+      border: 1px solid var(--border);
+    }
+    .service-card {
+      background: var(--void);
+      padding: 48px 40px;
+      position: relative;
+      overflow: hidden;
+      transition: background .3s;
+      cursor: none;
+    }
+    .service-card::before {
+      content: '';
+      position: absolute;
+      bottom: 0; left: 0;
+      width: 100%; height: 2px;
+      background: linear-gradient(90deg, var(--gold), var(--teal));
+      transform: scaleX(0); transform-origin: left;
+      transition: transform .35s ease;
+    }
+    .service-card:hover { background: var(--surface); }
+    .service-card:hover::before { transform: scaleX(1); }
+    .service-num {
+      font-family: var(--display);
+      font-size: 4.5rem;
+      font-weight: 800;
+      color: rgba(255,255,255,.05);
+      line-height: 1;
+      margin-bottom: 20px;
+      transition: color .3s;
+    }
+    .service-card:hover .service-num { color: rgba(201,168,76,.12); }
+    .service-name {
+      font-family: var(--display);
+      font-size: 1.3rem;
+      font-weight: 700;
+      margin-bottom: 14px;
+      letter-spacing: -.02em;
+    }
+    .service-desc {
+      font-size: .88rem;
+      color: var(--muted);
+      line-height: 1.75;
+      font-weight: 300;
+    }
+    .service-arrow {
+      display: inline-flex; align-items: center; gap: 8px;
+      margin-top: 24px;
+      font-size: .75rem;
+      letter-spacing: .1em;
+      text-transform: uppercase;
+      color: var(--gold);
+      font-weight: 600;
+      opacity: 0;
+      transform: translateX(-8px);
+      transition: opacity .3s, transform .3s;
+    }
+    .service-card:hover .service-arrow { opacity: 1; transform: translateX(0); }
+
+    /* ── PROCESS ─── */
+    .process { background: var(--deep); border-top: 1px solid var(--border); border-bottom: 1px solid var(--border); }
+    .process-header { text-align: center; margin-bottom: 80px; }
+    .process-header .section-label { justify-content: center; }
+    .process-steps {
+      display: grid;
+      grid-template-columns: repeat(4, 1fr);
+      gap: 0;
+      position: relative;
+    }
+    .process-steps::before {
+      content: '';
+      position: absolute;
+      top: 28px; left: 10%;
+      width: 80%; height: 1px;
+      background: linear-gradient(90deg, transparent, var(--border), var(--border), transparent);
+    }
+    .process-step {
+      padding: 0 32px;
+      text-align: center;
+    }
+    .step-circle {
+      width: 56px; height: 56px;
+      border: 1px solid var(--border);
+      border-radius: 50%;
+      display: flex; align-items: center; justify-content: center;
+      margin: 0 auto 28px;
+      font-family: var(--display);
+      font-size: .85rem;
+      font-weight: 800;
+      color: var(--gold);
+      background: var(--deep);
+      position: relative; z-index: 1;
+      transition: border-color .3s, background .3s;
+    }
+    .process-step:hover .step-circle { border-color: var(--gold); background: var(--gold-glow); }
+    .step-title {
+      font-family: var(--display);
+      font-size: 1.1rem;
+      font-weight: 700;
+      margin-bottom: 12px;
+      letter-spacing: -.01em;
+    }
+    .step-desc { font-size: .85rem; color: var(--muted); line-height: 1.7; font-weight: 300; }
+
+    /* ── NUMBERS ─── */
+    .numbers { background: var(--gold); }
+    .numbers-inner {
+      display: grid;
+      grid-template-columns: repeat(4, 1fr);
+      gap: 0;
+      border-left: 1px solid rgba(0,0,0,.15);
+    }
+    .number-item {
+      padding: 80px 48px;
+      border-right: 1px solid rgba(0,0,0,.15);
+      border-top: 1px solid rgba(0,0,0,.15);
+      border-bottom: 1px solid rgba(0,0,0,.15);
+    }
+    .number-val {
+      font-family: var(--display);
+      font-size: clamp(3rem, 5vw, 5rem);
+      font-weight: 800;
+      color: var(--void);
+      line-height: 1;
+      margin-bottom: 8px;
+    }
+    .number-label {
+      font-size: .8rem;
+      font-weight: 600;
+      color: rgba(8,8,16,.65);
+      letter-spacing: .08em;
+      text-transform: uppercase;
+    }
+
+    /* ── TESTIMONIALS ─── */
+    .testimonials { background: var(--void); }
+    .testi-header { text-align: center; margin-bottom: 72px; }
+    .testi-header .section-label { justify-content: center; }
+    .testi-grid {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 24px;
+    }
+    .testi-card {
+      background: var(--surface);
+      border: 1px solid var(--border);
+      padding: 48px 40px;
+      position: relative;
+      transition: border-color .3s, transform .3s;
+    }
+    .testi-card:hover { border-color: rgba(201,168,76,.3); transform: translateY(-6px); }
+    .testi-card::before {
+      content: '"';
+      position: absolute;
+      top: 24px; right: 32px;
+      font-family: var(--display);
+      font-size: 6rem;
+      color: rgba(201,168,76,.12);
+      line-height: 1;
+    }
+    .testi-stars { color: var(--gold); font-size: .9rem; margin-bottom: 20px; letter-spacing: 2px; }
+    .testi-quote {
+      font-size: .95rem;
+      color: var(--muted);
+      line-height: 1.85;
+      font-weight: 300;
+      margin-bottom: 32px;
+      font-style: italic;
+    }
+    .testi-author { display: flex; align-items: center; gap: 14px; }
+    .testi-avatar {
+      width: 44px; height: 44px;
+      border-radius: 50%;
+      background: linear-gradient(135deg, var(--gold) 0%, rgba(201,168,76,.4) 100%);
+      display: flex; align-items: center; justify-content: center;
+      font-size: .75rem;
+      font-weight: 700;
+      color: var(--void);
+      flex-shrink: 0;
+    }
+    .testi-name { display: block; font-weight: 600; font-size: .88rem; }
+    .testi-role { display: block; font-size: .77rem; color: var(--muted); margin-top: 2px; }
+
+    /* ── CTA BAND ─── */
+    .cta-band {
+      background: linear-gradient(135deg, var(--surface) 0%, var(--deep) 100%);
+      border-top: 1px solid var(--border);
+      border-bottom: 1px solid var(--border);
+      padding: 100px 56px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 48px;
+      position: relative;
+      overflow: hidden;
+    }
+    .cta-band::before {
+      content: '';
+      position: absolute;
+      inset: 0;
+      background: radial-gradient(ellipse 60% 100% at 80% 50%, rgba(201,168,76,.08) 0%, transparent 70%);
+    }
+    .cta-band-text { position: relative; z-index: 1; }
+    .cta-band-title {
+      font-family: var(--display);
+      font-size: clamp(2rem, 4vw, 3.2rem);
+      font-weight: 800;
+      letter-spacing: -.03em;
+      margin-bottom: 12px;
+    }
+    .cta-band-sub { font-size: 1rem; color: var(--muted); font-weight: 300; }
+    .cta-band .btn-gold { position: relative; z-index: 1; white-space: nowrap; }
+
+    /* ── CONTACT ─── */
+    .contact { background: var(--deep); }
+    .contact-inner {
+      display: grid;
+      grid-template-columns: 1fr 1.4fr;
+      gap: 100px;
+      align-items: start;
+    }
+    .contact-left .section-title { margin-bottom: 20px; }
+    .contact-desc {
+      font-size: .95rem;
+      color: var(--muted);
+      line-height: 1.8;
+      font-weight: 300;
+      margin-bottom: 48px;
+    }
+    .contact-details { display: flex; flex-direction: column; gap: 20px; }
+    .contact-detail {
+      display: flex; align-items: flex-start; gap: 14px;
+      font-size: .88rem;
+      color: var(--muted);
+    }
+    .contact-detail-icon {
+      width: 36px; height: 36px;
+      border: 1px solid rgba(201,168,76,.25);
+      display: flex; align-items: center; justify-content: center;
+      color: var(--gold);
+      font-size: .85rem;
+      flex-shrink: 0;
+    }
+    .contact-detail-text strong {
+      display: block;
+      color: var(--text);
+      font-weight: 600;
+      font-size: .8rem;
+      letter-spacing: .06em;
+      text-transform: uppercase;
+      margin-bottom: 2px;
+    }
+
+    /* Form */
+    .form-row { display: grid; grid-template-columns: 1fr 1fr; gap: 16px; }
+    .form-field { display: flex; flex-direction: column; gap: 8px; margin-bottom: 16px; }
+    .form-field label {
+      font-size: .72rem;
+      letter-spacing: .1em;
+      text-transform: uppercase;
+      font-weight: 600;
+      color: var(--muted);
+    }
+    .form-field input,
+    .form-field textarea,
+    .form-field select {
+      background: var(--surface);
+      border: 1px solid var(--border);
+      color: var(--text);
+      padding: 14px 18px;
+      font-family: var(--sans);
+      font-size: .9rem;
+      font-weight: 300;
+      transition: border-color .25s;
+      outline: none;
+      -webkit-appearance: none;
+    }
+    .form-field input::placeholder,
+    .form-field textarea::placeholder { color: var(--dim); }
+    .form-field input:focus,
+    .form-field textarea:focus,
+    .form-field select:focus { border-color: rgba(201,168,76,.5); }
+    .form-field textarea { resize: vertical; min-height: 130px; }
+    .form-submit {
+      width: 100%;
+      background: var(--gold);
+      color: var(--void);
+      border: none;
+      padding: 17px 40px;
+      font-family: var(--sans);
+      font-size: .8rem;
+      letter-spacing: .12em;
+      text-transform: uppercase;
+      font-weight: 700;
+      cursor: none;
+      transition: background .25s, box-shadow .25s;
+    }
+    .form-submit:hover { background: var(--gold-lt); box-shadow: 0 0 36px var(--gold-glow); }
+
+    /* ── FOOTER ─── */
+    .footer {
+      background: var(--void);
+      border-top: 1px solid var(--border);
+    }
+    .footer-top {
+      display: grid;
+      grid-template-columns: 1.8fr 1fr 1fr 1fr;
+      gap: 60px;
+      padding: 80px 0 60px;
+    }
+    .footer-brand-name {
+      font-family: var(--display);
+      font-size: 1.8rem;
+      font-weight: 800;
+      letter-spacing: -.03em;
+      color: var(--text);
+      margin-bottom: 16px;
+    }
+    .footer-brand-name span { color: var(--gold); }
+    .footer-tagline { font-size: .9rem; color: var(--muted); line-height: 1.7; font-weight: 300; max-width: 260px; }
+    .footer-col-title {
+      font-size: .7rem;
+      letter-spacing: .15em;
+      text-transform: uppercase;
+      font-weight: 700;
+      color: var(--muted);
+      margin-bottom: 24px;
+    }
+    .footer-links { list-style: none; display: flex; flex-direction: column; gap: 12px; }
+    .footer-links a {
+      font-size: .88rem;
+      color: var(--muted);
+      text-decoration: none;
+      transition: color .2s;
+      font-weight: 300;
+    }
+    .footer-links a:hover { color: var(--gold); }
+    .footer-bottom {
+      border-top: 1px solid var(--border);
+      padding: 28px 0;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      font-size: .78rem;
+      color: var(--dim);
+    }
+    .footer-bottom-links { display: flex; gap: 24px; }
+    .footer-bottom-links a { color: var(--dim); text-decoration: none; transition: color .2s; }
+    .footer-bottom-links a:hover { color: var(--muted); }
+
+    /* ── RESPONSIVE ─── */
+    @media (max-width: 1024px) {
+      .container { padding: 0 32px; }
+      .nav { padding: 0 32px; }
+      .hero { padding: 100px 32px 60px; }
+      .about-grid { grid-template-columns: 1fr; gap: 48px; }
+      .services-header { flex-direction: column; align-items: flex-start; gap: 20px; }
+      .services-meta { text-align: left; }
+      .process-steps { grid-template-columns: repeat(2, 1fr); gap: 40px; }
+      .process-steps::before { display: none; }
+      .numbers-inner { grid-template-columns: repeat(2, 1fr); }
+      .testi-grid { grid-template-columns: 1fr 1fr; }
+      .testi-card:last-child { display: none; }
+      .contact-inner { grid-template-columns: 1fr; gap: 60px; }
+      .footer-top { grid-template-columns: 1fr 1fr; }
+      .cta-band { flex-direction: column; align-items: flex-start; }
+      .hero-badge { display: none; }
+    }
+    @media (max-width: 640px) {
+      .nav-links li:not(:last-child) { display: none; }
+      .hero-actions { flex-direction: column; align-items: flex-start; }
+      .hero-headline { font-size: 3.2rem; }
+      .process-steps { grid-template-columns: 1fr; }
+      .numbers-inner { grid-template-columns: 1fr 1fr; }
+      .testi-grid { grid-template-columns: 1fr; }
+      .testi-card:last-child { display: block; }
+      .footer-top { grid-template-columns: 1fr; gap: 36px; }
+      .form-row { grid-template-columns: 1fr; }
+      .about-visual { grid-template-columns: 1fr 1fr; }
+      .about-stat-card:nth-child(2) { margin-top: 0; }
+      .about-stat-card:nth-child(4) { margin-top: 0; }
+    }
+  </style>
 </head>
-<body class="premium-template-body">
-  <nav class="premium-nav">
-    <div class="premium-container nav-flex">
-      <div class="premium-logo"><%= businessName %></div>
-      <ul class="premium-nav-links">
-        <li><a href="#about">About</a></li>
-        <li><a href="#services">Services</a></li>
-        <li><a href="#contact" class="premium-btn-nav">Get in Touch</a></li>
-      </ul>
-    </div>
+<body>
+
+  <!-- CUSTOM CURSOR -->
+  <div id="cursor-dot"></div>
+  <div id="cursor-ring"></div>
+
+  <!-- BACKGROUND ORBS -->
+  <div class="orb orb-1"></div>
+  <div class="orb orb-2"></div>
+  <div class="orb orb-3"></div>
+
+  <!-- NAVIGATION -->
+  <nav class="nav" id="nav">
+    <a href="#home" class="nav-logo"><%= businessName.split(' ')[0] %><span><%= businessName.split(' ').slice(1).join(' ') || '.' %></span></a>
+    <ul class="nav-links">
+      <li><a href="#about">About</a></li>
+      <li><a href="#services">Services</a></li>
+      <li><a href="#process">Process</a></li>
+      <li><a href="#testimonials">Clients</a></li>
+      <li><a href="#contact" class="nav-cta">Start a Project</a></li>
+    </ul>
   </nav>
 
-  <header class="premium-hero">
-    <div class="premium-hero-bg"></div>
-    <div class="premium-container">
-      <div class="premium-hero-content">
-        <div class="premium-badge"><%= tone.charAt(0).toUpperCase() + tone.slice(1) %> Solutions</div>
-        <h1 class="premium-title"><%= businessName %></h1>
-        <p class="premium-tagline"><%= tagline %></p>
-        <div class="premium-hero-actions">
-          <button class="premium-btn-primary" onclick="document.getElementById('services').scrollIntoView({behavior:'smooth'})">Explore Services</button>
-        </div>
+  <!-- HERO -->
+  <section id="home" class="hero">
+    <div class="hero-inner">
+      <div class="hero-eyebrow"><%= tone.charAt(0).toUpperCase() + tone.slice(1) %> Excellence Since <%= year %></div>
+      <h1 class="hero-headline">
+        <span class="line"><span class="word">Crafting</span></span>
+        <span class="line"><span class="word highlight"><%= businessName %></span></span>
+        <span class="line"><span class="word">Stories.</span></span>
+      </h1>
+      <p class="hero-sub"><%= tagline %></p>
+      <div class="hero-actions">
+        <a href="#services" class="btn-gold">Explore Services →</a>
+        <a href="#about" class="btn-outline">Learn More</a>
       </div>
     </div>
-  </header>
+    <div class="hero-scroll">
+      <div class="hero-scroll-line"></div>
+      Scroll to explore
+    </div>
+    <div class="hero-badge">
+      <svg viewBox="0 0 150 150" fill="none" xmlns="http://www.w3.org/2000/svg">
+        <path id="badgeCircle" d="M 75,75 m -55,0 a 55,55 0 1,1 110,0 a 55,55 0 1,1 -110,0" fill="none"/>
+        <text fill="rgba(201,168,76,0.6)" font-family="'Plus Jakarta Sans', sans-serif" font-size="11" font-weight="600" letter-spacing="5">
+          <textPath href="#badgeCircle">EXCELLENCE · QUALITY · PRECISION · TRUST · </textPath>
+        </text>
+        <text x="75" y="79" text-anchor="middle" fill="rgba(201,168,76,0.8)" font-size="16" font-weight="800" font-family="'Syne',sans-serif">✦</text>
+      </svg>
+    </div>
+  </section>
 
-  <section id="about" class="premium-section">
-    <div class="premium-container">
-      <div class="premium-grid-2">
-        <div class="premium-about-text">
-          <h2 class="premium-section-title">Who We Are</h2>
-          <div class="premium-title-underline"></div>
-          <p class="premium-body-text"><%= about %></p>
+  <!-- TICKER -->
+  <div class="ticker">
+    <div class="ticker-track" id="ticker">
+      <% const tickItems = [...products, ...products, ...products, ...products]; %>
+      <% tickItems.forEach(function(p) { %>
+        <span class="ticker-item"><%= p %></span>
+      <% }); %>
+    </div>
+  </div>
+
+  <!-- ABOUT -->
+  <section id="about" class="about section-pad">
+    <div class="container">
+      <div class="about-grid">
+        <div class="about-left reveal">
+          <p class="section-label">Who We Are</p>
+          <h2 class="section-title">Built on trust,<br>driven by results.</h2>
+          <p class="about-body" style="margin-top:24px"><%= about %></p>
+          <div class="about-tags">
+            <% products.forEach(function(p){ %><span class="about-tag"><%= p %></span><% }); %>
+          </div>
         </div>
-        <div class="premium-about-visual">
-          <div class="premium-glass-card">
-            <div class="glass-icon">✨</div>
-            <h3>Committed to Excellence</h3>
-            <p>Delivering high-quality results tailored to your specific needs and industry standards.</p>
+        <div class="about-visual reveal reveal-delay-1">
+          <div class="about-stat-card">
+            <div class="stat-num" data-target="150">0</div>
+            <div class="stat-label">Projects Delivered</div>
+          </div>
+          <div class="about-stat-card">
+            <div class="stat-num" data-target="98">0</div>
+            <div class="stat-label">Client Satisfaction %</div>
+          </div>
+          <div class="about-stat-card">
+            <div class="stat-num" data-target="12">0</div>
+            <div class="stat-label">Years of Experience</div>
+          </div>
+          <div class="about-stat-card">
+            <div class="stat-num" data-target="40">0</div>
+            <div class="stat-label">Global Partnerships</div>
           </div>
         </div>
       </div>
     </div>
   </section>
 
-  <section id="services" class="premium-section premium-bg-alt">
-    <div class="premium-container">
-      <div class="premium-section-header">
-        <h2 class="premium-section-title">What We Offer</h2>
-        <div class="premium-title-underline center"></div>
-        <p class="premium-subtitle">Comprehensive solutions designed for maximum growth and efficiency.</p>
+  <!-- SERVICES -->
+  <section id="services" class="services section-pad">
+    <div class="container">
+      <div class="services-header reveal">
+        <div>
+          <p class="section-label">What We Offer</p>
+          <h2 class="section-title">Premium services<br>for premium results.</h2>
+        </div>
+        <p class="services-meta">Every engagement begins with understanding. We tailor our approach to what your business genuinely needs.</p>
       </div>
-      <div class="premium-services-grid">
-        <% products.forEach((product, index) => { %>
-          <div class="premium-service-card">
-            <div class="premium-service-number">0<%= index + 1 %></div>
-            <h3 class="premium-service-title"><%= product %></h3>
-            <p class="premium-service-desc">Experience excellence with our <%= product.toLowerCase() %> services, crafted specifically for your goals.</p>
-          </div>
+      <div class="services-grid">
+        <% products.forEach(function(p, i){ %>
+        <div class="service-card reveal reveal-delay-<%= i % 3 %>">
+          <div class="service-num">0<%= i + 1 %></div>
+          <h3 class="service-name"><%= p %></h3>
+          <p class="service-desc">We deliver world-class <%= p.toLowerCase() %> solutions built around your goals, your audience, and your vision for sustainable growth.</p>
+          <span class="service-arrow">Learn more →</span>
+        </div>
         <% }); %>
       </div>
     </div>
   </section>
 
-  <section id="contact" class="premium-section">
-    <div class="premium-container">
-      <div class="premium-contact-wrapper">
-        <div class="premium-contact-info">
-          <h2 class="premium-section-title">Ready to start?</h2>
-          <p class="premium-body-text">Let's work together to achieve your goals. Reach out today and our team will get back to you within 24 hours.</p>
+  <!-- PROCESS -->
+  <section id="process" class="process section-pad">
+    <div class="container">
+      <div class="process-header reveal">
+        <p class="section-label">How We Work</p>
+        <h2 class="section-title">A process built<br>for precision.</h2>
+      </div>
+      <div class="process-steps">
+        <div class="process-step reveal">
+          <div class="step-circle">01</div>
+          <h3 class="step-title">Discovery</h3>
+          <p class="step-desc">We immerse ourselves in your world — understanding your goals, market, and the outcomes that matter most to you.</p>
         </div>
-        <form class="premium-contact-form">
-          <div class="premium-form-group">
-            <input type="text" placeholder="Your Name" required>
-          </div>
-          <div class="premium-form-group">
-            <input type="email" placeholder="Your Email" required>
-          </div>
-          <div class="premium-form-group">
-            <textarea placeholder="How can we help?" rows="4" required></textarea>
-          </div>
-          <button type="submit" class="premium-btn-primary full-width">Send Message</button>
-        </form>
+        <div class="process-step reveal reveal-delay-1">
+          <div class="step-circle">02</div>
+          <h3 class="step-title">Strategy</h3>
+          <p class="step-desc">We craft a bespoke roadmap grounded in data and shaped by years of cross-industry experience.</p>
+        </div>
+        <div class="process-step reveal reveal-delay-2">
+          <div class="step-circle">03</div>
+          <h3 class="step-title">Execution</h3>
+          <p class="step-desc">Our team executes with precision — transparent, on-time delivery with a relentless focus on quality at every step.</p>
+        </div>
+        <div class="process-step reveal reveal-delay-3">
+          <div class="step-circle">04</div>
+          <h3 class="step-title">Growth</h3>
+          <p class="step-desc">Beyond launch, we measure, refine, and optimize — ensuring your investment keeps compounding over time.</p>
+        </div>
       </div>
     </div>
   </section>
 
-  <footer class="premium-footer">
-    <div class="premium-container">
-      <div class="premium-footer-content">
-        <div class="premium-logo"><%= businessName %></div>
-        <p>&copy; <%= year %> <%= businessName %>. All rights reserved.</p>
+  <!-- NUMBERS -->
+  <div class="numbers">
+    <div class="numbers-inner container" style="padding:0">
+      <div class="number-item reveal">
+        <div class="number-val" data-target="500" data-suffix="+">0</div>
+        <div class="number-label">Clients Served</div>
+      </div>
+      <div class="number-item reveal reveal-delay-1">
+        <div class="number-val" data-target="99" data-suffix="%">0</div>
+        <div class="number-label">Retention Rate</div>
+      </div>
+      <div class="number-item reveal reveal-delay-2">
+        <div class="number-val" data-target="<%= products.length * 3 %>" data-suffix="x">0</div>
+        <div class="number-label">Average ROI</div>
+      </div>
+      <div class="number-item reveal reveal-delay-3">
+        <div class="number-val" data-target="24" data-suffix="hr">0</div>
+        <div class="number-label">Response Time</div>
+      </div>
+    </div>
+  </div>
+
+  <!-- TESTIMONIALS -->
+  <section id="testimonials" class="testimonials section-pad">
+    <div class="container">
+      <div class="testi-header reveal">
+        <p class="section-label">Client Voices</p>
+        <h2 class="section-title">What our clients<br>say about us.</h2>
+      </div>
+      <div class="testi-grid">
+        <div class="testi-card reveal">
+          <div class="testi-stars">★★★★★</div>
+          <p class="testi-quote">"Working with this team was a turning point for our business. They didn't just deliver results — they delivered confidence. Every decision was informed, every output was exceptional."</p>
+          <div class="testi-author">
+            <div class="testi-avatar">MR</div>
+            <div>
+              <span class="testi-name">Michael R.</span>
+              <span class="testi-role">Director of Operations</span>
+            </div>
+          </div>
+        </div>
+        <div class="testi-card reveal reveal-delay-1">
+          <div class="testi-stars">★★★★★</div>
+          <p class="testi-quote">"The level of professionalism and attention to detail is rare to find. From strategy to execution, they were our partners every step of the way. I can't recommend them highly enough."</p>
+          <div class="testi-author">
+            <div class="testi-avatar">SL</div>
+            <div>
+              <span class="testi-name">Sarah L.</span>
+              <span class="testi-role">Founder & CEO</span>
+            </div>
+          </div>
+        </div>
+        <div class="testi-card reveal reveal-delay-2">
+          <div class="testi-stars">★★★★★</div>
+          <p class="testi-quote">"In a sea of vendors, they stand apart entirely. Every answer came before we asked the question. This is what true partnership looks like — and we wouldn't work with anyone else."</p>
+          <div class="testi-author">
+            <div class="testi-avatar">JK</div>
+            <div>
+              <span class="testi-name">James K.</span>
+              <span class="testi-role">Head of Strategy</span>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- CTA BAND -->
+  <div class="cta-band reveal">
+    <div class="cta-band-text">
+      <h2 class="cta-band-title">Ready to work<br>with the best?</h2>
+      <p class="cta-band-sub">Join the clients who trust <%= businessName %> to deliver — every time.</p>
+    </div>
+    <a href="#contact" class="btn-gold">Start a Conversation →</a>
+  </div>
+
+  <!-- CONTACT -->
+  <section id="contact" class="contact section-pad">
+    <div class="container">
+      <div class="contact-inner">
+        <div class="contact-left reveal">
+          <p class="section-label">Get In Touch</p>
+          <h2 class="section-title">Let's build something remarkable.</h2>
+          <p class="contact-desc">Every great project begins with a conversation. Tell us what you're working toward, and we'll tell you how we can help you get there — better and faster.</p>
+          <div class="contact-details">
+            <div class="contact-detail">
+              <div class="contact-detail-icon">◷</div>
+              <div class="contact-detail-text">
+                <strong>Response Time</strong>
+                Within one business day, guaranteed
+              </div>
+            </div>
+            <div class="contact-detail">
+              <div class="contact-detail-icon">◈</div>
+              <div class="contact-detail-text">
+                <strong>Availability</strong>
+                Monday – Friday, 9 AM to 6 PM
+              </div>
+            </div>
+            <div class="contact-detail">
+              <div class="contact-detail-icon">◉</div>
+              <div class="contact-detail-text">
+                <strong>Confidentiality</strong>
+                All enquiries handled in strict confidence
+              </div>
+            </div>
+          </div>
+        </div>
+        <div class="reveal reveal-delay-1">
+          <form data-contact>
+            <div class="form-row">
+              <div class="form-field">
+                <label>First Name</label>
+                <input type="text" placeholder="Jane" required>
+              </div>
+              <div class="form-field">
+                <label>Last Name</label>
+                <input type="text" placeholder="Smith" required>
+              </div>
+            </div>
+            <div class="form-field">
+              <label>Email Address</label>
+              <input type="email" placeholder="jane@company.com" required>
+            </div>
+            <div class="form-field">
+              <label>Service of Interest</label>
+              <select>
+                <option value="" disabled selected>Select a service</option>
+                <% products.forEach(function(p){ %><option value="<%= p %>"><%= p %></option><% }); %>
+                <option value="other">Other / Multiple</option>
+              </select>
+            </div>
+            <div class="form-field">
+              <label>Your Message</label>
+              <textarea placeholder="Tell us about your project, timeline, and goals…" required></textarea>
+            </div>
+            <button type="submit" class="form-submit">Send Message</button>
+          </form>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- FOOTER -->
+  <footer class="footer">
+    <div class="container">
+      <div class="footer-top">
+        <div>
+          <div class="footer-brand-name"><%= businessName.split(' ')[0] %><span><%= businessName.split(' ').slice(1).join(' ') || '.' %></span></div>
+          <p class="footer-tagline"><%= tagline %> — built on trust, delivered with excellence.</p>
+        </div>
+        <div>
+          <p class="footer-col-title">Navigation</p>
+          <ul class="footer-links">
+            <li><a href="#home">Home</a></li>
+            <li><a href="#about">About</a></li>
+            <li><a href="#services">Services</a></li>
+            <li><a href="#process">Process</a></li>
+            <li><a href="#contact">Contact</a></li>
+          </ul>
+        </div>
+        <div>
+          <p class="footer-col-title">Services</p>
+          <ul class="footer-links">
+            <% products.forEach(function(p){ %><li><a href="#services"><%= p %></a></li><% }); %>
+          </ul>
+        </div>
+        <div>
+          <p class="footer-col-title">Company</p>
+          <ul class="footer-links">
+            <li><a href="#about">Our Story</a></li>
+            <li><a href="#testimonials">Clients</a></li>
+            <li><a href="#contact">Careers</a></li>
+            <li><a href="#contact">Press</a></li>
+          </ul>
+        </div>
+      </div>
+      <div class="footer-bottom">
+        <span>© <%= year %> <%= businessName %>. All rights reserved.</span>
+        <div class="footer-bottom-links">
+          <a href="#">Privacy Policy</a>
+          <a href="#">Terms of Service</a>
+          <a href="#">Cookie Policy</a>
+        </div>
       </div>
     </div>
   </footer>
 
-  <script src="script.js"></script>
+  <script>
+    // ── CURSOR
+    const dot = document.getElementById('cursor-dot');
+    const ring = document.getElementById('cursor-ring');
+    let mx = 0, my = 0, rx = 0, ry = 0;
+    document.addEventListener('mousemove', e => { mx = e.clientX; my = e.clientY; });
+    function animCursor() {
+      dot.style.left = mx + 'px'; dot.style.top = my + 'px';
+      rx += (mx - rx) * .14; ry += (my - ry) * .14;
+      ring.style.left = rx + 'px'; ring.style.top = ry + 'px';
+      requestAnimationFrame(animCursor);
+    }
+    animCursor();
+
+    // ── NAV SCROLL
+    const nav = document.getElementById('nav');
+    window.addEventListener('scroll', () => {
+      nav.classList.toggle('scrolled', window.scrollY > 40);
+    }, { passive: true });
+
+    // ── REVEAL
+    const revealObs = new IntersectionObserver((entries) => {
+      entries.forEach(e => {
+        if (e.isIntersecting) { e.target.classList.add('visible'); revealObs.unobserve(e.target); }
+      });
+    }, { threshold: 0.06, rootMargin: '0px 0px -40px 0px' });
+    document.querySelectorAll('.reveal').forEach(el => revealObs.observe(el));
+
+    // ── COUNTER ANIMATION
+    function animateCounter(el, target, suffix='') {
+      const duration = 1800;
+      const start = performance.now();
+      function update(now) {
+        const progress = Math.min((now - start) / duration, 1);
+        const eased = 1 - Math.pow(1 - progress, 3);
+        el.textContent = Math.floor(eased * target) + suffix;
+        if (progress < 1) requestAnimationFrame(update);
+        else el.textContent = target + suffix;
+      }
+      requestAnimationFrame(update);
+    }
+    const counterObs = new IntersectionObserver((entries) => {
+      entries.forEach(e => {
+        if (e.isIntersecting) {
+          const target = parseInt(e.target.dataset.target);
+          const suffix = e.target.dataset.suffix || '';
+          animateCounter(e.target, target, suffix);
+          counterObs.unobserve(e.target);
+        }
+      });
+    }, { threshold: 0.5 });
+    document.querySelectorAll('[data-target]').forEach(el => counterObs.observe(el));
+
+    // ── SMOOTH SCROLL
+    document.querySelectorAll('a[href^="#"]').forEach(a => {
+      a.addEventListener('click', e => {
+        const t = document.querySelector(a.getAttribute('href'));
+        if (t) { e.preventDefault(); t.scrollIntoView({ behavior: 'smooth', block: 'start' }); }
+      });
+    });
+
+    // ── CONTACT FORM
+    const form = document.querySelector('[data-contact]');
+    if (form) {
+      form.addEventListener('submit', e => {
+        e.preventDefault();
+        const btn = form.querySelector('.form-submit');
+        btn.textContent = 'Sending…';
+        btn.style.opacity = '.7';
+        btn.disabled = true;
+        setTimeout(() => {
+          const notice = document.createElement('div');
+          notice.style.cssText = 'background:rgba(45,212,191,.12);border:1px solid rgba(45,212,191,.3);color:#2dd4bf;padding:16px 20px;font-size:.85rem;letter-spacing:.04em;margin-bottom:20px;';
+          notice.textContent = '✓ Message received — we will be in touch within 24 hours.';
+          form.insertAdjacentElement('beforebegin', notice);
+          form.reset();
+          btn.textContent = 'Send Message';
+          btn.style.opacity = '1';
+          btn.disabled = false;
+          setTimeout(() => notice.remove(), 5000);
+        }, 900);
+      });
+    }
+
+    // ── TICKER CLONE FOR SEAMLESS LOOP
+    const ticker = document.getElementById('ticker');
+    if (ticker) {
+      ticker.addEventListener('mouseenter', () => ticker.style.animationPlayState = 'paused');
+      ticker.addEventListener('mouseleave', () => ticker.style.animationPlayState = 'running');
+    }
+  </script>
 </body>
 </html>

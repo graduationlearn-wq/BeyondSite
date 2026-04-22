@@ -95,7 +95,7 @@ app.post('/api/preview', async (req, res) => {
       year: new Date().getFullYear()
     };
 
-    let templateFile = 'website-template.ejs';
+    let templateFile = 'website-template-1.ejs';
     if (template === 'template-2') templateFile = 'website-template-2.ejs';
     else if (template === 'template-3') templateFile = 'website-template-3.ejs';
     else if (template === 'template-4') templateFile = 'website-template-4.ejs';
@@ -129,7 +129,7 @@ app.post('/api/generate', async (req, res) => {
       year: new Date().getFullYear()
     };
 
-    let templateFile = 'website-template.ejs';
+    let templateFile = 'website-template-1.ejs';
     if (template === 'template-2') templateFile = 'website-template-2.ejs';
     else if (template === 'template-3') templateFile = 'website-template-3.ejs';
     else if (template === 'template-4') templateFile = 'website-template-4.ejs';

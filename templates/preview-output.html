@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title><%= businessName %> — <%= tagline %></title>
+  <title>Apex Studio — Crafting experiences that endure.</title>
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link href="https://fonts.googleapis.com/css2?family=Syne:wght@400;600;700;800&family=Inter:wght@300;400;500&display=swap" rel="stylesheet">
   <style>
@@ -647,7 +647,7 @@
 
   <!-- NAV — unchanged -->
   <nav class="nav" id="nav">
-    <a href="#top" class="nav-logo"><span class="ndot"></span><%= businessName %></a>
+    <a href="#top" class="nav-logo"><span class="ndot"></span>Apex Studio</a>
     <ul class="nav-links">
       <li><a href="#services">Services</a></li>
       <li><a href="#about">About</a></li>
@@ -660,12 +660,12 @@
   <section class="hw" id="top">
     <div class="hs">
       <div class="hh" id="hh">
-        <div class="hbadge"><span class="bpulse"></span><%= tone.charAt(0).toUpperCase() + tone.slice(1) %> Protocol · Live</div>
+        <div class="hbadge"><span class="bpulse"></span>Professional Protocol · Live</div>
         <h1 class="htitle">
-          <%= businessName.split(' ').slice(0,-1).join(' ') || businessName %>
-          <% if(businessName.split(' ').length > 1) { %><span class="cy"><%= businessName.split(' ').slice(-1)[0] %></span><% } %>
+          Apex
+          <span class="cy">Studio</span>
         </h1>
-        <p class="hsub"><%= tagline %></p>
+        <p class="hsub">Crafting experiences that endure.</p>
         <div class="hacts">
           <a href="#services" class="btnp">Explore Services</a>
           <a href="#about" class="btng">Learn More</a>
@@ -677,16 +677,22 @@
           <div class="cinner">
             <div class="ctool">
               <div class="cdots"><div class="cdot dr"></div><div class="cdot da"></div><div class="cdot dg"></div></div>
-              <span class="ctitle"><%= businessName %> · Dashboard</span>
+              <span class="ctitle">Apex Studio · Dashboard</span>
               <span class="cbadge">● LIVE</span>
             </div>
             <div class="cbody">
               <div class="csidebar">
                 <span class="slabel">Navigation</span>
                 <div class="sitem act"><span class="sico">◈</span> Overview</div>
-                <% products.slice(0,4).forEach(function(p,i){ %>
-                  <div class="sitem"><span class="sico"><%= ['◇','△','○','□'][i] %></span> <%= p %></div>
-                <% }); %>
+                
+                  <div class="sitem"><span class="sico">◇</span> Brand Strategy</div>
+                
+                  <div class="sitem"><span class="sico">△</span> Web Design</div>
+                
+                  <div class="sitem"><span class="sico">○</span> Digital Marketing</div>
+                
+                  <div class="sitem"><span class="sico">□</span> Consulting</div>
+                
                 <span class="slabel" style="margin-top:12px">Account</span>
                 <div class="sitem"><span class="sico">⬡</span> Portfolio</div>
                 <div class="sitem"><span class="sico">◎</span> Settings</div>
@@ -696,7 +702,7 @@
                 <div class="srow">
                   <div class="schip"><div class="scl">Total Value</div><div class="scv">$284,910</div><div class="scd up">↑ +12.4%</div></div>
                   <div class="schip"><div class="scl">24h Change</div><div class="scv">+$8,240</div><div class="scd up">↑ +3.2%</div></div>
-                  <div class="schip"><div class="scl">Active Positions</div><div class="scv"><%= products.length %></div><div class="scd" style="color:var(--txm)">Across portfolio</div></div>
+                  <div class="schip"><div class="scl">Active Positions</div><div class="scv">4</div><div class="scd" style="color:var(--txm)">Across portfolio</div></div>
                 </div>
                 <div class="charea">
                   <svg class="chsvg" viewBox="0 0 600 160" preserveAspectRatio="none">
@@ -736,7 +742,7 @@
                 </div>
                 <div class="trow">
                   <div class="tico" style="background:rgba(0,229,255,.1);color:#00e5ff">◈</div>
-                  <div class="tnw"><span class="tn"><%= businessName.split(' ')[0] %></span><span class="ts"><%= businessName.replace(/\s+/g,'').slice(0,4).toUpperCase() %></span></div>
+                  <div class="tnw"><span class="tn">Apex</span><span class="ts">APEX</span></div>
                   <div><div class="tp">$142.80</div><div class="tc up">+8.6%</div></div>
                 </div>
                 <div class="trow">
@@ -755,11 +761,41 @@
   <!-- TICKER — unchanged -->
   <div class="ticker">
     <div class="ttrack" id="ttrack">
-      <% var tkrs=[['BTC','$67,420',true,'2.4%'],['ETH','$3,580',true,'1.8%'],['SOL','$184',false,'0.9%'],['BNB','$412',true,'3.1%'],['ARB','$1.24',true,'5.2%'],['OP','$2.18',true,'1.4%'],['AVAX','$38.4',true,'2.8%'],['MATIC','$0.92',false,'1.2%']]; %>
-      <% var tkrd=[...tkrs,...tkrs]; %>
-      <% tkrd.forEach(function(t){ %>
-        <span class="titem"><span class="tsym"><%= t[0] %></span><span class="tprice"><%= t[1] %></span><span class="<%= t[2]?'tup':'tdown' %>"><%= t[2]?'↑':'↓' %><%= t[3] %></span></span>
-      <% }); %>
+      
+      
+      
+        <span class="titem"><span class="tsym">BTC</span><span class="tprice">$67,420</span><span class="tup">↑2.4%</span></span>
+      
+        <span class="titem"><span class="tsym">ETH</span><span class="tprice">$3,580</span><span class="tup">↑1.8%</span></span>
+      
+        <span class="titem"><span class="tsym">SOL</span><span class="tprice">$184</span><span class="tdown">↓0.9%</span></span>
+      
+        <span class="titem"><span class="tsym">BNB</span><span class="tprice">$412</span><span class="tup">↑3.1%</span></span>
+      
+        <span class="titem"><span class="tsym">ARB</span><span class="tprice">$1.24</span><span class="tup">↑5.2%</span></span>
+      
+        <span class="titem"><span class="tsym">OP</span><span class="tprice">$2.18</span><span class="tup">↑1.4%</span></span>
+      
+        <span class="titem"><span class="tsym">AVAX</span><span class="tprice">$38.4</span><span class="tup">↑2.8%</span></span>
+      
+        <span class="titem"><span class="tsym">MATIC</span><span class="tprice">$0.92</span><span class="tdown">↓1.2%</span></span>
+      
+        <span class="titem"><span class="tsym">BTC</span><span class="tprice">$67,420</span><span class="tup">↑2.4%</span></span>
+      
+        <span class="titem"><span class="tsym">ETH</span><span class="tprice">$3,580</span><span class="tup">↑1.8%</span></span>
+      
+        <span class="titem"><span class="tsym">SOL</span><span class="tprice">$184</span><span class="tdown">↓0.9%</span></span>
+      
+        <span class="titem"><span class="tsym">BNB</span><span class="tprice">$412</span><span class="tup">↑3.1%</span></span>
+      
+        <span class="titem"><span class="tsym">ARB</span><span class="tprice">$1.24</span><span class="tup">↑5.2%</span></span>
+      
+        <span class="titem"><span class="tsym">OP</span><span class="tprice">$2.18</span><span class="tup">↑1.4%</span></span>
+      
+        <span class="titem"><span class="tsym">AVAX</span><span class="tprice">$38.4</span><span class="tup">↑2.8%</span></span>
+      
+        <span class="titem"><span class="tsym">MATIC</span><span class="tprice">$0.92</span><span class="tdown">↓1.2%</span></span>
+      
     </div>
   </div>
 
@@ -772,19 +808,46 @@
         <p class="services-label">What We Build</p>
         <h2 class="services-title">The full stack.<br>Nothing missing.</h2>
       </div>
-      <div class="services-count"><%= products.length < 10 ? '0' : '' %><%= products.length %></div>
+      <div class="services-count">04</div>
     </div>
     <ul class="svc-list">
-      <% products.forEach(function(p, i){ %>
+      
       <li class="svc-item reveal">
-        <span class="svc-num">0<%= i + 1 %></span>
-        <span class="svc-name"><%= p %></span>
+        <span class="svc-num">01</span>
+        <span class="svc-name">Brand Strategy</span>
         <div class="svc-right">
-          <span class="svc-desc">Enterprise-grade <%= p.toLowerCase() %> built for speed, scale, and decentralised infrastructure.</span>
+          <span class="svc-desc">Enterprise-grade brand strategy built for speed, scale, and decentralised infrastructure.</span>
           <span class="svc-arrow">↗</span>
         </div>
       </li>
-      <% }); %>
+      
+      <li class="svc-item reveal">
+        <span class="svc-num">02</span>
+        <span class="svc-name">Web Design</span>
+        <div class="svc-right">
+          <span class="svc-desc">Enterprise-grade web design built for speed, scale, and decentralised infrastructure.</span>
+          <span class="svc-arrow">↗</span>
+        </div>
+      </li>
+      
+      <li class="svc-item reveal">
+        <span class="svc-num">03</span>
+        <span class="svc-name">Digital Marketing</span>
+        <div class="svc-right">
+          <span class="svc-desc">Enterprise-grade digital marketing built for speed, scale, and decentralised infrastructure.</span>
+          <span class="svc-arrow">↗</span>
+        </div>
+      </li>
+      
+      <li class="svc-item reveal">
+        <span class="svc-num">04</span>
+        <span class="svc-name">Consulting</span>
+        <div class="svc-right">
+          <span class="svc-desc">Enterprise-grade consulting built for speed, scale, and decentralised infrastructure.</span>
+          <span class="svc-arrow">↗</span>
+        </div>
+      </li>
+      
     </ul>
   </section>
 
@@ -793,16 +856,16 @@
     <div class="about-manifesto">
       <p class="manifesto-label reveal">Our Foundation</p>
       <h2 class="manifesto-quote reveal rd1">
-        We didn't build <span class="cy"><%= businessName %></span><br>
+        We didn't build <span class="cy">Apex Studio</span><br>
         to be <span class="dim">another platform.</span><br>
         We built it to be the <span class="cy">last one</span> you need.
       </h2>
     </div>
     <div class="about-body-grid">
       <div class="about-text reveal">
-        <p><%= about %></p>
+        <p>We are a team of dedicated professionals committed to delivering excellence across every project we undertake.</p>
         <p style="margin-top:20px">Our architecture is non-custodial by design, our contracts are audited and open-source, and our infrastructure is monitored on-chain around the clock. We don't ask you to trust us — we make trust unnecessary.</p>
-        <p style="margin-top:20px">Every team that builds on <%= businessName %> gets direct access to protocol engineers, not a support ticket queue. That's the difference between a vendor and a partner.</p>
+        <p style="margin-top:20px">Every team that builds on Apex Studio gets direct access to protocol engineers, not a support ticket queue. That's the difference between a vendor and a partner.</p>
         <a href="#contact" class="btnp" style="margin-top:36px;display:inline-block;border-radius:8px">Start Building →</a>
       </div>
       <div class="about-data reveal rd1">
@@ -816,7 +879,7 @@
         </div>
         <div class="data-row">
           <span class="data-key">Active developer teams</span>
-          <div><div class="data-val">340+</div><span class="data-sub">across <%= products.length %> verticals</span></div>
+          <div><div class="data-val">340+</div><span class="data-sub">across 4 verticals</span></div>
         </div>
         <div class="data-row">
           <span class="data-key">Transaction finality</span>
@@ -834,11 +897,49 @@
   <div class="chains-wrap">
     <div class="chains-label">Supported Chains</div>
     <div class="chains-track">
-      <% var chains = [['Ethereum','#627eea'],['Bitcoin','#f7931a'],['Solana','#9945ff'],['Polygon','#8247e5'],['Arbitrum','#12aaff'],['Optimism','#ff0420'],['Avalanche','#e84142'],['BNB Chain','#f0b90b'],['Base','#0052ff'],['Cosmos','#6f7390']]; %>
-      <% var chainsDouble = [...chains,...chains]; %>
-      <% chainsDouble.forEach(function(c){ %>
-        <span class="chain-item"><span class="chain-dot" style="background:<%= c[1] %>"></span><%= c[0] %></span>
-      <% }); %>
+      
+      
+      
+        <span class="chain-item"><span class="chain-dot" style="background:#627eea"></span>Ethereum</span>
+      
+        <span class="chain-item"><span class="chain-dot" style="background:#f7931a"></span>Bitcoin</span>
+      
+        <span class="chain-item"><span class="chain-dot" style="background:#9945ff"></span>Solana</span>
+      
+        <span class="chain-item"><span class="chain-dot" style="background:#8247e5"></span>Polygon</span>
+      
+        <span class="chain-item"><span class="chain-dot" style="background:#12aaff"></span>Arbitrum</span>
+      
+        <span class="chain-item"><span class="chain-dot" style="background:#ff0420"></span>Optimism</span>
+      
+        <span class="chain-item"><span class="chain-dot" style="background:#e84142"></span>Avalanche</span>
+      
+        <span class="chain-item"><span class="chain-dot" style="background:#f0b90b"></span>BNB Chain</span>
+      
+        <span class="chain-item"><span class="chain-dot" style="background:#0052ff"></span>Base</span>
+      
+        <span class="chain-item"><span class="chain-dot" style="background:#6f7390"></span>Cosmos</span>
+      
+        <span class="chain-item"><span class="chain-dot" style="background:#627eea"></span>Ethereum</span>
+      
+        <span class="chain-item"><span class="chain-dot" style="background:#f7931a"></span>Bitcoin</span>
+      
+        <span class="chain-item"><span class="chain-dot" style="background:#9945ff"></span>Solana</span>
+      
+        <span class="chain-item"><span class="chain-dot" style="background:#8247e5"></span>Polygon</span>
+      
+        <span class="chain-item"><span class="chain-dot" style="background:#12aaff"></span>Arbitrum</span>
+      
+        <span class="chain-item"><span class="chain-dot" style="background:#ff0420"></span>Optimism</span>
+      
+        <span class="chain-item"><span class="chain-dot" style="background:#e84142"></span>Avalanche</span>
+      
+        <span class="chain-item"><span class="chain-dot" style="background:#f0b90b"></span>BNB Chain</span>
+      
+        <span class="chain-item"><span class="chain-dot" style="background:#0052ff"></span>Base</span>
+      
+        <span class="chain-item"><span class="chain-dot" style="background:#6f7390"></span>Cosmos</span>
+      
     </div>
   </div>
 
@@ -897,7 +998,7 @@
     <div class="cta-inner">
       <div class="cta-text-block">
         <p class="cta-eyebrow">Ready to Ship</p>
-        <h2 class="cta-title">Go on-chain with<br><span><%= businessName %>.</span></h2>
+        <h2 class="cta-title">Go on-chain with<br><span>Apex Studio.</span></h2>
         <p class="cta-sub">Join the protocol trusted by leading teams across DeFi, CeFi, and Web3 infrastructure. No lengthy onboarding — deploy in days, not months.</p>
       </div>
       <div class="cta-actions">
@@ -934,7 +1035,7 @@
             <label>Service of Interest</label>
             <select>
               <option value="" disabled selected>Select a service</option>
-              <% products.forEach(function(p){ %><option value="<%= p %>"><%= p %></option><% }); %>
+              <option value="Brand Strategy">Brand Strategy</option><option value="Web Design">Web Design</option><option value="Digital Marketing">Digital Marketing</option><option value="Consulting">Consulting</option>
               <option value="other">Other / Multiple</option>
             </select>
           </div>
@@ -948,8 +1049,8 @@
   <!-- FOOTER -->
   <footer class="footer">
     <div>
-      <span class="fbrand"><%= businessName %></span>
-      <p class="fdesc"><%= tagline %></p>
+      <span class="fbrand">Apex Studio</span>
+      <p class="fdesc">Crafting experiences that endure.</p>
       <div class="fstatus"><span class="sdot"></span>All systems operational</div>
     </div>
     <div>
@@ -965,7 +1066,7 @@
     <div>
       <p class="fct">Services</p>
       <ul class="flinks">
-        <% products.forEach(function(p){ %><li><a href="#services"><%= p %></a></li><% }); %>
+        <li><a href="#services">Brand Strategy</a></li><li><a href="#services">Web Design</a></li><li><a href="#services">Digital Marketing</a></li><li><a href="#services">Consulting</a></li>
       </ul>
     </div>
     <div>
@@ -980,7 +1081,7 @@
     </div>
   </footer>
   <div class="fbot">
-    <span class="fcopy">© <%= year %> <%= businessName %>. All rights reserved.</span>
+    <span class="fcopy">© 2025 Apex Studio. All rights reserved.</span>
     <div class="flinks-bot">
       <a href="#">Privacy</a>
       <a href="#">Terms</a>
