@@ -1,0 +1,1130 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title><%= businessName %> — <%= tagline %></title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link href="https://fonts.googleapis.com/css2?family=Sora:wght@300;400;500;600;700;800&family=Inter:wght@300;400;500;600&display=swap" rel="stylesheet">
+  <style>
+    *,*::before,*::after{margin:0;padding:0;box-sizing:border-box}
+    :root{
+      --bg:      #f8f9fb;
+      --bg2:     #f1f2f5;
+      --white:   #ffffff;
+      --ink:     #0b0c0e;
+      --ink2:    #1e2026;
+      --ink3:    #3a3d45;
+      --muted:   rgba(11,12,14,.45);
+      --dim:     rgba(11,12,14,.22);
+      --blue:    #2560e8;
+      --blue-lt: #4578f0;
+      --blue-glo:rgba(37,96,232,.14);
+      --blue-dim:rgba(37,96,232,.07);
+      --violet:  #7c3aed;
+      --grn:     #16a34a;
+      --grn-dim: rgba(22,163,74,.1);
+      --border:  rgba(11,12,14,.08);
+      --bdr-md:  rgba(11,12,14,.13);
+      --bdr-hi:  rgba(37,96,232,.25);
+      --radius:  12px;
+      --display: 'Sora', system-ui, sans-serif;
+      --body:    'Inter', system-ui, sans-serif;
+    }
+    html{scroll-behavior:smooth}
+    body{font-family:var(--body);background:var(--bg);color:var(--ink);overflow-x:hidden;-webkit-font-smoothing:antialiased;line-height:1.6}
+
+    /* ── SUBTLE BG PATTERN ── */
+    body::before{
+      content:'';position:fixed;inset:0;pointer-events:none;z-index:0;
+      background-image:radial-gradient(rgba(11,12,14,.04) 1px,transparent 1px);
+      background-size:24px 24px;
+    }
+
+    /* ── NAV ── */
+    .nav{
+      position:sticky;top:0;z-index:500;
+      height:60px;padding:0 40px;
+      display:flex;align-items:center;justify-content:space-between;
+      background:rgba(248,249,251,.88);
+      backdrop-filter:blur(18px);
+      border-bottom:1px solid var(--border);
+      transition:box-shadow .3s;
+    }
+    .nav.elevated{box-shadow:0 1px 24px rgba(11,12,14,.07)}
+    .nav-logo{
+      display:flex;align-items:center;gap:9px;
+      text-decoration:none;color:var(--ink);
+    }
+    .logo-mark{
+      width:28px;height:28px;border-radius:8px;
+      background:var(--blue);
+      display:flex;align-items:center;justify-content:center;
+      box-shadow:0 2px 10px var(--blue-glo);
+    }
+    .logo-mark svg{display:block}
+    .logo-text{
+      font-family:var(--display);font-size:1rem;font-weight:700;
+      letter-spacing:-.03em;color:var(--ink);
+    }
+    .nav-center{display:flex;gap:0;list-style:none;align-items:center}
+    .nav-center a{
+      font-size:.82rem;font-weight:500;color:var(--muted);
+      text-decoration:none;padding:8px 14px;
+      transition:color .2s;border-radius:8px;
+    }
+    .nav-center a:hover{color:var(--ink);background:var(--bg2)}
+    .nav-right{display:flex;gap:8px;align-items:center}
+    .btn-login{
+      font-size:.82rem;font-weight:500;color:var(--muted);
+      text-decoration:none;padding:7px 14px;
+      transition:color .2s;
+    }
+    .btn-login:hover{color:var(--ink)}
+    .btn-try{
+      display:inline-flex;align-items:center;gap:6px;
+      background:var(--blue);color:#fff;
+      padding:8px 18px;border-radius:8px;
+      font-size:.82rem;font-weight:600;
+      text-decoration:none;
+      box-shadow:0 2px 12px var(--blue-glo);
+      transition:background .2s,box-shadow .2s,transform .15s;
+    }
+    .btn-try:hover{background:var(--blue-lt);box-shadow:0 4px 20px var(--blue-glo);transform:translateY(-1px)}
+
+    /* ── HERO ── */
+    .hero{
+      position:relative;z-index:1;
+      padding:80px 40px 0;
+      text-align:center;
+      overflow:hidden;
+    }
+    .hero::before{
+      content:'';position:absolute;
+      top:-60px;left:50%;transform:translateX(-50%);
+      width:900px;height:480px;
+      background:radial-gradient(ellipse 70% 60% at 50% 40%,rgba(37,96,232,.07) 0%,transparent 70%);
+      pointer-events:none;
+    }
+    .hero-inner{position:relative;z-index:2;max-width:760px;margin:0 auto}
+    .hero-badge{
+      display:inline-flex;align-items:center;gap:8px;
+      background:var(--white);border:1px solid var(--border);
+      color:var(--ink3);
+      padding:5px 14px 5px 8px;border-radius:100px;
+      font-size:.76rem;font-weight:500;
+      margin-bottom:28px;
+      box-shadow:0 1px 6px rgba(11,12,14,.06);
+    }
+    .hero-badge-pill{
+      background:var(--blue);color:#fff;
+      padding:2px 9px;border-radius:100px;
+      font-size:.68rem;font-weight:600;letter-spacing:.04em;text-transform:uppercase;
+    }
+    .hero-title{
+      font-family:var(--display);
+      font-size:clamp(2.8rem,6vw,5.2rem);
+      font-weight:800;line-height:1.06;
+      letter-spacing:-.04em;
+      color:var(--ink);margin-bottom:22px;
+    }
+    .hero-title .blue{color:var(--blue)}
+    .hero-title .stroke{
+      -webkit-text-stroke:2px var(--ink);
+      color:transparent;
+    }
+    .hero-sub{
+      font-size:1.05rem;color:var(--muted);
+      font-weight:400;line-height:1.75;
+      max-width:520px;margin:0 auto 36px;
+    }
+    .hero-ctas{display:flex;gap:12px;align-items:center;justify-content:center;margin-bottom:14px}
+    .btn-primary{
+      display:inline-flex;align-items:center;gap:8px;
+      background:var(--blue);color:#fff;
+      padding:13px 28px;border-radius:10px;
+      font-family:var(--display);font-size:.9rem;font-weight:700;
+      text-decoration:none;border:none;cursor:pointer;
+      box-shadow:0 4px 20px var(--blue-glo);
+      transition:background .2s,box-shadow .2s,transform .15s;
+    }
+    .btn-primary:hover{background:var(--blue-lt);box-shadow:0 6px 32px var(--blue-glo);transform:translateY(-2px)}
+    .btn-secondary{
+      display:inline-flex;align-items:center;gap:8px;
+      background:var(--white);color:var(--ink2);
+      padding:12px 24px;border-radius:10px;
+      border:1px solid var(--bdr-md);
+      font-size:.9rem;font-weight:500;
+      text-decoration:none;
+      transition:border-color .2s,box-shadow .2s,transform .15s;
+    }
+    .btn-secondary:hover{border-color:var(--blue);box-shadow:0 4px 14px rgba(11,12,14,.07);transform:translateY(-1px)}
+    .hero-note{font-size:.76rem;color:var(--dim);margin-bottom:52px}
+    .hero-note a{color:var(--blue);text-decoration:none}
+
+    /* HERO DASHBOARD MOCKUP */
+    .hero-mockup{
+      position:relative;z-index:2;
+      max-width:960px;margin:0 auto;
+      border-radius:16px 16px 0 0;
+      border:1px solid var(--border);
+      border-bottom:none;
+      background:var(--white);
+      box-shadow:0 -2px 60px rgba(11,12,14,.1),0 -1px 0 rgba(37,96,232,.12) inset;
+      overflow:hidden;
+    }
+    .mockup-chrome{
+      background:#f3f4f6;border-bottom:1px solid var(--border);
+      padding:10px 16px;display:flex;align-items:center;gap:14px;
+    }
+    .mc-dots{display:flex;gap:5px}
+    .mc-dot{width:10px;height:10px;border-radius:50%}
+    .mc-dot.r{background:#ff5f57}.mc-dot.a{background:#febc2e}.mc-dot.g{background:#28c840}
+    .mc-addr{
+      flex:1;background:var(--white);border:1px solid var(--border);
+      border-radius:6px;padding:4px 12px;
+      font-size:.72rem;color:var(--muted);text-align:center;max-width:260px;margin:0 auto;
+      display:flex;align-items:center;gap:6px;justify-content:center;
+    }
+
+    /* Mockup body — 2 col */
+    .mockup-body{display:grid;grid-template-columns:200px 1fr;height:340px}
+    .mock-side{
+      background:#fafafa;border-right:1px solid var(--border);
+      display:flex;flex-direction:column;
+    }
+    .mock-side-header{
+      padding:14px 16px;border-bottom:1px solid var(--border);
+      display:flex;align-items:center;gap:8px;
+    }
+    .mock-avatar{
+      width:24px;height:24px;border-radius:6px;
+      background:linear-gradient(135deg,var(--blue),var(--violet));
+      flex-shrink:0;
+    }
+    .mock-brand-line{
+      height:8px;border-radius:4px;
+      background:var(--ink);width:80px;opacity:.8;
+    }
+    .mock-nav-section{padding:10px 10px 4px;font-size:.58rem;letter-spacing:.12em;text-transform:uppercase;color:var(--dim);font-weight:600}
+    .mock-nav-item{
+      display:flex;align-items:center;gap:8px;
+      padding:7px 12px;border-radius:6px;margin:0 6px 2px;
+      font-size:.72rem;color:var(--muted);
+    }
+    .mock-nav-item.active{background:var(--blue-dim);color:var(--blue)}
+    .mock-nav-icon{width:12px;height:12px;border-radius:3px;background:currentColor;opacity:.5;flex-shrink:0}
+    .mock-nav-label{height:6px;border-radius:3px;background:currentColor;opacity:.5;flex:1;max-width:60px}
+
+    .mock-main{padding:18px 20px;display:flex;flex-direction:column;gap:14px;overflow:hidden}
+    .mock-topbar{display:flex;align-items:center;justify-content:space-between}
+    .mock-page-title{height:10px;border-radius:5px;background:var(--ink);width:120px;opacity:.75}
+    .mock-tb-actions{display:flex;gap:6px}
+    .mock-tb-btn{height:22px;border-radius:6px;background:var(--blue);width:64px;opacity:.85}
+    .mock-tb-btn2{height:22px;border-radius:6px;border:1px solid var(--border);width:40px}
+
+    /* KPI chips */
+    .mock-kpis{display:grid;grid-template-columns:repeat(3,1fr);gap:10px}
+    .mock-kpi{
+      background:var(--white);border:1px solid var(--border);
+      border-radius:8px;padding:12px 14px;
+    }
+    .mock-kpi-label{height:5px;border-radius:3px;background:var(--dim);width:50px;margin-bottom:8px}
+    .mock-kpi-val{height:14px;border-radius:4px;background:var(--ink);width:72px;opacity:.7;margin-bottom:5px}
+    .mock-kpi-delta{height:5px;border-radius:3px;width:36px}
+    .mk-up{background:var(--grn);opacity:.7}
+    .mk-dn{background:#dc2626;opacity:.6}
+    .mk-neu{background:var(--muted);opacity:.4}
+
+    /* Chart */
+    .mock-chart{
+      background:var(--white);border:1px solid var(--border);
+      border-radius:8px;flex:1;overflow:hidden;padding:12px 14px;
+      display:flex;flex-direction:column;gap:10px;
+    }
+    .mock-chart-header{display:flex;justify-content:space-between;align-items:center}
+    .mock-chart-title{height:7px;border-radius:3px;background:var(--ink);width:80px;opacity:.65}
+    .mock-chart-tabs{display:flex;gap:3px}
+    .mock-ct{height:16px;border-radius:4px;width:24px;background:var(--border)}
+    .mock-ct.active{background:var(--blue-dim);border:1px solid var(--bdr-hi)}
+    .mock-chart-area{flex:1;position:relative}
+    .mock-chart-area svg{width:100%;height:100%}
+
+    /* ── LOGO STRIP ── */
+    .logos-strip{
+      position:relative;z-index:1;
+      background:var(--white);
+      border-top:1px solid var(--border);
+      border-bottom:1px solid var(--border);
+      padding:20px 0;overflow:hidden;
+    }
+    .logos-label{
+      text-align:center;font-size:.72rem;
+      letter-spacing:.1em;text-transform:uppercase;
+      color:var(--dim);font-weight:500;
+      margin-bottom:18px;
+    }
+    .logos-track{display:inline-flex;animation:logoScroll 28s linear infinite;white-space:nowrap}
+    .logo-item{
+      display:inline-flex;align-items:center;gap:0;
+      padding:0 36px;
+      font-family:var(--display);font-size:.88rem;font-weight:700;
+      color:rgba(11,12,14,.2);letter-spacing:-.02em;white-space:nowrap;
+    }
+    @keyframes logoScroll{from{transform:translateX(0)}to{transform:translateX(-50%)}}
+
+    /* ── SECTION GLOBALS ── */
+    .z1{position:relative;z-index:1}
+    .ctn{max-width:1200px;margin:0 auto;padding:0 40px}
+    .spad{padding:100px 0}
+    .eyebrow{
+      display:inline-flex;align-items:center;gap:8px;
+      font-size:.72rem;letter-spacing:.14em;text-transform:uppercase;
+      font-weight:600;color:var(--blue);margin-bottom:14px;
+    }
+    .eyebrow::before{content:'';width:16px;height:1.5px;background:var(--blue);border-radius:2px}
+    .sec-title{
+      font-family:var(--display);
+      font-size:clamp(2rem,4vw,3.2rem);
+      font-weight:800;line-height:1.1;
+      letter-spacing:-.04em;color:var(--ink);
+    }
+    .sec-sub{font-size:.95rem;color:var(--muted);font-weight:400;line-height:1.75;max-width:500px}
+    .reveal{opacity:0;transform:translateY(30px);transition:opacity .75s ease,transform .75s ease}
+    .reveal.visible{opacity:1;transform:translateY(0)}
+    .rd1{transition-delay:.1s}.rd2{transition-delay:.2s}.rd3{transition-delay:.3s}
+
+    /* ── BENTO FEATURES ── */
+    .features{background:var(--white);border-top:1px solid var(--border);border-bottom:1px solid var(--border)}
+    .ft-intro{text-align:center;max-width:560px;margin:0 auto 60px}
+    .ft-intro .sec-sub{margin:14px auto 0}
+    .bento{display:grid;grid-template-columns:repeat(3,1fr);grid-template-rows:auto auto;gap:12px}
+
+    .bc{
+      background:var(--bg);border:1px solid var(--border);
+      border-radius:16px;padding:32px 28px;
+      transition:border-color .25s,box-shadow .25s;
+      cursor:default;
+    }
+    .bc:hover{border-color:var(--bdr-hi);box-shadow:0 4px 24px rgba(37,96,232,.07)}
+    .bc-lg{grid-column:span 2}
+    .bc-icon{
+      width:40px;height:40px;border-radius:10px;
+      background:var(--blue-dim);border:1px solid var(--bdr-hi);
+      display:flex;align-items:center;justify-content:center;
+      font-size:1.1rem;margin-bottom:18px;
+    }
+    .bc-title{
+      font-family:var(--display);font-size:1.1rem;font-weight:700;
+      color:var(--ink);margin-bottom:9px;letter-spacing:-.02em;
+    }
+    .bc-desc{font-size:.87rem;color:var(--muted);line-height:1.72;font-weight:400}
+
+    /* Visual inside large bento */
+    .bc-visual{margin-top:24px}
+    .bc-mini-table{width:100%;border-collapse:collapse}
+    .bc-mini-table th{
+      font-size:.65rem;letter-spacing:.1em;text-transform:uppercase;
+      color:var(--dim);font-weight:600;padding:6px 10px;
+      border-bottom:1px solid var(--border);text-align:left;
+    }
+    .bc-mini-table td{
+      font-size:.78rem;color:var(--ink3);
+      padding:9px 10px;border-bottom:1px solid rgba(11,12,14,.04);
+    }
+    .bc-mini-table tr:last-child td{border-bottom:none}
+    .td-badge{
+      display:inline-block;padding:2px 8px;border-radius:100px;
+      font-size:.64rem;font-weight:600;
+    }
+    .tb-grn{background:var(--grn-dim);color:var(--grn)}
+    .tb-blue{background:var(--blue-dim);color:var(--blue)}
+    .tb-org{background:rgba(234,88,12,.08);color:#ea580c}
+
+    /* Stat inside small bento */
+    .bc-stat{
+      font-family:var(--display);
+      font-size:3.2rem;font-weight:800;
+      letter-spacing:-.05em;color:var(--blue);
+      line-height:1;margin-top:16px;
+    }
+    .bc-stat-sub{font-size:.8rem;color:var(--muted);margin-top:6px}
+
+    /* Progress bar inside bento */
+    .bc-bars{margin-top:20px;display:flex;flex-direction:column;gap:10px}
+    .bc-bar-row{display:flex;flex-direction:column;gap:4px}
+    .bc-bar-meta{display:flex;justify-content:space-between;font-size:.72rem;color:var(--muted)}
+    .bc-bar-track{height:5px;background:rgba(11,12,14,.08);border-radius:3px;overflow:hidden}
+    .bc-bar-fill{height:100%;border-radius:3px;background:var(--blue)}
+
+    /* ── HOW IT WORKS ── */
+    .hiw{background:var(--bg)}
+    .hiw-intro{margin-bottom:64px}
+    .hiw-steps{
+      display:grid;grid-template-columns:repeat(4,1fr);
+      gap:0;position:relative;
+    }
+    .hiw-steps::before{
+      content:'';position:absolute;
+      top:24px;left:14%;right:14%;height:1px;
+      background:linear-gradient(90deg,transparent,var(--border),var(--border),transparent);
+    }
+    .hiw-step{padding:0 20px;position:relative}
+    .step-num{
+      width:48px;height:48px;border-radius:12px;
+      background:var(--white);border:1px solid var(--border);
+      display:flex;align-items:center;justify-content:center;
+      font-family:var(--display);font-size:.82rem;font-weight:700;
+      color:var(--blue);margin:0 auto 22px;position:relative;z-index:1;
+      box-shadow:0 2px 10px rgba(11,12,14,.06);
+    }
+    .hiw-step.active-step .step-num{background:var(--blue);color:#fff;border-color:var(--blue);box-shadow:0 4px 18px var(--blue-glo)}
+    .hiw-title{font-family:var(--display);font-size:1rem;font-weight:700;color:var(--ink);margin-bottom:10px;text-align:center;letter-spacing:-.02em}
+    .hiw-desc{font-size:.84rem;color:var(--muted);line-height:1.72;text-align:center}
+
+    /* ── PRICING ── */
+    .pricing{background:var(--white);border-top:1px solid var(--border);border-bottom:1px solid var(--border)}
+    .pricing-intro{text-align:center;max-width:520px;margin:0 auto 56px}
+    .pricing-toggle{
+      display:inline-flex;align-items:center;gap:10px;
+      background:var(--bg2);border:1px solid var(--border);
+      border-radius:100px;padding:4px;margin-top:20px;
+    }
+    .ptog-opt{
+      padding:7px 20px;border-radius:100px;font-size:.8rem;font-weight:600;
+      cursor:pointer;transition:background .2s,color .2s;color:var(--muted);
+    }
+    .ptog-opt.active{background:var(--white);color:var(--ink);box-shadow:0 1px 6px rgba(11,12,14,.08)}
+    .ptog-save{
+      font-size:.68rem;font-weight:600;color:var(--grn);
+      background:var(--grn-dim);padding:2px 8px;border-radius:100px;margin-left:4px;
+    }
+
+    .pricing-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:16px;align-items:start}
+    .plan-card{
+      border:1px solid var(--border);border-radius:16px;
+      padding:32px 28px;background:var(--white);
+      position:relative;overflow:hidden;
+      transition:box-shadow .3s,transform .3s;
+    }
+    .plan-card:hover{box-shadow:0 8px 40px rgba(11,12,14,.08);transform:translateY(-4px)}
+    .plan-card.popular{
+      border-color:var(--blue);
+      box-shadow:0 4px 32px var(--blue-glo);
+      transform:translateY(-8px);
+    }
+    .plan-card.popular:hover{transform:translateY(-12px)}
+    .popular-badge{
+      position:absolute;top:16px;right:16px;
+      background:var(--blue);color:#fff;
+      font-size:.62rem;font-weight:700;letter-spacing:.1em;text-transform:uppercase;
+      padding:3px 10px;border-radius:100px;
+    }
+    .plan-name{font-family:var(--display);font-size:.88rem;font-weight:700;color:var(--muted);letter-spacing:.06em;text-transform:uppercase;margin-bottom:8px}
+    .plan-price{
+      font-family:var(--display);font-size:3rem;font-weight:800;
+      color:var(--ink);line-height:1;letter-spacing:-.05em;margin-bottom:4px;
+    }
+    .plan-price span{font-size:1rem;font-weight:500;color:var(--muted);letter-spacing:0}
+    .plan-period{font-size:.78rem;color:var(--muted);margin-bottom:20px}
+    .plan-divider{height:1px;background:var(--border);margin:20px 0}
+    .plan-features{display:flex;flex-direction:column;gap:10px;margin-bottom:28px}
+    .plan-feat{display:flex;align-items:flex-start;gap:10px;font-size:.84rem;color:var(--ink3)}
+    .feat-check{
+      width:16px;height:16px;border-radius:50%;
+      background:var(--grn-dim);color:var(--grn);
+      display:flex;align-items:center;justify-content:center;
+      font-size:.55rem;font-weight:700;flex-shrink:0;margin-top:2px;
+    }
+    .feat-x{background:rgba(11,12,14,.06);color:var(--dim)}
+    .plan-cta{
+      display:block;text-align:center;
+      padding:12px 20px;border-radius:10px;
+      font-size:.86rem;font-weight:600;
+      text-decoration:none;transition:all .2s;
+      font-family:var(--display);
+    }
+    .plan-cta-primary{background:var(--blue);color:#fff;box-shadow:0 2px 12px var(--blue-glo)}
+    .plan-cta-primary:hover{background:var(--blue-lt)}
+    .plan-cta-secondary{border:1px solid var(--bdr-md);color:var(--ink)}
+    .plan-cta-secondary:hover{border-color:var(--blue);color:var(--blue)}
+
+    /* ── TESTIMONIALS ── */
+    .tst{background:var(--bg)}
+    .tst-head{margin-bottom:56px}
+    .tst-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:14px}
+    .tst-card{
+      background:var(--white);border:1px solid var(--border);
+      border-radius:14px;padding:28px 24px;
+      transition:box-shadow .25s,transform .25s;
+    }
+    .tst-card:hover{box-shadow:0 6px 28px rgba(11,12,14,.07);transform:translateY(-3px)}
+    .tst-metric{
+      display:inline-flex;align-items:center;gap:6px;
+      background:var(--blue-dim);border:1px solid var(--bdr-hi);
+      color:var(--blue);padding:4px 12px;border-radius:100px;
+      font-family:var(--display);font-size:.78rem;font-weight:700;
+      margin-bottom:14px;
+    }
+    .tst-quote{font-size:.88rem;color:var(--muted);line-height:1.78;margin-bottom:20px;font-style:italic}
+    .tst-author{display:flex;align-items:center;gap:10px}
+    .tst-av{
+      width:34px;height:34px;border-radius:8px;
+      background:linear-gradient(135deg,var(--blue),var(--violet));
+      display:flex;align-items:center;justify-content:center;
+      font-size:.7rem;font-weight:700;color:#fff;flex-shrink:0;
+    }
+    .tst-name{font-weight:600;font-size:.84rem;color:var(--ink);display:block}
+    .tst-co{font-size:.74rem;color:var(--dim);display:block;margin-top:1px}
+
+    /* ── CTA BAND ── */
+    .ctaband{
+      background:var(--ink2);padding:96px 40px;
+      text-align:center;position:relative;overflow:hidden;
+    }
+    .ctaband::before{
+      content:'';position:absolute;inset:0;
+      background:radial-gradient(ellipse 60% 120% at 50% 0%,rgba(37,96,232,.2) 0%,transparent 70%);
+    }
+    .cta-inner{position:relative;z-index:1;max-width:580px;margin:0 auto}
+    .cta-badge{
+      display:inline-flex;align-items:center;gap:8px;
+      background:rgba(37,96,232,.15);border:1px solid rgba(37,96,232,.3);
+      color:rgba(255,255,255,.8);padding:5px 14px;border-radius:100px;
+      font-size:.72rem;font-weight:600;letter-spacing:.08em;text-transform:uppercase;
+      margin-bottom:24px;
+    }
+    .cta-title{
+      font-family:var(--display);
+      font-size:clamp(2rem,4vw,3.4rem);
+      font-weight:800;letter-spacing:-.04em;color:#fff;margin-bottom:14px;
+    }
+    .cta-sub{font-size:.98rem;color:rgba(255,255,255,.55);font-weight:400;line-height:1.72;margin-bottom:36px}
+    .cta-actions{display:flex;gap:12px;justify-content:center;align-items:center}
+    .cta-note{font-size:.74rem;color:rgba(255,255,255,.3);margin-top:14px}
+
+    /* ── CONTACT ── */
+    .contact{background:var(--bg);border-top:1px solid var(--border)}
+    .contact-inner{display:grid;grid-template-columns:1fr 1.3fr;gap:80px;align-items:start}
+    .contact-left .sec-title{margin-bottom:14px}
+    .contact-desc{font-size:.92rem;color:var(--muted);line-height:1.78;margin-bottom:32px}
+    .contact-perks{display:flex;flex-direction:column;gap:0}
+    .cperk{
+      display:flex;align-items:center;gap:12px;
+      padding:13px 0;border-bottom:1px solid var(--border);
+      font-size:.85rem;color:var(--muted);
+    }
+    .cperk:last-child{border-bottom:none}
+    .cperk-icon{
+      width:30px;height:30px;border-radius:8px;
+      background:var(--blue-dim);color:var(--blue);
+      display:flex;align-items:center;justify-content:center;
+      font-size:.85rem;flex-shrink:0;
+    }
+
+    .contact-form{
+      background:var(--white);border:1px solid var(--border);
+      border-radius:16px;padding:36px 32px;
+      box-shadow:0 4px 24px rgba(11,12,14,.05);
+    }
+    .form-title{font-family:var(--display);font-size:1.2rem;font-weight:700;color:var(--ink);margin-bottom:4px;letter-spacing:-.02em}
+    .form-sub{font-size:.82rem;color:var(--muted);margin-bottom:24px}
+    .fg2{display:grid;grid-template-columns:1fr 1fr;gap:12px}
+    .fg{display:flex;flex-direction:column;gap:5px;margin-bottom:12px}
+    .fg label{font-size:.7rem;letter-spacing:.08em;text-transform:uppercase;font-weight:600;color:var(--dim)}
+    .fg input,.fg textarea,.fg select{
+      background:var(--bg);border:1px solid var(--border);
+      color:var(--ink);padding:11px 14px;border-radius:8px;
+      font-family:var(--body);font-size:.88rem;font-weight:400;
+      outline:none;transition:border-color .2s,box-shadow .2s;-webkit-appearance:none;
+    }
+    .fg input::placeholder,.fg textarea::placeholder{color:var(--dim)}
+    .fg input:focus,.fg textarea:focus,.fg select:focus{
+      border-color:var(--blue);box-shadow:0 0 0 3px var(--blue-dim);
+    }
+    .fg textarea{resize:vertical;min-height:100px}
+    .form-submit{
+      width:100%;background:var(--blue);color:#fff;
+      border:none;padding:13px;border-radius:10px;
+      font-family:var(--display);font-size:.88rem;font-weight:700;
+      cursor:pointer;transition:background .2s,box-shadow .2s;
+      letter-spacing:-.01em;
+    }
+    .form-submit:hover{background:var(--blue-lt);box-shadow:0 4px 18px var(--blue-glo)}
+
+    /* ── FOOTER ── */
+    footer{background:var(--white);border-top:1px solid var(--border)}
+    .ft-top{
+      max-width:1200px;margin:0 auto;
+      padding:60px 40px 48px;
+      display:grid;grid-template-columns:2fr 1fr 1fr 1fr;gap:48px;
+    }
+    .ft-logo{display:flex;align-items:center;gap:8px;margin-bottom:12px}
+    .ft-logo-mark{width:24px;height:24px;border-radius:6px;background:var(--blue);display:flex;align-items:center;justify-content:center}
+    .ft-logo-text{font-family:var(--display);font-size:.95rem;font-weight:700;letter-spacing:-.03em;color:var(--ink)}
+    .ft-tagline{font-size:.84rem;color:var(--muted);line-height:1.65;max-width:220px;margin-bottom:20px}
+    .ft-status{display:inline-flex;align-items:center;gap:6px;font-size:.72rem;color:var(--grn);font-weight:500}
+    .ft-sdot{width:6px;height:6px;border-radius:50%;background:var(--grn);box-shadow:0 0 6px var(--grn);animation:pulse 2.5s ease-in-out infinite}
+    @keyframes pulse{0%,100%{opacity:1}50%{opacity:.3}}
+    .ft-col-title{font-size:.68rem;letter-spacing:.14em;text-transform:uppercase;font-weight:700;color:var(--dim);margin-bottom:16px}
+    .ft-links{list-style:none;display:flex;flex-direction:column;gap:9px}
+    .ft-links a{font-size:.85rem;color:var(--muted);text-decoration:none;transition:color .2s}
+    .ft-links a:hover{color:var(--blue)}
+    .ft-bot{
+      border-top:1px solid var(--border);
+      max-width:1200px;margin:0 auto;padding:18px 40px;
+      display:flex;justify-content:space-between;align-items:center;
+      font-size:.74rem;color:var(--dim);
+    }
+    .ft-bot-links{display:flex;gap:16px}
+    .ft-bot-links a{color:var(--dim);text-decoration:none;transition:color .2s}
+    .ft-bot-links a:hover{color:var(--muted)}
+
+    /* ── RESPONSIVE ── */
+    @media(max-width:1024px){
+      .ctn{padding:0 28px}.nav{padding:0 28px}
+      .hero{padding:60px 28px 0}
+      .bento{grid-template-columns:1fr 1fr}
+      .bc-lg{grid-column:span 2}
+      .pricing-grid{grid-template-columns:1fr}
+      .plan-card.popular{transform:none}
+      .plan-card.popular:hover{transform:translateY(-4px)}
+      .hiw-steps{grid-template-columns:repeat(2,1fr);gap:32px}
+      .hiw-steps::before{display:none}
+      .tst-grid{grid-template-columns:1fr 1fr}
+      .tst-card:last-child{display:none}
+      .contact-inner{grid-template-columns:1fr;gap:40px}
+      .ft-top{grid-template-columns:1fr 1fr;padding:48px 28px 36px}
+      .ft-bot{padding:16px 28px}
+      .ctaband{padding:72px 28px}
+    }
+    @media(max-width:640px){
+      .nav-center{display:none}
+      .nav{padding:0 20px}
+      .hero{padding:56px 20px 0}
+      .hero-title{font-size:2.6rem}
+      .hero-ctas{flex-direction:column}
+      .bento{grid-template-columns:1fr}
+      .bc-lg{grid-column:span 1}
+      .hiw-steps{grid-template-columns:1fr}
+      .tst-grid{grid-template-columns:1fr}
+      .tst-card:last-child{display:block}
+      .ft-top{grid-template-columns:1fr;gap:28px;padding:36px 20px}
+      .ft-bot{flex-direction:column;gap:10px;text-align:center;padding:16px 20px}
+      .fg2{grid-template-columns:1fr}
+      .mockup-body{grid-template-columns:1fr;height:auto}
+      .mock-side{display:none}
+      .cta-actions{flex-direction:column}
+      .pricing-grid{grid-template-columns:1fr}
+    }
+  </style>
+</head>
+<body>
+
+  <!-- NAV -->
+  <nav class="nav" id="nav">
+    <a href="#home" class="nav-logo">
+      <div class="logo-mark">
+        <svg width="14" height="14" viewBox="0 0 14 14" fill="none">
+          <path d="M2 7L7 2L12 7L7 12L2 7Z" fill="white" opacity=".9"/>
+          <circle cx="7" cy="7" r="2.5" fill="white"/>
+        </svg>
+      </div>
+      <span class="logo-text"><%= businessName %></span>
+    </a>
+    <ul class="nav-center">
+      <li><a href="#features">Features</a></li>
+      <li><a href="#hiw">How it Works</a></li>
+      <li><a href="#pricing">Pricing</a></li>
+      <li><a href="#testimonials">Customers</a></li>
+    </ul>
+    <div class="nav-right">
+      <a href="/login" class="btn-login">Sign in</a>
+      <a href="#contact" class="btn-try">Start free trial →</a>
+    </div>
+  </nav>
+
+  <!-- HERO -->
+  <section id="home" class="hero z1">
+    <div class="hero-inner">
+      <div class="hero-badge">
+        <span class="hero-badge-pill">New</span>
+        <%= products[0] || 'AI-powered' %> just got an upgrade
+      </div>
+      <h1 class="hero-title">
+        <%= businessName %>.<br>
+        <span class="blue">Built</span> for teams<br>
+        who <span class="stroke">ship.</span>
+      </h1>
+      <p class="hero-sub"><%= tagline %> — the platform your team actually wants to use, because it gets out of their way.</p>
+      <div class="hero-ctas">
+        <a href="#contact" class="btn-primary">
+          Start for free
+          <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M5 12h14M12 5l7 7-7 7"/></svg>
+        </a>
+        <a href="#features" class="btn-secondary">
+          <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polygon points="5 3 19 12 5 21 5 3"/></svg>
+          See how it works
+        </a>
+      </div>
+      <p class="hero-note">No credit card required · Free forever plan · <a href="#pricing">See pricing</a></p>
+    </div>
+
+    <!-- DASHBOARD MOCKUP -->
+    <div class="hero-mockup">
+      <div class="mockup-chrome">
+        <div class="mc-dots">
+          <span class="mc-dot r"></span><span class="mc-dot a"></span><span class="mc-dot g"></span>
+        </div>
+        <div class="mc-addr">
+          <svg width="10" height="10" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="11" width="18" height="11" rx="2"/><path d="M7 11V7a5 5 0 0 1 10 0v4"/></svg>
+          app.<%= businessName.toLowerCase().replace(/\s+/g,'') %>.io/dashboard
+        </div>
+      </div>
+      <div class="mockup-body">
+        <div class="mock-side">
+          <div class="mock-side-header">
+            <div class="mock-avatar"></div>
+            <div class="mock-brand-line"></div>
+          </div>
+          <div class="mock-nav-section">Main</div>
+          <div class="mock-nav-item active"><div class="mock-nav-icon"></div><div class="mock-nav-label"></div></div>
+          <div class="mock-nav-item"><div class="mock-nav-icon"></div><div class="mock-nav-label" style="max-width:44px"></div></div>
+          <div class="mock-nav-item"><div class="mock-nav-icon"></div><div class="mock-nav-label" style="max-width:52px"></div></div>
+          <div class="mock-nav-section" style="margin-top:8px">Workspace</div>
+          <% products.slice(0,3).forEach(function(){ %>
+          <div class="mock-nav-item"><div class="mock-nav-icon"></div><div class="mock-nav-label"></div></div>
+          <% }); %>
+        </div>
+        <div class="mock-main">
+          <div class="mock-topbar">
+            <div class="mock-page-title"></div>
+            <div class="mock-tb-actions">
+              <div class="mock-tb-btn2"></div>
+              <div class="mock-tb-btn"></div>
+            </div>
+          </div>
+          <div class="mock-kpis">
+            <div class="mock-kpi">
+              <div class="mock-kpi-label"></div>
+              <div class="mock-kpi-val"></div>
+              <div class="mock-kpi-delta mk-up"></div>
+            </div>
+            <div class="mock-kpi">
+              <div class="mock-kpi-label"></div>
+              <div class="mock-kpi-val" style="width:58px"></div>
+              <div class="mock-kpi-delta mk-up"></div>
+            </div>
+            <div class="mock-kpi">
+              <div class="mock-kpi-label"></div>
+              <div class="mock-kpi-val" style="width:64px"></div>
+              <div class="mock-kpi-delta mk-dn"></div>
+            </div>
+          </div>
+          <div class="mock-chart">
+            <div class="mock-chart-header">
+              <div class="mock-chart-title"></div>
+              <div class="mock-chart-tabs">
+                <div class="mock-ct active"></div>
+                <div class="mock-ct"></div>
+                <div class="mock-ct"></div>
+              </div>
+            </div>
+            <div class="mock-chart-area">
+              <svg viewBox="0 0 500 100" preserveAspectRatio="none" xmlns="http://www.w3.org/2000/svg">
+                <defs>
+                  <linearGradient id="cgrad" x1="0" y1="0" x2="0" y2="1">
+                    <stop offset="0%" stop-color="#2560e8" stop-opacity=".2"/>
+                    <stop offset="100%" stop-color="#2560e8" stop-opacity="0"/>
+                  </linearGradient>
+                </defs>
+                <line x1="0" y1="25" x2="500" y2="25" stroke="rgba(11,12,14,.05)" stroke-width="1"/>
+                <line x1="0" y1="50" x2="500" y2="50" stroke="rgba(11,12,14,.05)" stroke-width="1"/>
+                <line x1="0" y1="75" x2="500" y2="75" stroke="rgba(11,12,14,.05)" stroke-width="1"/>
+                <path d="M0,78 C40,72 80,80 120,64 C160,48 200,58 240,42 C280,26 320,38 360,24 C400,10 440,20 500,14 L500,100 L0,100 Z" fill="url(#cgrad)"/>
+                <path d="M0,78 C40,72 80,80 120,64 C160,48 200,58 240,42 C280,26 320,38 360,24 C400,10 440,20 500,14" fill="none" stroke="#2560e8" stroke-width="1.8"/>
+                <circle cx="360" cy="24" r="4" fill="#2560e8"/>
+                <circle cx="360" cy="24" r="7" fill="#2560e8" opacity=".15"/>
+              </svg>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- LOGO STRIP -->
+  <div class="logos-strip z1">
+    <p class="logos-label">Trusted by teams at</p>
+    <div style="overflow:hidden">
+      <div class="logos-track" id="logotrack">
+        <% var companies = ['Acme Corp','Stripe','Notion','Figma','Linear','Vercel','Shopify','Atlassian','Intercom','Loom','Acme Corp','Stripe','Notion','Figma','Linear','Vercel','Shopify','Atlassian','Intercom','Loom']; %>
+        <% companies.forEach(function(c){ %><span class="logo-item"><%= c %></span><% }); %>
+      </div>
+    </div>
+  </div>
+
+  <!-- FEATURES BENTO -->
+  <section id="features" class="features spad z1">
+    <div class="ctn">
+      <div class="ft-intro reveal">
+        <div class="eyebrow">Features</div>
+        <h2 class="sec-title">Everything your team<br>needs. Nothing they don't.</h2>
+        <p class="sec-sub">We obsess over the details so your team can focus on the work that actually matters.</p>
+      </div>
+      <div class="bento">
+
+        <!-- Large card — table visual -->
+        <div class="bc bc-lg reveal">
+          <div class="bc-icon">📊</div>
+          <h3 class="bc-title"><%= products[0] || 'Real-time Analytics' %></h3>
+          <p class="bc-desc">Live dashboards that update the moment data changes. No refreshes, no lag, no excuses — just clarity when your team needs it most.</p>
+          <div class="bc-visual">
+            <table class="bc-mini-table">
+              <thead><tr><th>Metric</th><th>This Week</th><th>Change</th><th>Status</th></tr></thead>
+              <tbody>
+                <tr><td>Active Users</td><td><strong>12,481</strong></td><td style="color:var(--grn)">+18.4%</td><td><span class="td-badge tb-grn">On Track</span></td></tr>
+                <tr><td>Conversion</td><td><strong>4.2%</strong></td><td style="color:var(--grn)">+0.8pp</td><td><span class="td-badge tb-blue">Improving</span></td></tr>
+                <tr><td>Churn Rate</td><td><strong>1.1%</strong></td><td style="color:var(--grn)">−0.3pp</td><td><span class="td-badge tb-grn">Healthy</span></td></tr>
+                <tr><td>MRR</td><td><strong>₹18.4L</strong></td><td style="color:var(--grn)">+22%</td><td><span class="td-badge tb-org">Review</span></td></tr>
+              </tbody>
+            </table>
+          </div>
+        </div>
+
+        <!-- Small card — big stat -->
+        <div class="bc reveal rd1">
+          <div class="bc-icon">⚡</div>
+          <h3 class="bc-title"><%= products[1] || 'Lightning Fast' %></h3>
+          <p class="bc-desc">Sub-100ms response times across all operations. Speed isn't a feature — it's a guarantee.</p>
+          <div class="bc-stat">99.9<span style="font-size:1.4rem">%</span></div>
+          <p class="bc-stat-sub">Uptime SLA — backed by contract</p>
+        </div>
+
+        <!-- Small card — progress bars -->
+        <div class="bc reveal">
+          <div class="bc-icon">🔗</div>
+          <h3 class="bc-title"><%= products[2] || 'Integrations' %></h3>
+          <p class="bc-desc">Plug into your existing workflow. One-click setup with the tools your team already uses.</p>
+          <div class="bc-bars">
+            <% var integrations = ['Slack','Notion','GitHub','Jira']; var widths=[92,85,78,70]; %>
+            <% integrations.forEach(function(n,i){ %>
+            <div class="bc-bar-row">
+              <div class="bc-bar-meta"><span><%= n %></span><span><%= widths[i] %>%</span></div>
+              <div class="bc-bar-track"><div class="bc-bar-fill" style="width:<%= widths[i] %>%"></div></div>
+            </div>
+            <% }); %>
+          </div>
+        </div>
+
+        <!-- Small card -->
+        <% if(products[3]){ %>
+        <div class="bc reveal rd1">
+          <div class="bc-icon">🛡️</div>
+          <h3 class="bc-title"><%= products[3] %></h3>
+          <p class="bc-desc">Enterprise-grade security baked in from day one. SOC 2 Type II certified, GDPR ready, end-to-end encrypted.</p>
+          <div class="bc-stat" style="font-size:2rem;margin-top:20px">SOC 2</div>
+          <p class="bc-stat-sub">Type II Certified · GDPR Ready</p>
+        </div>
+        <% } %>
+
+        <!-- Large card — text only -->
+        <div class="bc bc-lg reveal rd2">
+          <div class="bc-icon">🤝</div>
+          <h3 class="bc-title"><%= products[products.length-1] || 'Team Collaboration' %></h3>
+          <p class="bc-desc">Built for teams that move fast. Real-time multiplayer editing, granular permissions, audit logs, and comment threads — all in one place without the chaos. No more "did you see my email?" ever again.</p>
+        </div>
+
+      </div>
+    </div>
+  </section>
+
+  <!-- HOW IT WORKS -->
+  <section id="hiw" class="hiw spad z1">
+    <div class="ctn">
+      <div class="hiw-intro reveal">
+        <div class="eyebrow">How It Works</div>
+        <h2 class="sec-title">Up and running<br>in under 10 minutes.</h2>
+      </div>
+      <div class="hiw-steps">
+        <div class="hiw-step reveal">
+          <div class="step-num">01</div>
+          <h3 class="hiw-title">Sign Up Free</h3>
+          <p class="hiw-desc">No credit card, no sales call. Create your workspace in 30 seconds flat.</p>
+        </div>
+        <div class="hiw-step active-step reveal rd1">
+          <div class="step-num">02</div>
+          <h3 class="hiw-title">Connect Your Stack</h3>
+          <p class="hiw-desc">One-click integrations with the tools you already use. We sync everything automatically.</p>
+        </div>
+        <div class="hiw-step reveal rd2">
+          <div class="step-num">03</div>
+          <h3 class="hiw-title">Invite Your Team</h3>
+          <p class="hiw-desc">Add team members by email. Granular roles and permissions from the start.</p>
+        </div>
+        <div class="hiw-step reveal rd3">
+          <div class="step-num">04</div>
+          <h3 class="hiw-title">Ship Faster</h3>
+          <p class="hiw-desc">Watch your team's velocity climb as the tool gets out of the way and lets them focus.</p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- PRICING -->
+  <section id="pricing" class="pricing spad z1">
+    <div class="ctn">
+      <div class="pricing-intro reveal">
+        <div class="eyebrow">Pricing</div>
+        <h2 class="sec-title">Simple, honest pricing.</h2>
+        <p class="sec-sub" style="margin:12px auto 0">Start free. Scale as you grow. No surprises on your invoice.</p>
+        <div class="pricing-toggle">
+          <div class="ptog-opt active">Monthly</div>
+          <div class="ptog-opt">Annual <span class="ptog-save">Save 30%</span></div>
+        </div>
+      </div>
+      <div class="pricing-grid reveal rd1">
+
+        <!-- Starter -->
+        <div class="plan-card">
+          <div class="plan-name">Starter</div>
+          <div class="plan-price">₹0<span>/mo</span></div>
+          <div class="plan-period">Free forever · No credit card needed</div>
+          <div class="plan-divider"></div>
+          <div class="plan-features">
+            <div class="plan-feat"><div class="feat-check">✓</div>Up to 3 team members</div>
+            <div class="plan-feat"><div class="feat-check">✓</div>5 active projects</div>
+            <div class="plan-feat"><div class="feat-check">✓</div><%= products[0] || '5 GB' %> storage</div>
+            <div class="plan-feat"><div class="feat-check">✓</div>Community support</div>
+            <div class="plan-feat"><div class="feat-check feat-x">—</div><span style="color:var(--dim)">Advanced analytics</span></div>
+            <div class="plan-feat"><div class="feat-check feat-x">—</div><span style="color:var(--dim)">Priority support</span></div>
+          </div>
+          <a href="#contact" class="plan-cta plan-cta-secondary">Get started free</a>
+        </div>
+
+        <!-- Pro — Popular -->
+        <div class="plan-card popular">
+          <div class="popular-badge">Most Popular</div>
+          <div class="plan-name">Pro</div>
+          <div class="plan-price">₹2,499<span>/mo</span></div>
+          <div class="plan-period">Per workspace · Billed monthly</div>
+          <div class="plan-divider"></div>
+          <div class="plan-features">
+            <div class="plan-feat"><div class="feat-check">✓</div>Unlimited team members</div>
+            <div class="plan-feat"><div class="feat-check">✓</div>Unlimited projects</div>
+            <div class="plan-feat"><div class="feat-check">✓</div>Advanced analytics & reports</div>
+            <div class="plan-feat"><div class="feat-check">✓</div><%= products[1] || 'API access' %> included</div>
+            <div class="plan-feat"><div class="feat-check">✓</div>Priority email & chat support</div>
+            <div class="plan-feat"><div class="feat-check feat-x">—</div><span style="color:var(--dim)">SSO & custom roles</span></div>
+          </div>
+          <a href="#contact" class="plan-cta plan-cta-primary">Start 14-day trial</a>
+        </div>
+
+        <!-- Enterprise -->
+        <div class="plan-card">
+          <div class="plan-name">Enterprise</div>
+          <div class="plan-price" style="font-size:2.2rem">Custom</div>
+          <div class="plan-period">Tailored to your organisation</div>
+          <div class="plan-divider"></div>
+          <div class="plan-features">
+            <div class="plan-feat"><div class="feat-check">✓</div>Everything in Pro</div>
+            <div class="plan-feat"><div class="feat-check">✓</div>SSO + custom roles</div>
+            <div class="plan-feat"><div class="feat-check">✓</div>Dedicated success manager</div>
+            <div class="plan-feat"><div class="feat-check">✓</div>SLA guarantee + 24/7 support</div>
+            <div class="plan-feat"><div class="feat-check">✓</div>On-premise deployment option</div>
+            <div class="plan-feat"><div class="feat-check">✓</div>Custom integrations & API</div>
+          </div>
+          <a href="#contact" class="plan-cta plan-cta-secondary">Talk to sales</a>
+        </div>
+
+      </div>
+    </div>
+  </section>
+
+  <!-- TESTIMONIALS -->
+  <section id="testimonials" class="tst spad z1">
+    <div class="ctn">
+      <div class="tst-head reveal">
+        <div class="eyebrow">Customer Stories</div>
+        <h2 class="sec-title">Teams that ship faster<br>with <%= businessName %>.</h2>
+      </div>
+      <div class="tst-grid">
+        <div class="tst-card reveal">
+          <div class="tst-metric">↑ 40% faster delivery</div>
+          <p class="tst-quote">"We cut our sprint review time in half in the first two weeks. The team stopped dreading Mondays — and that's not something I expected a tool to do."</p>
+          <div class="tst-author">
+            <div class="tst-av">KM</div>
+            <div><span class="tst-name">Kavya Menon</span><span class="tst-co">Head of Product · Groww</span></div>
+          </div>
+        </div>
+        <div class="tst-card reveal rd1">
+          <div class="tst-metric">₹4L saved / quarter</div>
+          <p class="tst-quote">"We replaced three separate tools with this one. The ROI was visible in the first month. The setup took a single afternoon — our previous tool took three weeks."</p>
+          <div class="tst-author">
+            <div class="tst-av">RS</div>
+            <div><span class="tst-name">Rohan Suri</span><span class="tst-co">CTO · Series B Startup</span></div>
+          </div>
+        </div>
+        <div class="tst-card reveal rd2">
+          <div class="tst-metric">3× team velocity</div>
+          <p class="tst-quote">"Every founder told me tooling doesn't matter — just ship. They were wrong. The right tool is a multiplier, and this is the best one we've found for our stage."</p>
+          <div class="tst-author">
+            <div class="tst-av">AT</div>
+            <div><span class="tst-name">Ananya Tripathi</span><span class="tst-co">Co-Founder · YC W24</span></div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- CTA BAND -->
+  <div class="ctaband z1 reveal">
+    <div class="cta-inner">
+      <div class="cta-badge">✦ Join 10,000+ teams worldwide</div>
+      <h2 class="cta-title">Your team deserves<br>better tools.</h2>
+      <p class="cta-sub">Start free. No credit card. No sales calls. Just a faster, cleaner way to work.</p>
+      <div class="cta-actions">
+        <a href="#contact" class="btn-primary">Start for free →</a>
+        <a href="#pricing" class="btn-secondary" style="background:rgba(255,255,255,.07);border-color:rgba(255,255,255,.15);color:rgba(255,255,255,.75)">View pricing</a>
+      </div>
+      <p class="cta-note">Free forever plan available · 14-day trial on paid plans · Cancel anytime</p>
+    </div>
+  </div>
+
+  <!-- CONTACT -->
+  <section id="contact" class="contact spad z1">
+    <div class="ctn">
+      <div class="contact-inner">
+        <div class="contact-left reveal">
+          <div class="eyebrow">Get In Touch</div>
+          <h2 class="sec-title">Let's find the<br>right plan for you.</h2>
+          <p class="contact-desc">Whether you're a solo founder or scaling a 500-person org — we have a plan that fits. Talk to us and we'll figure it out together.</p>
+          <div class="contact-perks">
+            <div class="cperk"><div class="cperk-icon">⚡</div>Reply within 2 hours on business days</div>
+            <div class="cperk"><div class="cperk-icon">🎯</div>Free personalised onboarding call</div>
+            <div class="cperk"><div class="cperk-icon">🔒</div>Your data stays yours — always</div>
+            <div class="cperk"><div class="cperk-icon">🧾</div>Migration help from your current tool</div>
+          </div>
+        </div>
+        <div class="reveal rd1">
+          <div class="contact-form">
+            <h3 class="form-title">Start your free trial</h3>
+            <p class="form-sub">14 days free. No credit card required.</p>
+            <form data-contact>
+              <div class="fg2">
+                <div class="fg"><label>First Name</label><input type="text" placeholder="Kavya" required></div>
+                <div class="fg"><label>Last Name</label><input type="text" placeholder="Menon" required></div>
+              </div>
+              <div class="fg"><label>Work Email</label><input type="email" placeholder="kavya@company.io" required></div>
+              <div class="fg"><label>Company Name</label><input type="text" placeholder="Acme Inc."></div>
+              <div class="fg">
+                <label>Team Size</label>
+                <select>
+                  <option value="" disabled selected>Select team size</option>
+                  <option>Just me</option>
+                  <option>2–10</option>
+                  <option>11–50</option>
+                  <option>51–200</option>
+                  <option>200+</option>
+                </select>
+              </div>
+              <div class="fg"><label>What are you trying to solve?</label><textarea placeholder="Tell us about your current challenges and what you're hoping to achieve..."></textarea></div>
+              <button type="submit" class="form-submit">Start free trial →</button>
+            </form>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- FOOTER -->
+  <footer class="z1">
+    <div class="ft-top">
+      <div>
+        <div class="ft-logo">
+          <div class="ft-logo-mark">
+            <svg width="12" height="12" viewBox="0 0 14 14" fill="none"><path d="M2 7L7 2L12 7L7 12L2 7Z" fill="white" opacity=".9"/><circle cx="7" cy="7" r="2.5" fill="white"/></svg>
+          </div>
+          <span class="ft-logo-text"><%= businessName %></span>
+        </div>
+        <p class="ft-tagline"><%= tagline %></p>
+        <div class="ft-status"><span class="ft-sdot"></span>All systems operational</div>
+      </div>
+      <div>
+        <p class="ft-col-title">Product</p>
+        <ul class="ft-links">
+          <li><a href="#features">Features</a></li>
+          <li><a href="#pricing">Pricing</a></li>
+          <li><a href="#hiw">How it Works</a></li>
+          <li><a href="#">Changelog</a></li>
+          <li><a href="#">Roadmap</a></li>
+        </ul>
+      </div>
+      <div>
+        <p class="ft-col-title">Company</p>
+        <ul class="ft-links">
+          <li><a href="#testimonials">Customers</a></li>
+          <li><a href="#">Blog</a></li>
+          <li><a href="#">Careers</a></li>
+          <li><a href="#">Press Kit</a></li>
+        </ul>
+      </div>
+      <div>
+        <p class="ft-col-title">Legal</p>
+        <ul class="ft-links">
+          <li><a href="#">Privacy Policy</a></li>
+          <li><a href="#">Terms of Service</a></li>
+          <li><a href="#">Security</a></li>
+          <li><a href="#">Cookie Policy</a></li>
+        </ul>
+      </div>
+    </div>
+    <div class="ft-bot">
+      <span>© <%= year %> <%= businessName %>. All rights reserved.</span>
+      <div class="ft-bot-links">
+        <a href="#">Privacy</a><a href="#">Terms</a><a href="#">Security</a>
+      </div>
+    </div>
+  </footer>
+
+  <script>
+    // NAV
+    const nav=document.getElementById('nav');
+    window.addEventListener('scroll',()=>nav.classList.toggle('elevated',window.scrollY>20),{passive:true});
+
+    // REVEAL
+    const ro=new IntersectionObserver(e=>{e.forEach(x=>{if(x.isIntersecting){x.target.classList.add('visible');ro.unobserve(x.target);}});},{threshold:.07,rootMargin:'0px 0px -40px 0px'});
+    document.querySelectorAll('.reveal').forEach(el=>ro.observe(el));
+
+    // PRICING TOGGLE
+    document.querySelectorAll('.ptog-opt').forEach(opt=>{
+      opt.addEventListener('click',()=>{
+        document.querySelectorAll('.ptog-opt').forEach(o=>o.classList.remove('active'));
+        opt.classList.add('active');
+      });
+    });
+
+    // LOGO SCROLL
+    const lt=document.getElementById('logotrack');
+    if(lt){lt.addEventListener('mouseenter',()=>lt.style.animationPlayState='paused');lt.addEventListener('mouseleave',()=>lt.style.animationPlayState='running');}
+
+    // SMOOTH SCROLL
+    document.querySelectorAll('a[href^="#"]').forEach(a=>{a.addEventListener('click',e=>{const t=document.querySelector(a.getAttribute('href'));if(t){e.preventDefault();t.scrollIntoView({behavior:'smooth',block:'start'});}});});
+
+    // CONTACT FORM
+    const f=document.querySelector('[data-contact]');
+    if(f){f.addEventListener('submit',e=>{
+      e.preventDefault();
+      const b=f.querySelector('.form-submit');b.textContent='Creating workspace…';b.disabled=true;
+      setTimeout(()=>{
+        const n=document.createElement('div');
+        n.style.cssText='background:rgba(22,163,74,.07);border:1px solid rgba(22,163,74,.25);color:#16a34a;padding:14px 18px;border-radius:10px;font-size:.87rem;margin-bottom:14px;line-height:1.6;';
+        n.innerHTML='✓ <strong>You\'re in!</strong> Check your email — we\'ve sent your workspace link.';
+        f.insertAdjacentElement('beforebegin',n);f.reset();
+        b.textContent='Start free trial →';b.disabled=false;
+        setTimeout(()=>n.remove(),7000);
+      },900);
+    });}
+  </script>
+</body>
+</html>

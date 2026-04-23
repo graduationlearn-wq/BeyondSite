@@ -10,7 +10,7 @@ const data = {
   year: 2025
 };
 
-const template = fs.readFileSync('./website-template-4.ejs', 'utf8');
+const template = fs.readFileSync('./website-template-8.ejs', 'utf8');
 const html = ejs.render(template, data);
 fs.writeFileSync('./preview-output.html', html);
 console.log('Done — open preview-output.html in browser');

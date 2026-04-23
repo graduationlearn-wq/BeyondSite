@@ -3,85 +3,151 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>WebSite Builder - Professional Website Generator</title>
+  <title>WebSite Builder — AI-Powered Website Generator</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
   <link rel="stylesheet" href="style.css">
 </head>
-<body class="form-page">
-  <div class="stars"></div>
-  
+<body>
+
+  <!-- Custom Cursor -->
+  <div class="cursor-follower" id="cursorFollower">
+    <span class="cursor-text" id="cursorText"></span>
+  </div>
+
+  <!-- Background -->
+  <div class="bg-grid"></div>
+  <div class="bg-glow bg-glow-1"></div>
+  <div class="bg-glow bg-glow-2"></div>
+
   <div class="main-container">
-    <nav class="navbar">
+
+    <!-- NAV -->
+    <nav class="navbar" id="navbar">
       <div class="navbar-content">
-        <div class="logo">
-          <span class="logo-icon">⚡</span>
-          <span class="logo-text">WebSite Builder</span>
+        <a href="/" class="logo">
+          <span class="logo-mark">
+            <svg width="20" height="20" viewBox="0 0 20 20" fill="none">
+              <rect x="1.5" y="1.5" width="17" height="17" rx="3" stroke="var(--accent)" stroke-width="1.5" fill="rgba(232,160,48,.08)"/>
+              <path d="M6 10h8M10 6v8" stroke="var(--accent)" stroke-width="1.8" stroke-linecap="round"/>
+            </svg>
+          </span>
+          <span class="logo-text">WebSite<span class="logo-accent">Builder</span></span>
+        </a>
+
+        <div class="step-track">
+          <div class="step-indicator active" data-step="1">
+            <span class="step-num">01</span>
+            <span class="step-label">Details</span>
+          </div>
+          <div class="step-connector"></div>
+          <div class="step-indicator" data-step="2">
+            <span class="step-num">02</span>
+            <span class="step-label">Customize</span>
+          </div>
+          <div class="step-connector"></div>
+          <div class="step-indicator" data-step="3">
+            <span class="step-num">03</span>
+            <span class="step-label">Preview</span>
+          </div>
         </div>
+
         <div class="navbar-right">
-          <div class="nav-badge">AI Powered</div>
+          <span class="nav-badge">
+            <span class="nav-badge-dot"></span>
+            AI Powered
+          </span>
           <a href="/login" class="btn-nav-login">Login</a>
         </div>
       </div>
     </nav>
 
-    <div class="hero-section">
-      <div class="hero-content">
-        <div class="hero-badge">Build Faster with AI</div>
-        <h1 class="hero-title">Professional Websites<br>in Minutes</h1>
-        <p class="hero-subtitle">Create stunning, professional websites without coding. Let AI help you build the perfect online presence.</p>
+    <!-- HERO with Arc Gallery -->
+    <section class="hero-section">
+      <!-- Arc stage: JS populates this. Replace Unsplash URLs with real template screenshots when ready. -->
+      <div class="arc-stage" id="arcStage" aria-hidden="true">
+        <div class="arc-pivot" id="arcPivot"></div>
       </div>
-      <div class="hero-shape"></div>
-    </div>
 
+      <!-- Hero content overlaps arc bottom -->
+      <div class="hero-content">
+        <div class="hero-badge">
+          <span class="hero-badge-dot"></span>
+          8 Premium Templates · AI Content · Instant Download
+        </div>
+        <h1 class="hero-title">
+          Build <em>Extraordinary</em><br>
+          <span class="hero-title-dim">Websites with AI</span>
+        </h1>
+        <p class="hero-subtitle">
+          Describe your business. Pick a template. AI generates the content.<br>
+          Download a complete, professional website in minutes.
+        </p>
+        <div class="hero-scroll-hint">
+          <div class="hero-scroll-line"></div>
+          <span>Start below</span>
+        </div>
+      </div>
+    </section>
+
+    <!-- MAIN CONTAINER -->
     <div class="container">
       <main>
-        <!-- Step 1 -->
+
+        <!-- ── STEP 1 ── -->
         <section class="form-section active" id="step1">
           <div class="section-header">
             <div class="step-badge">Step 1 of 3</div>
             <h2>Tell Us About Your Business</h2>
-            <p>Share your business details to get started</p>
+            <p>Share the basics — AI will handle the rest</p>
           </div>
-          
+
           <form id="inputForm" class="form-modern">
-            <div class="form-group">
-              <label for="businessName">Business Name</label>
-              <div class="input-box">
-                <input 
-                  type="text" 
-                  id="businessName" 
-                  name="businessName" 
-                  placeholder="e.g., Luna Creative Studio" 
-                  required
-                >
-                <span class="input-highlight"></span>
+
+            <div class="form-row-2">
+              <div class="form-group">
+                <label for="businessName">Business Name</label>
+                <div class="input-box">
+                  <input type="text" id="businessName" name="businessName"
+                    placeholder="e.g., Luna Creative Studio" required>
+                  <span class="input-highlight"></span>
+                </div>
+              </div>
+              <div class="form-group">
+                <label for="tagline">Tagline</label>
+                <div class="input-box">
+                  <input type="text" id="tagline" name="tagline"
+                    placeholder="e.g., Design That Inspires" required>
+                  <span class="input-highlight"></span>
+                </div>
+                <small>A memorable phrase that defines your brand</small>
               </div>
             </div>
 
-            <div class="form-group">
-              <label for="tagline">Tagline</label>
-              <div class="input-box">
-                <input 
-                  type="text" 
-                  id="tagline" 
-                  name="tagline" 
-                  placeholder="e.g., Design That Inspires" 
-                  required
-                >
-                <span class="input-highlight"></span>
-              </div>
-              <small>A memorable phrase that defines your business</small>
-            </div>
-
+            <!-- Template Picker -->
             <div class="form-group">
               <label>Choose Your Template</label>
               <div class="template-grid">
+
                 <label class="template-box">
                   <input type="radio" name="template" value="template-1" checked hidden>
                   <div class="template-content">
-                    <div class="template-preview template-modern"></div>
+                    <div class="template-preview template-editorial">
+                      <div class="tp-nav"></div>
+                      <div class="tp-hero">
+                        <div class="tp-line tp-line-lg"></div>
+                        <div class="tp-line tp-line-md"></div>
+                        <div class="tp-btn" style="background:#c9a84c"></div>
+                      </div>
+                      <div class="tp-cards">
+                        <div class="tp-card"></div>
+                        <div class="tp-card"></div>
+                        <div class="tp-card"></div>
+                      </div>
+                    </div>
                     <div class="template-label">
-                      <h4>Modern SaaS</h4>
-                      <p>Bold & Contemporary</p>
+                      <h4>Editorial</h4>
+                      <p>Magazine & Luxury</p>
                     </div>
                     <span class="checkmark">✓</span>
                   </div>
@@ -90,10 +156,20 @@
                 <label class="template-box">
                   <input type="radio" name="template" value="template-2" hidden>
                   <div class="template-content">
-                    <div class="template-preview template-elegant"></div>
+                    <div class="template-preview template-agency">
+                      <div class="tp-nav tp-nav-dark"></div>
+                      <div class="tp-hero tp-hero-split">
+                        <div class="tp-split-left">
+                          <div class="tp-line tp-line-lg" style="background:rgba(255,255,255,.55)"></div>
+                          <div class="tp-line tp-line-md" style="background:rgba(255,255,255,.3)"></div>
+                          <div class="tp-btn" style="background:#c9a84c;width:32px"></div>
+                        </div>
+                        <div class="tp-split-right"></div>
+                      </div>
+                    </div>
                     <div class="template-label">
                       <h4>Agency</h4>
-                      <p>Professional & Minimal</p>
+                      <p>Professional & Bold</p>
                     </div>
                     <span class="checkmark">✓</span>
                   </div>
@@ -102,10 +178,19 @@
                 <label class="template-box">
                   <input type="radio" name="template" value="template-3" hidden>
                   <div class="template-content">
-                    <div class="template-preview template-dev"></div>
+                    <div class="template-preview template-dev">
+                      <div class="tp-nav tp-nav-dark" style="border-bottom:1px solid rgba(0,255,65,.25)"></div>
+                      <div class="tp-terminal">
+                        <div class="tp-term-line" style="width:30%;background:rgba(0,255,65,.6)"></div>
+                        <div class="tp-term-line" style="width:70%;background:rgba(0,255,65,.35)"></div>
+                        <div class="tp-term-line" style="width:50%;background:rgba(0,255,65,.45)"></div>
+                        <div class="tp-term-line" style="width:80%;background:rgba(0,255,65,.25)"></div>
+                        <div class="tp-term-line" style="width:40%;background:rgba(0,255,65,.5)"></div>
+                      </div>
+                    </div>
                     <div class="template-label">
-                      <h4>Developer</h4>
-                      <p>Dark & Terminal</p>
+                      <h4>Terminal</h4>
+                      <p>Dev & Tech Studio</p>
                     </div>
                     <span class="checkmark">✓</span>
                   </div>
@@ -114,10 +199,18 @@
                 <label class="template-box">
                   <input type="radio" name="template" value="template-4" hidden>
                   <div class="template-content">
-                    <div class="template-preview template-web3"></div>
+                    <div class="template-preview template-web3">
+                      <div class="tp-nav tp-nav-dark" style="border-bottom:1px solid rgba(139,92,246,.3)"></div>
+                      <div class="tp-web3-body">
+                        <div class="tp-web3-chip"></div>
+                        <div class="tp-web3-chip" style="opacity:.7"></div>
+                        <div class="tp-web3-chip" style="opacity:.5"></div>
+                        <div class="tp-web3-chart"></div>
+                      </div>
+                    </div>
                     <div class="template-label">
-                      <h4>Web3 / Tech</h4>
-                      <p>Neon & Futuristic</p>
+                      <h4>Web3</h4>
+                      <p>DeFi & Protocol</p>
                     </div>
                     <span class="checkmark">✓</span>
                   </div>
@@ -126,88 +219,164 @@
                 <label class="template-box">
                   <input type="radio" name="template" value="template-5" hidden>
                   <div class="template-content">
-                    <div class="template-preview template-local"></div>
+                    <div class="template-preview template-local">
+                      <div class="tp-nav" style="background:#fff3e8;border-bottom:2px solid rgba(196,98,45,.4)"></div>
+                      <div class="tp-local-body">
+                        <div class="tp-line tp-line-lg" style="background:rgba(196,98,45,.65)"></div>
+                        <div class="tp-line tp-line-md" style="background:rgba(196,98,45,.35)"></div>
+                        <div class="tp-btn" style="background:#c4622d;width:38px;margin-top:2px"></div>
+                      </div>
+                      <div class="tp-local-tags">
+                        <div class="tp-tag"></div>
+                        <div class="tp-tag"></div>
+                        <div class="tp-tag"></div>
+                      </div>
+                    </div>
                     <div class="template-label">
-                      <h4>Local Business</h4>
-                      <p>Clean & Trustworthy</p>
+                      <h4>Local</h4>
+                      <p>Community & Services</p>
                     </div>
                     <span class="checkmark">✓</span>
                   </div>
                 </label>
+                
+                <label class="template-box">
+                  <input type="radio" name="template" value="template-6" hidden>
+                  <div class="template-content">
+                    <div class="template-preview template-bfsi">
+                      <div class="tp-bfsi-bar"></div>
+                      <div class="tp-nav tp-nav-dark" style="height:8px;border-bottom:1px solid rgba(184,154,62,.18)"></div>
+                      <div class="tp-bfsi-body">
+                        <div class="tp-bfsi-row"><div class="tp-bfsi-label"></div><div class="tp-bfsi-val"></div></div>
+                        <div class="tp-bfsi-row"><div class="tp-bfsi-label"></div><div class="tp-bfsi-val" style="opacity:.75"></div></div>
+                        <div class="tp-bfsi-row"><div class="tp-bfsi-label"></div><div class="tp-bfsi-val" style="opacity:.55"></div></div>
+                      </div>
+                    </div>
+                    <div class="template-label">
+                      <h4>BFSI</h4>
+                      <p>Banking & Finance</p>
+                    </div>
+                    <span class="checkmark">✓</span>
+                  </div>
+                </label>
+
+                <label class="template-box">
+                  <input type="radio" name="template" value="template-7" hidden>
+                  <div class="template-content">
+                    <div class="template-preview template-startup">
+                      <div class="tp-startup-nav">
+                        <div class="tp-startup-dot"></div>
+                      </div>
+                      <div class="tp-startup-body">
+                        <div class="tp-startup-kpis">
+                          <div class="tp-startup-kpi"></div>
+                          <div class="tp-startup-kpi"></div>
+                          <div class="tp-startup-kpi"></div>
+                        </div>
+                        <div class="tp-startup-chart"></div>
+                      </div>
+                    </div>
+                    <div class="template-label">
+                      <h4>Startup</h4>
+                      <p>SaaS & Product</p>
+                    </div>
+                    <span class="checkmark">✓</span>
+                  </div>
+                </label>
+
+                <label class="template-box">
+                  <input type="radio" name="template" value="template-8" hidden>
+                  <div class="template-content">
+                    <div class="template-preview template-insurance">
+                      <div class="tp-nav tp-nav-dark" style="border-bottom:1px solid rgba(52,211,153,.2)"></div>
+                      <div class="tp-ins-hero">
+                        <div class="tp-ins-badge"></div>
+                        <div class="tp-line tp-line-lg" style="background:rgba(255,255,255,.45)"></div>
+                        <div class="tp-line tp-line-md" style="background:rgba(255,255,255,.25)"></div>
+                        <div class="tp-btn" style="background:rgba(52,211,153,.55);width:30px;height:7px"></div>
+                      </div>
+                      <div class="tp-ins-cards">
+                        <div class="tp-ins-card"></div>
+                        <div class="tp-ins-card"></div>
+                        <div class="tp-ins-card"></div>
+                      </div>
+                    </div>
+                    <div class="template-label">
+                      <h4>Insurance</h4>
+                      <p>Agent & Advisory</p>
+                    </div>
+                    <span class="checkmark">✓</span>
+                  </div>
+                </label>
+
               </div>
             </div>
 
+            <!-- Description -->
             <div class="form-group">
               <label for="description">Business Description</label>
-              <div class="input-box textarea-box">
-                <textarea 
-                  id="description" 
-                  name="description" 
-                  placeholder="Tell us about your business, what you do, and who you serve..." 
-                  rows="5"
-                  required
-                ></textarea>
+              <div class="input-box">
+                <textarea id="description" name="description" rows="4"
+                  placeholder="Describe your business, what makes it unique, and who your customers are..."
+                  required></textarea>
                 <span class="input-highlight"></span>
               </div>
-              <small>Example: We create custom web designs for small businesses</small>
+              <small>AI uses this to generate tailored content for every section of your website</small>
             </div>
 
-            <button type="submit" class="btn btn-primary btn-lg">
-              <span>Generate with AI</span>
-              <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-                <path d="M5 12h14M12 5l7 7-7 7"/>
-              </svg>
-            </button>
+            <div class="button-group">
+              <button type="submit" class="btn btn-primary btn-lg">
+                <span>Generate with AI</span>
+                <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5">
+                  <path d="M5 12h14M12 5l7 7-7 7"/>
+                </svg>
+              </button>
+            </div>
+
           </form>
         </section>
 
-        <!-- Step 2 -->
-        <section class="form-section" id="step2" style="display: none;">
-          <div class="section-header">
-            <div class="step-badge">Step 2 of 3</div>
-            <h2>Customize Your Content</h2>
-            <p>Review and refine the AI suggestions</p>
-          </div>
+        <!-- ── STEP 2 ── -->
+        <section class="form-section" id="step2" style="display:none">
 
-          <div id="loadingState" class="loading-state" style="display: none;">
+          <div id="loadingState" class="loading-state" style="display:none">
             <div class="loader">
               <div class="loader-dot"></div>
               <div class="loader-dot"></div>
               <div class="loader-dot"></div>
             </div>
-            <p>AI is analyzing your business...</p>
+            <p class="loading-dots">Generating AI suggestions</p>
           </div>
 
-          <form id="editForm" class="form-modern" style="display: none;">
+          <form id="editForm" class="form-modern" style="display:none">
+            <div class="section-header">
+              <div class="step-badge">Step 2 of 3</div>
+              <h2>Review AI Suggestions</h2>
+              <p>Fine-tune the generated content before preview</p>
+            </div>
+
             <div class="form-group">
               <label for="about">About Your Business</label>
-              <div class="input-box textarea-box">
-                <textarea 
-                  id="about" 
-                  name="about" 
-                  rows="4"
-                  placeholder="Tell your business story..."
-                ></textarea>
+              <div class="input-box">
+                <textarea id="about" name="about" rows="4"
+                  placeholder="A compelling about section for your website..."></textarea>
                 <span class="input-highlight"></span>
               </div>
             </div>
 
             <div class="form-group">
-              <label for="products">Products/Services</label>
-              <div class="input-box textarea-box">
-                <textarea 
-                  id="products" 
-                  name="products" 
-                  rows="3"
-                  placeholder="Separate with commas"
-                ></textarea>
+              <label for="products">Products / Services</label>
+              <div class="input-box">
+                <input type="text" id="products" name="products"
+                  placeholder="e.g., Web Design, Brand Strategy, Consulting">
                 <span class="input-highlight"></span>
               </div>
+              <small>Separate each service with a comma</small>
             </div>
 
             <div class="form-group">
-              <label for="tone">Website Tone</label>
-              <div class="select-box">
+              <label for="tone">Brand Tone</label>
+              <div class="input-box">
                 <select id="tone" name="tone">
                   <option value="professional">Professional</option>
                   <option value="friendly">Friendly</option>
@@ -218,12 +387,15 @@
             </div>
 
             <div class="button-group">
-              <button type="button" class="btn btn-secondary" onclick="goBackStep()">
-                ← Go Back
+              <button type="button" class="btn btn-secondary" onclick="resetForm()">
+                <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5">
+                  <path d="M19 12H5M12 5l-7 7 7 7"/>
+                </svg>
+                Go Back
               </button>
               <button type="button" class="btn btn-primary btn-lg" onclick="showPreview()">
                 <span>Preview Website</span>
-                <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
                   <path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"/>
                   <circle cx="12" cy="12" r="3"/>
                 </svg>
@@ -232,21 +404,24 @@
           </form>
         </section>
 
-        <!-- Step 3 -->
-        <section class="form-section" id="step3" style="display: none;">
+        <!-- ── STEP 3: Preview ── -->
+        <section class="form-section" id="step3" style="display:none">
           <div class="section-header">
             <div class="step-badge">Step 3 of 3</div>
             <h2>Preview & Download</h2>
-            <p>See how your website looks before downloading</p>
+            <p>Your website is ready — review before downloading</p>
           </div>
 
           <div class="preview-controls">
-            <button type="button" class="btn btn-secondary" onclick="goBackStep()">
-              ← Back
+            <button type="button" class="btn btn-secondary" onclick="backToEdit()">
+              <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5">
+                <path d="M19 12H5M12 5l-7 7 7 7"/>
+              </svg>
+              Back
             </button>
             <button type="button" class="btn btn-success btn-lg" onclick="downloadWebsite()">
               <span>Download Website</span>
-              <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+              <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
                 <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/>
                 <polyline points="7 10 12 15 17 10"/>
                 <line x1="12" y1="15" x2="12" y2="3"/>
@@ -255,16 +430,33 @@
           </div>
 
           <div class="preview-container">
+            <div class="preview-browser-chrome">
+              <div class="browser-dots">
+                <span class="bdot bdot-r"></span>
+                <span class="bdot bdot-a"></span>
+                <span class="bdot bdot-g"></span>
+              </div>
+              <div class="browser-address">
+                <svg width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                  <rect x="3" y="11" width="18" height="11" rx="2"/>
+                  <path d="M7 11V7a5 5 0 0 1 10 0v4"/>
+                </svg>
+                <span>yourwebsite.com</span>
+              </div>
+            </div>
             <iframe id="previewFrame" class="preview-frame"></iframe>
           </div>
 
           <div class="preview-controls">
-            <button type="button" class="btn btn-secondary" onclick="goBackStep()">
-              ← Back
+            <button type="button" class="btn btn-secondary" onclick="backToEdit()">
+              <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5">
+                <path d="M19 12H5M12 5l-7 7 7 7"/>
+              </svg>
+              Back
             </button>
             <button type="button" class="btn btn-success btn-lg" onclick="downloadWebsite()">
               <span>Download Website</span>
-              <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+              <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
                 <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/>
                 <polyline points="7 10 12 15 17 10"/>
                 <line x1="12" y1="15" x2="12" y2="3"/>
@@ -273,20 +465,24 @@
           </div>
         </section>
 
-        <!-- Success State -->
-        <section class="form-section" id="successStep" style="display: none;">
+        <!-- ── SUCCESS ── -->
+        <section class="form-section" id="successStep" style="display:none">
           <div class="success-container">
-            <div class="success-icon">✓</div>
-            <h2>Website Generated!</h2>
-            <p>Your website is ready to download and deploy</p>
+            <div class="success-icon">
+              <svg width="36" height="36" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5">
+                <polyline points="20 6 9 17 4 12"/>
+              </svg>
+            </div>
+            <h2>Website Downloaded!</h2>
+            <p>Your website is ready to deploy. Unzip and upload to any host.</p>
             <div class="success-details">
               <div class="detail-item">
                 <span class="detail-icon">📦</span>
-                <span>Complete HTML/CSS package</span>
+                <span>Complete HTML + CSS + JS package</span>
               </div>
               <div class="detail-item">
-                <span class="detail-icon">🎨</span>
-                <span>Responsive design included</span>
+                <span class="detail-icon">📱</span>
+                <span>Fully responsive on all devices</span>
               </div>
               <div class="detail-item">
                 <span class="detail-icon">⚡</span>
@@ -298,14 +494,189 @@
             </button>
           </div>
         </section>
+
       </main>
     </div>
 
+    <!-- FOOTER -->
     <footer class="footer">
-      <p>© 2024 WebSite Builder. Crafted with ❤️ for creators</p>
+      <div class="footer-inner">
+        <span class="footer-logo">WebSite<span style="color:var(--accent)">Builder</span></span>
+        <p>Crafted for creators who move fast · AI-powered · © 2025</p>
+      </div>
     </footer>
+
   </div>
 
   <script src="script.js"></script>
+
+  <script>
+    /* ── ARC GALLERY ─────────────────────────────────────────────
+       12 images representing all 5 template themes.
+       Replace Unsplash URLs with real template screenshots when ready.
+       To add more templates later, just push more URLs to this array.
+    ─────────────────────────────────────────────────────────────── */
+    const arcImages = [
+      // Template 1 — Editorial / Magazine
+      'https://images.unsplash.com/photo-1618005182384-a83a8bd57fbe?w=300&h=300&fit=crop&q=80',
+      'https://images.unsplash.com/photo-1558618666-fcd25c85cd64?w=300&h=300&fit=crop&q=80',
+      'https://images.unsplash.com/photo-1536599018102-9f803c140fc1?w=300&h=300&fit=crop&q=80',
+      // Template 2 — Agency / Professional
+      'https://images.unsplash.com/photo-1497366216548-37526070297c?w=300&h=300&fit=crop&q=80',
+      'https://images.unsplash.com/photo-1551434678-e076c223a692?w=300&h=300&fit=crop&q=80',
+      // Template 3 — Dev / Terminal
+      'https://images.unsplash.com/photo-1555099962-4199c345e5dd?w=300&h=300&fit=crop&q=80',
+      'https://images.unsplash.com/photo-1461749280684-dccba630e2f6?w=300&h=300&fit=crop&q=80',
+      // Template 4 — Web3 / Protocol
+      'https://images.unsplash.com/photo-1639762681057-408e52192e55?w=300&h=300&fit=crop&q=80',
+      'https://images.unsplash.com/photo-1635070041078-e363dbe005cb?w=300&h=300&fit=crop&q=80',
+      'https://images.unsplash.com/photo-1640161704729-cbe966a08476?w=300&h=300&fit=crop&q=80',
+      // Template 5 — Local Business
+      'https://images.unsplash.com/photo-1556742049-0cfed4f6a45d?w=300&h=300&fit=crop&q=80',
+      'https://images.unsplash.com/photo-1509440159596-0249088772ff?w=300&h=300&fit=crop&q=80',
+      // Template 6 — BFSI / Wealth Management
+      'https://images.unsplash.com/photo-1611974789855-9c2a0a7236a3?w=300&h=300&fit=crop&q=80',
+      'https://images.unsplash.com/photo-1454165804606-c3d57bc86b40?w=300&h=300&fit=crop&q=80',
+      // Template 7 — Startup / SaaS
+      'https://images.unsplash.com/photo-1551288049-bebda4e38f71?w=300&h=300&fit=crop&q=80',
+      'https://images.unsplash.com/photo-1593642632559-0c6d3fc62b89?w=300&h=300&fit=crop&q=80',
+      // Template 8 — Insurance Agent
+      'https://images.unsplash.com/photo-1450101499163-c8848c66ca85?w=300&h=300&fit=crop&q=80',
+      'https://images.unsplash.com/photo-1521791136064-7986c2920216?w=300&h=300&fit=crop&q=80',
+    ];
+
+    function buildArc() {
+      const pivot = document.getElementById('arcPivot');
+      const stage = document.getElementById('arcStage');
+      if (!pivot || !stage) return;
+      pivot.innerHTML = '';
+
+      const W = window.innerWidth;
+      const radius   = W < 640 ? 210 : W < 1024 ? 320 : 450;
+      const cardSize = W < 640 ? 68  : W < 1024 ? 86  : 108;
+      const startAngle = 18;
+      const endAngle   = 162;
+      const count = arcImages.length;
+      const step = (endAngle - startAngle) / (count - 1);
+
+      // Set stage height proportional to radius
+      stage.style.height = Math.round(radius * 1.08) + 'px';
+
+      arcImages.forEach((src, i) => {
+        const angle  = startAngle + step * i;
+        const rad    = angle * Math.PI / 180;
+        const x      = Math.cos(rad) * radius;
+        const y      = Math.sin(rad) * radius;
+        const rotate = (angle - 90) * 0.12; // gentle card tilt
+
+        const card = document.createElement('div');
+        card.className = 'arc-card';
+        card.style.cssText = [
+          `width:${cardSize}px`,
+          `height:${cardSize}px`,
+          `left:calc(50% + ${x}px)`,
+          `bottom:${y}px`,
+          `animation-delay:${i * 75}ms`,
+        ].join(';');
+
+        const inner = document.createElement('div');
+        inner.className = 'arc-card-inner';
+        inner.style.setProperty('--r', `${rotate}deg`);
+
+        const img = document.createElement('img');
+        img.src = src;
+        img.alt = '';
+        img.draggable = false;
+        img.loading = 'lazy';
+        img.onerror = () => {
+          img.style.display = 'none';
+          inner.style.background = 'rgba(232,160,48,.08)';
+        };
+
+        inner.appendChild(img);
+        card.appendChild(inner);
+        pivot.appendChild(card);
+      });
+    }
+
+    buildArc();
+    let arcTimer;
+    window.addEventListener('resize', () => {
+      clearTimeout(arcTimer);
+      arcTimer = setTimeout(buildArc, 180);
+    }, { passive: true });
+
+    /* ── CUSTOM CURSOR ─────────────────────────────────────────── */
+    const cursor = document.getElementById('cursorFollower');
+    const cursorTextEl = document.getElementById('cursorText');
+    let mx = -200, my = -200, rx = -200, ry = -200;
+
+    // Track actual mouse position
+    document.addEventListener('mousemove', e => {
+      mx = e.clientX;
+      my = e.clientY;
+    });
+
+    // Spring-like interpolation for smooth follow (mimics Framer Motion)
+    (function animCursor() {
+      rx += (mx - rx) * 0.15; 
+      ry += (my - ry) * 0.15;
+      cursor.style.transform = `translate(calc(${rx}px - 50%), calc(${ry}px - 50%))`;
+      requestAnimationFrame(animCursor);
+    })();
+
+    // Handle hover states for any element with data-cursor-text
+    document.addEventListener('mouseover', e => {
+      const target = e.target.closest('[data-cursor-text]');
+      if (target) {
+        const text = target.getAttribute('data-cursor-text');
+        cursorTextEl.textContent = text;
+        cursor.classList.add('has-text');
+      }
+    });
+
+    document.addEventListener('mouseout', e => {
+      const target = e.target.closest('[data-cursor-text]');
+      if (target) {
+        cursor.classList.remove('has-text');
+        // Wait for CSS collapse animation to finish before clearing text
+        setTimeout(() => {
+          if (!cursor.classList.contains('has-text')) {
+             cursorTextEl.textContent = '';
+          }
+        }, 300);
+      }
+    });
+
+    // Hide cursor when leaving window
+    document.addEventListener('mouseleave', () => cursor.style.opacity = '0');
+    document.addEventListener('mouseenter', () => cursor.style.opacity = '1');
+    /* ── NAV SCROLL ─────────────────────────────────────────────── */
+    const navbar = document.getElementById('navbar');
+    window.addEventListener('scroll', () => {
+      navbar.classList.toggle('scrolled', window.scrollY > 20);
+    }, { passive: true });
+
+    /* ── TEMPLATE PICKER ─────────────────────────────────────────── */
+    document.querySelectorAll('.template-box input[type="radio"]').forEach(radio => {
+      radio.addEventListener('change', () => {
+        document.querySelectorAll('.template-content').forEach(c => c.classList.remove('selected'));
+        if (radio.checked) radio.nextElementSibling.classList.add('selected');
+      });
+    });
+    const firstChecked = document.querySelector('.template-box input[type="radio"]:checked');
+    if (firstChecked) firstChecked.nextElementSibling.classList.add('selected');
+
+    /* ── FORM REVEAL ─────────────────────────────────────────────── */
+    document.querySelectorAll('.form-group').forEach((el, i) => {
+      el.style.opacity = '0';
+      el.style.transform = 'translateY(18px)';
+      setTimeout(() => {
+        el.style.transition = 'opacity .5s ease, transform .5s ease';
+        el.style.opacity = '1';
+        el.style.transform = 'none';
+      }, 100 + i * 65);
+    });
+  </script>
 </body>
 </html>

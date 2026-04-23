@@ -100,6 +100,9 @@ app.post('/api/preview', async (req, res) => {
     else if (template === 'template-3') templateFile = 'website-template-3.ejs';
     else if (template === 'template-4') templateFile = 'website-template-4.ejs';
     else if (template === 'template-5') templateFile = 'website-template-5.ejs';
+    else if (template === 'template-6') templateFile = 'website-template-6.ejs';
+    else if (template === 'template-7') templateFile = 'website-template-7.ejs';
+    else if (template === 'template-8') templateFile = 'website-template-8.ejs';
 
     const htmlContent = await ejsLib.renderFile(
       path.join(__dirname, 'templates', templateFile),
@@ -134,6 +137,9 @@ app.post('/api/generate', async (req, res) => {
     else if (template === 'template-3') templateFile = 'website-template-3.ejs';
     else if (template === 'template-4') templateFile = 'website-template-4.ejs';
     else if (template === 'template-5') templateFile = 'website-template-5.ejs';
+    else if (template === 'template-6') templateFile = 'website-template-6.ejs';
+    else if (template === 'template-7') templateFile = 'website-template-7.ejs';
+    else if (template === 'template-8') templateFile = 'website-template-8.ejs';
 
     const htmlContent = await ejsLib.renderFile(
       path.join(__dirname, 'templates', templateFile),

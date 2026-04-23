@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Apex Studio — Crafting experiences that endure.</title>
+  <title><%= businessName %> — <%= tagline %></title>
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,400;0,600;0,700;1,400;1,600&family=DM+Sans:wght@300;400;500;600&display=swap" rel="stylesheet">
   <style>
@@ -1178,7 +1178,7 @@
   <nav class="nav" id="nav">
     <div class="nav-inner">
       <a href="#top" class="nav-logo">
-        <span class="nav-logo-name">Apex Studio</span>
+        <span class="nav-logo-name"><%= businessName %></span>
         <span class="nav-logo-tag">Licensed Insurance Professional</span>
       </a>
       <ul class="nav-links">
@@ -1196,14 +1196,14 @@
     <div class="hero-left">
       <div>
         <div class="hero-badge">
-          Professional Coverage · Locally Trusted
+          <%= tone.charAt(0).toUpperCase() + tone.slice(1) %> Coverage · Locally Trusted
         </div>
         <h1 class="hero-title">
           Your Protection<br>
           is Our<br>
           <em>Priority.</em>
         </h1>
-        <p class="hero-deck">Crafting experiences that endure.</p>
+        <p class="hero-deck"><%= tagline %></p>
       </div>
       <div class="hero-trust-bar">
         <div class="trust-item">
@@ -1246,15 +1246,9 @@
           <input type="tel"   class="qinput" placeholder="Phone number" required>
           <input type="email" class="qinput" placeholder="Email address" required>
           <select class="qinput qselect">
-            
-              <option value="Brand Strategy">Brand Strategy</option>
-            
-              <option value="Web Design">Web Design</option>
-            
-              <option value="Digital Marketing">Digital Marketing</option>
-            
-              <option value="Consulting">Consulting</option>
-            
+            <% products.forEach(function(p){ %>
+              <option value="<%= p %>"><%= p %></option>
+            <% }); %>
           </select>
           <button type="submit" class="qbtn">
             Request Free Quote
@@ -1269,41 +1263,11 @@
   <!-- TRUST MARQUEE -->
   <div class="trust-strip">
     <div class="trust-track" id="trustTrack">
-      
-      
-      
-        <span class="trust-tag"><span class="trust-tag-dot">✦</span>IRDA Registered</span>
-      
-        <span class="trust-tag"><span class="trust-tag-dot">✦</span>Claim Support 24/7</span>
-      
-        <span class="trust-tag"><span class="trust-tag-dot">✦</span>Independent Agent</span>
-      
-        <span class="trust-tag"><span class="trust-tag-dot">✦</span>No Hidden Fees</span>
-      
-        <span class="trust-tag"><span class="trust-tag-dot">✦</span>Free Consultations</span>
-      
-        <span class="trust-tag"><span class="trust-tag-dot">✦</span>Multiple Insurers</span>
-      
-        <span class="trust-tag"><span class="trust-tag-dot">✦</span>Paperless Process</span>
-      
-        <span class="trust-tag"><span class="trust-tag-dot">✦</span>Quick Renewals</span>
-      
-        <span class="trust-tag"><span class="trust-tag-dot">✦</span>IRDA Registered</span>
-      
-        <span class="trust-tag"><span class="trust-tag-dot">✦</span>Claim Support 24/7</span>
-      
-        <span class="trust-tag"><span class="trust-tag-dot">✦</span>Independent Agent</span>
-      
-        <span class="trust-tag"><span class="trust-tag-dot">✦</span>No Hidden Fees</span>
-      
-        <span class="trust-tag"><span class="trust-tag-dot">✦</span>Free Consultations</span>
-      
-        <span class="trust-tag"><span class="trust-tag-dot">✦</span>Multiple Insurers</span>
-      
-        <span class="trust-tag"><span class="trust-tag-dot">✦</span>Paperless Process</span>
-      
-        <span class="trust-tag"><span class="trust-tag-dot">✦</span>Quick Renewals</span>
-      
+      <% var tags = ['IRDA Registered','Claim Support 24/7','Independent Agent','No Hidden Fees','Free Consultations','Multiple Insurers','Paperless Process','Quick Renewals']; %>
+      <% var doubled = [...tags,...tags]; %>
+      <% doubled.forEach(function(t){ %>
+        <span class="trust-tag"><span class="trust-tag-dot">✦</span><%= t %></span>
+      <% }); %>
     </div>
   </div>
 
@@ -1314,39 +1278,15 @@
       <h2 class="section-title reveal rd1">Comprehensive Protection<br>For Every Stage of Life</h2>
       <p class="section-sub reveal rd2">From your first policy to your family's future, I provide tailored coverage across every category that matters.</p>
       <div class="services-grid">
-        
-          <div class="service-card reveal rd1">
-            <div class="service-icon-wrap">🛡</div>
-            <span class="service-num">01</span>
-            <h3 class="service-title">Brand Strategy</h3>
-            <p class="service-body">Tailored brand strategy solutions that give you real coverage when it matters most — no jargon, no surprises.</p>
+        <% products.forEach(function(product, i){ %>
+          <div class="service-card reveal rd<%= Math.min(i%3+1,3) %>">
+            <div class="service-icon-wrap"><%= ['🛡','🏠','🚗','❤️','✈️','💼'][i%6] %></div>
+            <span class="service-num">0<%= i+1 %></span>
+            <h3 class="service-title"><%= product %></h3>
+            <p class="service-body">Tailored <%= product.toLowerCase() %> solutions that give you real coverage when it matters most — no jargon, no surprises.</p>
             <a href="#contact" class="service-link">Get Covered →</a>
           </div>
-        
-          <div class="service-card reveal rd2">
-            <div class="service-icon-wrap">🏠</div>
-            <span class="service-num">02</span>
-            <h3 class="service-title">Web Design</h3>
-            <p class="service-body">Tailored web design solutions that give you real coverage when it matters most — no jargon, no surprises.</p>
-            <a href="#contact" class="service-link">Get Covered →</a>
-          </div>
-        
-          <div class="service-card reveal rd3">
-            <div class="service-icon-wrap">🚗</div>
-            <span class="service-num">03</span>
-            <h3 class="service-title">Digital Marketing</h3>
-            <p class="service-body">Tailored digital marketing solutions that give you real coverage when it matters most — no jargon, no surprises.</p>
-            <a href="#contact" class="service-link">Get Covered →</a>
-          </div>
-        
-          <div class="service-card reveal rd1">
-            <div class="service-icon-wrap">❤️</div>
-            <span class="service-num">04</span>
-            <h3 class="service-title">Consulting</h3>
-            <p class="service-body">Tailored consulting solutions that give you real coverage when it matters most — no jargon, no surprises.</p>
-            <a href="#contact" class="service-link">Get Covered →</a>
-          </div>
-        
+        <% }); %>
       </div>
     </div>
   </section>
@@ -1357,7 +1297,7 @@
       <div class="why-left">
         <p class="eyebrow">Why Work With Me</p>
         <h2 class="section-title">An agent who puts<br>you first. Always.</h2>
-        <p class="why-body">We are a team of dedicated professionals committed to delivering excellence across every project we undertake.</p>
+        <p class="why-body"><%= about %></p>
         <ul class="why-checklist">
           <li><span class="why-check">✓</span> Independent agent — I compare across multiple insurers to find your best rate</li>
           <li><span class="why-check">✓</span> I handle claims personally, so you're never passed from department to department</li>
@@ -1389,17 +1329,17 @@
     <div class="about-inner">
       <div class="about-photo-wrap reveal">
         <div class="about-photo-placeholder">
-          <span class="about-photo-initial">A</span>
+          <span class="about-photo-initial"><%= businessName.charAt(0) %></span>
           <div class="about-photo-badge">
-            <span class="about-photo-badge-name">Apex Studio</span>
-            <span class="about-photo-badge-title">Certified Insurance Professional · 2025</span>
+            <span class="about-photo-badge-name"><%= businessName %></span>
+            <span class="about-photo-badge-title">Certified Insurance Professional · <%= year %></span>
           </div>
         </div>
       </div>
       <div class="about-right reveal rd1">
         <p class="eyebrow">About Me</p>
         <h2 class="section-title">A face you can trust<br>behind every policy.</h2>
-        <p class="about-body">We are a team of dedicated professionals committed to delivering excellence across every project we undertake.</p>
+        <p class="about-body"><%= about %></p>
         <div class="about-credentials">
           <div class="cred-item">
             <span class="cred-icon">🏆</span>
@@ -1415,7 +1355,7 @@
           </div>
           <div class="cred-item">
             <span class="cred-icon">⭐</span>
-            Top 1% Producer — 2025 Award
+            Top 1% Producer — <%= year %> Award
           </div>
         </div>
       </div>
@@ -1484,15 +1424,9 @@
               <label>Coverage of Interest</label>
               <select>
                 <option value="">Select a category</option>
-                
-                  <option value="Brand Strategy">Brand Strategy</option>
-                
-                  <option value="Web Design">Web Design</option>
-                
-                  <option value="Digital Marketing">Digital Marketing</option>
-                
-                  <option value="Consulting">Consulting</option>
-                
+                <% products.forEach(function(p){ %>
+                  <option value="<%= p %>"><%= p %></option>
+                <% }); %>
               </select>
             </div>
             <div class="cfield"><label>Your Message</label><textarea rows="3" placeholder="Tell me a little about what you're looking for..."></textarea></div>
@@ -1507,22 +1441,16 @@
   <footer>
     <div class="footer-top">
       <div>
-        <span class="footer-brand-name">Apex Studio</span>
-        <p class="footer-tagline">Crafting experiences that endure.</p>
-        <span class="footer-license">🛡 IRDA Lic. No. — 2025</span>
+        <span class="footer-brand-name"><%= businessName %></span>
+        <p class="footer-tagline"><%= tagline %></p>
+        <span class="footer-license">🛡 IRDA Lic. No. — <%= year %></span>
       </div>
       <div>
         <p class="footer-col-title">Coverage</p>
         <ul class="footer-links">
-          
-            <li><a href="#services">Brand Strategy</a></li>
-          
-            <li><a href="#services">Web Design</a></li>
-          
-            <li><a href="#services">Digital Marketing</a></li>
-          
-            <li><a href="#services">Consulting</a></li>
-          
+          <% products.forEach(function(p){ %>
+            <li><a href="#services"><%= p %></a></li>
+          <% }); %>
         </ul>
       </div>
       <div>
@@ -1536,7 +1464,7 @@
       </div>
     </div>
     <div class="footer-bottom">
-      <span class="footer-copy">© 2025 Apex Studio. All rights reserved.</span>
+      <span class="footer-copy">© <%= year %> <%= businessName %>. All rights reserved.</span>
       <span class="footer-disc">Insurance products are subject to terms and conditions. Please read the policy document carefully before purchasing. Premiums and benefits may vary.</span>
     </div>
   </footer>

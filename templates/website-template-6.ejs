@@ -1,0 +1,1033 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title><%= businessName %> | <%= tagline %></title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,400;0,500;0,600;0,700;1,400;1,600&family=DM+Sans:wght@300;400;500;600&display=swap" rel="stylesheet">
+  <style>
+    *,*::before,*::after{margin:0;padding:0;box-sizing:border-box}
+    :root{
+      --night:  #090d16;
+      --navy:   #0d1421;
+      --navy-2: #111d30;
+      --navy-3: #16243d;
+      --plat:   #e8e4dc;
+      --plat-s: rgba(232,228,220,.55);
+      --plat-d: rgba(232,228,220,.25);
+      --gold:   #b89a3e;
+      --gold-lt:#cdb05a;
+      --gold-glo:rgba(184,154,62,.16);
+      --gold-dim:rgba(184,154,62,.08);
+      --border: rgba(232,228,220,.07);
+      --bdr-md: rgba(232,228,220,.13);
+      --bdr-hi: rgba(184,154,62,.3);
+      --red:    #e05252;
+      --grn:    #3dba7e;
+      --serif:  'Cormorant Garamond', Georgia, serif;
+      --sans:   'DM Sans', system-ui, sans-serif;
+    }
+    html{scroll-behavior:smooth}
+    body{font-family:var(--sans);background:var(--night);color:var(--plat);overflow-x:hidden;-webkit-font-smoothing:antialiased;line-height:1.65}
+
+    /* ── NOISE ── */
+    body::after{content:'';position:fixed;inset:0;pointer-events:none;z-index:0;opacity:.018;
+      background-image:url("data:image/svg+xml,%3Csvg viewBox='0 0 512 512' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='.85' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E");
+      background-size:200px}
+
+    /* ── COMPLIANCE TOPBAR ── */
+    .comp-bar{
+      background:var(--navy-2);
+      border-bottom:1px solid var(--border);
+      padding:8px 56px;
+      display:flex;align-items:center;justify-content:space-between;
+      font-size:.68rem;letter-spacing:.08em;
+      color:var(--plat-d);
+      position:relative;z-index:10;
+    }
+    .comp-bar-left{display:flex;align-items:center;gap:24px}
+    .comp-reg{display:flex;align-items:center;gap:6px}
+    .comp-dot{width:5px;height:5px;border-radius:50%;background:var(--grn);box-shadow:0 0 6px var(--grn)}
+    .comp-bar a{color:var(--plat-d);text-decoration:none;transition:color .2s}
+    .comp-bar a:hover{color:var(--plat-s)}
+
+    /* ── NAV ── */
+    .nav{
+      position:sticky;top:0;z-index:500;
+      height:72px;padding:0 56px;
+      display:flex;align-items:center;justify-content:space-between;
+      background:rgba(9,13,22,.92);
+      backdrop-filter:blur(20px);
+      border-bottom:1px solid var(--border);
+      transition:box-shadow .3s;
+    }
+    .nav.elevated{box-shadow:0 4px 32px rgba(0,0,0,.5)}
+    .nav-logo{display:flex;align-items:center;gap:12px;text-decoration:none}
+    .logo-emblem{
+      width:36px;height:36px;
+      border:1px solid var(--gold);
+      display:flex;align-items:center;justify-content:center;
+      position:relative;
+    }
+    .logo-emblem::before{
+      content:'';position:absolute;inset:3px;
+      border:1px solid rgba(184,154,62,.3);
+    }
+    .logo-emblem-text{
+      font-family:var(--serif);font-size:.95rem;font-weight:700;
+      color:var(--gold);letter-spacing:.04em;line-height:1;
+    }
+    .logo-name{
+      font-family:var(--serif);font-size:1.3rem;font-weight:600;
+      color:var(--plat);letter-spacing:.02em;
+    }
+    .logo-name span{color:var(--gold)}
+    .nav-links{display:flex;gap:0;list-style:none;align-items:center}
+    .nav-links a{
+      font-size:.8rem;font-weight:500;
+      color:var(--plat-s);text-decoration:none;
+      padding:10px 16px;letter-spacing:.04em;
+      transition:color .2s;
+    }
+    .nav-links a:hover{color:var(--plat)}
+    .nav-cta{
+      display:inline-flex;align-items:center;gap:8px;
+      border:1px solid var(--gold);
+      color:var(--gold)!important;
+      padding:9px 22px!important;
+      font-size:.78rem!important;
+      letter-spacing:.08em!important;
+      transition:background .2s,color .2s!important;
+    }
+    .nav-cta:hover{background:var(--gold)!important;color:var(--night)!important}
+
+    /* ── HERO ── */
+    .hero{
+      position:relative;z-index:1;
+      min-height:100vh;
+      display:grid;
+      grid-template-columns:1fr 1fr;
+      align-items:center;
+      padding:80px 56px;
+      gap:60px;
+      overflow:hidden;
+    }
+    .hero::before{
+      content:'';position:absolute;
+      top:-200px;right:-200px;
+      width:700px;height:700px;
+      background:radial-gradient(circle,rgba(184,154,62,.06) 0%,transparent 65%);
+      border-radius:50%;pointer-events:none;
+    }
+    .hero-left{position:relative;z-index:2}
+    .hero-eyebrow{
+      display:inline-flex;align-items:center;gap:10px;
+      font-size:.68rem;letter-spacing:.22em;text-transform:uppercase;
+      font-weight:600;color:var(--gold);margin-bottom:28px;
+    }
+    .hero-eyebrow::before{content:'';width:32px;height:1px;background:var(--gold)}
+    .hero-title{
+      font-family:var(--serif);
+      font-size:clamp(3.2rem,5.5vw,5.8rem);
+      font-weight:600;line-height:1.04;
+      letter-spacing:-.01em;
+      color:var(--plat);margin-bottom:24px;
+    }
+    .hero-title em{font-style:italic;color:var(--gold)}
+    .hero-sub{
+      font-size:.98rem;color:var(--plat-s);
+      font-weight:300;line-height:1.82;
+      max-width:480px;margin-bottom:44px;
+    }
+    .hero-ctas{display:flex;gap:14px;align-items:center;margin-bottom:52px}
+    .btn-gold{
+      display:inline-flex;align-items:center;gap:10px;
+      background:var(--gold);color:var(--night);
+      padding:14px 34px;font-size:.82rem;font-weight:600;
+      font-family:var(--sans);letter-spacing:.06em;text-transform:uppercase;
+      border:none;cursor:pointer;text-decoration:none;
+      transition:background .25s,box-shadow .25s,transform .15s;
+    }
+    .btn-gold:hover{background:var(--gold-lt);box-shadow:0 0 32px var(--gold-glo);transform:translateY(-2px)}
+    .btn-out{
+      display:inline-flex;align-items:center;gap:8px;
+      background:transparent;color:var(--plat-s);
+      padding:13px 28px;font-size:.82rem;font-weight:500;
+      letter-spacing:.04em;border:1px solid var(--bdr-md);
+      text-decoration:none;
+      transition:border-color .2s,color .2s;
+    }
+    .btn-out:hover{border-color:var(--bdr-hi);color:var(--plat)}
+
+    .hero-trust{display:flex;gap:28px;align-items:center}
+    .trust-badge{
+      display:flex;align-items:center;gap:8px;
+      font-size:.75rem;color:var(--plat-d);font-weight:400;
+    }
+    .trust-badge-icon{
+      width:28px;height:28px;border:1px solid var(--bdr-md);
+      display:flex;align-items:center;justify-content:center;
+      font-size:.8rem;
+    }
+
+    /* Hero right — product panel */
+    .hero-right{position:relative;z-index:2}
+    .hero-panel{
+      background:var(--navy-2);
+      border:1px solid var(--bdr-md);
+      overflow:hidden;
+    }
+    .panel-header{
+      background:var(--navy-3);
+      border-bottom:1px solid var(--border);
+      padding:16px 24px;
+      display:flex;align-items:center;justify-content:space-between;
+    }
+    .panel-title{
+      font-family:var(--serif);font-size:1rem;font-weight:600;
+      color:var(--plat);letter-spacing:.02em;
+    }
+    .panel-live{
+      display:inline-flex;align-items:center;gap:6px;
+      font-size:.65rem;letter-spacing:.1em;text-transform:uppercase;
+      color:var(--grn);
+    }
+    .panel-live-dot{width:5px;height:5px;border-radius:50%;background:var(--grn);box-shadow:0 0 6px var(--grn);animation:pulse 2s ease-in-out infinite}
+    @keyframes pulse{0%,100%{opacity:1}50%{opacity:.3}}
+    .panel-body{padding:24px}
+    .rate-row{
+      display:flex;align-items:center;justify-content:space-between;
+      padding:14px 0;border-bottom:1px solid var(--border);
+    }
+    .rate-row:last-child{border-bottom:none}
+    .rate-label{
+      display:flex;flex-direction:column;gap:3px;
+    }
+    .rate-name{font-size:.85rem;font-weight:500;color:var(--plat)}
+    .rate-sub{font-size:.7rem;color:var(--plat-d);letter-spacing:.04em}
+    .rate-val{
+      font-family:var(--serif);font-size:1.65rem;font-weight:700;
+      color:var(--gold);line-height:1;letter-spacing:-.01em;
+    }
+    .rate-badge{
+      font-size:.62rem;letter-spacing:.1em;text-transform:uppercase;
+      padding:3px 8px;border:1px solid rgba(61,186,126,.25);
+      color:var(--grn);margin-top:3px;display:inline-block;
+    }
+    .panel-footer{
+      background:var(--navy-3);border-top:1px solid var(--border);
+      padding:12px 24px;
+      font-size:.68rem;letter-spacing:.04em;
+      color:var(--plat-d);
+    }
+
+    /* ── MARQUEE ── */
+    .mq-strip{
+      background:var(--gold);
+      padding:12px 0;overflow:hidden;position:relative;z-index:2;
+    }
+    .mq-track{
+      display:inline-flex;animation:mq 28s linear infinite;white-space:nowrap;
+    }
+    .mq-item{
+      display:inline-flex;align-items:center;gap:8px;
+      padding:0 32px;border-right:1px solid rgba(0,0,0,.15);
+      font-size:.72rem;font-weight:600;letter-spacing:.1em;
+      text-transform:uppercase;color:var(--night);white-space:nowrap;
+    }
+    .mq-item::after{content:'◆';font-size:.4rem;opacity:.5;margin-left:8px}
+    @keyframes mq{from{transform:translateX(0)}to{transform:translateX(-50%)}}
+
+    /* ── SECTION GLOBALS ── */
+    section{position:relative;z-index:1}
+    .ctn{max-width:1240px;margin:0 auto;padding:0 56px}
+    .spad{padding:110px 0}
+    .eyebrow{
+      font-size:.68rem;letter-spacing:.22em;text-transform:uppercase;
+      font-weight:600;color:var(--gold);
+      display:flex;align-items:center;gap:10px;margin-bottom:16px;
+    }
+    .eyebrow::before{content:'';width:24px;height:1px;background:var(--gold)}
+    .sec-title{
+      font-family:var(--serif);
+      font-size:clamp(2.2rem,4vw,3.6rem);
+      font-weight:600;line-height:1.1;
+      letter-spacing:-.01em;color:var(--plat);
+    }
+    .sec-title em{font-style:italic;color:var(--gold)}
+    .reveal{opacity:0;transform:translateY(32px);transition:opacity .8s ease,transform .8s ease}
+    .reveal.visible{opacity:1;transform:translateY(0)}
+    .rd1{transition-delay:.1s}.rd2{transition-delay:.2s}.rd3{transition-delay:.3s}
+
+    /* ── SERVICES ── */
+    .svc{background:var(--navy)}
+    .svc-head{
+      display:grid;grid-template-columns:1fr 1fr;
+      gap:60px;align-items:end;margin-bottom:64px;
+    }
+    .svc-desc{font-size:.92rem;color:var(--plat-s);font-weight:300;line-height:1.82;margin-top:14px}
+    .svc-count{
+      font-family:var(--serif);
+      font-size:7rem;font-weight:600;
+      letter-spacing:-.06em;
+      color:rgba(184,154,62,.08);
+      line-height:1;text-align:right;
+      text-shadow:none;
+    }
+    .svc-grid{
+      display:grid;
+      grid-template-columns:repeat(auto-fit,minmax(260px,1fr));
+      gap:1px;background:var(--border);border:1px solid var(--border);
+    }
+    .svc-card{
+      background:var(--navy);padding:44px 36px;
+      position:relative;overflow:hidden;
+      transition:background .25s;cursor:default;
+    }
+    .svc-card:hover{background:var(--navy-2)}
+    .svc-card::before{
+      content:'';position:absolute;top:0;left:0;right:0;height:2px;
+      background:linear-gradient(90deg,var(--gold),var(--gold-lt));
+      transform:scaleX(0);transform-origin:left;transition:transform .35s ease;
+    }
+    .svc-card:hover::before{transform:scaleX(1)}
+    .svc-icon{
+      width:44px;height:44px;border:1px solid var(--bdr-md);
+      display:flex;align-items:center;justify-content:center;
+      font-size:1.1rem;margin-bottom:20px;
+      transition:border-color .3s;
+    }
+    .svc-card:hover .svc-icon{border-color:var(--bdr-hi)}
+    .svc-name{
+      font-family:var(--serif);font-size:1.25rem;font-weight:600;
+      color:var(--plat);margin-bottom:12px;letter-spacing:.01em;
+    }
+    .svc-desc-t{font-size:.86rem;color:var(--plat-s);line-height:1.75;font-weight:300;margin-bottom:18px}
+    .svc-arrow{
+      font-size:.72rem;letter-spacing:.1em;text-transform:uppercase;
+      color:var(--gold);font-weight:600;
+      display:inline-flex;align-items:center;gap:6px;
+      opacity:0;transform:translateX(-6px);transition:opacity .3s,transform .3s;
+    }
+    .svc-card:hover .svc-arrow{opacity:1;transform:translateX(0)}
+
+    /* ── ABOUT / HERITAGE ── */
+    .about{background:var(--night);border-top:1px solid var(--border);border-bottom:1px solid var(--border)}
+    .about-grid{display:grid;grid-template-columns:1fr 1fr;gap:80px;align-items:center}
+    .about-left .sec-title{margin-bottom:20px}
+    .about-body{font-size:.94rem;color:var(--plat-s);line-height:1.88;font-weight:300;margin-bottom:32px}
+    .about-pillars{display:flex;flex-direction:column;gap:0}
+    .pillar{
+      display:flex;align-items:flex-start;gap:18px;
+      padding:18px 0;border-bottom:1px solid var(--border);
+    }
+    .pillar:last-child{border-bottom:none}
+    .pillar-num{
+      font-family:var(--serif);font-size:1.4rem;font-weight:600;
+      color:rgba(184,154,62,.35);line-height:1;flex-shrink:0;min-width:28px;
+    }
+    .pillar-title{font-size:.88rem;font-weight:600;color:var(--plat);margin-bottom:3px}
+    .pillar-sub{font-size:.8rem;color:var(--plat-d);font-weight:300;line-height:1.6}
+
+    .about-right-inner{display:flex;flex-direction:column;gap:20px}
+    .heritage-card{
+      background:var(--navy-2);border:1px solid var(--border);
+      padding:32px 28px;
+    }
+    .hc-num{
+      font-family:var(--serif);
+      font-size:3.5rem;font-weight:700;
+      color:var(--gold);line-height:1;margin-bottom:4px;
+      letter-spacing:-.02em;
+    }
+    .hc-label{font-size:.72rem;letter-spacing:.1em;text-transform:uppercase;color:var(--plat-d);font-weight:500}
+    .hc-grid{display:grid;grid-template-columns:1fr 1fr;gap:1px;background:var(--border)}
+    .hc-item{background:var(--navy-2);padding:24px 20px}
+
+    .cert-row{
+      display:flex;gap:10px;flex-wrap:wrap;
+    }
+    .cert-badge{
+      display:inline-flex;align-items:center;gap:7px;
+      border:1px solid var(--bdr-md);
+      padding:8px 14px;font-size:.7rem;
+      letter-spacing:.06em;color:var(--plat-s);
+      font-weight:500;
+    }
+    .cert-badge-icon{color:var(--gold);font-size:.8rem}
+
+    /* ── NUMBERS ── */
+    .numband{background:var(--gold);padding:72px 0;position:relative;overflow:hidden}
+    .numband::before{
+      content:'';position:absolute;inset:0;
+      background:linear-gradient(90deg,transparent 40%,rgba(0,0,0,.1) 100%);
+    }
+    .num-grid{
+      display:grid;grid-template-columns:repeat(4,1fr);
+      gap:1px;background:rgba(0,0,0,.15);
+      border:1px solid rgba(0,0,0,.15);
+    }
+    .num-item{background:transparent;padding:52px 36px;text-align:center}
+    .num-val{
+      font-family:var(--serif);
+      font-size:clamp(2.5rem,4.5vw,4rem);
+      font-weight:700;color:var(--night);line-height:1;margin-bottom:8px;
+      letter-spacing:-.02em;
+    }
+    .num-label{font-size:.72rem;font-weight:600;color:rgba(9,13,22,.65);letter-spacing:.1em;text-transform:uppercase}
+
+    /* ── TESTIMONIALS ── */
+    .tst{background:var(--navy)}
+    .tst-head{margin-bottom:56px}
+    .tst-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:1px;background:var(--border);border:1px solid var(--border)}
+    .tst-card{
+      background:var(--night);padding:44px 36px;
+      position:relative;transition:background .25s;
+    }
+    .tst-card:hover{background:var(--navy-2)}
+    .tst-card::before{
+      content:'"';
+      position:absolute;top:20px;right:28px;
+      font-family:var(--serif);font-size:5rem;
+      color:rgba(184,154,62,.1);line-height:1;
+    }
+    .tst-rating{color:var(--gold);font-size:.82rem;letter-spacing:2px;margin-bottom:16px}
+    .tst-quote{
+      font-family:var(--serif);font-size:1rem;font-style:italic;
+      color:var(--plat-s);line-height:1.82;margin-bottom:28px;
+    }
+    .tst-author{display:flex;align-items:center;gap:12px}
+    .tst-av{
+      width:38px;height:38px;
+      background:var(--gold-dim);border:1px solid var(--bdr-hi);
+      display:flex;align-items:center;justify-content:center;
+      font-family:var(--serif);font-size:.78rem;font-weight:700;color:var(--gold);flex-shrink:0;
+    }
+    .tst-name{font-size:.85rem;font-weight:600;color:var(--plat);display:block}
+    .tst-role{font-size:.72rem;color:var(--plat-d);display:block;margin-top:2px}
+
+    /* ── RATES TABLE ── */
+    .rates{background:var(--night);border-top:1px solid var(--border);border-bottom:1px solid var(--border)}
+    .rates-inner{display:grid;grid-template-columns:1fr 1fr;gap:1px;background:var(--border);border:1px solid var(--border)}
+    .rates-panel{background:var(--navy-2);overflow:hidden}
+    .rp-head{
+      background:var(--navy-3);border-bottom:1px solid var(--border);
+      padding:18px 28px;
+      display:flex;align-items:center;justify-content:space-between;
+    }
+    .rp-title{font-family:var(--serif);font-size:1.05rem;font-weight:600;color:var(--plat);letter-spacing:.01em}
+    .rp-as-of{font-size:.65rem;letter-spacing:.08em;color:var(--plat-d)}
+    .rp-body{padding:8px 0}
+    .rp-row{
+      display:flex;align-items:center;justify-content:space-between;
+      padding:14px 28px;border-bottom:1px solid var(--border);
+    }
+    .rp-row:last-child{border-bottom:none}
+    .rp-product{font-size:.85rem;font-weight:500;color:var(--plat)}
+    .rp-tenure{font-size:.7rem;color:var(--plat-d);margin-top:2px}
+    .rp-rate-val{
+      font-family:var(--serif);font-size:1.45rem;font-weight:700;
+      color:var(--gold);letter-spacing:-.01em;
+    }
+    .rp-rate-pa{font-size:.65rem;color:var(--plat-d);letter-spacing:.06em}
+    .rp-tag-up{font-size:.62rem;color:var(--grn);display:flex;align-items:center;gap:3px}
+    .rp-tag-dn{font-size:.62rem;color:var(--red);display:flex;align-items:center;gap:3px}
+
+    /* ── CTA BAND ── */
+    .ctaband{
+      background:var(--navy-2);
+      border-top:1px solid var(--border);border-bottom:1px solid var(--border);
+      padding:96px 56px;
+      display:flex;align-items:center;justify-content:space-between;gap:48px;
+      position:relative;overflow:hidden;
+    }
+    .ctaband::before{
+      content:'';position:absolute;inset:0;
+      background:radial-gradient(ellipse 50% 120% at 85% 50%,rgba(184,154,62,.07) 0%,transparent 70%);
+    }
+    .cta-text{position:relative;z-index:1}
+    .cta-title{
+      font-family:var(--serif);
+      font-size:clamp(2rem,4vw,3.4rem);
+      font-weight:600;color:var(--plat);
+      letter-spacing:-.01em;margin-bottom:10px;
+    }
+    .cta-title em{font-style:italic;color:var(--gold)}
+    .cta-sub{font-size:.92rem;color:var(--plat-s);font-weight:300;max-width:480px}
+    .ctaband .btn-gold{position:relative;z-index:1;white-space:nowrap;flex-shrink:0}
+
+    /* ── CONTACT ── */
+    .contact{background:var(--navy);border-top:1px solid var(--border)}
+    .contact-inner{display:grid;grid-template-columns:1fr 1.35fr;gap:80px;align-items:start}
+    .contact-left .sec-title{margin-bottom:18px}
+    .contact-desc{font-size:.92rem;color:var(--plat-s);font-weight:300;line-height:1.82;margin-bottom:40px}
+    .contact-perks{display:flex;flex-direction:column;gap:0}
+    .cperk{
+      display:flex;align-items:center;gap:14px;
+      padding:14px 0;border-bottom:1px solid var(--border);
+      font-size:.84rem;color:var(--plat-s);font-weight:300;
+    }
+    .cperk:last-child{border-bottom:none}
+    .cperk-icon{color:var(--gold);font-size:.9rem;flex-shrink:0;width:16px;text-align:center}
+
+    .contact-form{background:var(--navy-2);border:1px solid var(--border);padding:40px 36px}
+    .form-title{
+      font-family:var(--serif);font-size:1.3rem;font-weight:600;
+      color:var(--plat);margin-bottom:6px;
+    }
+    .form-sub{font-size:.82rem;color:var(--plat-d);margin-bottom:28px;font-weight:300}
+    .fg2{display:grid;grid-template-columns:1fr 1fr;gap:14px}
+    .fg{display:flex;flex-direction:column;gap:6px;margin-bottom:14px}
+    .fg label{font-size:.68rem;letter-spacing:.12em;text-transform:uppercase;font-weight:600;color:var(--plat-d)}
+    .fg input,.fg textarea,.fg select{
+      background:var(--navy-3);border:1px solid var(--border);
+      color:var(--plat);padding:12px 16px;
+      font-family:var(--sans);font-size:.88rem;font-weight:300;
+      outline:none;transition:border-color .2s,box-shadow .2s;-webkit-appearance:none;
+    }
+    .fg input::placeholder,.fg textarea::placeholder{color:var(--plat-d)}
+    .fg input:focus,.fg textarea:focus,.fg select:focus{
+      border-color:rgba(184,154,62,.4);box-shadow:0 0 0 1px rgba(184,154,62,.1);
+    }
+    .fg textarea{resize:vertical;min-height:110px}
+    .form-submit{
+      width:100%;background:var(--gold);color:var(--night);
+      border:none;padding:15px;font-family:var(--sans);
+      font-size:.82rem;font-weight:600;letter-spacing:.08em;text-transform:uppercase;
+      cursor:pointer;transition:background .2s,box-shadow .2s;
+    }
+    .form-submit:hover{background:var(--gold-lt);box-shadow:0 0 28px var(--gold-glo)}
+
+    /* ── FOOTER ── */
+    footer{background:var(--night);border-top:1px solid var(--border);position:relative;z-index:2}
+    .ft-top{
+      max-width:1240px;margin:0 auto;padding:72px 56px 52px;
+      display:grid;grid-template-columns:2fr 1fr 1fr 1fr;gap:56px;
+    }
+    .ft-brand-name{
+      font-family:var(--serif);font-size:1.35rem;font-weight:600;
+      color:var(--plat);display:flex;align-items:center;gap:10px;margin-bottom:12px;
+    }
+    .ft-brand-name span{color:var(--gold)}
+    .ft-tagline{font-size:.82rem;color:var(--plat-d);line-height:1.7;max-width:240px;margin-bottom:20px}
+    .ft-discl{
+      font-size:.68rem;color:var(--plat-d);line-height:1.7;
+      border-top:1px solid var(--border);padding-top:16px;
+    }
+    .ft-col-title{font-size:.64rem;letter-spacing:.18em;text-transform:uppercase;font-weight:700;color:rgba(184,154,62,.5);margin-bottom:18px}
+    .ft-links{list-style:none;display:flex;flex-direction:column;gap:10px}
+    .ft-links a{font-size:.84rem;color:var(--plat-s);text-decoration:none;font-weight:300;transition:color .2s}
+    .ft-links a:hover{color:var(--gold)}
+    .ft-bot{
+      border-top:1px solid var(--border);
+      max-width:1240px;margin:0 auto;padding:22px 56px;
+      display:flex;justify-content:space-between;align-items:center;
+      font-size:.7rem;color:var(--plat-d);
+    }
+    .ft-reg-badges{display:flex;gap:16px;align-items:center}
+    .ft-rb{
+      font-size:.62rem;letter-spacing:.08em;text-transform:uppercase;
+      border:1px solid var(--bdr-md);padding:4px 10px;color:var(--plat-d);
+    }
+    .ft-bot-links{display:flex;gap:18px}
+    .ft-bot-links a{color:var(--plat-d);text-decoration:none;transition:color .2s}
+    .ft-bot-links a:hover{color:var(--plat-s)}
+
+    /* ── RESPONSIVE ── */
+    @media(max-width:1024px){
+      .ctn{padding:0 32px}.nav{padding:0 32px}
+      .hero{padding:80px 32px;grid-template-columns:1fr;gap:48px}
+      .hero-right{max-width:520px}
+      .svc-head{grid-template-columns:1fr;gap:0}
+      .svc-count{text-align:left;font-size:4rem;margin-top:10px}
+      .about-grid{grid-template-columns:1fr;gap:48px}
+      .num-grid{grid-template-columns:repeat(2,1fr)}
+      .tst-grid{grid-template-columns:1fr 1fr}
+      .tst-card:last-child{display:none}
+      .rates-inner{grid-template-columns:1fr}
+      .contact-inner{grid-template-columns:1fr;gap:48px}
+      .ft-top{grid-template-columns:1fr 1fr;padding:56px 32px 40px}
+      .ft-bot{padding:18px 32px}
+      .ctaband{padding:72px 32px;flex-direction:column;align-items:flex-start}
+      .comp-bar{padding:8px 32px}
+    }
+    @media(max-width:640px){
+      .nav-links li:not(:last-child){display:none}
+      .nav{padding:0 20px}
+      .hero{padding:72px 20px 60px}
+      .hero-ctas{flex-direction:column;align-items:flex-start}
+      .hero-trust{flex-wrap:wrap}
+      .ctn{padding:0 20px}
+      .num-grid{grid-template-columns:1fr 1fr}
+      .tst-grid{grid-template-columns:1fr}
+      .tst-card:last-child{display:block}
+      .ft-top{grid-template-columns:1fr;gap:32px;padding:40px 20px}
+      .ft-bot{flex-direction:column;gap:12px;text-align:center;padding:18px 20px}
+      .fg2{grid-template-columns:1fr}
+      .comp-bar{display:none}
+      .hero-right{display:none}
+      .ctaband{padding:60px 20px}
+      .hc-grid{grid-template-columns:1fr}
+    }
+  </style>
+</head>
+<body>
+
+  <!-- COMPLIANCE TOPBAR -->
+  <div class="comp-bar">
+    <div class="comp-bar-left">
+      <div class="comp-reg">
+        <span class="comp-dot"></span>
+        Regulated Entity · RBI Registered · CIN: U65100MH2010PLC000000
+      </div>
+      <span>·</span>
+      <span>All deposits insured up to ₹5L by DICGC</span>
+    </div>
+    <div class="comp-bar-right">
+      <a href="#">PMLA Policy</a> &nbsp;·&nbsp; <a href="#">Grievance Redressal</a>
+    </div>
+  </div>
+
+  <!-- NAV -->
+  <nav class="nav" id="nav">
+    <a href="#home" class="nav-logo">
+      <div class="logo-emblem">
+        <span class="logo-emblem-text"><%= businessName.charAt(0) %></span>
+      </div>
+      <span class="logo-name"><%= businessName.split(' ')[0] %><span><%= businessName.includes(' ') ? ' ' + businessName.split(' ').slice(1).join(' ') : '' %></span></span>
+    </a>
+    <ul class="nav-links">
+      <li><a href="#services">Services</a></li>
+      <li><a href="#rates">Rates</a></li>
+      <li><a href="#about">About</a></li>
+      <li><a href="#testimonials">Clients</a></li>
+      <li><a href="#contact" class="nav-cta">Open Account →</a></li>
+    </ul>
+  </nav>
+
+  <!-- HERO -->
+  <section id="home" class="hero">
+    <div class="hero-left">
+      <div class="hero-eyebrow">Trusted Financial Partner Since <%= year %></div>
+      <h1 class="hero-title">
+        Grow Your<br>
+        Wealth with<br>
+        <em>Confidence.</em>
+      </h1>
+      <p class="hero-sub"><%= tagline %> — regulated, transparent, and built to serve your financial ambitions for the long term.</p>
+      <div class="hero-ctas">
+        <a href="#contact" class="btn-gold">Open Account →</a>
+        <a href="#services" class="btn-out">Explore Services</a>
+      </div>
+      <div class="hero-trust">
+        <div class="trust-badge">
+          <div class="trust-badge-icon">🏛</div>
+          RBI Regulated
+        </div>
+        <div class="trust-badge">
+          <div class="trust-badge-icon">🛡</div>
+          DICGC Insured
+        </div>
+        <div class="trust-badge">
+          <div class="trust-badge-icon">⭐</div>
+          ISO 27001
+        </div>
+      </div>
+    </div>
+    <div class="hero-right">
+      <div class="hero-panel">
+        <div class="panel-header">
+          <span class="panel-title">Live Indicative Rates</span>
+          <div class="panel-live"><span class="panel-live-dot"></span>Updated Today</div>
+        </div>
+        <div class="panel-body">
+          <div class="rate-row">
+            <div class="rate-label">
+              <span class="rate-name">Fixed Deposit</span>
+              <span class="rate-sub">12–24 months</span>
+            </div>
+            <div>
+              <div class="rate-val">7.85%</div>
+              <div class="rate-badge">p.a. compounding</div>
+            </div>
+          </div>
+          <div class="rate-row">
+            <div class="rate-label">
+              <span class="rate-name">Personal Loan</span>
+              <span class="rate-sub">Starting from</span>
+            </div>
+            <div>
+              <div class="rate-val">10.5%</div>
+              <div class="rate-badge">p.a.</div>
+            </div>
+          </div>
+          <div class="rate-row">
+            <div class="rate-label">
+              <span class="rate-name">Home Loan</span>
+              <span class="rate-sub">Floating rate</span>
+            </div>
+            <div>
+              <div class="rate-val">8.45%</div>
+              <div class="rate-badge">p.a. linked to RLLR</div>
+            </div>
+          </div>
+          <% products.slice(0,2).forEach(function(p){ %>
+          <div class="rate-row">
+            <div class="rate-label">
+              <span class="rate-name"><%= p %></span>
+              <span class="rate-sub">Enquire for rates</span>
+            </div>
+            <div>
+              <div style="font-size:.78rem;color:var(--plat-s);font-weight:500">Get Quote →</div>
+            </div>
+          </div>
+          <% }); %>
+        </div>
+        <div class="panel-footer">* Rates are indicative. Subject to change without notice. T&C apply.</div>
+      </div>
+    </div>
+  </section>
+
+  <!-- MARQUEE -->
+  <div class="mq-strip">
+    <div class="mq-track" id="mqtrack">
+      <% var mqi = [...products,...products,...products,...products]; %>
+      <% mqi.forEach(function(p){ %><span class="mq-item"><%= p %></span><% }); %>
+    </div>
+  </div>
+
+  <!-- SERVICES -->
+  <section id="services" class="svc spad">
+    <div class="ctn">
+      <div class="svc-head reveal">
+        <div>
+          <div class="eyebrow">Our Services</div>
+          <h2 class="sec-title">Financial solutions<br>for every life stage.</h2>
+          <p class="svc-desc">From your first savings account to your retirement corpus — we are with you at every milestone, with products built around your needs.</p>
+        </div>
+        <div class="svc-count"><%= String(products.length).padStart(2,'0') %></div>
+      </div>
+      <div class="svc-grid">
+        <% var icons = ['🏦','📈','🏠','💳','🛡️','📋']; %>
+        <% products.forEach(function(p,i){ %>
+        <div class="svc-card reveal rd<%= i%3 %>">
+          <div class="svc-icon"><%= icons[i%icons.length] %></div>
+          <h3 class="svc-name"><%= p %></h3>
+          <p class="svc-desc-t">Expert-managed <%= p.toLowerCase() %> solutions with competitive rates, transparent terms, and dedicated relationship management.</p>
+          <span class="svc-arrow">Learn More →</span>
+        </div>
+        <% }); %>
+      </div>
+    </div>
+  </section>
+
+  <!-- NUMBERS -->
+  <div class="numband">
+    <div class="ctn">
+      <div class="num-grid">
+        <div class="num-item reveal"><div class="num-val" data-target="25" data-suffix="B+">0</div><div class="num-label">Assets Under Management</div></div>
+        <div class="num-item reveal rd1"><div class="num-val" data-target="4" data-suffix="L+">0</div><div class="num-label">Satisfied Customers</div></div>
+        <div class="num-item reveal rd2"><div class="num-val" data-target="15" data-suffix="yr">0</div><div class="num-label">Years of Trust</div></div>
+        <div class="num-item reveal rd3"><div class="num-val" data-target="98" data-suffix="%">0</div><div class="num-label">Renewal Rate</div></div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ABOUT / HERITAGE -->
+  <section id="about" class="about spad">
+    <div class="ctn">
+      <div class="about-grid">
+        <div class="reveal">
+          <div class="eyebrow">Our Heritage</div>
+          <h2 class="sec-title">Stability you can<br><em>bank on.</em></h2>
+          <p class="about-body" style="margin-top:18px"><%= about %></p>
+          <div class="about-pillars">
+            <div class="pillar">
+              <span class="pillar-num">01</span>
+              <div>
+                <div class="pillar-title">Regulatory Compliance</div>
+                <div class="pillar-sub">Fully compliant with RBI, SEBI, and IRDAI guidelines — your assets are safe and protected.</div>
+              </div>
+            </div>
+            <div class="pillar">
+              <span class="pillar-num">02</span>
+              <div>
+                <div class="pillar-title">Transparent Pricing</div>
+                <div class="pillar-sub">No hidden fees, no fine print surprises — all terms are disclosed upfront before you sign.</div>
+              </div>
+            </div>
+            <div class="pillar">
+              <span class="pillar-num">03</span>
+              <div>
+                <div class="pillar-title">Relationship First</div>
+                <div class="pillar-sub">Dedicated relationship manager for every client. Real people, not bots, when you need help.</div>
+              </div>
+            </div>
+          </div>
+        </div>
+        <div class="reveal rd1">
+          <div class="about-right-inner">
+            <div class="heritage-card">
+              <div class="hc-grid">
+                <div class="hc-item">
+                  <div class="hc-num" data-target="25" data-suffix="Yr">0</div>
+                  <div class="hc-label">In Operation</div>
+                </div>
+                <div class="hc-item">
+                  <div class="hc-num" data-target="99" data-suffix=".9%">0</div>
+                  <div class="hc-label">Uptime</div>
+                </div>
+                <div class="hc-item">
+                  <div class="hc-num" data-target="48" data-suffix="hr">0</div>
+                  <div class="hc-label">Loan Disbursal</div>
+                </div>
+                <div class="hc-item">
+                  <div class="hc-num" data-target="7" data-suffix="★">0</div>
+                  <div class="hc-label">CRISIL Rating</div>
+                </div>
+              </div>
+            </div>
+            <div class="heritage-card">
+              <div class="hc-label" style="margin-bottom:14px">Certifications & Memberships</div>
+              <div class="cert-row">
+                <div class="cert-badge"><span class="cert-badge-icon">✓</span>RBI Licensed</div>
+                <div class="cert-badge"><span class="cert-badge-icon">✓</span>DICGC Member</div>
+                <div class="cert-badge"><span class="cert-badge-icon">✓</span>ISO 27001</div>
+                <div class="cert-badge"><span class="cert-badge-icon">✓</span>IBA Member</div>
+                <div class="cert-badge"><span class="cert-badge-icon">✓</span>PMLA Compliant</div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- RATES TABLE -->
+  <section id="rates" class="rates spad">
+    <div class="ctn">
+      <div class="reveal" style="margin-bottom:52px">
+        <div class="eyebrow">Indicative Rates</div>
+        <h2 class="sec-title">Competitive rates,<br><em>every single day.</em></h2>
+      </div>
+      <div class="rates-inner reveal rd1">
+        <div class="rates-panel">
+          <div class="rp-head">
+            <span class="rp-title">Deposit Rates</span>
+            <span class="rp-as-of">Effective <%= new Date().toLocaleDateString('en-IN',{day:'2-digit',month:'short',year:'numeric'}) %></span>
+          </div>
+          <div class="rp-body">
+            <div class="rp-row"><div><div class="rp-product">Savings Account</div><div class="rp-tenure">Standard</div></div><div style="text-align:right"><div class="rp-rate-val">4.00%</div><div class="rp-rate-pa">p.a.</div></div></div>
+            <div class="rp-row"><div><div class="rp-product">Fixed Deposit · 1yr</div><div class="rp-tenure">Non-callable</div></div><div style="text-align:right"><div class="rp-rate-val">7.50%</div><div class="rp-rate-pa">p.a.</div></div></div>
+            <div class="rp-row"><div><div class="rp-product">Fixed Deposit · 2yr</div><div class="rp-tenure">Compounding</div></div><div style="text-align:right"><div class="rp-rate-val">7.85%</div><div class="rp-rate-pa">p.a.</div><div class="rp-tag-up">▲ Special Rate</div></div></div>
+            <div class="rp-row"><div><div class="rp-product">Senior Citizen FD</div><div class="rp-tenure">+0.5% additional</div></div><div style="text-align:right"><div class="rp-rate-val">8.35%</div><div class="rp-rate-pa">p.a.</div><div class="rp-tag-up">▲ Best Rate</div></div></div>
+            <div class="rp-row"><div><div class="rp-product">Recurring Deposit</div><div class="rp-tenure">12–60 months</div></div><div style="text-align:right"><div class="rp-rate-val">7.25%</div><div class="rp-rate-pa">p.a.</div></div></div>
+          </div>
+        </div>
+        <div class="rates-panel">
+          <div class="rp-head">
+            <span class="rp-title">Lending Rates</span>
+            <span class="rp-as-of">Subject to Credit Assessment</span>
+          </div>
+          <div class="rp-body">
+            <div class="rp-row"><div><div class="rp-product">Home Loan</div><div class="rp-tenure">Floating · RLLR linked</div></div><div style="text-align:right"><div class="rp-rate-val">8.45%</div><div class="rp-rate-pa">p.a. onwards</div></div></div>
+            <div class="rp-row"><div><div class="rp-product">Personal Loan</div><div class="rp-tenure">Up to ₹30L</div></div><div style="text-align:right"><div class="rp-rate-val">10.50%</div><div class="rp-rate-pa">p.a. onwards</div></div></div>
+            <div class="rp-row"><div><div class="rp-product">Business Loan</div><div class="rp-tenure">Working capital</div></div><div style="text-align:right"><div class="rp-rate-val">11.00%</div><div class="rp-rate-pa">p.a. onwards</div><div class="rp-tag-dn">▼ Revised</div></div></div>
+            <div class="rp-row"><div><div class="rp-product">Gold Loan</div><div class="rp-tenure">Instant disbursal</div></div><div style="text-align:right"><div class="rp-rate-val">9.00%</div><div class="rp-rate-pa">p.a.</div><div class="rp-tag-up">▲ Popular</div></div></div>
+            <div class="rp-row"><div><div class="rp-product">LAP</div><div class="rp-tenure">Loan against property</div></div><div style="text-align:right"><div class="rp-rate-val">9.75%</div><div class="rp-rate-pa">p.a. onwards</div></div></div>
+          </div>
+        </div>
+      </div>
+      <p style="font-size:.7rem;color:var(--plat-d);margin-top:14px;line-height:1.6">* All rates are indicative and subject to change without prior notice. Final rates depend on credit profile, loan amount, tenure, and applicable policy at the time of sanction. Taxes applicable as per government norms.</p>
+    </div>
+  </section>
+
+  <!-- TESTIMONIALS -->
+  <section id="testimonials" class="tst spad">
+    <div class="ctn">
+      <div class="tst-head reveal">
+        <div class="eyebrow">Client Stories</div>
+        <h2 class="sec-title">Trusted by families<br><em>and businesses alike.</em></h2>
+      </div>
+      <div class="tst-grid">
+        <div class="tst-card reveal">
+          <div class="tst-rating">★★★★★</div>
+          <p class="tst-quote">"Switched my FDs here three years ago. The rates are genuinely better and the relationship manager actually calls me — not the other way around. That means everything."</p>
+          <div class="tst-author">
+            <div class="tst-av">RS</div>
+            <div><span class="tst-name">Ramesh Sharma</span><span class="tst-role">Retired Principal, FD Customer</span></div>
+          </div>
+        </div>
+        <div class="tst-card reveal rd1">
+          <div class="tst-rating">★★★★★</div>
+          <p class="tst-quote">"Got my business loan approved in 3 days. The documentation was straightforward, no unnecessary delays. This is what a financial institution should feel like."</p>
+          <div class="tst-author">
+            <div class="tst-av">PK</div>
+            <div><span class="tst-name">Priya Krishnamurthy</span><span class="tst-role">Founder, SME Owner</span></div>
+          </div>
+        </div>
+        <div class="tst-card reveal rd2">
+          <div class="tst-rating">★★★★★</div>
+          <p class="tst-quote">"The wealth management team helped me plan my daughter's education and my retirement in the same conversation. That level of holistic thinking is rare to find."</p>
+          <div class="tst-author">
+            <div class="tst-av">AV</div>
+            <div><span class="tst-name">Ashok Varma</span><span class="tst-role">Senior Engineer, Wealth Client</span></div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- CTA BAND -->
+  <div class="ctaband reveal">
+    <div class="cta-text">
+      <h2 class="cta-title">Ready to make your<br>money work <em>harder?</em></h2>
+      <p class="cta-sub">Open your account today or speak with a relationship manager. No commitments — just a conversation.</p>
+    </div>
+    <a href="#contact" class="btn-gold">Open Account →</a>
+  </div>
+
+  <!-- CONTACT -->
+  <section id="contact" class="contact spad">
+    <div class="ctn">
+      <div class="contact-inner">
+        <div class="contact-left reveal">
+          <div class="eyebrow">Get In Touch</div>
+          <h2 class="sec-title">Speak with a<br><em>Relationship Manager.</em></h2>
+          <p class="contact-desc">Our advisors are available Monday through Saturday. Tell us what you're looking for and we'll match you with the right solution.</p>
+          <div class="contact-perks">
+            <div class="cperk"><span class="cperk-icon">◷</span>Response within 4 business hours</div>
+            <div class="cperk"><span class="cperk-icon">🔒</span>KYC-compliant onboarding · Full data privacy</div>
+            <div class="cperk"><span class="cperk-icon">◉</span>Dedicated RM assigned from Day 1</div>
+            <div class="cperk"><span class="cperk-icon">⚖</span>Regulated by RBI · PMLA compliant</div>
+          </div>
+        </div>
+        <div class="reveal rd1">
+          <div class="contact-form">
+            <h3 class="form-title">Request a Consultation</h3>
+            <p class="form-sub">Free, no-obligation — we'll call you back within 4 hours.</p>
+            <form data-contact>
+              <div class="fg2">
+                <div class="fg"><label>First Name</label><input type="text" placeholder="Ramesh" required></div>
+                <div class="fg"><label>Last Name</label><input type="text" placeholder="Sharma" required></div>
+              </div>
+              <div class="fg"><label>Email Address</label><input type="email" placeholder="ramesh@email.com" required></div>
+              <div class="fg"><label>Phone Number</label><input type="tel" placeholder="+91 98765 43210"></div>
+              <div class="fg">
+                <label>I Am Interested In</label>
+                <select>
+                  <option value="" disabled selected>Select a service</option>
+                  <% products.forEach(function(p){ %><option value="<%= p %>"><%= p %></option><% }); %>
+                  <option value="fd">Fixed Deposit</option>
+                  <option value="loan">Loan Enquiry</option>
+                  <option value="wealth">Wealth Management</option>
+                </select>
+              </div>
+              <div class="fg"><label>Message (Optional)</label><textarea placeholder="Tell us about your financial goals or any specific requirements..."></textarea></div>
+              <button type="submit" class="form-submit">Request Callback →</button>
+            </form>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- FOOTER -->
+  <footer>
+    <div class="ft-top">
+      <div>
+        <div class="ft-brand-name">
+          <%= businessName.split(' ')[0] %><span><%= businessName.includes(' ') ? ' ' + businessName.split(' ').slice(1).join(' ') : '' %></span>
+        </div>
+        <p class="ft-tagline"><%= tagline %></p>
+        <p class="ft-discl">
+          <%= businessName %> is a regulated financial institution. Deposits are insured up to ₹5,00,000 per depositor under the DICGC Act. Investments in mutual funds and securities are subject to market risk. Past returns are not indicative of future performance. Loans are subject to credit assessment. T&C apply.
+        </p>
+      </div>
+      <div>
+        <p class="ft-col-title">Services</p>
+        <ul class="ft-links">
+          <% products.forEach(function(p){ %><li><a href="#services"><%= p %></a></li><% }); %>
+          <li><a href="#rates">Interest Rates</a></li>
+        </ul>
+      </div>
+      <div>
+        <p class="ft-col-title">Company</p>
+        <ul class="ft-links">
+          <li><a href="#about">About Us</a></li>
+          <li><a href="#testimonials">Client Stories</a></li>
+          <li><a href="#">Investor Relations</a></li>
+          <li><a href="#">Careers</a></li>
+          <li><a href="#">Press</a></li>
+        </ul>
+      </div>
+      <div>
+        <p class="ft-col-title">Legal & Compliance</p>
+        <ul class="ft-links">
+          <li><a href="#">Privacy Policy</a></li>
+          <li><a href="#">Terms of Service</a></li>
+          <li><a href="#">PMLA Policy</a></li>
+          <li><a href="#">Grievance Redressal</a></li>
+          <li><a href="#">Fair Practice Code</a></li>
+        </ul>
+      </div>
+    </div>
+    <div class="ft-bot">
+      <span>© <%= year %> <%= businessName %>. All rights reserved. CIN: U65100MH2010PLC000000</span>
+      <div class="ft-reg-badges">
+        <span class="ft-rb">RBI Reg.</span>
+        <span class="ft-rb">DICGC</span>
+        <span class="ft-rb">ISO 27001</span>
+      </div>
+      <div class="ft-bot-links">
+        <a href="#">Privacy</a><a href="#">Terms</a><a href="#">Sitemap</a>
+      </div>
+    </div>
+  </footer>
+
+  <script>
+    // NAV ELEVATION
+    const nav=document.getElementById('nav');
+    window.addEventListener('scroll',()=>nav.classList.toggle('elevated',window.scrollY>30),{passive:true});
+
+    // SCROLL REVEAL
+    const ro=new IntersectionObserver(e=>{e.forEach(x=>{if(x.isIntersecting){x.target.classList.add('visible');ro.unobserve(x.target);}});},{threshold:.07,rootMargin:'0px 0px -40px 0px'});
+    document.querySelectorAll('.reveal').forEach(el=>ro.observe(el));
+
+    // COUNTERS
+    function cnt(el,target,suffix){
+      const dur=1800,s=performance.now();
+      (function tick(now){
+        const p=Math.min((now-s)/dur,1),v=Math.floor((1-Math.pow(1-p,3))*target);
+        el.textContent=v+suffix;
+        if(p<1)requestAnimationFrame(tick);else el.textContent=target+suffix;
+      })(s);
+    }
+    const co=new IntersectionObserver(e=>{e.forEach(x=>{if(x.isIntersecting){cnt(x.target,+x.target.dataset.target,x.target.dataset.suffix||'');co.unobserve(x.target);}});},{threshold:.5});
+    document.querySelectorAll('[data-target]').forEach(el=>co.observe(el));
+
+    // MARQUEE PAUSE
+    const mq=document.getElementById('mqtrack');
+    if(mq){mq.addEventListener('mouseenter',()=>mq.style.animationPlayState='paused');mq.addEventListener('mouseleave',()=>mq.style.animationPlayState='running');}
+
+    // SMOOTH SCROLL
+    document.querySelectorAll('a[href^="#"]').forEach(a=>{a.addEventListener('click',e=>{const t=document.querySelector(a.getAttribute('href'));if(t){e.preventDefault();t.scrollIntoView({behavior:'smooth',block:'start'});}});});
+
+    // CONTACT FORM
+    const f=document.querySelector('[data-contact]');
+    if(f){f.addEventListener('submit',e=>{
+      e.preventDefault();
+      const b=f.querySelector('.form-submit');b.textContent='Submitting…';b.disabled=true;
+      setTimeout(()=>{
+        const n=document.createElement('div');
+        n.style.cssText='background:rgba(61,186,126,.08);border:1px solid rgba(61,186,126,.28);color:#3dba7e;padding:14px 18px;font-size:.85rem;margin-bottom:16px;line-height:1.6;';
+        n.innerHTML='✓ <strong>Request received.</strong> A Relationship Manager will call you within 4 business hours.';
+        f.insertAdjacentElement('beforebegin',n);f.reset();
+        b.textContent='Request Callback →';b.disabled=false;
+        setTimeout(()=>n.remove(),7000);
+      },900);
+    });}
+  </script>
+</body>
+</html>
