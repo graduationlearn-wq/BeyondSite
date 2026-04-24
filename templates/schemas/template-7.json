@@ -1,0 +1,109 @@
+{
+  "id": "template-7",
+  "name": "Startup / SaaS",
+  "extends": "_base",
+  "sections": [
+    {
+      "id": "hero",
+      "title": "Hero",
+      "aiable": true,
+      "fields": [
+        { "id": "heroBadge",    "label": "Small badge (e.g. NEW · Series A raised)", "type": "text", "max": 50, "aiable": true },
+        { "id": "heroHeadline", "label": "Headline", "type": "text", "max": 90, "aiable": true },
+        { "id": "heroSub",      "label": "Sub-headline", "type": "textarea", "rows": 3, "max": 260, "aiable": true },
+        { "id": "heroCtaPrimary",   "label": "Primary CTA text",   "type": "text", "max": 30, "placeholder": "Start free" },
+        { "id": "heroCtaSecondary", "label": "Secondary CTA text", "type": "text", "max": 30, "placeholder": "Book a demo" },
+        { "id": "heroScreenshot", "label": "Product screenshot", "type": "image", "accept": "image/png,image/jpeg,image/webp", "maxSizeMB": 3, "uploadLabel": "Upload screenshot" }
+      ]
+    },
+    {
+      "id": "logoStrip",
+      "title": "Customer Logos",
+      "fields": [
+        {
+          "id": "logos", "type": "repeater", "min": 0, "max": 10, "itemLabel": "Customer",
+          "item": [
+            { "id": "name", "label": "Customer name", "type": "text", "max": 40 },
+            { "id": "logo", "label": "Logo image",    "type": "image", "accept": "image/png,image/svg+xml,image/webp", "maxSizeMB": 1, "uploadLabel": "Upload logo" }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "features",
+      "title": "Features (bento)",
+      "aiable": true,
+      "fields": [
+        {
+          "id": "features", "type": "repeater", "min": 3, "max": 6, "itemLabel": "Feature",
+          "item": [
+            { "id": "title", "label": "Feature title", "type": "text", "required": true, "max": 60, "aiable": true },
+            { "id": "body",  "label": "Feature body",  "type": "textarea", "rows": 2, "max": 220, "aiable": true },
+            { "id": "metric", "label": "Supporting metric (optional)", "type": "text", "max": 40, "placeholder": "2.4x faster" }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "howItWorks",
+      "title": "How it works (4 steps)",
+      "aiable": true,
+      "fields": [
+        {
+          "id": "howItWorks", "type": "repeater", "min": 4, "max": 4, "itemLabel": "Step",
+          "item": [
+            { "id": "title", "label": "Step title", "type": "text", "required": true, "max": 50 },
+            { "id": "body",  "label": "Step body",  "type": "textarea", "rows": 2, "max": 200, "aiable": true }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "pricing",
+      "title": "Pricing",
+      "fields": [
+        { "id": "currencySymbol", "label": "Currency symbol", "type": "text", "max": 3, "placeholder": "$" },
+        {
+          "id": "plans", "type": "repeater", "min": 2, "max": 4, "itemLabel": "Plan",
+          "item": [
+            { "id": "name",    "label": "Plan name",  "type": "text", "required": true, "max": 40 },
+            { "id": "tagline", "label": "Plan tagline", "type": "text", "max": 80 },
+            { "id": "monthly", "label": "Monthly price (number only)", "type": "text", "max": 12, "placeholder": "29" },
+            { "id": "annual",  "label": "Annual price (number only)",  "type": "text", "max": 12, "placeholder": "290" },
+            { "id": "popular", "label": "Mark as popular?", "type": "select", "options": ["No","Yes"] },
+            { "id": "cta",     "label": "Button text", "type": "text", "max": 30, "placeholder": "Start free" },
+            {
+              "id": "features", "label": "Included features", "type": "repeater", "min": 1, "max": 10, "itemLabel": "Feature",
+              "item": [ { "id": "text", "label": "Feature", "type": "text", "max": 100 } ]
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "testimonials",
+      "title": "Testimonials",
+      "fields": [
+        {
+          "id": "testimonials", "type": "repeater", "min": 0, "max": 6, "itemLabel": "Testimonial",
+          "item": [
+            { "id": "quote",      "label": "Quote",       "type": "textarea", "rows": 3, "max": 280 },
+            { "id": "name",       "label": "Person name", "type": "text", "max": 60 },
+            { "id": "role",       "label": "Role / company", "type": "text", "max": 80 },
+            { "id": "metricLabel","label": "Metric label (e.g. +312% conv.)", "type": "text", "max": 40 }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "cta",
+      "title": "CTA Band",
+      "aiable": true,
+      "fields": [
+        { "id": "ctaHeadline", "label": "CTA headline",        "type": "text", "max": 80,  "aiable": true },
+        { "id": "ctaBody",     "label": "CTA supporting line", "type": "text", "max": 140, "aiable": true },
+        { "id": "ctaButton",   "label": "CTA button text",     "type": "text", "max": 30,  "placeholder": "Start free trial" }
+      ]
+    }
+  ]
+}

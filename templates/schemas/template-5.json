@@ -1,0 +1,119 @@
+{
+  "id": "template-5",
+  "name": "Local Service",
+  "extends": "_base",
+  "sections": [
+    {
+      "id": "hero",
+      "title": "Hero",
+      "aiable": true,
+      "fields": [
+        { "id": "heroEyebrow", "label": "Eyebrow (e.g. Trusted since 2015)", "type": "text", "max": 60, "aiable": true },
+        { "id": "heroHeadline", "label": "Headline", "type": "text", "max": 90, "aiable": true },
+        { "id": "heroSub",      "label": "Sub-headline",                      "type": "textarea", "rows": 3, "max": 240, "aiable": true },
+        { "id": "heroCtaPrimary",   "label": "Primary CTA text",   "type": "text", "max": 30, "placeholder": "Get a Free Quote" },
+        { "id": "heroCtaSecondary", "label": "Secondary CTA text", "type": "text", "max": 30, "placeholder": "Call Now" },
+        { "id": "heroQuoteCardTitle", "label": "Quote card title", "type": "text", "max": 60, "placeholder": "Licensed. Insured. Local." },
+        { "id": "heroQuoteCardBody",  "label": "Quote card body",  "type": "textarea", "rows": 3, "max": 220, "aiable": true }
+      ]
+    },
+    {
+      "id": "trust",
+      "title": "Trust Strip",
+      "fields": [
+        {
+          "id": "trustItems", "type": "repeater", "min": 2, "max": 6, "itemLabel": "Trust item",
+          "item": [
+            { "id": "label", "label": "Label (e.g. BBB Accredited)", "type": "text", "max": 60 }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "services",
+      "title": "Services",
+      "aiable": true,
+      "fields": [
+        {
+          "id": "services", "type": "repeater", "min": 2, "max": 8, "itemLabel": "Service",
+          "item": [
+            { "id": "icon",  "label": "Icon (single emoji)", "type": "text", "max": 4, "placeholder": "🔧" },
+            { "id": "name",  "label": "Service name",        "type": "text", "required": true, "max": 60 },
+            { "id": "body",  "label": "Short description",   "type": "textarea", "rows": 2, "max": 200, "aiable": true },
+            { "id": "price", "label": "Starting price (optional)", "type": "text", "max": 40, "placeholder": "From $99" }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "numbers",
+      "title": "Numbers / Stats",
+      "fields": [
+        {
+          "id": "stats", "type": "repeater", "min": 2, "max": 4, "itemLabel": "Stat",
+          "item": [
+            { "id": "value", "label": "Number (e.g. 10+, 2500)", "type": "text", "max": 12 },
+            { "id": "label", "label": "Label",                    "type": "text", "max": 60 }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "about",
+      "title": "About",
+      "aiable": true,
+      "fields": [
+        { "id": "aboutHeadline", "label": "About headline", "type": "text", "max": 90, "aiable": true },
+        { "id": "aboutBody",     "label": "About body",     "type": "textarea", "rows": 5, "max": 600, "aiable": true },
+        { "id": "emergencyLine", "label": "Emergency line (e.g. 24/7 emergency service)", "type": "text", "max": 120 },
+        {
+          "id": "areasServed", "label": "Service areas", "type": "repeater", "min": 0, "max": 10, "itemLabel": "Area",
+          "item": [ { "id": "name", "label": "City / neighborhood", "type": "text", "max": 60 } ]
+        }
+      ]
+    },
+    {
+      "id": "hoursList",
+      "title": "Business Hours (day-by-day)",
+      "fields": [
+        {
+          "id": "hoursList", "type": "repeater", "min": 1, "max": 7, "itemLabel": "Day",
+          "item": [
+            { "id": "day",    "label": "Day",    "type": "select", "options": ["Monday","Tuesday","Wednesday","Thursday","Friday","Saturday","Sunday"] },
+            { "id": "open",   "label": "Open",   "type": "text", "max": 12, "placeholder": "9:00 AM" },
+            { "id": "close",  "label": "Close",  "type": "text", "max": 12, "placeholder": "6:00 PM" },
+            { "id": "closed", "label": "Closed?","type": "select", "options": ["No","Yes"] }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "testimonials",
+      "title": "Testimonials",
+      "fields": [
+        {
+          "id": "testimonials", "type": "repeater", "min": 0, "max": 6, "itemLabel": "Review",
+          "item": [
+            { "id": "quote", "label": "Review",   "type": "textarea", "rows": 3, "max": 280 },
+            { "id": "name",  "label": "Reviewer", "type": "text", "max": 60 },
+            { "id": "role",  "label": "Location / service received", "type": "text", "max": 80 }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "faq",
+      "title": "FAQ",
+      "aiable": true,
+      "fields": [
+        {
+          "id": "faqs", "type": "repeater", "min": 0, "max": 8, "itemLabel": "FAQ",
+          "item": [
+            { "id": "q", "label": "Question", "type": "text", "max": 140 },
+            { "id": "a", "label": "Answer",   "type": "textarea", "rows": 3, "max": 320, "aiable": true }
+          ]
+        }
+      ]
+    }
+  ]
+}

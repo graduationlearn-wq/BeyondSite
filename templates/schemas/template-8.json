@@ -1,0 +1,118 @@
+{
+  "id": "template-8",
+  "name": "Insurance Advisor",
+  "extends": "_base",
+  "sections": [
+    {
+      "id": "hero",
+      "title": "Hero",
+      "aiable": true,
+      "fields": [
+        { "id": "heroTag",      "label": "Nav tag (e.g. Licensed Insurance Professional)", "type": "text", "max": 60 },
+        { "id": "heroEyebrow",  "label": "Eyebrow", "type": "text", "max": 60, "placeholder": "Protecting families since 2010", "aiable": true },
+        { "id": "heroHeadline", "label": "Headline", "type": "text", "max": 100, "aiable": true },
+        { "id": "heroSub",      "label": "Sub-headline", "type": "textarea", "rows": 3, "max": 260, "aiable": true },
+        { "id": "heroCtaPrimary",   "label": "Primary CTA text",   "type": "text", "max": 30, "placeholder": "Get Free Quote" },
+        { "id": "heroCtaSecondary", "label": "Secondary CTA text", "type": "text", "max": 30, "placeholder": "Call Advisor" },
+        { "id": "heroQuoteCardTitle", "label": "Quote card title",  "type": "text",     "max": 60, "placeholder": "Get a personalized quote" },
+        { "id": "heroQuoteCardBody",  "label": "Quote card body",   "type": "textarea", "rows": 2, "max": 200, "aiable": true }
+      ]
+    },
+    {
+      "id": "trust",
+      "title": "Trust Strip",
+      "fields": [
+        {
+          "id": "trustItems", "type": "repeater", "min": 2, "max": 6, "itemLabel": "Trust item",
+          "item": [
+            { "id": "label", "label": "Label (e.g. IRDAI Licensed, 24/7 Claim Support)", "type": "text", "max": 60 }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "policies",
+      "title": "Policies Offered",
+      "aiable": true,
+      "fields": [
+        {
+          "id": "policies", "type": "repeater", "min": 2, "max": 8, "itemLabel": "Policy",
+          "item": [
+            { "id": "icon", "label": "Icon (single emoji)", "type": "text", "max": 4, "placeholder": "🛡" },
+            { "id": "name", "label": "Policy name",        "type": "text", "required": true, "max": 60 },
+            { "id": "body", "label": "Short description",  "type": "textarea", "rows": 2, "max": 200, "aiable": true }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "whyChoose",
+      "title": "Why Choose Us",
+      "aiable": true,
+      "fields": [
+        { "id": "whyHeadline", "label": "Section headline", "type": "text", "max": 90, "aiable": true },
+        {
+          "id": "whyPoints", "label": "Checklist points", "type": "repeater", "min": 3, "max": 8, "itemLabel": "Point",
+          "item": [ { "id": "text", "label": "Point", "type": "text", "max": 140, "aiable": true } ]
+        },
+        {
+          "id": "statBoxes", "label": "Stat boxes", "type": "repeater", "min": 0, "max": 4, "itemLabel": "Stat",
+          "item": [
+            { "id": "value", "label": "Number (e.g. ₹480Cr)", "type": "text", "max": 16 },
+            { "id": "label", "label": "Label",                 "type": "text", "max": 60 }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "advisor",
+      "title": "About the Advisor",
+      "aiable": true,
+      "fields": [
+        { "id": "advisorName",  "label": "Advisor name",   "type": "text", "max": 80 },
+        { "id": "advisorPhoto", "label": "Advisor photo",  "type": "image", "accept": "image/png,image/jpeg,image/webp", "maxSizeMB": 2, "uploadLabel": "Upload photo" },
+        { "id": "advisorBio",   "label": "Advisor bio",    "type": "textarea", "rows": 5, "max": 600, "aiable": true },
+        {
+          "id": "credentials", "label": "Credentials", "type": "repeater", "min": 1, "max": 8, "itemLabel": "Credential",
+          "item": [ { "id": "text", "label": "Credential (e.g. IRDAI Licensed · 15 years)", "type": "text", "max": 120 } ]
+        }
+      ]
+    },
+    {
+      "id": "claimProcess",
+      "title": "Claim Process",
+      "aiable": true,
+      "fields": [
+        {
+          "id": "claimSteps", "type": "repeater", "min": 3, "max": 5, "itemLabel": "Step",
+          "item": [
+            { "id": "title", "label": "Step title", "type": "text", "max": 40 },
+            { "id": "body",  "label": "Step body",  "type": "textarea", "rows": 2, "max": 200, "aiable": true }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "testimonials",
+      "title": "Testimonials",
+      "fields": [
+        {
+          "id": "testimonials", "type": "repeater", "min": 0, "max": 6, "itemLabel": "Testimonial",
+          "item": [
+            { "id": "quote", "label": "Quote",           "type": "textarea", "rows": 3, "max": 280 },
+            { "id": "name",  "label": "Client name",     "type": "text", "max": 60 },
+            { "id": "role",  "label": "Policy / context","type": "text", "max": 80 }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "compliance",
+      "title": "Compliance / License",
+      "fields": [
+        { "id": "licenseNumber", "label": "IRDAI / License number", "type": "text", "max": 60 },
+        { "id": "regulator",     "label": "Regulator name",         "type": "text", "max": 60, "placeholder": "IRDAI" }
+      ]
+    }
+  ]
+}

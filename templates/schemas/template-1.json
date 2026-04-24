@@ -1,0 +1,82 @@
+{
+  "id": "template-1",
+  "name": "Editorial",
+  "extends": "_base",
+  "sections": [
+    {
+      "id": "hero",
+      "title": "Hero",
+      "aiable": true,
+      "fields": [
+        { "id": "heroEyebrow",   "label": "Small label above headline", "type": "text",     "max": 40,  "aiable": true },
+        { "id": "heroDeck",      "label": "Short intro under headline", "type": "textarea", "rows": 3, "max": 280, "aiable": true },
+        { "id": "heroPullQuote", "label": "Pull quote",                 "type": "textarea", "rows": 2, "max": 200, "aiable": true }
+      ]
+    },
+    {
+      "id": "services",
+      "title": "Services",
+      "aiable": true,
+      "fields": [
+        {
+          "id": "services", "type": "repeater", "min": 1, "max": 8, "itemLabel": "Service",
+          "item": [
+            { "id": "name", "label": "Name",        "type": "text",     "required": true, "max": 60 },
+            { "id": "body", "label": "Description", "type": "textarea", "rows": 2, "max": 200, "aiable": true }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "process",
+      "title": "Process (4 steps)",
+      "aiable": true,
+      "fields": [
+        {
+          "id": "processSteps", "type": "repeater", "min": 4, "max": 4, "itemLabel": "Step",
+          "item": [
+            { "id": "title", "label": "Step title",       "type": "text",     "required": true, "max": 40 },
+            { "id": "body",  "label": "Step description", "type": "textarea", "rows": 2, "max": 200, "aiable": true }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "about",
+      "title": "About",
+      "aiable": true,
+      "fields": [
+        { "id": "aboutHeadline", "label": "About headline", "type": "text",     "max": 80, "aiable": true },
+        { "id": "aboutBody",     "label": "About body",     "type": "textarea", "rows": 5, "max": 600, "aiable": true },
+        {
+          "id": "values", "label": "Company values", "type": "repeater", "min": 3, "max": 6, "itemLabel": "Value",
+          "item": [ { "id": "text", "label": "Value", "type": "text", "max": 120 } ]
+        }
+      ]
+    },
+    {
+      "id": "testimonials",
+      "title": "Testimonials",
+      "fields": [
+        {
+          "id": "testimonials", "type": "repeater", "min": 0, "max": 6, "itemLabel": "Testimonial",
+          "item": [
+            { "id": "quote", "label": "Quote",       "type": "textarea", "rows": 3, "max": 280 },
+            { "id": "name",  "label": "Author name", "type": "text", "max": 60 },
+            { "id": "role",  "label": "Author role", "type": "text", "max": 60 }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "cta",
+      "title": "CTA Band",
+      "aiable": true,
+      "fields": [
+        { "id": "ctaHeadline", "label": "CTA headline",        "type": "text", "max": 80,  "aiable": true },
+        { "id": "ctaBody",     "label": "CTA supporting line", "type": "text", "max": 140, "aiable": true },
+        { "id": "ctaButton",   "label": "CTA button text",     "type": "text", "max": 30 }
+      ]
+    }
+  ]
+}

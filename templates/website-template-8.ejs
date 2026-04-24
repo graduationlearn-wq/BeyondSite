@@ -1,1550 +1,407 @@
+<%
+  const L = locals || {};
+  const esc = (s) => (s == null ? '' : String(s));
+  const def = (v, d) => (v && String(v).trim() ? v : d);
+  const bn     = esc(L.businessName) || 'Your Insurance Advisor';
+  const tag    = esc(L.tagline) || 'Protecting what matters most, with advice you can trust.';
+  const year   = esc(L.foundedYear) || new Date().getFullYear();
+  const accent = L.primaryColor || '#b8902a';
+  const logoV  = esc(L.logo);
+
+  const heroTagV           = def(L.heroTag, 'Licensed Insurance Professional');
+  const heroEyebrowV       = def(L.heroEyebrow, `Protecting families since ${year}`);
+  const heroHeadlineV      = def(L.heroHeadline, `Personalized insurance for every stage of life.`);
+  const heroSubV           = def(L.heroSub, `Life, health, motor, home, and travel coverage — carefully tailored to your family and your future. With 24/7 claim support and a dedicated advisor.`);
+  const heroCtaPrimaryV    = def(L.heroCtaPrimary, 'Get Free Quote');
+  const heroCtaSecondaryV  = def(L.heroCtaSecondary, 'Call Advisor');
+  const heroQuoteCardTitleV = def(L.heroQuoteCardTitle, 'Get a personalized quote');
+  const heroQuoteCardBodyV  = def(L.heroQuoteCardBody, 'Fill out the quick form — one of our licensed advisors will call you within 24 hours with a plan tailored to your family.');
+
+  const trust = Array.isArray(L.trustItems) && L.trustItems.length ? L.trustItems
+    : [{label:'IRDAI Licensed'},{label:'24/7 Claim Support'},{label:'₹480Cr+ Claims Settled'},{label:'50,000+ Families Insured'}];
+
+  const policyList = Array.isArray(L.policies) && L.policies.length ? L.policies : [
+    { icon:'🛡', name:'Life Insurance',    body:'Comprehensive life cover with plans that grow with your family.' },
+    { icon:'🏠', name:'Home Insurance',    body:'Protect your home, valuables, and everything inside it.' },
+    { icon:'🚗', name:'Motor Insurance',   body:'Car and two-wheeler cover with cashless garage access.' },
+    { icon:'❤️', name:'Health Insurance',  body:'Hospitalization, critical illness, and family floater plans.' },
+    { icon:'✈️', name:'Travel Insurance',  body:'Domestic and international travel with emergency evacuation.' },
+    { icon:'💼', name:'Business Insurance',body:'Asset, liability, and employee benefits for your business.' }
+  ];
+
+  const whyHeadlineV = def(L.whyHeadline, `Why families choose to work with us`);
+  const whyPointsList = Array.isArray(L.whyPoints) && L.whyPoints.length ? L.whyPoints : [
+    { text:'Every recommendation compared across 15+ top insurers' },
+    { text:'Dedicated advisor who knows your policy inside-out' },
+    { text:'Hassle-free claim assistance, from intimation to payout' },
+    { text:'Annual policy review to keep you correctly covered' }
+  ];
+  const statBoxesList = Array.isArray(L.statBoxes) && L.statBoxes.length ? L.statBoxes : [
+    { value:'₹480Cr', label:'Claims settled' },
+    { value:'96%',    label:'Claim success rate' }
+  ];
+
+  const advisorNameV  = def(L.advisorName, bn);
+  const advisorPhotoV = esc(L.advisorPhoto);
+  const advisorBioV   = def(L.advisorBio, `With over a decade of experience advising families across India, I help clients choose the right coverage — not the most expensive one. Every family I work with gets a plan built around their actual life, reviewed annually, and defended when it matters most.`);
+  const credList = Array.isArray(L.credentials) && L.credentials.length ? L.credentials
+    : [{text:'IRDAI Licensed Advisor'},{text:'Certified Financial Planner (CFP)'},{text:'15+ years of experience'},{text:'500+ claims personally handled'}];
+
+  const claimStepsList = Array.isArray(L.claimSteps) && L.claimSteps.length ? L.claimSteps : [
+    { title:'Intimation',   body:'Call us or fill the claim form. We kick off the process the same day.' },
+    { title:'Documentation',body:'We help you prepare every document required by the insurer.' },
+    { title:'Follow-up',    body:'We coordinate with the insurer on your behalf until settlement.' },
+    { title:'Payout',       body:'Funds are released directly to your bank account.' }
+  ];
+
+  const testList = Array.isArray(L.testimonials) ? L.testimonials : [];
+
+  const licenseNumberV = esc(L.licenseNumber) || 'IRDAI License No. XXXXXX';
+  const regulatorV     = esc(L.regulator)     || 'IRDAI';
+
+  const primaryEmail = esc(L.email) || 'hello@example.com';
+  const primaryPhone = esc(L.phone) || '+91 98765 43210';
+  const addressBlock = esc(L.address);
+  const hoursText    = esc(L.hours);
+%>
 <!DOCTYPE html>
 <html lang="en">
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title><%= businessName %> — <%= tagline %></title>
+  <title><%= bn %> | <%= tag %></title>
   <link rel="preconnect" href="https://fonts.googleapis.com">
-  <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,400;0,600;0,700;1,400;1,600&family=DM+Sans:wght@300;400;500;600&display=swap" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:wght@500;600;700&family=DM+Sans:wght@400;500;600;700&display=swap" rel="stylesheet">
   <style>
-    *, *::before, *::after { margin: 0; padding: 0; box-sizing: border-box; }
-
-    :root {
-      --forest:      #0e1e0e;
-      --forest-mid:  #162616;
-      --forest-soft: #1f3520;
-      --cream:       #f7f3ec;
-      --cream-mid:   #ede8df;
-      --cream-dark:  #ddd6c8;
-      --gold:        #b8902a;
-      --gold-light:  #d4a93c;
-      --gold-dim:    rgba(184,144,42,.15);
-      --gold-line:   rgba(184,144,42,.3);
-      --text-dark:   #0e1e0e;
-      --text-mid:    #3a4a3a;
-      --text-soft:   #6a7a6a;
-      --text-muted:  #9aaa9a;
-      --white:       #ffffff;
-      --serif: 'Cormorant Garamond', Georgia, serif;
-      --sans:  'DM Sans', system-ui, sans-serif;
-    }
-
-    html { scroll-behavior: smooth; }
-
-    body {
-      font-family: var(--sans);
-      background: var(--cream);
-      color: var(--text-dark);
-      overflow-x: hidden;
-      -webkit-font-smoothing: antialiased;
-    }
-
-    /* ── FLOATING QUOTE BUTTON ───────────────────────────────── */
-    .float-cta {
-      position: fixed;
-      bottom: 32px;
-      right: 32px;
-      z-index: 200;
-      background: var(--gold);
-      color: var(--white);
-      padding: 14px 24px;
-      border-radius: 100px;
-      font-family: var(--sans);
-      font-size: .82rem;
-      font-weight: 600;
-      text-decoration: none;
-      letter-spacing: .04em;
-      box-shadow: 0 8px 32px rgba(184,144,42,.45);
-      display: flex;
-      align-items: center;
-      gap: 8px;
-      transition: transform .2s, box-shadow .2s;
-      animation: floatBtn 3s ease-in-out infinite;
-    }
-
-    .float-cta:hover {
-      transform: translateY(-3px);
-      box-shadow: 0 14px 40px rgba(184,144,42,.55);
-    }
-
-    @keyframes floatBtn {
-      0%,100% { transform: translateY(0); }
-      50%      { transform: translateY(-4px); }
-    }
-
-    .float-cta-dot {
-      width: 7px; height: 7px;
-      background: var(--white);
-      border-radius: 50%;
-      opacity: .7;
-      animation: pulse-dot 2s ease-in-out infinite;
-    }
-
-    @keyframes pulse-dot {
-      0%,100% { transform: scale(1); opacity: .7; }
-      50%      { transform: scale(.6); opacity: .3; }
-    }
-
-    /* ── NAV ─────────────────────────────────────────────────── */
-    .nav {
-      position: sticky;
-      top: 0;
-      z-index: 100;
-      background: var(--forest);
-      border-bottom: 1px solid rgba(255,255,255,.06);
-      padding: 0 56px;
-      transition: box-shadow .3s;
-    }
-
-    .nav.scrolled {
-      box-shadow: 0 4px 32px rgba(0,0,0,.4);
-    }
-
-    .nav-inner {
-      max-width: 1200px;
-      margin: 0 auto;
-      display: flex;
-      align-items: center;
-      justify-content: space-between;
-      height: 72px;
-    }
-
-    .nav-logo {
-      display: flex;
-      flex-direction: column;
-      text-decoration: none;
-      line-height: 1.15;
-    }
-
-    .nav-logo-name {
-      font-family: var(--serif);
-      font-size: 1.35rem;
-      font-weight: 600;
-      color: var(--cream);
-      letter-spacing: .01em;
-    }
-
-    .nav-logo-tag {
-      font-size: .65rem;
-      letter-spacing: .18em;
-      text-transform: uppercase;
-      color: var(--gold-light);
-      font-weight: 500;
-    }
-
-    .nav-links {
-      display: flex;
-      list-style: none;
-      gap: 0;
-      align-items: center;
-    }
-
-    .nav-links a {
-      font-size: .8rem;
-      font-weight: 500;
-      color: rgba(247,243,236,.55);
-      text-decoration: none;
-      padding: 8px 16px;
-      letter-spacing: .03em;
-      transition: color .2s;
-    }
-
-    .nav-links a:hover { color: var(--cream); }
-
-    .nav-cta {
-      background: var(--gold);
-      color: var(--white) !important;
-      padding: 9px 22px !important;
-      border-radius: 6px;
-      font-weight: 600 !important;
-      margin-left: 8px;
-      letter-spacing: .04em !important;
-      transition: background .2s, box-shadow .2s !important;
-    }
-
-    .nav-cta:hover {
-      background: var(--gold-light) !important;
-      box-shadow: 0 0 20px rgba(184,144,42,.35) !important;
-    }
-
-    /* ── HERO — FULL-BLEED SPLIT ─────────────────────────────── */
-    .hero {
-      display: grid;
-      grid-template-columns: 1.1fr 1fr;
-      min-height: 88vh;
-    }
-
-    .hero-left {
-      background: var(--forest);
-      padding: 72px 64px;
-      display: flex;
-      flex-direction: column;
-      justify-content: space-between;
-      position: relative;
-      overflow: hidden;
-    }
-
-    /* Subtle radial glow behind hero text */
-    .hero-left::before {
-      content: '';
-      position: absolute;
-      top: -100px; left: -100px;
-      width: 500px; height: 500px;
-      background: radial-gradient(circle, rgba(184,144,42,.07), transparent 70%);
-      pointer-events: none;
-    }
-
-    .hero-badge {
-      display: inline-flex;
-      align-items: center;
-      gap: 10px;
-      background: var(--gold-dim);
-      border: 1px solid var(--gold-line);
-      color: var(--gold-light);
-      padding: 7px 16px;
-      border-radius: 4px;
-      font-size: .72rem;
-      font-weight: 600;
-      letter-spacing: .14em;
-      text-transform: uppercase;
-      margin-bottom: 36px;
-      width: fit-content;
-    }
-
-    .hero-badge::before {
-      content: '';
-      width: 6px; height: 6px;
-      background: var(--gold-light);
-      border-radius: 50%;
-      box-shadow: 0 0 8px var(--gold);
-    }
-
-    .hero-title {
-      font-family: var(--serif);
-      font-size: clamp(3rem, 5.5vw, 5.5rem);
-      font-weight: 600;
-      line-height: 1.06;
-      letter-spacing: -.01em;
-      color: var(--cream);
-      margin-bottom: 28px;
-    }
-
-    .hero-title em {
-      font-style: italic;
-      color: var(--gold-light);
-    }
-
-    .hero-deck {
-      font-size: 1rem;
-      color: rgba(247,243,236,.55);
-      font-weight: 300;
-      line-height: 1.75;
-      max-width: 420px;
-      margin-bottom: 40px;
-    }
-
-    .hero-trust-bar {
-      display: flex;
-      gap: 0;
-      border: 1px solid rgba(255,255,255,.07);
-    }
-
-    .trust-item {
-      flex: 1;
-      padding: 18px 20px;
-      border-right: 1px solid rgba(255,255,255,.07);
-      display: flex;
-      flex-direction: column;
-      gap: 4px;
-    }
-
-    .trust-item:last-child { border-right: none; }
-
-    .trust-num {
-      font-family: var(--serif);
-      font-size: 1.8rem;
-      font-weight: 600;
-      color: var(--gold-light);
-      line-height: 1;
-    }
-
-    .trust-label {
-      font-size: .68rem;
-      letter-spacing: .08em;
-      text-transform: uppercase;
-      color: rgba(247,243,236,.4);
-      font-weight: 500;
-    }
-
-    /* Right panel — cream with quote card */
-    .hero-right {
-      background: var(--cream);
-      padding: 72px 56px;
-      display: flex;
-      flex-direction: column;
-      justify-content: center;
-      gap: 28px;
-      position: relative;
-    }
-
-    /* Rotating badge */
-    .spin-badge-wrap {
-      position: absolute;
-      top: 40px;
-      right: 40px;
-      width: 80px; height: 80px;
-    }
-
-    .spin-badge-inner {
-      width: 100%; height: 100%;
-      position: relative;
-    }
-
-    .spin-badge-inner svg {
-      animation: rotateBadge 18s linear infinite;
-      position: absolute; inset: 0;
-    }
-
-    .spin-badge-inner .badge-center {
-      position: absolute;
-      inset: 0;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-    }
-
-    .badge-center-icon {
-      font-size: 1.4rem;
-      color: var(--gold);
-      filter: drop-shadow(0 0 4px rgba(184,144,42,.4));
-    }
-
-    @keyframes rotateBadge {
-      from { transform: rotate(0deg); }
-      to   { transform: rotate(360deg); }
-    }
-
-    /* Quote request card */
-    .quote-card {
-      background: var(--white);
-      border: 1px solid var(--cream-dark);
-      border-radius: 12px;
-      padding: 32px;
-      box-shadow: 0 8px 40px rgba(14,30,14,.08);
-    }
-
-    .quote-card-title {
-      font-family: var(--serif);
-      font-size: 1.5rem;
-      font-weight: 600;
-      color: var(--text-dark);
-      margin-bottom: 6px;
-    }
-
-    .quote-card-sub {
-      font-size: .82rem;
-      color: var(--text-soft);
-      margin-bottom: 24px;
-    }
-
-    .qform { display: flex; flex-direction: column; gap: 12px; }
-
-    .qinput {
-      width: 100%;
-      padding: 12px 14px;
-      background: var(--cream);
-      border: 1px solid var(--cream-dark);
-      border-radius: 8px;
-      font-family: var(--sans);
-      font-size: .88rem;
-      color: var(--text-dark);
-      outline: none;
-      transition: border-color .2s, box-shadow .2s;
-    }
-
-    .qinput::placeholder { color: var(--text-muted); }
-    .qinput:focus { border-color: var(--gold); box-shadow: 0 0 0 3px var(--gold-dim); }
-
-    .qselect {
-      appearance: none;
-      background-image: url("data:image/svg+xml;charset=UTF-8,%3csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='%239aaa9a' stroke-width='2'%3e%3cpolyline points='6 9 12 15 18 9'%3e%3c/polyline%3e%3c/svg%3e");
-      background-repeat: no-repeat;
-      background-position: right 12px center;
-      background-size: 16px;
-      padding-right: 36px;
-      cursor: pointer;
-    }
-
-    .qbtn {
-      background: var(--forest);
-      color: var(--cream);
-      border: none;
-      padding: 13px;
-      border-radius: 8px;
-      font-family: var(--sans);
-      font-size: .88rem;
-      font-weight: 600;
-      cursor: pointer;
-      letter-spacing: .04em;
-      transition: background .2s, transform .15s;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      gap: 8px;
-    }
-
-    .qbtn:hover { background: var(--forest-soft); transform: translateY(-1px); }
-
-    /* Micro reassurance */
-    .quote-reassurance {
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      gap: 6px;
-      font-size: .72rem;
-      color: var(--text-muted);
-      margin-top: 4px;
-    }
-
-    .quote-reassurance::before {
-      content: '🔒';
-      font-size: .68rem;
-    }
-
-    /* ── MARQUEE TRUST STRIP ─────────────────────────────────── */
-    .trust-strip {
-      background: var(--forest-mid);
-      border-top: 1px solid rgba(255,255,255,.05);
-      border-bottom: 1px solid rgba(255,255,255,.05);
-      padding: 14px 0;
-      overflow: hidden;
-      white-space: nowrap;
-    }
-
-    .trust-track {
-      display: inline-flex;
-      animation: marquee 32s linear infinite;
-    }
-
-    .trust-tag {
-      display: inline-flex;
-      align-items: center;
-      gap: 10px;
-      padding: 0 36px;
-      border-right: 1px solid rgba(255,255,255,.06);
-      font-size: .72rem;
-      letter-spacing: .14em;
-      text-transform: uppercase;
-      color: rgba(247,243,236,.4);
-      font-weight: 500;
-    }
-
-    .trust-tag-dot { color: var(--gold-light); font-size: .5rem; }
-
-    @keyframes marquee {
-      from { transform: translateX(0); }
-      to   { transform: translateX(-50%); }
-    }
-
-    /* ── SECTION SHARED ──────────────────────────────────────── */
-    .section {
-      padding: 96px 56px;
-      max-width: 1200px;
-      margin: 0 auto;
-    }
-
-    .eyebrow {
-      font-size: .72rem;
-      font-weight: 600;
-      letter-spacing: .18em;
-      text-transform: uppercase;
-      color: var(--gold);
-      margin-bottom: 14px;
-      display: flex;
-      align-items: center;
-      gap: 10px;
-    }
-
-    .eyebrow::before {
-      content: '';
-      width: 28px; height: 1px;
-      background: var(--gold);
-    }
-
-    .section-title {
-      font-family: var(--serif);
-      font-size: clamp(2rem, 3.5vw, 3.2rem);
-      font-weight: 600;
-      line-height: 1.12;
-      letter-spacing: -.01em;
-      color: var(--text-dark);
-      margin-bottom: 14px;
-    }
-
-    .section-sub {
-      font-size: .95rem;
-      color: var(--text-soft);
-      font-weight: 300;
-      line-height: 1.75;
-      max-width: 560px;
-    }
-
-    /* ── SERVICES / PROTECTION CATEGORIES ───────────────────── */
-    .services-section {
-      background: var(--forest);
-      padding: 96px 56px;
-    }
-
-    .services-inner {
-      max-width: 1200px;
-      margin: 0 auto;
-    }
-
-    .services-inner .eyebrow { color: var(--gold-light); }
-    .services-inner .eyebrow::before { background: var(--gold-light); }
-    .services-inner .section-title { color: var(--cream); }
-    .services-inner .section-sub { color: rgba(247,243,236,.55); }
-
-    .services-grid {
-      display: grid;
-      grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
-      gap: 1px;
-      background: rgba(255,255,255,.05);
-      border: 1px solid rgba(255,255,255,.05);
-      margin-top: 48px;
-    }
-
-    .service-card {
-      background: var(--forest);
-      padding: 36px 30px;
-      position: relative;
-      overflow: hidden;
-      transition: background .3s;
-      cursor: default;
-    }
-
-    .service-card::after {
-      content: '';
-      position: absolute;
-      bottom: 0; left: 0; right: 0;
-      height: 2px;
-      background: var(--gold);
-      transform: scaleX(0);
-      transition: transform .4s ease;
-      transform-origin: left;
-    }
-
-    .service-card:hover { background: var(--forest-mid); }
-    .service-card:hover::after { transform: scaleX(1); }
-
-    .service-icon-wrap {
-      width: 48px; height: 48px;
-      border: 1px solid var(--gold-line);
-      border-radius: 8px;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      font-size: 1.2rem;
-      margin-bottom: 20px;
-      background: var(--gold-dim);
-      transition: background .3s;
-    }
-
-    .service-card:hover .service-icon-wrap { background: rgba(184,144,42,.25); }
-
-    .service-num {
-      position: absolute;
-      top: 24px; right: 24px;
-      font-family: var(--serif);
-      font-size: 2.8rem;
-      font-weight: 400;
-      color: rgba(255,255,255,.04);
-      line-height: 1;
-      letter-spacing: -.02em;
-    }
-
-    .service-title {
-      font-family: var(--serif);
-      font-size: 1.25rem;
-      font-weight: 600;
-      color: var(--cream);
-      margin-bottom: 10px;
-      line-height: 1.2;
-    }
-
-    .service-body {
-      font-size: .83rem;
-      color: rgba(247,243,236,.5);
-      line-height: 1.7;
-      font-weight: 300;
-    }
-
-    .service-link {
-      display: inline-flex;
-      align-items: center;
-      gap: 6px;
-      margin-top: 18px;
-      font-size: .75rem;
-      font-weight: 600;
-      color: var(--gold-light);
-      text-decoration: none;
-      letter-spacing: .06em;
-      text-transform: uppercase;
-      opacity: 0;
-      transition: opacity .25s;
-    }
-
-    .service-card:hover .service-link { opacity: 1; }
-
-    /* ── WHY CHOOSE ME — SPLIT ───────────────────────────────── */
-    .why-grid {
-      display: grid;
-      grid-template-columns: 1fr 1fr;
-      gap: 4px;
-      margin-top: 48px;
-    }
-
-    .why-left {
-      background: var(--forest);
-      border-radius: 12px 0 0 12px;
-      padding: 56px 48px;
-      display: flex;
-      flex-direction: column;
-      justify-content: center;
-    }
-
-    .why-left .eyebrow { color: var(--gold-light); }
-    .why-left .eyebrow::before { background: var(--gold-light); }
-    .why-left .section-title { color: var(--cream); font-size: clamp(1.8rem, 3vw, 2.6rem); margin-bottom: 20px; }
-
-    .why-body {
-      font-size: .9rem;
-      color: rgba(247,243,236,.6);
-      line-height: 1.75;
-      font-weight: 300;
-      margin-bottom: 32px;
-    }
-
-    .why-checklist {
-      list-style: none;
-      display: flex;
-      flex-direction: column;
-      gap: 12px;
-    }
-
-    .why-checklist li {
-      display: flex;
-      align-items: flex-start;
-      gap: 12px;
-      font-size: .85rem;
-      color: rgba(247,243,236,.7);
-      line-height: 1.5;
-    }
-
-    .why-check {
-      width: 20px; height: 20px;
-      background: var(--gold-dim);
-      border: 1px solid var(--gold-line);
-      border-radius: 50%;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      color: var(--gold-light);
-      font-size: .65rem;
-      flex-shrink: 0;
-      margin-top: 1px;
-    }
-
-    .why-right {
-      display: grid;
-      grid-template-rows: 1fr 1fr;
-      gap: 4px;
-    }
-
-    .why-stat-box {
-      background: var(--cream-mid);
-      border: 1px solid var(--cream-dark);
-      padding: 40px 36px;
-      display: flex;
-      flex-direction: column;
-      justify-content: space-between;
-      position: relative;
-      overflow: hidden;
-      transition: background .3s;
-    }
-
-    .why-stat-box:hover { background: var(--cream); }
-
-    .why-stat-box:first-child { border-radius: 0 12px 0 0; }
-    .why-stat-box:last-child  { border-radius: 0 0 12px 0; }
-
-    .why-stat-num {
-      font-family: var(--serif);
-      font-size: 3.2rem;
-      font-weight: 600;
-      color: var(--forest);
-      line-height: 1;
-      letter-spacing: -.02em;
-    }
-
-    .why-stat-num span { color: var(--gold); }
-
-    .why-stat-label {
-      font-size: .8rem;
-      color: var(--text-soft);
-      font-weight: 400;
-      line-height: 1.5;
-      margin-top: 8px;
-    }
-
-    .why-stat-dec {
-      position: absolute;
-      bottom: -20px; right: -10px;
-      font-family: var(--serif);
-      font-size: 6rem;
-      font-weight: 600;
-      color: rgba(14,30,14,.04);
-      line-height: 1;
-      pointer-events: none;
-    }
-
-    /* ── TESTIMONIALS ────────────────────────────────────────── */
-    .testi-section {
-      background: var(--cream-mid);
-      padding: 96px 56px;
-    }
-
-    .testi-inner { max-width: 1200px; margin: 0 auto; }
-
-    .testi-grid {
-      display: grid;
-      grid-template-columns: repeat(3, 1fr);
-      gap: 1px;
-      background: var(--cream-dark);
-      border: 1px solid var(--cream-dark);
-      margin-top: 48px;
-    }
-
-    .testi-card {
-      background: var(--cream-mid);
-      padding: 36px 30px;
-      display: flex;
-      flex-direction: column;
-      gap: 18px;
-      transition: background .3s;
-    }
-
-    .testi-card:hover { background: var(--cream); }
-
-    .testi-stars { color: var(--gold); font-size: .85rem; letter-spacing: 3px; }
-
-    .testi-quote {
-      font-family: var(--serif);
-      font-style: italic;
-      font-size: 1.05rem;
-      color: var(--text-mid);
-      line-height: 1.65;
-      flex: 1;
-    }
-
-    .testi-author {
-      display: flex;
-      align-items: center;
-      gap: 12px;
-      padding-top: 16px;
-      border-top: 1px solid var(--cream-dark);
-    }
-
-    .testi-av {
-      width: 36px; height: 36px;
-      border-radius: 50%;
-      background: var(--forest);
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      font-family: var(--serif);
-      font-size: .85rem;
-      font-weight: 600;
-      color: var(--gold-light);
-      flex-shrink: 0;
-    }
-
-    .testi-name { font-size: .82rem; font-weight: 600; color: var(--text-dark); display: block; }
-    .testi-role { font-size: .72rem; color: var(--text-muted); display: block; }
-
-    /* ── ABOUT / PERSONAL ────────────────────────────────────── */
-    .about-section { padding: 96px 56px; }
-
-    .about-inner {
-      max-width: 1200px;
-      margin: 0 auto;
-      display: grid;
-      grid-template-columns: 1fr 1fr;
-      gap: 80px;
-      align-items: center;
-    }
-
-    .about-photo-wrap {
-      position: relative;
-    }
-
-    .about-photo-placeholder {
-      width: 100%;
-      aspect-ratio: 4/5;
-      background: var(--forest);
-      border-radius: 12px;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      overflow: hidden;
-      position: relative;
-    }
-
-    .about-photo-placeholder::before {
-      content: '';
-      position: absolute;
-      inset: 0;
-      background: radial-gradient(circle at 30% 70%, rgba(184,144,42,.08), transparent 60%);
-    }
-
-    .about-photo-initial {
-      font-family: var(--serif);
-      font-size: 8rem;
-      font-weight: 600;
-      color: rgba(247,243,236,.06);
-      letter-spacing: -.04em;
-      user-select: none;
-    }
-
-    .about-photo-badge {
-      position: absolute;
-      bottom: 24px;
-      left: 24px;
-      right: 24px;
-      background: rgba(14,30,14,.85);
-      backdrop-filter: blur(8px);
-      border: 1px solid var(--gold-line);
-      border-radius: 8px;
-      padding: 16px 20px;
-    }
-
-    .about-photo-badge-name {
-      font-family: var(--serif);
-      font-size: 1rem;
-      font-weight: 600;
-      color: var(--cream);
-      display: block;
-      margin-bottom: 2px;
-    }
-
-    .about-photo-badge-title {
-      font-size: .7rem;
-      letter-spacing: .1em;
-      text-transform: uppercase;
-      color: var(--gold-light);
-      display: block;
-    }
-
-    /* Gold corner accent */
-    .about-photo-wrap::after {
-      content: '';
-      position: absolute;
-      bottom: -16px; right: -16px;
-      width: 80px; height: 80px;
-      border-right: 2px solid var(--gold-line);
-      border-bottom: 2px solid var(--gold-line);
-      border-radius: 0 0 8px 0;
-    }
-
-    .about-right { display: flex; flex-direction: column; gap: 20px; }
-
-    .about-body {
-      font-size: .95rem;
-      color: var(--text-soft);
-      line-height: 1.8;
-      font-weight: 300;
-    }
-
-    .about-credentials {
-      display: flex;
-      flex-direction: column;
-      gap: 0;
-      border: 1px solid var(--cream-dark);
-      border-radius: 10px;
-      overflow: hidden;
-    }
-
-    .cred-item {
-      display: flex;
-      align-items: center;
-      gap: 14px;
-      padding: 14px 18px;
-      border-bottom: 1px solid var(--cream-dark);
-      font-size: .83rem;
-      color: var(--text-mid);
-      transition: background .2s;
-    }
-
-    .cred-item:last-child { border-bottom: none; }
-    .cred-item:hover { background: var(--cream-mid); }
-
-    .cred-icon {
-      width: 28px; height: 28px;
-      background: var(--gold-dim);
-      border: 1px solid var(--gold-line);
-      border-radius: 6px;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      font-size: .8rem;
-      flex-shrink: 0;
-      color: var(--gold);
-    }
-
-    /* ── CONTACT ─────────────────────────────────────────────── */
-    .contact-section {
-      background: var(--forest);
-      padding: 96px 56px;
-    }
-
-    .contact-inner {
-      max-width: 1200px;
-      margin: 0 auto;
-      display: grid;
-      grid-template-columns: 1fr 1fr;
-      gap: 72px;
-      align-items: start;
-    }
-
-    .contact-left .eyebrow { color: var(--gold-light); }
-    .contact-left .eyebrow::before { background: var(--gold-light); }
-    .contact-left .section-title { color: var(--cream); font-size: clamp(1.8rem, 3vw, 2.6rem); margin-bottom: 16px; }
-
-    .contact-body {
-      font-size: .9rem;
-      color: rgba(247,243,236,.55);
-      line-height: 1.75;
-      font-weight: 300;
-      margin-bottom: 32px;
-    }
-
-    .contact-details { display: flex; flex-direction: column; gap: 12px; }
-
-    .contact-detail {
-      display: flex;
-      align-items: center;
-      gap: 12px;
-      font-size: .85rem;
-      color: rgba(247,243,236,.6);
-    }
-
-    .contact-detail-icon {
-      width: 32px; height: 32px;
-      background: var(--gold-dim);
-      border: 1px solid var(--gold-line);
-      border-radius: 6px;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      font-size: .85rem;
-      flex-shrink: 0;
-    }
-
-    /* Contact form */
-    .cform {
-      background: rgba(255,255,255,.04);
-      border: 1px solid rgba(255,255,255,.08);
-      border-radius: 14px;
-      padding: 36px;
-    }
-
-    .cform-title {
-      font-family: var(--serif);
-      font-size: 1.3rem;
-      font-weight: 600;
-      color: var(--cream);
-      margin-bottom: 24px;
-    }
-
-    .cform-fields { display: flex; flex-direction: column; gap: 14px; }
-
-    .cfield-row { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; }
-
-    .cfield { display: flex; flex-direction: column; gap: 6px; }
-
-    .cfield label {
-      font-size: .68rem;
-      letter-spacing: .12em;
-      text-transform: uppercase;
-      color: rgba(247,243,236,.35);
-      font-weight: 600;
-    }
-
-    .cfield input,
-    .cfield textarea,
-    .cfield select {
-      background: rgba(255,255,255,.06);
-      border: 1px solid rgba(255,255,255,.1);
-      border-radius: 8px;
-      padding: 11px 14px;
-      font-family: var(--sans);
-      font-size: .88rem;
-      color: var(--cream);
-      outline: none;
-      resize: none;
-      transition: border-color .2s, box-shadow .2s;
-      width: 100%;
-    }
-
-    .cfield input::placeholder,
-    .cfield textarea::placeholder { color: rgba(247,243,236,.2); }
-
-    .cfield input:focus,
-    .cfield textarea:focus,
-    .cfield select:focus {
-      border-color: var(--gold);
-      box-shadow: 0 0 0 3px var(--gold-dim);
-    }
-
-    .cfield select {
-      appearance: none;
-      background-image: url("data:image/svg+xml;charset=UTF-8,%3csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='rgba(247,243,236,.3)' stroke-width='2'%3e%3cpolyline points='6 9 12 15 18 9'%3e%3c/polyline%3e%3c/svg%3e");
-      background-repeat: no-repeat;
-      background-position: right 12px center;
-      background-size: 16px;
-      padding-right: 36px;
-      cursor: pointer;
-    }
-
-    .cfield select option { background: var(--forest-mid); color: var(--cream); }
-
-    .csubmit {
-      background: var(--gold);
-      color: var(--white);
-      border: none;
-      padding: 14px;
-      border-radius: 8px;
-      font-family: var(--sans);
-      font-size: .88rem;
-      font-weight: 600;
-      cursor: pointer;
-      letter-spacing: .04em;
-      width: 100%;
-      transition: background .2s, transform .15s, box-shadow .2s;
-    }
-
-    .csubmit:hover {
-      background: var(--gold-light);
-      transform: translateY(-1px);
-      box-shadow: 0 8px 24px rgba(184,144,42,.35);
-    }
-
-    /* ── FOOTER ──────────────────────────────────────────────── */
-    footer {
-      background: var(--forest-mid);
-      border-top: 1px solid rgba(255,255,255,.05);
-    }
-
-    .footer-top {
-      max-width: 1200px;
-      margin: 0 auto;
-      padding: 56px 56px 40px;
-      display: grid;
-      grid-template-columns: 2fr 1fr 1fr;
-      gap: 48px;
-    }
-
-    .footer-brand-name {
-      font-family: var(--serif);
-      font-size: 1.6rem;
-      font-weight: 600;
-      color: var(--cream);
-      display: block;
-      margin-bottom: 10px;
-    }
-
-    .footer-tagline {
-      font-size: .83rem;
-      color: rgba(247,243,236,.4);
-      font-weight: 300;
-      line-height: 1.6;
-      margin-bottom: 20px;
-    }
-
-    .footer-license {
-      display: inline-flex;
-      align-items: center;
-      gap: 6px;
-      font-size: .68rem;
-      letter-spacing: .1em;
-      text-transform: uppercase;
-      color: var(--gold-light);
-      border: 1px solid var(--gold-line);
-      padding: 4px 10px;
-      border-radius: 4px;
-    }
-
-    .footer-col-title {
-      font-size: .68rem;
-      letter-spacing: .16em;
-      text-transform: uppercase;
-      color: rgba(247,243,236,.3);
-      margin-bottom: 16px;
-      font-weight: 600;
-    }
-
-    .footer-links { list-style: none; display: flex; flex-direction: column; gap: 8px; }
-
-    .footer-links a {
-      font-size: .83rem;
-      color: rgba(247,243,236,.5);
-      text-decoration: none;
-      transition: color .2s;
-    }
-
-    .footer-links a:hover { color: var(--gold-light); }
-
-    .footer-bottom {
-      border-top: 1px solid rgba(255,255,255,.05);
-      padding: 20px 56px;
-      max-width: 1200px;
-      margin: 0 auto;
-      display: flex;
-      align-items: center;
-      justify-content: space-between;
-    }
-
-    .footer-copy { font-size: .72rem; color: rgba(247,243,236,.25); }
-    .footer-disc { font-size: .68rem; color: rgba(247,243,236,.18); max-width: 480px; text-align: right; line-height: 1.5; }
-
-    /* ── SCROLL REVEAL ───────────────────────────────────────── */
-    .reveal {
-      opacity: 0;
-      transform: translateY(22px);
-      transition: opacity .65s ease, transform .65s ease;
-    }
-
-    .reveal.visible { opacity: 1; transform: none; }
-    .rd1 { transition-delay: .1s; }
-    .rd2 { transition-delay: .2s; }
-    .rd3 { transition-delay: .3s; }
-
-    /* ── RESPONSIVE ──────────────────────────────────────────── */
-    @media (max-width: 1024px) {
-      .hero { grid-template-columns: 1fr; min-height: auto; }
-      .hero-left { padding: 56px 40px; }
-      .hero-right { padding: 48px 40px; }
-      .spin-badge-wrap { display: none; }
-      .why-grid { grid-template-columns: 1fr; }
-      .why-left { border-radius: 12px 12px 0 0; }
-      .why-right { grid-template-columns: 1fr 1fr; grid-template-rows: auto; }
-      .why-stat-box:first-child { border-radius: 0; }
-      .why-stat-box:last-child  { border-radius: 0 0 12px 12px; }
-      .about-inner { grid-template-columns: 1fr; gap: 48px; }
-      .about-photo-wrap { max-width: 380px; }
-      .contact-inner { grid-template-columns: 1fr; }
-      .footer-top { grid-template-columns: 1fr 1fr; }
-      .testi-grid { grid-template-columns: 1fr; }
-    }
-
-    @media (max-width: 768px) {
-      .nav { padding: 0 24px; }
-      .nav-links { display: none; }
-      .section { padding: 64px 24px; }
-      .services-section { padding: 64px 24px; }
-      .testi-section { padding: 64px 24px; }
-      .about-section { padding: 64px 24px; }
-      .contact-section { padding: 64px 24px; }
-      .cfield-row { grid-template-columns: 1fr; }
-      .footer-top { padding: 40px 24px 32px; grid-template-columns: 1fr; gap: 32px; }
-      .footer-bottom { padding: 16px 24px; flex-direction: column; gap: 8px; text-align: center; }
-      .footer-disc { text-align: center; }
-      .float-cta { bottom: 20px; right: 16px; padding: 12px 18px; }
-      .hero-trust-bar { flex-direction: column; gap: 0; }
-      .trust-item { border-right: none; border-bottom: 1px solid rgba(255,255,255,.07); }
-      .trust-item:last-child { border-bottom: none; }
+    *,*::before,*::after{margin:0;padding:0;box-sizing:border-box}
+    :root{
+      --forest:#0e1e0e;--forest-d:#0a160a;--forest-m:#16291a;
+      --gold:<%= accent %>;--gold-lt:#d4ac4d;
+      --cream:#faf6ec;--cream-d:#efe9d6;
+      --ink:#0e1e0e;--muted:rgba(14,30,14,.6);--dim:rgba(14,30,14,.4);
+      --border:rgba(14,30,14,.12);
+      --serif:'Cormorant Garamond',Georgia,serif;
+      --sans:'DM Sans',system-ui,sans-serif;
+    }
+    html{scroll-behavior:smooth}
+    body{font-family:var(--sans);background:var(--cream);color:var(--ink);line-height:1.65;-webkit-font-smoothing:antialiased}
+    a{color:inherit;text-decoration:none}
+    .wrap{max-width:1200px;margin:0 auto;padding:0 32px}
+    .eyebrow{display:inline-block;font-size:.75rem;font-weight:600;text-transform:uppercase;letter-spacing:.22em;color:var(--gold)}
+    h1,h2,h3{font-family:var(--serif);letter-spacing:-.01em;line-height:1.12}
+    .btn{display:inline-flex;align-items:center;gap:8px;padding:14px 26px;border-radius:3px;font-weight:600;font-size:.92rem;cursor:pointer;border:0;letter-spacing:.02em;font-family:var(--sans)}
+    .btn-gold{background:var(--gold);color:var(--forest)}
+    .btn-ghost{background:transparent;color:var(--cream);border:1.5px solid var(--gold)}
+    .btn-outline-ink{background:transparent;color:var(--forest);border:1.5px solid var(--forest)}
+
+    /* ── TOP STRIP ─── */
+    .topstrip{background:var(--forest-d);color:rgba(255,255,255,.68);font-size:.78rem;padding:9px 32px;display:flex;justify-content:space-between;gap:16px}
+    .topstrip span{display:inline-flex;align-items:center;gap:8px}
+    .topstrip .dot{width:7px;height:7px;border-radius:50%;background:var(--gold);animation:pulse 2s ease-in-out infinite}
+    @keyframes pulse{0%,100%{opacity:1;transform:scale(1)}50%{opacity:.45;transform:scale(1.4)}}
+
+    /* ── NAV ─── */
+    .nav{background:var(--cream);border-bottom:1px solid var(--border);padding:0 32px;height:78px;display:flex;align-items:center;justify-content:space-between;position:sticky;top:0;z-index:500}
+    .nav-logo{display:flex;align-items:center;gap:14px}
+    .nav-logo .mark{width:44px;height:44px;border-radius:50%;background:var(--forest);display:grid;place-items:center;color:var(--gold);font-family:var(--serif);font-size:1.5rem;font-weight:700}
+    .nav-logo img{height:40px}
+    .nav-logo .name{font-family:var(--serif);font-size:1.4rem;color:var(--forest);font-weight:700;line-height:1}
+    .nav-logo .tag{font-size:.68rem;letter-spacing:.18em;text-transform:uppercase;color:var(--muted);margin-top:2px}
+
+    /* ── HERO ─── */
+    .hero{background:linear-gradient(180deg,var(--cream),var(--cream-d));padding:80px 0 100px;position:relative;overflow:hidden}
+    .hero::before{content:"";position:absolute;width:600px;height:600px;border-radius:50%;background:radial-gradient(closest-side,rgba(184,144,42,.18),transparent);top:-150px;right:-180px;pointer-events:none}
+    .hero-grid{display:grid;grid-template-columns:1.1fr .9fr;gap:70px;align-items:center;position:relative}
+    .hero h1{font-size:clamp(2.6rem,5vw,4.4rem);font-weight:700;color:var(--forest);margin:22px 0 24px}
+    .hero h1 em{font-style:italic;color:var(--gold)}
+    .hero p.sub{color:var(--muted);font-size:1.1rem;max-width:540px;margin-bottom:32px}
+    .hero-ctas{display:flex;gap:12px;flex-wrap:wrap}
+
+    .quote-card{background:#fff;border-radius:8px;padding:40px 36px;box-shadow:0 30px 70px rgba(14,30,14,.12);border:1px solid var(--border);position:relative}
+    .quote-card::before{content:"";position:absolute;width:70px;height:70px;border:3px solid var(--gold);border-radius:50%;top:-34px;left:50%;transform:translateX(-50%);background:#fff;background-image:radial-gradient(circle,var(--gold) 30%,transparent 35%);animation:spin 30s linear infinite}
+    @keyframes spin{to{transform:translateX(-50%) rotate(360deg)}}
+    .quote-card h3{font-size:1.7rem;color:var(--forest);margin-bottom:12px;margin-top:14px;text-align:center}
+    .quote-card p{color:var(--muted);text-align:center;margin-bottom:22px;font-size:.96rem}
+    .quote-card .field{display:flex;flex-direction:column;gap:6px;margin-bottom:12px}
+    .quote-card label{font-size:.74rem;color:var(--muted);letter-spacing:.12em;text-transform:uppercase}
+    .quote-card input,.quote-card select{padding:11px 14px;border:1px solid var(--border);font-family:inherit;font-size:.94rem;background:var(--cream)}
+    .quote-card button{background:var(--forest);color:var(--gold);border:0;padding:14px;font-weight:600;letter-spacing:.04em;cursor:pointer;margin-top:8px;font-family:inherit;text-transform:uppercase;font-size:.82rem}
+
+    /* ── TRUST BAR ─── */
+    .trustbar{background:var(--forest);color:rgba(255,255,255,.78);padding:22px 0;font-size:.88rem}
+    .trustbar-grid{display:flex;flex-wrap:wrap;justify-content:space-around;gap:22px;align-items:center}
+    .trustbar-item{display:inline-flex;align-items:center;gap:10px;letter-spacing:.04em}
+    .trustbar-item::before{content:"◆";color:var(--gold)}
+
+    /* ── SECTIONS ─── */
+    section{padding:92px 0}
+    .sec-head{text-align:center;max-width:740px;margin:0 auto 60px}
+    .sec-head h2{font-size:clamp(2rem,3.4vw,2.9rem);color:var(--forest);margin-top:12px}
+    .sec-head p{color:var(--muted);margin-top:12px}
+
+    /* ── POLICIES ─── */
+    .policies-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(260px,1fr));gap:22px}
+    .pol{background:#fff;border:1px solid var(--border);padding:32px 28px;display:flex;flex-direction:column;gap:10px;border-radius:4px;transition:transform .25s,border-color .25s}
+    .pol:hover{transform:translateY(-4px);border-color:var(--gold)}
+    .pol-icon{font-size:2rem;color:var(--gold);margin-bottom:4px}
+    .pol h3{font-size:1.4rem;color:var(--forest)}
+    .pol p{color:var(--muted);font-size:.94rem}
+
+    /* ── WHY ─── */
+    .why{background:#fff}
+    .why-grid{display:grid;grid-template-columns:1fr 1fr;gap:56px;align-items:start}
+    .why h2{font-size:clamp(2rem,3.2vw,2.8rem);color:var(--forest);margin-bottom:22px}
+    .why ul{list-style:none;display:flex;flex-direction:column;gap:16px}
+    .why li{padding-left:34px;position:relative;color:var(--forest);font-size:1.02rem}
+    .why li::before{content:"✓";position:absolute;left:0;top:-1px;width:22px;height:22px;background:var(--gold);color:var(--forest);border-radius:50%;display:grid;place-items:center;font-size:.78rem;font-weight:700}
+    .stats-pair{display:grid;grid-template-columns:1fr 1fr;gap:20px}
+    .stat-box{background:var(--forest);color:#fff;padding:32px 24px;border-radius:6px;text-align:center}
+    .stat-box .v{font-family:var(--serif);font-size:2.8rem;color:var(--gold);font-weight:700;line-height:1}
+    .stat-box .l{margin-top:8px;font-size:.82rem;letter-spacing:.06em;text-transform:uppercase;color:rgba(255,255,255,.72)}
+
+    /* ── ADVISOR ─── */
+    .advisor{background:var(--cream-d)}
+    .advisor-grid{display:grid;grid-template-columns:.8fr 1.2fr;gap:56px;align-items:center}
+    .advisor-photo{width:100%;max-width:380px;aspect-ratio:4/5;background:linear-gradient(135deg,var(--forest),var(--forest-m));border-radius:6px;display:grid;place-items:center;color:var(--gold);font-family:var(--serif);font-size:4rem;overflow:hidden}
+    .advisor-photo img{width:100%;height:100%;object-fit:cover}
+    .advisor h2{font-size:clamp(2rem,3.2vw,2.8rem);color:var(--forest);margin-bottom:18px}
+    .advisor p{color:var(--muted);margin-bottom:20px}
+    .cred-list{list-style:none;display:flex;flex-direction:column;gap:10px;margin-top:20px}
+    .cred-list li{padding-left:24px;position:relative;font-weight:500;font-size:.95rem;color:var(--forest)}
+    .cred-list li::before{content:"◆";color:var(--gold);position:absolute;left:0}
+
+    /* ── CLAIM PROCESS ─── */
+    .claim-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(220px,1fr));gap:22px;counter-reset:cstep}
+    .claim-step{background:#fff;border:1px solid var(--border);border-radius:4px;padding:28px;position:relative}
+    .claim-step::before{counter-increment:cstep;content:counter(cstep,decimal-leading-zero);position:absolute;top:-16px;left:22px;width:40px;height:40px;background:var(--gold);color:var(--forest);border-radius:50%;display:grid;place-items:center;font-family:var(--serif);font-weight:700;font-size:1.12rem}
+    .claim-step h3{color:var(--forest);margin:14px 0 8px;font-size:1.25rem}
+    .claim-step p{color:var(--muted);font-size:.94rem}
+
+    /* ── TESTIMONIALS ─── */
+    .tests{background:#fff}
+    .tests-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(280px,1fr));gap:22px}
+    .t{background:var(--cream);border:1px solid var(--border);padding:28px;border-radius:4px;position:relative}
+    .t::before{content:"\201C";font-family:var(--serif);color:var(--gold);font-size:4rem;position:absolute;top:-4px;left:18px;line-height:1}
+    .t p{margin:10px 0 20px;color:var(--forest)}
+    .t-meta{padding-top:14px;border-top:1px solid var(--border)}
+    .t-meta strong{color:var(--forest);font-weight:600}
+    .t-meta span{display:block;color:var(--muted);font-size:.86rem}
+
+    /* ── CONTACT / FOOTER ─── */
+    .contact{background:var(--forest);color:rgba(255,255,255,.82)}
+    .contact .sec-head h2{color:#fff}
+    .contact .sec-head p{color:rgba(255,255,255,.6)}
+    .contact-grid{display:grid;grid-template-columns:1fr 1fr;gap:54px;align-items:start}
+    .contact-info p{display:flex;gap:12px;margin-bottom:14px;color:rgba(255,255,255,.72)}
+    .contact-info p strong{color:var(--gold)}
+    form.advisor-form{background:rgba(255,255,255,.04);padding:28px;border-radius:6px;border:1px solid rgba(255,255,255,.1)}
+    form.advisor-form label{display:block;color:rgba(255,255,255,.62);font-size:.78rem;letter-spacing:.06em;margin-bottom:5px}
+    form.advisor-form input,form.advisor-form textarea,form.advisor-form select{width:100%;background:rgba(255,255,255,.05);border:1px solid rgba(255,255,255,.12);color:#fff;padding:11px 14px;font-family:inherit;border-radius:3px;margin-bottom:14px;font-size:.94rem}
+    form.advisor-form button{background:var(--gold);color:var(--forest);border:0;padding:13px 28px;font-weight:700;cursor:pointer;letter-spacing:.04em;text-transform:uppercase;font-size:.82rem}
+
+    footer{background:var(--forest-d);color:rgba(255,255,255,.55);padding:32px 0;font-size:.82rem;text-align:center;line-height:1.7}
+    footer .license{display:inline-block;margin-top:8px;padding:5px 14px;background:rgba(184,144,42,.14);color:var(--gold);border-radius:2px;letter-spacing:.08em;font-size:.74rem;text-transform:uppercase}
+
+    .floating-cta{position:fixed;bottom:24px;right:24px;z-index:600;background:var(--gold);color:var(--forest);padding:14px 22px;border-radius:50px;font-weight:700;box-shadow:0 12px 30px rgba(184,144,42,.4);display:inline-flex;align-items:center;gap:8px;font-size:.88rem}
+
+    @media (max-width:900px){
+      .hero-grid,.why-grid,.advisor-grid,.contact-grid{grid-template-columns:1fr;gap:40px}
+      section{padding:60px 0}
+      .topstrip,.nav{padding-left:18px;padding-right:18px}
+      .wrap{padding:0 18px}
     }
   </style>
 </head>
 <body>
 
-  <!-- Floating CTA -->
-  <a href="#contact" class="float-cta" id="floatCta">
-    <span class="float-cta-dot"></span>
-    Get a Free Quote
-  </a>
+<div class="topstrip">
+  <span><span class="dot"></span>Office hours: <%= hoursText || 'Mon–Sat · 9am–7pm' %></span>
+  <span>📞 <%= primaryPhone %> · <%= primaryEmail %></span>
+</div>
 
-  <!-- NAV -->
-  <nav class="nav" id="nav">
-    <div class="nav-inner">
-      <a href="#top" class="nav-logo">
-        <span class="nav-logo-name"><%= businessName %></span>
-        <span class="nav-logo-tag">Licensed Insurance Professional</span>
-      </a>
-      <ul class="nav-links">
-        <li><a href="#services">Coverage</a></li>
-        <li><a href="#about">About</a></li>
-        <li><a href="#testimonials">Reviews</a></li>
-        <li><a href="#contact" class="nav-cta">Get a Quote</a></li>
+<nav class="nav">
+  <div class="nav-logo">
+    <% if (logoV) { %><img src="<%= logoV %>" alt="<%= bn %>">
+    <% } else { %><span class="mark"><%= bn.charAt(0) %></span><% } %>
+    <div>
+      <div class="name"><%= bn %></div>
+      <div class="tag"><%= heroTagV %></div>
+    </div>
+  </div>
+  <a href="#contact" class="btn btn-gold"><%= heroCtaPrimaryV %> →</a>
+</nav>
+
+<section class="hero">
+  <div class="wrap hero-grid">
+    <div>
+      <span class="eyebrow"><%= heroEyebrowV %></span>
+      <h1><%- heroHeadlineV %></h1>
+      <p class="sub"><%= heroSubV %></p>
+      <div class="hero-ctas">
+        <a href="#contact" class="btn btn-gold"><%= heroCtaPrimaryV %></a>
+        <% if (primaryPhone) { %><a href="tel:<%= primaryPhone %>" class="btn btn-outline-ink">📞 <%= heroCtaSecondaryV %></a><% } %>
+      </div>
+    </div>
+    <aside class="quote-card">
+      <h3><%= heroQuoteCardTitleV %></h3>
+      <p><%= heroQuoteCardBodyV %></p>
+      <div class="field"><label>Full name</label><input type="text" placeholder="Your name"></div>
+      <div class="field"><label>Phone</label><input type="tel" placeholder="+91 …"></div>
+      <div class="field"><label>Email</label><input type="email" placeholder="you@example.com"></div>
+      <div class="field">
+        <label>Policy of interest</label>
+        <select>
+          <% policyList.forEach(p => { %><option><%= p.name %></option><% }) %>
+        </select>
+      </div>
+      <button type="button" onclick="alert('Thanks! An advisor will reach out shortly.')"><%= heroCtaPrimaryV %></button>
+    </aside>
+  </div>
+</section>
+
+<% if (trust.length) { %>
+<div class="trustbar">
+  <div class="wrap trustbar-grid">
+    <% trust.forEach(t => { %><span class="trustbar-item"><%= t.label %></span><% }) %>
+  </div>
+</div>
+<% } %>
+
+<% if (policyList.length) { %>
+<section id="policies">
+  <div class="wrap">
+    <div class="sec-head">
+      <span class="eyebrow">Policies offered</span>
+      <h2>Coverage for every milestone</h2>
+      <p>Compare plans across leading insurers and pick the one that actually fits your family.</p>
+    </div>
+    <div class="policies-grid">
+      <% policyList.forEach(p => { %>
+        <article class="pol">
+          <% if (p.icon) { %><div class="pol-icon"><%= p.icon %></div><% } %>
+          <h3><%= p.name %></h3>
+          <p><%= p.body %></p>
+        </article>
+      <% }) %>
+    </div>
+  </div>
+</section>
+<% } %>
+
+<section class="why">
+  <div class="wrap why-grid">
+    <div>
+      <span class="eyebrow">Why choose us</span>
+      <h2><%= whyHeadlineV %></h2>
+      <ul>
+        <% whyPointsList.forEach(p => { %><li><%= p.text %></li><% }) %>
       </ul>
     </div>
-  </nav>
-
-  <!-- HERO -->
-  <section class="hero" id="top">
-
-    <div class="hero-left">
-      <div>
-        <div class="hero-badge">
-          <%= tone.charAt(0).toUpperCase() + tone.slice(1) %> Coverage · Locally Trusted
-        </div>
-        <h1 class="hero-title">
-          Your Protection<br>
-          is Our<br>
-          <em>Priority.</em>
-        </h1>
-        <p class="hero-deck"><%= tagline %></p>
+    <div class="stats-pair">
+      <% statBoxesList.forEach(s => { %>
+      <div class="stat-box">
+        <div class="v"><%= s.value %></div>
+        <div class="l"><%= s.label %></div>
       </div>
-      <div class="hero-trust-bar">
-        <div class="trust-item">
-          <span class="trust-num">15+</span>
-          <span class="trust-label">Years Experience</span>
-        </div>
-        <div class="trust-item">
-          <span class="trust-num">2,400+</span>
-          <span class="trust-label">Policies Written</span>
-        </div>
-        <div class="trust-item">
-          <span class="trust-num">98%</span>
-          <span class="trust-label">Client Retention</span>
-        </div>
-      </div>
-    </div>
-
-    <div class="hero-right">
-      <!-- Rotating Trust Badge -->
-      <div class="spin-badge-wrap">
-        <div class="spin-badge-inner">
-          <svg viewBox="0 0 80 80" width="80" height="80">
-            <path id="circlePath" d="M 40,40 m -28,0 a 28,28 0 1,1 56,0 a 28,28 0 1,1 -56,0" fill="none"/>
-            <text font-size="8.5" font-family="DM Sans" font-weight="600" letter-spacing="3" fill="rgba(184,144,42,.7)" text-anchor="middle">
-              <textPath href="#circlePath">TRUSTED · LICENSED · DEDICATED · </textPath>
-            </text>
-          </svg>
-          <div class="badge-center">
-            <span class="badge-center-icon">🛡</span>
-          </div>
-        </div>
-      </div>
-
-      <!-- Quote Card -->
-      <div class="quote-card">
-        <h3 class="quote-card-title">Get Your Free Quote</h3>
-        <p class="quote-card-sub">No obligation · Response within 2 hours</p>
-        <form class="qform" data-hero-form>
-          <input type="text"  class="qinput" placeholder="Your full name" required>
-          <input type="tel"   class="qinput" placeholder="Phone number" required>
-          <input type="email" class="qinput" placeholder="Email address" required>
-          <select class="qinput qselect">
-            <% products.forEach(function(p){ %>
-              <option value="<%= p %>"><%= p %></option>
-            <% }); %>
-          </select>
-          <button type="submit" class="qbtn">
-            Request Free Quote
-            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M5 12h14M12 5l7 7-7 7"/></svg>
-          </button>
-          <p class="quote-reassurance">Your information is 100% secure and private</p>
-        </form>
-      </div>
-    </div>
-  </section>
-
-  <!-- TRUST MARQUEE -->
-  <div class="trust-strip">
-    <div class="trust-track" id="trustTrack">
-      <% var tags = ['IRDA Registered','Claim Support 24/7','Independent Agent','No Hidden Fees','Free Consultations','Multiple Insurers','Paperless Process','Quick Renewals']; %>
-      <% var doubled = [...tags,...tags]; %>
-      <% doubled.forEach(function(t){ %>
-        <span class="trust-tag"><span class="trust-tag-dot">✦</span><%= t %></span>
-      <% }); %>
+      <% }) %>
     </div>
   </div>
+</section>
 
-  <!-- SERVICES -->
-  <section class="services-section" id="services">
-    <div class="services-inner">
-      <p class="eyebrow reveal">What I Cover</p>
-      <h2 class="section-title reveal rd1">Comprehensive Protection<br>For Every Stage of Life</h2>
-      <p class="section-sub reveal rd2">From your first policy to your family's future, I provide tailored coverage across every category that matters.</p>
-      <div class="services-grid">
-        <% products.forEach(function(product, i){ %>
-          <div class="service-card reveal rd<%= Math.min(i%3+1,3) %>">
-            <div class="service-icon-wrap"><%= ['🛡','🏠','🚗','❤️','✈️','💼'][i%6] %></div>
-            <span class="service-num">0<%= i+1 %></span>
-            <h3 class="service-title"><%= product %></h3>
-            <p class="service-body">Tailored <%= product.toLowerCase() %> solutions that give you real coverage when it matters most — no jargon, no surprises.</p>
-            <a href="#contact" class="service-link">Get Covered →</a>
-          </div>
-        <% }); %>
-      </div>
+<section class="advisor" id="advisor">
+  <div class="wrap advisor-grid">
+    <div class="advisor-photo">
+      <% if (advisorPhotoV) { %><img src="<%= advisorPhotoV %>" alt="<%= advisorNameV %>">
+      <% } else { %><%= advisorNameV.charAt(0) %><% } %>
     </div>
-  </section>
-
-  <!-- WHY CHOOSE ME -->
-  <div class="section" style="padding-bottom:0">
-    <div class="why-grid reveal">
-      <div class="why-left">
-        <p class="eyebrow">Why Work With Me</p>
-        <h2 class="section-title">An agent who puts<br>you first. Always.</h2>
-        <p class="why-body"><%= about %></p>
-        <ul class="why-checklist">
-          <li><span class="why-check">✓</span> Independent agent — I compare across multiple insurers to find your best rate</li>
-          <li><span class="why-check">✓</span> I handle claims personally, so you're never passed from department to department</li>
-          <li><span class="why-check">✓</span> Annual policy reviews to make sure your coverage grows with your life</li>
-          <li><span class="why-check">✓</span> Bilingual service available · evening and weekend appointments</li>
-        </ul>
-      </div>
-      <div class="why-right">
-        <div class="why-stat-box">
-          <div>
-            <div class="why-stat-num">₹<span>480Cr</span>+</div>
-            <div class="why-stat-label">Total coverage secured for clients across all policy categories</div>
-          </div>
-          <div class="why-stat-dec">Cr</div>
-        </div>
-        <div class="why-stat-box">
-          <div>
-            <div class="why-stat-num"><span>96%</span></div>
-            <div class="why-stat-label">Claim settlement success rate — well above the industry average</div>
-          </div>
-          <div class="why-stat-dec">%</div>
-        </div>
-      </div>
+    <div>
+      <span class="eyebrow">About <%= advisorNameV %></span>
+      <h2>Your trusted family advisor</h2>
+      <p><%= advisorBioV %></p>
+      <ul class="cred-list">
+        <% credList.forEach(c => { %><li><%= c.text %></li><% }) %>
+      </ul>
     </div>
   </div>
+</section>
 
-  <!-- ABOUT -->
-  <section class="about-section" id="about">
-    <div class="about-inner">
-      <div class="about-photo-wrap reveal">
-        <div class="about-photo-placeholder">
-          <span class="about-photo-initial"><%= businessName.charAt(0) %></span>
-          <div class="about-photo-badge">
-            <span class="about-photo-badge-name"><%= businessName %></span>
-            <span class="about-photo-badge-title">Certified Insurance Professional · <%= year %></span>
-          </div>
-        </div>
-      </div>
-      <div class="about-right reveal rd1">
-        <p class="eyebrow">About Me</p>
-        <h2 class="section-title">A face you can trust<br>behind every policy.</h2>
-        <p class="about-body"><%= about %></p>
-        <div class="about-credentials">
-          <div class="cred-item">
-            <span class="cred-icon">🏆</span>
-            IRDA Licensed Insurance Advisor
-          </div>
-          <div class="cred-item">
-            <span class="cred-icon">📋</span>
-            Certified Financial Planner (CFP)
-          </div>
-          <div class="cred-item">
-            <span class="cred-icon">🤝</span>
-            15+ Years in the Insurance Industry
-          </div>
-          <div class="cred-item">
-            <span class="cred-icon">⭐</span>
-            Top 1% Producer — <%= year %> Award
-          </div>
-        </div>
-      </div>
+<% if (claimStepsList.length) { %>
+<section id="claim">
+  <div class="wrap">
+    <div class="sec-head">
+      <span class="eyebrow">Claim process</span>
+      <h2>A simple, supported claim journey</h2>
+      <p>We don't just sell the policy — we stand with you when it's time to claim.</p>
     </div>
-  </section>
+    <div class="claim-grid">
+      <% claimStepsList.forEach(s => { %>
+        <div class="claim-step">
+          <h3><%= s.title %></h3>
+          <p><%= s.body %></p>
+        </div>
+      <% }) %>
+    </div>
+  </div>
+</section>
+<% } %>
 
-  <!-- TESTIMONIALS -->
-  <section class="testi-section" id="testimonials">
-    <div class="testi-inner">
-      <p class="eyebrow reveal">What Clients Say</p>
-      <h2 class="section-title reveal rd1">Real people.<br>Real protection. Real peace of mind.</h2>
-      <div class="testi-grid" style="margin-top:48px">
-        <div class="testi-card reveal">
-          <div class="testi-stars">★★★★★</div>
-          <p class="testi-quote">"I had been putting off getting life insurance for years. One conversation changed everything — the process was simple, the rate was better than I expected, and I felt genuinely cared for."</p>
-          <div class="testi-author">
-            <div class="testi-av">RP</div>
-            <div><span class="testi-name">Rajesh P.</span><span class="testi-role">Life & Health Policy · Client since 2019</span></div>
+<% if (testList.length) { %>
+<section class="tests">
+  <div class="wrap">
+    <div class="sec-head">
+      <span class="eyebrow">Testimonials</span>
+      <h2>Families we've helped protect</h2>
+    </div>
+    <div class="tests-grid">
+      <% testList.forEach(r => { %>
+        <div class="t">
+          <p><%= r.quote %></p>
+          <div class="t-meta">
+            <strong><%= r.name %></strong>
+            <% if (r.role) { %><span><%= r.role %></span><% } %>
           </div>
         </div>
-        <div class="testi-card reveal rd1">
-          <div class="testi-stars">★★★★★</div>
-          <p class="testi-quote">"When my car was totalled, I was dreading the claim process. My agent handled everything from the first call to the final cheque. I didn't have to chase anyone once."</p>
-          <div class="testi-author">
-            <div class="testi-av">SM</div>
-            <div><span class="testi-name">Sunita M.</span><span class="testi-role">Auto & Home Policy · Client since 2021</span></div>
-          </div>
-        </div>
-        <div class="testi-card reveal rd2">
-          <div class="testi-stars">★★★★★</div>
-          <p class="testi-quote">"I've referred six family members. Every single one came back to say thank you. That's the mark of someone who genuinely works in your interest, not just to close a sale."</p>
-          <div class="testi-author">
-            <div class="testi-av">AK</div>
-            <div><span class="testi-name">Ankit K.</span><span class="testi-role">Family Floater Health · Client since 2018</span></div>
-          </div>
-        </div>
-      </div>
+      <% }) %>
     </div>
-  </section>
+  </div>
+</section>
+<% } %>
 
-  <!-- CONTACT -->
-  <section class="contact-section" id="contact">
-    <div class="contact-inner">
-      <div class="contact-left">
-        <p class="eyebrow reveal">Get In Touch</p>
-        <h2 class="section-title reveal rd1">Let's find the right coverage for you.</h2>
-        <p class="contact-body reveal rd2">No sales pressure. No confusing jargon. Just an honest conversation about what you need and what makes sense for your life and budget.</p>
-        <div class="contact-details reveal rd2">
-          <div class="contact-detail"><span class="contact-detail-icon">📞</span> Available Mon–Sat · 9am to 7pm</div>
-          <div class="contact-detail"><span class="contact-detail-icon">📧</span> Email response within 2 hours</div>
-          <div class="contact-detail"><span class="contact-detail-icon">📍</span> In-person consultations available</div>
-          <div class="contact-detail"><span class="contact-detail-icon">🔒</span> All information kept strictly confidential</div>
-        </div>
-      </div>
-      <div class="reveal rd1">
-        <form class="cform" data-contact>
-          <h3 class="cform-title">Send a Message</h3>
-          <div class="cform-fields">
-            <div class="cfield-row">
-              <div class="cfield"><label>First Name</label><input type="text" placeholder="Rahul" required></div>
-              <div class="cfield"><label>Last Name</label><input type="text" placeholder="Sharma" required></div>
-            </div>
-            <div class="cfield"><label>Email Address</label><input type="email" placeholder="rahul@example.com" required></div>
-            <div class="cfield"><label>Phone Number</label><input type="tel" placeholder="+91 98765 43210"></div>
-            <div class="cfield">
-              <label>Coverage of Interest</label>
-              <select>
-                <option value="">Select a category</option>
-                <% products.forEach(function(p){ %>
-                  <option value="<%= p %>"><%= p %></option>
-                <% }); %>
-              </select>
-            </div>
-            <div class="cfield"><label>Your Message</label><textarea rows="3" placeholder="Tell me a little about what you're looking for..."></textarea></div>
-            <button type="submit" class="csubmit">Send Message →</button>
-          </div>
-        </form>
-      </div>
+<section class="contact" id="contact">
+  <div class="wrap">
+    <div class="sec-head">
+      <span class="eyebrow">Get in touch</span>
+      <h2>Let's protect what matters, together.</h2>
+      <p>Share a few details — we'll be in touch within 24 hours with a personalized plan.</p>
     </div>
-  </section>
-
-  <!-- FOOTER -->
-  <footer>
-    <div class="footer-top">
-      <div>
-        <span class="footer-brand-name"><%= businessName %></span>
-        <p class="footer-tagline"><%= tagline %></p>
-        <span class="footer-license">🛡 IRDA Lic. No. — <%= year %></span>
+    <div class="contact-grid">
+      <div class="contact-info">
+        <p><strong>Call</strong> <%= primaryPhone %></p>
+        <p><strong>Email</strong> <%= primaryEmail %></p>
+        <% if (addressBlock) { %><p><strong>Office</strong> <%= addressBlock %></p><% } %>
+        <% if (hoursText) { %><p><strong>Hours</strong> <%= hoursText %></p><% } %>
       </div>
-      <div>
-        <p class="footer-col-title">Coverage</p>
-        <ul class="footer-links">
-          <% products.forEach(function(p){ %>
-            <li><a href="#services"><%= p %></a></li>
-          <% }); %>
-        </ul>
-      </div>
-      <div>
-        <p class="footer-col-title">Quick Links</p>
-        <ul class="footer-links">
-          <li><a href="#services">Coverage Options</a></li>
-          <li><a href="#about">About Me</a></li>
-          <li><a href="#testimonials">Client Reviews</a></li>
-          <li><a href="#contact">Get a Quote</a></li>
-        </ul>
-      </div>
+      <form class="advisor-form" onsubmit="event.preventDefault(); this.reset(); alert('Thanks — we will be in touch within 24 hours.')">
+        <label>Name</label><input type="text" required>
+        <label>Phone</label><input type="tel" required>
+        <label>Email</label><input type="email">
+        <label>Policy of interest</label>
+        <select>
+          <% policyList.forEach(p => { %><option><%= p.name %></option><% }) %>
+        </select>
+        <label>How can we help?</label><textarea rows="3"></textarea>
+        <button type="submit">Request Callback</button>
+      </form>
     </div>
-    <div class="footer-bottom">
-      <span class="footer-copy">© <%= year %> <%= businessName %>. All rights reserved.</span>
-      <span class="footer-disc">Insurance products are subject to terms and conditions. Please read the policy document carefully before purchasing. Premiums and benefits may vary.</span>
-    </div>
-  </footer>
+  </div>
+</section>
 
-  <script>
-    // SMOOTH SCROLL
-    document.querySelectorAll('a[href^="#"]').forEach(a => {
-      a.addEventListener('click', e => {
-        const t = document.querySelector(a.getAttribute('href'));
-        if (t) { e.preventDefault(); t.scrollIntoView({ behavior: 'smooth', block: 'start' }); }
-      });
-    });
+<footer>
+  © <%= year %> <%= bn %>. All rights reserved.<br>
+  <span class="license"><%= regulatorV %> · <%= licenseNumberV %></span>
+</footer>
 
-    // NAV SCROLL
-    const nav = document.getElementById('nav');
-    window.addEventListener('scroll', () => {
-      nav.classList.toggle('scrolled', window.scrollY > 40);
-    }, { passive: true });
+<a href="#contact" class="floating-cta">💬 <%= heroCtaPrimaryV %></a>
 
-    // FLOAT CTA — hide when contact visible
-    const floatCta = document.getElementById('floatCta');
-    const contactSec = document.getElementById('contact');
-    if (contactSec && floatCta) {
-      new IntersectionObserver(([e]) => {
-        floatCta.style.opacity = e.isIntersecting ? '0' : '1';
-        floatCta.style.pointerEvents = e.isIntersecting ? 'none' : 'auto';
-        floatCta.style.transition = 'opacity .3s';
-      }, { threshold: 0.15 }).observe(contactSec);
-    }
-
-    // SCROLL REVEAL
-    const ro = new IntersectionObserver(entries => {
-      entries.forEach(e => { if (e.isIntersecting) { e.target.classList.add('visible'); ro.unobserve(e.target); } });
-    }, { threshold: 0.07, rootMargin: '0px 0px -40px 0px' });
-    document.querySelectorAll('.reveal').forEach(el => ro.observe(el));
-
-    // MARQUEE PAUSE
-    const tt = document.getElementById('trustTrack');
-    if (tt) {
-      tt.addEventListener('mouseenter', () => tt.style.animationPlayState = 'paused');
-      tt.addEventListener('mouseleave', () => tt.style.animationPlayState = 'running');
-    }
-
-    // HERO QUOTE FORM
-    const heroForm = document.querySelector('[data-hero-form]');
-    if (heroForm) {
-      heroForm.addEventListener('submit', e => {
-        e.preventDefault();
-        const btn = heroForm.querySelector('.qbtn');
-        btn.textContent = 'Sending...';
-        btn.disabled = true;
-        setTimeout(() => {
-          btn.textContent = '✓ Request Received!';
-          btn.style.background = '#2d6a2d';
-          heroForm.reset();
-          setTimeout(() => { btn.textContent = 'Request Free Quote'; btn.style.background = ''; btn.disabled = false; }, 4000);
-        }, 900);
-      });
-    }
-
-    // CONTACT FORM
-    const cform = document.querySelector('[data-contact]');
-    if (cform) {
-      cform.addEventListener('submit', e => {
-        e.preventDefault();
-        const btn = cform.querySelector('.csubmit');
-        btn.textContent = 'Sending...';
-        btn.disabled = true;
-        setTimeout(() => {
-          const n = document.createElement('div');
-          n.style.cssText = 'background:rgba(184,144,42,.12);border:1px solid rgba(184,144,42,.3);color:#d4a93c;padding:14px 18px;border-radius:8px;font-size:.85rem;margin-bottom:12px;';
-          n.textContent = '✓ Message received — I\'ll be in touch within 2 hours.';
-          cform.insertAdjacentElement('beforebegin', n);
-          cform.reset();
-          btn.textContent = 'Send Message →';
-          btn.disabled = false;
-          setTimeout(() => n.remove(), 5000);
-        }, 900);
-      });
-    }
-  </script>
 </body>
 </html>

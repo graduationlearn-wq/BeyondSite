@@ -1,0 +1,33 @@
+{
+  "id": "_base",
+  "name": "Shared base",
+  "description": "Sections merged into every template: Brand, Contact, Theme. Do not load this directly as a template.",
+  "sections": [
+    {
+      "id": "brand",
+      "title": "Brand",
+      "fields": [
+        { "id": "logo", "label": "Logo", "type": "image", "accept": "image/png,image/jpeg,image/svg+xml,image/webp", "maxSizeMB": 2, "uploadLabel": "Upload logo" },
+        { "id": "foundedYear", "label": "Founded Year", "type": "text", "placeholder": "2024", "max": 4 }
+      ]
+    },
+    {
+      "id": "contact",
+      "title": "Contact",
+      "fields": [
+        { "id": "email",   "label": "Email",   "type": "text", "placeholder": "hello@example.com", "max": 120 },
+        { "id": "phone",   "label": "Phone",   "type": "text", "max": 40 },
+        { "id": "address", "label": "Address", "type": "textarea", "rows": 2, "max": 200 },
+        { "id": "hours",   "label": "Business hours", "type": "text", "placeholder": "Mon–Fri · 9am–6pm", "max": 120 }
+      ]
+    },
+    {
+      "id": "theme",
+      "title": "Theme",
+      "fields": [
+        { "id": "primaryColor", "label": "Primary accent color", "type": "color", "default": "#c0392b" },
+        { "id": "tone",         "label": "Brand tone",            "type": "select", "options": ["professional","friendly","luxury","casual"], "default": "professional" }
+      ]
+    }
+  ]
+}
