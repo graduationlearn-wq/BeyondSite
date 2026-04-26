@@ -1,0 +1,158 @@
+{
+  "id": "template-2",
+  "name": "Agency",
+  "extends": "_base",
+  "sections": [
+    {
+      "id": "hero",
+      "title": "Hero",
+      "aiable": true,
+      "hint": {
+        "label": "The big statement up top",
+        "description": "A full-screen dramatic hero with three-line headline (the middle word glows gold), a quiet sub-line, and two buttons. This is your pitch in ten seconds — make it count."
+      },
+      "fields": [
+        { "id": "heroEyebrow",         "label": "Eyebrow (e.g. Creative Excellence Since 2015)", "type": "text", "max": 80, "aiable": true },
+        { "id": "heroHeadlineLead",    "label": "Headline — first word",    "type": "text", "max": 30, "placeholder": "Crafting", "aiable": true },
+        { "id": "heroHeadlineAccent",  "label": "Headline — accent word (gets the gold gradient)", "type": "text", "max": 30, "placeholder": "Bold", "aiable": true },
+        { "id": "heroHeadlineTail",    "label": "Headline — last word",     "type": "text", "max": 30, "placeholder": "Stories.", "aiable": true },
+        { "id": "heroSub",             "label": "Sub-headline",              "type": "textarea", "rows": 3, "max": 260, "aiable": true },
+        { "id": "heroCtaPrimary",      "label": "Primary CTA text",          "type": "text", "max": 30, "placeholder": "Explore Services" },
+        { "id": "heroCtaSecondary",    "label": "Secondary CTA text",        "type": "text", "max": 30, "placeholder": "Learn More" }
+      ]
+    },
+    {
+      "id": "ticker",
+      "title": "Ticker Strip",
+      "hint": {
+        "label": "A marquee of keywords",
+        "description": "A scrolling strip under the hero showing the things you offer or believe in — 'Brand · Digital · Strategy · Film'. Adds motion and a sense of breadth."
+      },
+      "fields": [
+        {
+          "id": "tickerItems", "type": "repeater", "min": 3, "max": 12, "itemLabel": "Ticker item",
+          "item": [
+            { "id": "text", "label": "Item (e.g. Brand Systems)", "type": "text", "max": 40 }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "about",
+      "title": "About",
+      "aiable": true,
+      "hint": {
+        "label": "Who you are, in your own words",
+        "description": "Your studio's story sits on the left, with four staggered stat cards on the right. The tags chips below the story double as a quick 'what we do' scan."
+      },
+      "fields": [
+        { "id": "aboutHeadlineLead",   "label": "About headline — first line",  "type": "text", "max": 60, "placeholder": "Built on trust,", "aiable": true },
+        { "id": "aboutHeadlineTail",   "label": "About headline — second line", "type": "text", "max": 60, "placeholder": "driven by results.", "aiable": true },
+        { "id": "aboutBody",           "label": "About body",                    "type": "textarea", "rows": 5, "max": 600, "aiable": true },
+        {
+          "id": "aboutTags", "label": "Tag chips (what you do)", "type": "repeater", "min": 0, "max": 8, "itemLabel": "Tag",
+          "item": [ { "id": "text", "label": "Tag (e.g. Brand Systems)", "type": "text", "max": 40 } ]
+        },
+        {
+          "id": "aboutStats", "label": "Stat cards (up to 4)", "type": "repeater", "min": 0, "max": 4, "itemLabel": "Stat",
+          "item": [
+            { "id": "value",  "label": "Number (e.g. 150, 98, 12)", "type": "text", "max": 10, "placeholder": "150" },
+            { "id": "suffix", "label": "Suffix (optional, e.g. +, %, x, hr)", "type": "text", "max": 6 },
+            { "id": "label",  "label": "Label",                     "type": "text", "max": 60 }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "services",
+      "title": "Services",
+      "aiable": true,
+      "hint": {
+        "label": "What you sell",
+        "description": "Numbered service cards — each shows its number, a title, a short pitch, and an arrow that appears on hover. Keep descriptions tight and benefit-led."
+      },
+      "fields": [
+        { "id": "servicesLabel",    "label": "Section eyebrow",    "type": "text", "max": 40, "placeholder": "What We Offer" },
+        { "id": "servicesHeadline", "label": "Section headline",   "type": "text", "max": 80, "placeholder": "Premium services for premium results.", "aiable": true },
+        { "id": "servicesMeta",     "label": "Right-side caption", "type": "textarea", "rows": 2, "max": 180, "aiable": true },
+        {
+          "id": "services", "type": "repeater", "min": 3, "max": 9, "itemLabel": "Service",
+          "item": [
+            { "id": "name",  "label": "Service name",       "type": "text", "required": true, "max": 60 },
+            { "id": "body",  "label": "Short description",  "type": "textarea", "rows": 2, "max": 220, "aiable": true }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "process",
+      "title": "Process (4 steps)",
+      "aiable": true,
+      "hint": {
+        "label": "How an engagement runs",
+        "description": "The four phases you walk clients through — Discover, Strategy, Execute, Grow (or whatever your version is). Helps skeptical prospects picture working with you."
+      },
+      "fields": [
+        { "id": "processLabel",    "label": "Section eyebrow",  "type": "text", "max": 40, "placeholder": "How We Work" },
+        { "id": "processHeadline", "label": "Section headline", "type": "text", "max": 80, "placeholder": "A process built for precision.", "aiable": true },
+        {
+          "id": "processSteps", "type": "repeater", "min": 4, "max": 4, "itemLabel": "Step",
+          "item": [
+            { "id": "title", "label": "Step title", "type": "text", "required": true, "max": 40 },
+            { "id": "body",  "label": "Step body",  "type": "textarea", "rows": 2, "max": 200, "aiable": true }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "numbers",
+      "title": "Numbers Band",
+      "hint": {
+        "label": "The gold number band",
+        "description": "A full-width gold strip with four big stats — the most eye-catching block on the page. Use concrete numbers: '500+ Clients', '99% Retention', '24hr Response'."
+      },
+      "fields": [
+        {
+          "id": "numberStats", "type": "repeater", "min": 2, "max": 4, "itemLabel": "Stat",
+          "item": [
+            { "id": "value",  "label": "Number",                    "type": "text", "max": 10, "placeholder": "500" },
+            { "id": "suffix", "label": "Suffix (e.g. +, %, x, hr)", "type": "text", "max": 6, "placeholder": "+" },
+            { "id": "label",  "label": "Label",                      "type": "text", "max": 60 }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "testimonials",
+      "title": "Testimonials",
+      "hint": {
+        "label": "Client quotes",
+        "description": "Three dark testimonial cards with a giant decorative quote mark. Initials become the avatar — so if the name is 'Sarah Lin', the card shows 'SL'."
+      },
+      "fields": [
+        {
+          "id": "testimonials", "type": "repeater", "min": 0, "max": 6, "itemLabel": "Testimonial",
+          "item": [
+            { "id": "quote", "label": "Quote",       "type": "textarea", "rows": 3, "max": 320 },
+            { "id": "name",  "label": "Client name", "type": "text", "max": 60 },
+            { "id": "role",  "label": "Role / company", "type": "text", "max": 80 }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "cta",
+      "title": "CTA Band",
+      "aiable": true,
+      "hint": {
+        "label": "The closing nudge",
+        "description": "A large CTA band near the bottom — one bold headline, one short supporting line, one gold button. Keep the button copy action-oriented: 'Start a Conversation'."
+      },
+      "fields": [
+        { "id": "ctaHeadline", "label": "CTA headline",       "type": "text", "max": 80, "aiable": true, "placeholder": "Ready to work with the best?" },
+        { "id": "ctaBody",     "label": "CTA supporting line","type": "text", "max": 160, "aiable": true },
+        { "id": "ctaButton",   "label": "CTA button text",    "type": "text", "max": 30, "placeholder": "Start a Conversation" }
+      ]
+    }
+  ]
+}

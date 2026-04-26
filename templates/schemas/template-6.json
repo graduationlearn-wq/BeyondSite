@@ -1,0 +1,237 @@
+{
+  "id": "template-6",
+  "name": "BFSI / Banking",
+  "extends": "_base",
+  "complianceReview": {
+    "title": "Regulatory content — please have your compliance team review before publishing.",
+    "body": "This template publishes RBI registration, deposit insurance (DICGC), and rate disclosures. AI-suggested copy is a starting draft only — final wording must match your actual licence category, your real DICGC eligibility, and current RBI/SEBI guidelines. Indicative rates shown publicly must be kept up to date and clearly marked as indicative."
+  },
+  "sections": [
+    {
+      "id": "compliance",
+      "title": "Compliance Bar",
+      "hint": {
+        "label": "The thin bar at the very top",
+        "description": "Regulator status and deposit-insurance copy sit in a slim strip above the nav. Required for most BFSI sites — visitors use it to confirm you're a real regulated entity.",
+        "mockupTarget": "header"
+      },
+      "fields": [
+        { "id": "regulatorLine",   "label": "Regulator line",       "type": "text", "max": 140, "placeholder": "Regulated Entity · RBI Registered · CIN: U65100MH2010PLC000000" },
+        { "id": "insuranceLine",   "label": "Deposit insurance line (optional)", "type": "text", "max": 140, "placeholder": "All deposits insured up to ₹5L by DICGC" },
+        { "id": "pmlaLinkLabel",   "label": "PMLA link label",      "type": "text", "max": 40, "placeholder": "PMLA Policy" },
+        { "id": "grievanceLinkLabel","label": "Grievance link label","type": "text", "max": 40, "placeholder": "Grievance Redressal" }
+      ]
+    },
+    {
+      "id": "hero",
+      "title": "Hero",
+      "aiable": true,
+      "hint": {
+        "label": "The big promise + live rates",
+        "description": "A three-line headline on the left, a Live Indicative Rates panel on the right. The rates panel is the thing visitors screenshot — keep the numbers current and realistic."
+      },
+      "fields": [
+        { "id": "heroEyebrow",         "label": "Eyebrow (e.g. Trusted Financial Partner Since 2008)", "type": "text", "max": 80, "aiable": true },
+        { "id": "heroHeadlineLead",    "label": "Headline — line 1", "type": "text", "max": 40, "placeholder": "Grow Your" },
+        { "id": "heroHeadlineBody",    "label": "Headline — line 2", "type": "text", "max": 40, "placeholder": "Wealth with" },
+        { "id": "heroHeadlineEmph",    "label": "Headline — emphasized line (italic)", "type": "text", "max": 40, "placeholder": "Confidence.", "aiable": true },
+        { "id": "heroSub",             "label": "Sub-headline",       "type": "textarea", "rows": 3, "max": 260, "aiable": true },
+        { "id": "heroCtaPrimary",      "label": "Primary CTA text",   "type": "text", "max": 30, "placeholder": "Open Account" },
+        { "id": "heroCtaSecondary",    "label": "Secondary CTA text", "type": "text", "max": 30, "placeholder": "Explore Services" },
+        {
+          "id": "heroTrustBadges", "label": "Trust badges (under hero)", "type": "repeater", "min": 0, "max": 6, "itemLabel": "Badge",
+          "item": [
+            { "id": "icon",  "label": "Icon (single emoji)", "type": "text", "max": 4, "placeholder": "🏛" },
+            { "id": "label", "label": "Label",               "type": "text", "max": 40, "placeholder": "RBI Regulated" }
+          ]
+        },
+        { "id": "ratesPanelTitle",  "label": "Rates panel title",  "type": "text", "max": 40, "placeholder": "Live Indicative Rates" },
+        { "id": "ratesPanelFooter", "label": "Rates panel footer (disclaimer)", "type": "text", "max": 200, "placeholder": "* Rates are indicative. Subject to change without notice. T&C apply." },
+        {
+          "id": "heroRates", "label": "Hero rate rows (3–5 rows)", "type": "repeater", "min": 0, "max": 5, "itemLabel": "Rate row",
+          "item": [
+            { "id": "name",   "label": "Product name", "type": "text", "max": 40, "placeholder": "Fixed Deposit" },
+            { "id": "detail", "label": "Detail (e.g. 12–24 months)", "type": "text", "max": 40 },
+            { "id": "rate",   "label": "Rate (e.g. 7.85%)", "type": "text", "max": 12 },
+            { "id": "tag",    "label": "Tag under rate (optional)", "type": "text", "max": 30, "placeholder": "p.a. compounding" }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "marquee",
+      "title": "Product Marquee",
+      "hint": {
+        "label": "A scrolling list of products",
+        "description": "A thin scrolling strip showing all the products you offer — FD, RD, Home Loan, Gold Loan, etc. Adds motion and makes the catalog feel bigger at a glance."
+      },
+      "fields": [
+        {
+          "id": "marqueeItems", "type": "repeater", "min": 3, "max": 12, "itemLabel": "Product",
+          "item": [
+            { "id": "text", "label": "Product name", "type": "text", "max": 40 }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "services",
+      "title": "Services",
+      "aiable": true,
+      "hint": {
+        "label": "Financial solutions grid",
+        "description": "Icon-led cards for each service — FD, loans, wealth, cards, insurance. The number in the top-right counts how many you offer. Tight benefit-first descriptions convert better than jargon."
+      },
+      "fields": [
+        { "id": "servicesLabel",    "label": "Section eyebrow",    "type": "text", "max": 40, "placeholder": "Our Services" },
+        { "id": "servicesHeadline", "label": "Section headline",   "type": "text", "max": 80, "placeholder": "Financial solutions for every life stage.", "aiable": true },
+        { "id": "servicesBody",     "label": "Section sub-copy",   "type": "textarea", "rows": 2, "max": 240, "aiable": true },
+        {
+          "id": "services", "type": "repeater", "min": 3, "max": 9, "itemLabel": "Service",
+          "item": [
+            { "id": "icon",  "label": "Icon (single emoji)", "type": "text", "max": 4, "placeholder": "🏦" },
+            { "id": "name",  "label": "Service name",        "type": "text", "required": true, "max": 60 },
+            { "id": "body",  "label": "Short description",   "type": "textarea", "rows": 2, "max": 220, "aiable": true }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "numbers",
+      "title": "Numbers Band",
+      "hint": {
+        "label": "The big stats band",
+        "description": "Four headline numbers — AUM, customers served, years in operation, renewal rate. Specific numbers beat vague superlatives every time for BFSI trust."
+      },
+      "fields": [
+        {
+          "id": "numberStats", "type": "repeater", "min": 2, "max": 4, "itemLabel": "Stat",
+          "item": [
+            { "id": "value",  "label": "Number (e.g. 25, 4, 15, 98)", "type": "text", "max": 10 },
+            { "id": "suffix", "label": "Suffix (e.g. B+, L+, yr, %)", "type": "text", "max": 6 },
+            { "id": "label",  "label": "Label",                        "type": "text", "max": 60 }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "about",
+      "title": "About / Heritage",
+      "aiable": true,
+      "hint": {
+        "label": "Your heritage & pillars",
+        "description": "The story goes on the left, your three pillars underneath. On the right you get a heritage card with four stats and a certifications row — ISO, RBI license, etc."
+      },
+      "fields": [
+        { "id": "aboutLabel",        "label": "Section eyebrow",  "type": "text", "max": 40, "placeholder": "Our Heritage" },
+        { "id": "aboutHeadlineLead", "label": "Headline — line 1","type": "text", "max": 40, "placeholder": "Stability you can" },
+        { "id": "aboutHeadlineEmph", "label": "Headline — line 2 (italic)", "type": "text", "max": 40, "placeholder": "bank on.", "aiable": true },
+        { "id": "aboutBody",         "label": "About body",        "type": "textarea", "rows": 5, "max": 650, "aiable": true },
+        {
+          "id": "pillars", "label": "Pillars (3 recommended)", "type": "repeater", "min": 0, "max": 4, "itemLabel": "Pillar",
+          "item": [
+            { "id": "title", "label": "Pillar title", "type": "text", "max": 40, "placeholder": "Regulatory Compliance" },
+            { "id": "body",  "label": "Pillar body",  "type": "textarea", "rows": 2, "max": 200, "aiable": true }
+          ]
+        },
+        {
+          "id": "heritageStats", "label": "Heritage stat card (4 stats)", "type": "repeater", "min": 0, "max": 4, "itemLabel": "Stat",
+          "item": [
+            { "id": "value",  "label": "Number",                 "type": "text", "max": 10 },
+            { "id": "suffix", "label": "Suffix (e.g. Yr, %, hr, ★)", "type": "text", "max": 6 },
+            { "id": "label",  "label": "Label",                   "type": "text", "max": 60 }
+          ]
+        },
+        {
+          "id": "certifications", "label": "Certifications & memberships", "type": "repeater", "min": 0, "max": 8, "itemLabel": "Certification",
+          "item": [
+            { "id": "label", "label": "Cert (e.g. RBI Licensed)", "type": "text", "max": 40 }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "rates",
+      "title": "Rates Tables",
+      "hint": {
+        "label": "The detailed rate boards",
+        "description": "Two side-by-side panels: deposit rates on the left, lending rates on the right. Tag rows as 'Best Rate' or 'Revised' to draw the eye — works exactly like in a bank branch."
+      },
+      "fields": [
+        { "id": "ratesLabel",    "label": "Section eyebrow",    "type": "text", "max": 40, "placeholder": "Indicative Rates" },
+        { "id": "ratesHeadlineLead", "label": "Headline — line 1", "type": "text", "max": 40, "placeholder": "Competitive rates," },
+        { "id": "ratesHeadlineEmph", "label": "Headline — line 2 (italic)", "type": "text", "max": 40, "placeholder": "every single day." },
+        { "id": "depositPanelTitle", "label": "Deposit panel title",  "type": "text", "max": 40, "placeholder": "Deposit Rates" },
+        { "id": "lendingPanelTitle", "label": "Lending panel title",  "type": "text", "max": 40, "placeholder": "Lending Rates" },
+        {
+          "id": "depositRates", "label": "Deposit rate rows", "type": "repeater", "min": 0, "max": 8, "itemLabel": "Deposit row",
+          "item": [
+            { "id": "name",   "label": "Product (e.g. Fixed Deposit · 1yr)", "type": "text", "max": 50 },
+            { "id": "detail", "label": "Detail (e.g. Non-callable)",           "type": "text", "max": 40 },
+            { "id": "rate",   "label": "Rate (e.g. 7.50%)",                    "type": "text", "max": 12 },
+            { "id": "tag",    "label": "Right-side tag (optional, e.g. Best Rate)", "type": "text", "max": 30 }
+          ]
+        },
+        {
+          "id": "lendingRates", "label": "Lending rate rows", "type": "repeater", "min": 0, "max": 8, "itemLabel": "Lending row",
+          "item": [
+            { "id": "name",   "label": "Product (e.g. Home Loan)",         "type": "text", "max": 50 },
+            { "id": "detail", "label": "Detail (e.g. Floating · RLLR linked)", "type": "text", "max": 40 },
+            { "id": "rate",   "label": "Rate (e.g. 8.45%)",                 "type": "text", "max": 12 },
+            { "id": "tag",    "label": "Right-side tag (optional, e.g. Popular)", "type": "text", "max": 30 }
+          ]
+        },
+        { "id": "ratesDisclaimer", "label": "Disclaimer line below the tables", "type": "textarea", "rows": 2, "max": 320, "aiable": true }
+      ]
+    },
+    {
+      "id": "testimonials",
+      "title": "Testimonials",
+      "hint": {
+        "label": "Real client stories",
+        "description": "Quotes from depositors, loan customers, wealth clients. The role line matters — 'Retired Principal, FD Customer' reassures far more than a generic title."
+      },
+      "fields": [
+        {
+          "id": "testimonials", "type": "repeater", "min": 0, "max": 6, "itemLabel": "Testimonial",
+          "item": [
+            { "id": "quote", "label": "Quote",        "type": "textarea", "rows": 3, "max": 320 },
+            { "id": "name",  "label": "Client name",  "type": "text", "max": 60 },
+            { "id": "role",  "label": "Role / context (e.g. FD Customer, Business Loan)", "type": "text", "max": 80 }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "cta",
+      "title": "CTA Band",
+      "aiable": true,
+      "hint": {
+        "label": "The final nudge",
+        "description": "A wide band inviting the visitor to open an account or speak to a relationship manager. One clear headline, one reassurance, one button."
+      },
+      "fields": [
+        { "id": "ctaHeadline", "label": "CTA headline",        "type": "text", "max": 80,  "aiable": true, "placeholder": "Ready to make your money work harder?" },
+        { "id": "ctaBody",     "label": "CTA supporting line", "type": "text", "max": 180, "aiable": true },
+        { "id": "ctaButton",   "label": "CTA button text",     "type": "text", "max": 30,  "placeholder": "Open Account" }
+      ]
+    },
+    {
+      "id": "contactPerks",
+      "title": "Contact Perks",
+      "hint": {
+        "label": "Why it's safe to enquire",
+        "description": "Four reassurance lines shown next to the consultation form — 'Response within 4 hours', 'KYC-compliant', 'Dedicated RM', etc. Reduces form abandonment."
+      },
+      "fields": [
+        {
+          "id": "contactPerks", "type": "repeater", "min": 0, "max": 6, "itemLabel": "Perk",
+          "item": [
+            { "id": "icon", "label": "Icon (single character or emoji)", "type": "text", "max": 4, "placeholder": "◷" },
+            { "id": "text", "label": "Perk text", "type": "text", "max": 120 }
+          ]
+        }
+      ]
+    }
+  ]
+}

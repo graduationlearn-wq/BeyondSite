@@ -1,103 +1,10 @@
-<%
-  // ── Read schema values from locals to avoid TDZ / undefined-ref errors ──
-  const L = locals || {};
-  const esc = (s) => (s == null ? '' : String(s));
-  const def = (v, d) => (v && String(v).trim() ? v : d);
 
-  const bn     = esc(L.businessName) || 'Noir Studio';
-  const tag    = esc(L.tagline)      || 'Design-led work that actually ships.';
-  const year   = esc(L.foundedYear)  || new Date().getFullYear();
-  const accent = L.primaryColor      || '#c9a84c';
-
-  const heroEyebrowV        = def(L.heroEyebrow, `Creative Excellence Since ${year}`);
-  const heroHeadlineLeadV   = def(L.heroHeadlineLead, 'Crafting');
-  const heroHeadlineAccentV = def(L.heroHeadlineAccent, bn);
-  const heroHeadlineTailV   = def(L.heroHeadlineTail, 'Stories.');
-  const heroSubV            = def(L.heroSub, tag);
-  const heroCtaPrimaryV     = def(L.heroCtaPrimary, 'Explore Services →');
-  const heroCtaSecondaryV   = def(L.heroCtaSecondary, 'Learn More');
-
-  const tickerList = (Array.isArray(L.tickerItems) && L.tickerItems.length)
-    ? L.tickerItems.map(t => esc(t && t.text)).filter(Boolean)
-    : ['Brand Systems','Digital Products','Strategy','Film & Motion','Identity','Campaigns'];
-  const tickItems = [...tickerList, ...tickerList, ...tickerList, ...tickerList];
-
-  const aboutLead  = def(L.aboutHeadlineLead, 'Built on trust,');
-  const aboutTail  = def(L.aboutHeadlineTail, 'driven by results.');
-  const aboutBodyV = def(L.aboutBody, `We're a boutique studio that partners with ambitious teams to build brands, products, and campaigns that travel. Everything starts with a conversation — and ends with work you'd hang on the wall.`);
-  const aboutTagsList = (Array.isArray(L.aboutTags) && L.aboutTags.length)
-    ? L.aboutTags.map(t => esc(t && t.text)).filter(Boolean)
-    : tickerList.slice(0, 5);
-  const aboutStatsList = (Array.isArray(L.aboutStats) && L.aboutStats.length)
-    ? L.aboutStats
-    : [
-        { value: '150', suffix: '', label: 'Projects Delivered' },
-        { value: '98',  suffix: '%', label: 'Client Satisfaction' },
-        { value: '12',  suffix: '',  label: 'Years of Experience' },
-        { value: '40',  suffix: '',  label: 'Global Partnerships' }
-      ];
-
-  const servicesLabelV    = def(L.servicesLabel, 'What We Offer');
-  const servicesHeadlineV = def(L.servicesHeadline, 'Premium services for premium results.');
-  const servicesMetaV     = def(L.servicesMeta, 'Every engagement begins with understanding. We tailor our approach to what your business genuinely needs.');
-  const servicesList = (Array.isArray(L.services) && L.services.length)
-    ? L.services
-    : [
-        { name: 'Brand Systems',      body: 'Identity, voice, and guidelines that scale from deck to building signage.' },
-        { name: 'Digital Products',   body: 'Websites and apps designed to convert, built to last, measured with care.' },
-        { name: 'Campaigns',          body: 'Go-to-market assets that get noticed and drive pipeline — across channels.' },
-        { name: 'Film & Motion',      body: 'Story-driven films, explainers, and motion systems that elevate the brand.' }
-      ];
-
-  const processLabelV    = def(L.processLabel, 'How We Work');
-  const processHeadlineV = def(L.processHeadline, 'A process built for precision.');
-  const processStepsList = (Array.isArray(L.processSteps) && L.processSteps.length === 4)
-    ? L.processSteps
-    : [
-        { title: 'Discovery', body: 'We immerse ourselves in your world — goals, market, and the outcomes that matter most.' },
-        { title: 'Strategy',  body: 'We craft a bespoke roadmap grounded in data and shaped by cross-industry experience.' },
-        { title: 'Execution', body: 'Our team executes with precision — transparent delivery, relentless focus on quality.' },
-        { title: 'Growth',    body: 'Beyond launch, we measure, refine, and optimize — the investment keeps compounding.' }
-      ];
-
-  const numberStatsList = (Array.isArray(L.numberStats) && L.numberStats.length)
-    ? L.numberStats
-    : [
-        { value: '500', suffix: '+',  label: 'Clients Served' },
-        { value: '99',  suffix: '%',  label: 'Retention Rate' },
-        { value: '12',  suffix: 'x',  label: 'Average ROI' },
-        { value: '24',  suffix: 'hr', label: 'Response Time' }
-      ];
-
-  const testimonialsList = (Array.isArray(L.testimonials) && L.testimonials.length)
-    ? L.testimonials
-    : [
-        { quote: `Working with ${bn} was a turning point. They didn't just deliver — they delivered confidence. Every decision informed, every output exceptional.`, name: 'Michael R.', role: 'Director of Operations' },
-        { quote: `The professionalism and attention to detail is rare. From strategy to execution, they were our partners every step of the way.`, name: 'Sarah L.', role: 'Founder & CEO' },
-        { quote: `In a sea of vendors, they stand apart. Every answer came before we asked the question. This is what partnership looks like.`, name: 'James K.', role: 'Head of Strategy' }
-      ];
-
-  function initialsOf(name) {
-    const parts = String(name || '').trim().split(/\s+/).filter(Boolean);
-    if (!parts.length) return '•';
-    return (parts[0][0] + (parts[1] ? parts[1][0] : '')).toUpperCase();
-  }
-
-  const ctaHeadlineV = def(L.ctaHeadline, 'Ready to work with the best?');
-  const ctaBodyV     = def(L.ctaBody,     `Join the clients who trust ${bn} to deliver — every time.`);
-  const ctaButtonV   = def(L.ctaButton,   'Start a Conversation →');
-
-  const emailV   = esc(L.email);
-  const phoneV   = esc(L.phone);
-  const addressV = esc(L.address);
-  const hoursV   = esc(L.hours);
-%>
 <!DOCTYPE html>
 <html lang="en">
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title><%= bn %> | <%= tag %></title>
+  <title>Noir Studio | Bold ideas, beautifully crafted.</title>
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link href="https://fonts.googleapis.com/css2?family=Syne:wght@400;700;800&family=Plus+Jakarta+Sans:wght@300;400;500;600&display=swap" rel="stylesheet">
   <style>
@@ -110,7 +17,7 @@
       --text:      #f0eee8;
       --muted:     rgba(240,238,232,.45);
       --dim:       rgba(240,238,232,.2);
-      --gold:      <%= accent %>;
+      --gold:      #c9a84c;
       --gold-lt:   #e8c96a;
       --gold-glow: rgba(201,168,76,.18);
       --teal:      #2dd4bf;
@@ -334,7 +241,7 @@
   <div class="orb orb-3"></div>
 
   <nav class="nav" id="nav">
-    <a href="#home" class="nav-logo"><%= bn.split(' ')[0] %><span><%= bn.split(' ').slice(1).join(' ') || '.' %></span></a>
+    <a href="#home" class="nav-logo">Noir<span>Studio</span></a>
     <ul class="nav-links">
       <li><a href="#about">About</a></li>
       <li><a href="#services">Services</a></li>
@@ -346,16 +253,16 @@
 
   <section id="home" class="hero">
     <div class="hero-inner">
-      <div class="hero-eyebrow"><%= heroEyebrowV %></div>
+      <div class="hero-eyebrow">Creative Excellence Since 2015</div>
       <h1 class="hero-headline">
-        <span class="line"><span class="word"><%= heroHeadlineLeadV %></span></span>
-        <span class="line"><span class="word highlight"><%= heroHeadlineAccentV %></span></span>
-        <span class="line"><span class="word"><%= heroHeadlineTailV %></span></span>
+        <span class="line"><span class="word">Crafting</span></span>
+        <span class="line"><span class="word highlight">Bold</span></span>
+        <span class="line"><span class="word">Stories.</span></span>
       </h1>
-      <p class="hero-sub"><%= heroSubV %></p>
+      <p class="hero-sub">A Brooklyn-based studio building enduring brands and the digital products that bring them to life. Trusted by 200+ companies, from venture-backed startups to legacy houses.</p>
       <div class="hero-actions">
-        <a href="#services" class="btn-gold"><%= heroCtaPrimaryV %></a>
-        <a href="#about" class="btn-outline"><%= heroCtaSecondaryV %></a>
+        <a href="#services" class="btn-gold">Explore Services</a>
+        <a href="#about" class="btn-outline">See Our Work</a>
       </div>
     </div>
     <div class="hero-scroll">
@@ -375,9 +282,63 @@
 
   <div class="ticker">
     <div class="ticker-track" id="ticker">
-      <% tickItems.forEach(function(p) { %>
-        <span class="ticker-item"><%= p %></span>
-      <% }); %>
+      
+        <span class="ticker-item">Brand Systems</span>
+      
+        <span class="ticker-item">Digital Products</span>
+      
+        <span class="ticker-item">Film &amp; Motion</span>
+      
+        <span class="ticker-item">Strategy</span>
+      
+        <span class="ticker-item">Editorial</span>
+      
+        <span class="ticker-item">Packaging</span>
+      
+        <span class="ticker-item">Type Design</span>
+      
+        <span class="ticker-item">Brand Systems</span>
+      
+        <span class="ticker-item">Digital Products</span>
+      
+        <span class="ticker-item">Film &amp; Motion</span>
+      
+        <span class="ticker-item">Strategy</span>
+      
+        <span class="ticker-item">Editorial</span>
+      
+        <span class="ticker-item">Packaging</span>
+      
+        <span class="ticker-item">Type Design</span>
+      
+        <span class="ticker-item">Brand Systems</span>
+      
+        <span class="ticker-item">Digital Products</span>
+      
+        <span class="ticker-item">Film &amp; Motion</span>
+      
+        <span class="ticker-item">Strategy</span>
+      
+        <span class="ticker-item">Editorial</span>
+      
+        <span class="ticker-item">Packaging</span>
+      
+        <span class="ticker-item">Type Design</span>
+      
+        <span class="ticker-item">Brand Systems</span>
+      
+        <span class="ticker-item">Digital Products</span>
+      
+        <span class="ticker-item">Film &amp; Motion</span>
+      
+        <span class="ticker-item">Strategy</span>
+      
+        <span class="ticker-item">Editorial</span>
+      
+        <span class="ticker-item">Packaging</span>
+      
+        <span class="ticker-item">Type Design</span>
+      
     </div>
   </div>
 
@@ -386,21 +347,36 @@
       <div class="about-grid">
         <div class="about-left reveal">
           <p class="section-label">Who We Are</p>
-          <h2 class="section-title"><%= aboutLead %><br><%= aboutTail %></h2>
-          <p class="about-body" style="margin-top:24px"><%= aboutBodyV %></p>
-          <% if (aboutTagsList.length) { %>
+          <h2 class="section-title">Built on trust,<br>driven by results.</h2>
+          <p class="about-body" style="margin-top:24px">Noir was founded in 2015 by Mira Chen and Daniel Park, both alumni of Pentagram. We started small — a single brand identity for a Brooklyn coffee roaster — and grew by referral. Today the studio is fifteen designers, three strategists, and a film team. We work in close partnership: small senior teams, no juniors learning on your dime, no handoffs to anyone you have not met. Every project starts with a week of listening before we draw a line.</p>
+          
           <div class="about-tags">
-            <% aboutTagsList.forEach(function(t){ %><span class="about-tag"><%= t %></span><% }); %>
+            <span class="about-tag">Brand Systems</span><span class="about-tag">Digital Products</span><span class="about-tag">Film</span><span class="about-tag">Strategy</span><span class="about-tag">Type</span><span class="about-tag">Packaging</span>
           </div>
-          <% } %>
+          
         </div>
         <div class="about-visual reveal reveal-delay-1">
-          <% aboutStatsList.slice(0,4).forEach(function(s){ %>
+          
           <div class="about-stat-card">
-            <div class="stat-num"><%= esc(s.value) %><%= esc(s.suffix) %></div>
-            <div class="stat-label"><%= esc(s.label) %></div>
+            <div class="stat-num">150+</div>
+            <div class="stat-label">Brands Shaped</div>
           </div>
-          <% }); %>
+          
+          <div class="about-stat-card">
+            <div class="stat-num">98%</div>
+            <div class="stat-label">Client Retention</div>
+          </div>
+          
+          <div class="about-stat-card">
+            <div class="stat-num">12x</div>
+            <div class="stat-label">Awards Won</div>
+          </div>
+          
+          <div class="about-stat-card">
+            <div class="stat-num">24hr</div>
+            <div class="stat-label">Avg. Response Time</div>
+          </div>
+          
         </div>
       </div>
     </div>
@@ -410,20 +386,55 @@
     <div class="container">
       <div class="services-header reveal">
         <div>
-          <p class="section-label"><%= servicesLabelV %></p>
-          <h2 class="section-title"><%= servicesHeadlineV %></h2>
+          <p class="section-label">What We Offer</p>
+          <h2 class="section-title">Premium services for premium results.</h2>
         </div>
-        <p class="services-meta"><%= servicesMetaV %></p>
+        <p class="services-meta">Boutique by design. We take on twelve clients a year and build deep relationships with each.</p>
       </div>
       <div class="services-grid">
-        <% servicesList.forEach(function(s, i){ %>
-        <div class="service-card reveal reveal-delay-<%= i % 3 %>">
-          <div class="service-num"><%= String(i+1).padStart(2,'0') %></div>
-          <h3 class="service-name"><%= esc(s.name) %></h3>
-          <p class="service-desc"><%= esc(s.body) %></p>
+        
+        <div class="service-card reveal reveal-delay-0">
+          <div class="service-num">01</div>
+          <h3 class="service-name">Brand Identity</h3>
+          <p class="service-desc">Logos, typography, color, voice — complete systems built to scale from a tweet to a billboard.</p>
           <span class="service-arrow">Learn more →</span>
         </div>
-        <% }); %>
+        
+        <div class="service-card reveal reveal-delay-1">
+          <div class="service-num">02</div>
+          <h3 class="service-name">Web &amp; Product</h3>
+          <p class="service-desc">Custom marketing sites and product UI shipped with engineering, not just thrown over the wall.</p>
+          <span class="service-arrow">Learn more →</span>
+        </div>
+        
+        <div class="service-card reveal reveal-delay-2">
+          <div class="service-num">03</div>
+          <h3 class="service-name">Strategy</h3>
+          <p class="service-desc">Naming, positioning, narrative — the structural work that makes great visuals possible.</p>
+          <span class="service-arrow">Learn more →</span>
+        </div>
+        
+        <div class="service-card reveal reveal-delay-0">
+          <div class="service-num">04</div>
+          <h3 class="service-name">Film &amp; Motion</h3>
+          <p class="service-desc">Brand films, product launches, and motion design for the moments that matter most.</p>
+          <span class="service-arrow">Learn more →</span>
+        </div>
+        
+        <div class="service-card reveal reveal-delay-1">
+          <div class="service-num">05</div>
+          <h3 class="service-name">Packaging</h3>
+          <p class="service-desc">Premium consumer packaging that earns its place on the shelf — and stays there.</p>
+          <span class="service-arrow">Learn more →</span>
+        </div>
+        
+        <div class="service-card reveal reveal-delay-2">
+          <div class="service-num">06</div>
+          <h3 class="service-name">Editorial</h3>
+          <p class="service-desc">Books, reports, and editorial systems for brands that have something worth saying.</p>
+          <span class="service-arrow">Learn more →</span>
+        </div>
+        
       </div>
     </div>
   </section>
@@ -431,33 +442,66 @@
   <section id="process" class="process section-pad">
     <div class="container">
       <div class="process-header reveal">
-        <p class="section-label"><%= processLabelV %></p>
-        <h2 class="section-title"><%= processHeadlineV %></h2>
+        <p class="section-label">How We Work</p>
+        <h2 class="section-title">A process built for precision.</h2>
       </div>
       <div class="process-steps">
-        <% processStepsList.slice(0,4).forEach(function(step, i){ %>
-        <div class="process-step reveal reveal-delay-<%= i %>">
-          <div class="step-circle"><%= String(i+1).padStart(2,'0') %></div>
-          <h3 class="step-title"><%= esc(step.title) %></h3>
-          <p class="step-desc"><%= esc(step.body) %></p>
+        
+        <div class="process-step reveal reveal-delay-0">
+          <div class="step-circle">01</div>
+          <h3 class="step-title">Discover</h3>
+          <p class="step-desc">We start with a week of listening — stakeholder interviews, brand audits, market mapping.</p>
         </div>
-        <% }); %>
+        
+        <div class="process-step reveal reveal-delay-1">
+          <div class="step-circle">02</div>
+          <h3 class="step-title">Strategy</h3>
+          <p class="step-desc">We sharpen the brief, name the audience, decide what the work needs to do — before drawing.</p>
+        </div>
+        
+        <div class="process-step reveal reveal-delay-2">
+          <div class="step-circle">03</div>
+          <h3 class="step-title">Execute</h3>
+          <p class="step-desc">Senior teams of two-to-four designers ship the work in tight, high-bandwidth sprints.</p>
+        </div>
+        
+        <div class="process-step reveal reveal-delay-3">
+          <div class="step-circle">04</div>
+          <h3 class="step-title">Grow</h3>
+          <p class="step-desc">We stay on as a creative partner — refining, extending, and scaling the system over years.</p>
+        </div>
+        
       </div>
     </div>
   </section>
 
   <div class="numbers">
     <div class="numbers-inner container" style="padding:0">
-      <% numberStatsList.slice(0,4).forEach(function(s, i){ %>
-      <div class="number-item reveal reveal-delay-<%= i %>">
-        <div class="number-val"><%= esc(s.value) %><%= esc(s.suffix) %></div>
-        <div class="number-label"><%= esc(s.label) %></div>
+      
+      <div class="number-item reveal reveal-delay-0">
+        <div class="number-val">500+</div>
+        <div class="number-label">Projects Shipped</div>
       </div>
-      <% }); %>
+      
+      <div class="number-item reveal reveal-delay-1">
+        <div class="number-val">99%</div>
+        <div class="number-label">Client Retention</div>
+      </div>
+      
+      <div class="number-item reveal reveal-delay-2">
+        <div class="number-val">24hr</div>
+        <div class="number-label">Response SLA</div>
+      </div>
+      
+      <div class="number-item reveal reveal-delay-3">
+        <div class="number-val">15+</div>
+        <div class="number-label">Years Together</div>
+      </div>
+      
     </div>
   </div>
 
-  <% if (testimonialsList.length) { %>
+  
   <section id="testimonials" class="testimonials section-pad">
     <div class="container">
       <div class="testi-header reveal">
@@ -465,30 +509,54 @@
         <h2 class="section-title">What our clients<br>say about us.</h2>
       </div>
       <div class="testi-grid">
-        <% testimonialsList.slice(0,3).forEach(function(t, i){ %>
-        <div class="testi-card reveal reveal-delay-<%= i %>">
+        
+        <div class="testi-card reveal reveal-delay-0">
           <div class="testi-stars">★★★★★</div>
-          <p class="testi-quote">"<%= esc(t.quote) %>"</p>
+          <p class="testi-quote">"Noir built us a brand we still grow into a decade later. Easily the best money we ever spent."</p>
           <div class="testi-author">
-            <div class="testi-avatar"><%= initialsOf(t.name) %></div>
+            <div class="testi-avatar">SL</div>
             <div>
-              <span class="testi-name"><%= esc(t.name) %></span>
-              <span class="testi-role"><%= esc(t.role) %></span>
+              <span class="testi-name">Sarah Lin</span>
+              <span class="testi-role">CEO · Helix Coffee</span>
             </div>
           </div>
         </div>
-        <% }); %>
+        
+        <div class="testi-card reveal reveal-delay-1">
+          <div class="testi-stars">★★★★★</div>
+          <p class="testi-quote">"Their strategy work changed how we talk about ourselves internally. The visuals were the bonus."</p>
+          <div class="testi-author">
+            <div class="testi-avatar">MW</div>
+            <div>
+              <span class="testi-name">Marcus Webb</span>
+              <span class="testi-role">Founder · Northbeam</span>
+            </div>
+          </div>
+        </div>
+        
+        <div class="testi-card reveal reveal-delay-2">
+          <div class="testi-stars">★★★★★</div>
+          <p class="testi-quote">"A genuine creative partnership — they care about our outcomes more than their portfolio."</p>
+          <div class="testi-author">
+            <div class="testi-avatar">PR</div>
+            <div>
+              <span class="testi-name">Priya Raman</span>
+              <span class="testi-role">VP Brand · Orbit Skincare</span>
+            </div>
+          </div>
+        </div>
+        
       </div>
     </div>
   </section>
-  <% } %>
+  
 
   <div class="cta-band reveal">
     <div class="cta-band-text">
-      <h2 class="cta-band-title"><%= ctaHeadlineV %></h2>
-      <p class="cta-band-sub"><%= ctaBodyV %></p>
+      <h2 class="cta-band-title">Ready to work with the best?</h2>
+      <p class="cta-band-sub">We take on twelve clients a year. If you have something worth doing properly, let us talk.</p>
     </div>
-    <a href="#contact" class="btn-gold"><%= ctaButtonV %></a>
+    <a href="#contact" class="btn-gold">Start a Conversation</a>
   </div>
 
   <section id="contact" class="contact section-pad">
@@ -499,30 +567,31 @@
           <h2 class="section-title">Let's build something remarkable.</h2>
           <p class="contact-desc">Every great project begins with a conversation. Tell us what you're working toward, and we'll tell you how we can help you get there — better and faster.</p>
           <div class="contact-details">
-            <% if (emailV) { %>
+            
             <div class="contact-detail">
               <div class="contact-detail-icon">✉</div>
-              <div class="contact-detail-text"><strong>Email</strong><%= emailV %></div>
+              <div class="contact-detail-text"><strong>Email</strong>hello@apexstudio.co</div>
             </div>
-            <% } %>
-            <% if (phoneV) { %>
+            
+            
             <div class="contact-detail">
               <div class="contact-detail-icon">☏</div>
-              <div class="contact-detail-text"><strong>Phone</strong><%= phoneV %></div>
+              <div class="contact-detail-text"><strong>Phone</strong>+1 (555) 123-4567</div>
             </div>
-            <% } %>
-            <% if (hoursV) { %>
+            
+            
             <div class="contact-detail">
               <div class="contact-detail-icon">◷</div>
-              <div class="contact-detail-text"><strong>Hours</strong><%= hoursV %></div>
+              <div class="contact-detail-text"><strong>Hours</strong>Mon–Fri · 9am–6pm PT</div>
             </div>
-            <% } %>
-            <% if (addressV) { %>
+            
+            
             <div class="contact-detail">
               <div class="contact-detail-icon">◉</div>
-              <div class="contact-detail-text"><strong>Studio</strong><%= addressV %></div>
+              <div class="contact-detail-text"><strong>Studio</strong>88 Market Street, Suite 400
+San Francisco, CA 94103</div>
             </div>
-            <% } %>
+            
           </div>
         </div>
         <div class="reveal reveal-delay-1">
@@ -536,7 +605,7 @@
               <label>Service of Interest</label>
               <select>
                 <option value="" disabled selected>Select a service</option>
-                <% servicesList.forEach(function(s){ %><option value="<%= esc(s.name) %>"><%= esc(s.name) %></option><% }); %>
+                <option value="Brand Identity">Brand Identity</option><option value="Web &amp; Product">Web &amp; Product</option><option value="Strategy">Strategy</option><option value="Film &amp; Motion">Film &amp; Motion</option><option value="Packaging">Packaging</option><option value="Editorial">Editorial</option>
                 <option value="other">Other / Multiple</option>
               </select>
             </div>
@@ -552,8 +621,8 @@
     <div class="container">
       <div class="footer-top">
         <div>
-          <div class="footer-brand-name"><%= bn.split(' ')[0] %><span><%= bn.split(' ').slice(1).join(' ') || '.' %></span></div>
-          <p class="footer-tagline"><%= tag %> — built on trust, delivered with excellence.</p>
+          <div class="footer-brand-name">Noir<span>Studio</span></div>
+          <p class="footer-tagline">Bold ideas, beautifully crafted. — built on trust, delivered with excellence.</p>
         </div>
         <div>
           <p class="footer-col-title">Navigation</p>
@@ -568,7 +637,7 @@
         <div>
           <p class="footer-col-title">Services</p>
           <ul class="footer-links">
-            <% servicesList.slice(0,5).forEach(function(s){ %><li><a href="#services"><%= esc(s.name) %></a></li><% }); %>
+            <li><a href="#services">Brand Identity</a></li><li><a href="#services">Web &amp; Product</a></li><li><a href="#services">Strategy</a></li><li><a href="#services">Film &amp; Motion</a></li><li><a href="#services">Packaging</a></li>
           </ul>
         </div>
         <div>
@@ -582,7 +651,7 @@
         </div>
       </div>
       <div class="footer-bottom">
-        <span>© <%= year %> <%= bn %>. All rights reserved.</span>
+        <span>© 2015 Noir Studio. All rights reserved.</span>
         <div class="footer-bottom-links">
           <a href="#">Privacy Policy</a>
           <a href="#">Terms of Service</a>

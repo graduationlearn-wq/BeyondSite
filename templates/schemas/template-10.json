@@ -1,0 +1,155 @@
+{
+  "id": "template-10",
+  "name": "Restaurant / Café",
+  "extends": "_base",
+  "sections": [
+    {
+      "id": "hero",
+      "title": "Hero",
+      "aiable": true,
+      "hint": {
+        "label": "The first plate visitors see",
+        "description": "A warm welcoming hero — italic accent on a key word, a short sub-line about cuisine and city, and two buttons (reserve + view menu). The 'open now' status under the buttons is a small live indicator that builds trust."
+      },
+      "fields": [
+        { "id": "heroEyebrow",      "label": "Eyebrow (e.g. Modern Italian · Mumbai · Since 2014)", "type": "text", "max": 80, "aiable": true },
+        { "id": "heroHeadlineLead", "label": "Headline · line 1", "type": "text", "max": 40, "placeholder": "Crafted with" },
+        { "id": "heroHeadlineEmph", "label": "Headline · italic accent line", "type": "text", "max": 40, "placeholder": "passion,", "aiable": true },
+        { "id": "heroHeadlineTail", "label": "Headline · line 3", "type": "text", "max": 40, "placeholder": "served with care." },
+        { "id": "heroSub",          "label": "Sub-headline", "type": "textarea", "rows": 3, "max": 280, "aiable": true },
+        { "id": "heroCtaPrimary",   "label": "Primary CTA text",   "type": "text", "max": 30, "placeholder": "Reserve a Table" },
+        { "id": "heroCtaSecondary", "label": "Secondary CTA text", "type": "text", "max": 30, "placeholder": "View Menu" },
+        { "id": "heroOpenStatus",   "label": "Open-status line (small live indicator)", "type": "text", "max": 80, "placeholder": "● Open now · Last seating 10:30 PM" }
+      ]
+    },
+    {
+      "id": "about",
+      "title": "About / Our Story",
+      "aiable": true,
+      "hint": {
+        "label": "Who's behind the kitchen",
+        "description": "The story of how the restaurant came to be — the chef, the philosophy, why this cuisine. A small chef-card on the right adds a personal face to the establishment."
+      },
+      "fields": [
+        { "id": "aboutLabel",        "label": "Section eyebrow",       "type": "text", "max": 40, "placeholder": "Our Story" },
+        { "id": "aboutHeadlineLead", "label": "Headline · line 1",      "type": "text", "max": 40, "placeholder": "A kitchen rooted in" },
+        { "id": "aboutHeadlineEmph", "label": "Headline · italic accent","type": "text", "max": 40, "placeholder": "tradition.", "aiable": true },
+        { "id": "aboutBody",         "label": "About body",              "type": "textarea", "rows": 6, "max": 800, "aiable": true },
+        { "id": "chefName",          "label": "Chef name",               "type": "text", "max": 60, "placeholder": "Chef Marco Russo" },
+        { "id": "chefRole",          "label": "Chef role / title",       "type": "text", "max": 60, "placeholder": "Executive Chef & Founder" },
+        { "id": "chefBio",           "label": "Chef short bio",          "type": "textarea", "rows": 3, "max": 320, "aiable": true }
+      ]
+    },
+    {
+      "id": "signatures",
+      "title": "Signature Dishes",
+      "aiable": true,
+      "hint": {
+        "label": "The dishes you're known for",
+        "description": "Three to six 'must-try' dishes shown larger than the rest of the menu. These are the photos people screenshot. Keep names evocative and descriptions specific — 'slow-braised lamb shank' beats 'tender meat'."
+      },
+      "fields": [
+        { "id": "signaturesLabel",    "label": "Section eyebrow",   "type": "text", "max": 40, "placeholder": "Signature Plates" },
+        { "id": "signaturesHeadline", "label": "Section headline",  "type": "text", "max": 80, "placeholder": "What we're known for.", "aiable": true },
+        {
+          "id": "signatureDishes", "label": "Signature dishes (3–6)", "type": "repeater", "min": 0, "max": 6, "itemLabel": "Dish",
+          "item": [
+            { "id": "name",  "label": "Dish name",    "type": "text", "required": true, "max": 60, "placeholder": "Truffle Tagliatelle" },
+            { "id": "body",  "label": "Description",  "type": "textarea", "rows": 2, "max": 200, "aiable": true },
+            { "id": "price", "label": "Price (optional, e.g. ₹680)", "type": "text", "max": 20 },
+            { "id": "tag",   "label": "Tag (optional, e.g. Chef's Pick / Vegan / Gluten-free)", "type": "text", "max": 30 }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "menu",
+      "title": "Full Menu (by category)",
+      "hint": {
+        "label": "The full bill of fare",
+        "description": "The full menu, grouped by category — Starters, Mains, Desserts, Drinks, etc. Each category is its own block. Inside each, list dishes with prices. Mark dietary options (V for vegan, S for spicy) for clarity."
+      },
+      "fields": [
+        { "id": "menuLabel",    "label": "Section eyebrow",  "type": "text", "max": 40, "placeholder": "Full Menu" },
+        { "id": "menuHeadline", "label": "Section headline", "type": "text", "max": 80, "placeholder": "Today's offerings." },
+        { "id": "menuIntro",    "label": "Sub-copy (optional)", "type": "textarea", "rows": 2, "max": 240 },
+        {
+          "id": "menuCategories", "label": "Menu categories (e.g. Starters / Mains / Desserts)", "type": "repeater", "min": 0, "max": 6, "itemLabel": "Category",
+          "item": [
+            { "id": "name",  "label": "Category name",        "type": "text", "max": 40, "placeholder": "Starters" },
+            { "id": "items", "label": "Items (one per line — Name | Price | Description | Tag)", "type": "textarea", "rows": 6, "max": 1400, "placeholder": "Bruschetta | ₹320 | Toasted ciabatta with heirloom tomato, basil, olive oil | V\nCarpaccio | ₹520 | Thinly sliced beef tenderloin, parmesan, rocket, lemon" }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "reviews",
+      "title": "Reviews & Press",
+      "hint": {
+        "label": "What critics & guests say",
+        "description": "Quotes from food critics, publications, or guest reviews. The publication name (or guest's location) makes them feel real. Star ratings optional."
+      },
+      "fields": [
+        {
+          "id": "reviews", "type": "repeater", "min": 0, "max": 6, "itemLabel": "Review",
+          "item": [
+            { "id": "quote",  "label": "Quote",                 "type": "textarea", "rows": 3, "max": 320 },
+            { "id": "source", "label": "Source (publication or guest name)", "type": "text", "max": 80 },
+            { "id": "role",   "label": "Role / location (e.g. Food Critic, Times of India)", "type": "text", "max": 80 },
+            { "id": "stars",  "label": "Star rating (optional, 1–5)", "type": "text", "max": 1, "placeholder": "5" }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "hours",
+      "title": "Hours of Service",
+      "hint": {
+        "label": "When the kitchen is open",
+        "description": "Day-by-day service hours. Customers check this before they call for a reservation. Mark days as closed if you're shut on certain days."
+      },
+      "fields": [
+        {
+          "id": "hoursList", "type": "repeater", "min": 1, "max": 7, "itemLabel": "Day",
+          "item": [
+            { "id": "day",    "label": "Day",    "type": "select", "options": ["Monday","Tuesday","Wednesday","Thursday","Friday","Saturday","Sunday"] },
+            { "id": "open",   "label": "Open",   "type": "text", "max": 12, "placeholder": "12:00 PM" },
+            { "id": "close",  "label": "Close",  "type": "text", "max": 12, "placeholder": "11:00 PM" },
+            { "id": "closed", "label": "Closed?","type": "select", "options": ["No","Yes"] }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "press",
+      "title": "Press / Awards Strip",
+      "hint": {
+        "label": "Recognition strip",
+        "description": "A thin band of awards, press mentions, or accolades — 'Featured in Vogue Living', 'TimeOut Best New Restaurant 2024'. Adds quick credibility."
+      },
+      "fields": [
+        {
+          "id": "pressItems", "type": "repeater", "min": 0, "max": 8, "itemLabel": "Press / award",
+          "item": [
+            { "id": "label", "label": "Label (e.g. 'Featured in Vogue Living')", "type": "text", "max": 50 }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "reservation",
+      "title": "Reservation Band",
+      "aiable": true,
+      "hint": {
+        "label": "The 'book a table' nudge",
+        "description": "A wide call-to-action band before the contact form — bold headline, one supporting line, one button. Action verbs work best ('Reserve', 'Book Now')."
+      },
+      "fields": [
+        { "id": "ctaHeadline",  "label": "Headline",        "type": "text", "max": 80, "aiable": true, "placeholder": "Hungry? Reserve your table." },
+        { "id": "ctaBody",      "label": "Supporting line", "type": "text", "max": 200, "aiable": true },
+        { "id": "ctaButton",    "label": "Button text",     "type": "text", "max": 30, "placeholder": "Book a Table" },
+        { "id": "ctaPhone",     "label": "Or call (phone shown next to button)", "type": "text", "max": 40, "placeholder": "+91 22 6789 4500" }
+      ]
+    }
+  ]
+}

@@ -6,6 +6,11 @@
     {
       "id": "brand",
       "title": "Brand",
+      "hint": {
+        "label": "Your business identity",
+        "description": "Your logo appears at the top of every page and in the footer. The founded year shows visitors you're established and trustworthy.",
+        "mockupTarget": "header"
+      },
       "fields": [
         { "id": "logo", "label": "Logo", "type": "image", "accept": "image/png,image/jpeg,image/svg+xml,image/webp", "maxSizeMB": 2, "uploadLabel": "Upload logo" },
         { "id": "foundedYear", "label": "Founded Year", "type": "text", "placeholder": "2024", "max": 4 }
@@ -14,6 +19,11 @@
     {
       "id": "contact",
       "title": "Contact",
+      "hint": {
+        "label": "How people reach you",
+        "description": "These details show up in the footer and contact area of your site. Visitors use them to call, email, or find your location.",
+        "mockupTarget": "footer"
+      },
       "fields": [
         { "id": "email",   "label": "Email",   "type": "text", "placeholder": "hello@example.com", "max": 120 },
         { "id": "phone",   "label": "Phone",   "type": "text", "max": 40 },
@@ -24,6 +34,11 @@
     {
       "id": "theme",
       "title": "Theme",
+      "hint": {
+        "label": "The overall feel of your site",
+        "description": "The accent color is used for buttons and highlights across the whole page. The brand tone tells the AI what voice to use when writing — professional, friendly, luxury, or casual.",
+        "mockupTarget": "page"
+      },
       "fields": [
         { "id": "primaryColor", "label": "Primary accent color", "type": "color", "default": "#c0392b" },
         { "id": "tone",         "label": "Brand tone",            "type": "select", "options": ["professional","friendly","luxury","casual"], "default": "professional" }

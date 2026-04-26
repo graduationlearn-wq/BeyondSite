@@ -1,0 +1,347 @@
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Voltline — The inbox that runs itself.</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link href="https://fonts.googleapis.com/css2?family=Sora:wght@500;600;700;800&family=Inter:wght@400;500;600&display=swap" rel="stylesheet">
+  <style>
+    *,*::before,*::after{margin:0;padding:0;box-sizing:border-box}
+    :root{
+      --bg:#fff;--soft:#f6f8fc;--ink:#0e1322;--muted:#5a6472;--border:#e4e8ef;
+      --blue:#2560e8;--violet:#7a5af8;--accent-soft:rgba(37,96,232,.1);
+      --display:'Sora',system-ui,sans-serif;
+      --body:'Inter',system-ui,sans-serif;
+      --radius:14px;
+    }
+    html{scroll-behavior:smooth}
+    body{font-family:var(--body);background:var(--bg);color:var(--ink);line-height:1.6;-webkit-font-smoothing:antialiased}
+    a{color:inherit;text-decoration:none}
+    .wrap{max-width:1200px;margin:0 auto;padding:0 28px}
+    h1,h2,h3,h4{font-family:var(--display);letter-spacing:-.02em}
+
+    .nav{position:sticky;top:0;z-index:500;background:rgba(255,255,255,.78);backdrop-filter:blur(16px);border-bottom:1px solid var(--border);height:68px;display:flex;align-items:center;justify-content:space-between;padding:0 28px}
+    .nav-logo{font-family:var(--display);font-weight:700;font-size:1.2rem;display:flex;align-items:center;gap:10px}
+    .nav-logo .mark{width:30px;height:30px;border-radius:8px;background:linear-gradient(135deg,var(--blue),var(--violet));display:grid;place-items:center;color:#fff;font-weight:700}
+    .nav-logo img{height:30px}
+    .nav-cta{display:flex;gap:10px;align-items:center}
+    .btn{display:inline-flex;align-items:center;gap:8px;padding:12px 22px;border-radius:12px;font-weight:600;font-size:.94rem;cursor:pointer;border:0;font-family:var(--body)}
+    .btn-primary{background:var(--ink);color:#fff}
+    .btn-blue{background:var(--blue);color:#fff}
+    .btn-outline{background:#fff;color:var(--ink);border:1px solid var(--border)}
+    .btn-ghost{background:transparent;color:var(--muted)}
+
+    .hero{padding:80px 0 70px;position:relative;overflow:hidden}
+    .hero::before{content:"";position:absolute;top:-200px;left:50%;transform:translateX(-50%);width:1100px;height:1100px;background:radial-gradient(closest-side,rgba(37,96,232,.12),transparent 70%);pointer-events:none}
+    .badge{display:inline-flex;align-items:center;gap:8px;background:var(--accent-soft);color:var(--blue);padding:6px 12px;border-radius:20px;font-size:.8rem;font-weight:600;margin-bottom:24px}
+    .hero h1{font-size:clamp(2.6rem,5.2vw,4.4rem);line-height:1.05;font-weight:700;max-width:900px;margin-left:auto;margin-right:auto}
+    .hero h1 em{font-style:normal;background:linear-gradient(135deg,var(--blue),var(--violet));-webkit-background-clip:text;background-clip:text;color:transparent}
+    .hero p.sub{font-size:1.12rem;color:var(--muted);max-width:640px;margin:22px auto 32px}
+    .hero-ctas{display:flex;gap:12px;flex-wrap:wrap;justify-content:center}
+    .hero-shot{margin-top:56px;border-radius:20px;overflow:hidden;box-shadow:0 40px 80px rgba(14,19,34,.18);border:1px solid var(--border);position:relative;background:#fff}
+    .hero-shot img{width:100%;display:block}
+    .hero-shot.fallback{aspect-ratio:16/8;background:linear-gradient(135deg,#0e1322,#1c2540);display:grid;place-items:center;color:rgba(255,255,255,.5);font-family:var(--display);font-size:1.2rem}
+
+    .logo-strip{padding:40px 0;border-top:1px solid var(--border);border-bottom:1px solid var(--border);background:var(--soft)}
+    .logo-strip .label{text-align:center;font-size:.8rem;color:var(--muted);letter-spacing:.2em;text-transform:uppercase;margin-bottom:20px}
+    .logo-strip-grid{display:flex;gap:48px;flex-wrap:wrap;justify-content:center;align-items:center;opacity:.7}
+    .logo-strip-grid img{height:26px;filter:grayscale(1) brightness(.5)}
+    .logo-strip-grid .logo-name{font-family:var(--display);font-weight:600;color:var(--muted);font-size:1.05rem}
+
+    section{padding:90px 0}
+    .sec-head{text-align:center;max-width:760px;margin:0 auto 56px}
+    .sec-head .eyebrow{display:inline-block;color:var(--blue);font-weight:600;font-size:.82rem;letter-spacing:.18em;text-transform:uppercase;margin-bottom:12px}
+    .sec-head h2{font-size:clamp(1.9rem,3.4vw,2.8rem);line-height:1.15}
+    .sec-head p{color:var(--muted);margin-top:14px}
+
+    .bento{display:grid;grid-template-columns:repeat(6,1fr);gap:20px}
+    .bento-card{background:#fff;border:1px solid var(--border);border-radius:18px;padding:30px;display:flex;flex-direction:column;gap:14px;transition:border-color .2s,transform .25s}
+    .bento-card:hover{border-color:var(--blue);transform:translateY(-3px)}
+    .bento-card h3{font-size:1.25rem;font-weight:700;color:var(--ink)}
+    .bento-card p{color:var(--muted);font-size:.97rem}
+    .bento-card .metric{margin-top:auto;background:var(--accent-soft);color:var(--blue);padding:6px 12px;border-radius:8px;font-size:.82rem;font-weight:600;width:fit-content}
+    .bento-card:nth-child(1){grid-column:span 4}
+    .bento-card:nth-child(2){grid-column:span 2}
+    .bento-card:nth-child(3){grid-column:span 2}
+    .bento-card:nth-child(4){grid-column:span 4}
+    .bento-card:nth-child(5){grid-column:span 3}
+    .bento-card:nth-child(6){grid-column:span 3}
+
+    .how{background:var(--soft)}
+    .how-grid{display:grid;grid-template-columns:repeat(4,1fr);gap:28px;counter-reset:step}
+    .step{background:#fff;border:1px solid var(--border);border-radius:16px;padding:28px;position:relative}
+    .step::before{counter-increment:step;content:counter(step,decimal-leading-zero);position:absolute;top:22px;right:22px;font-family:var(--display);font-size:1.4rem;color:var(--border);font-weight:700}
+    .step h3{font-size:1.12rem;margin-bottom:10px;font-weight:700}
+    .step p{color:var(--muted);font-size:.94rem}
+
+    .price-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(270px,1fr));gap:22px;max-width:1000px;margin:0 auto}
+    .plan{background:#fff;border:1px solid var(--border);border-radius:20px;padding:34px 28px;display:flex;flex-direction:column;gap:16px;position:relative}
+    .plan.popular{border:2px solid var(--blue);transform:scale(1.03);box-shadow:0 30px 60px rgba(37,96,232,.12)}
+    .plan.popular::before{content:"Most popular";position:absolute;top:-14px;left:50%;transform:translateX(-50%);background:var(--blue);color:#fff;padding:5px 16px;border-radius:20px;font-size:.72rem;font-weight:700;letter-spacing:.06em}
+    .plan h3{font-size:1.35rem;font-weight:700}
+    .plan .tg{color:var(--muted);font-size:.92rem}
+    .plan .price{margin:8px 0 4px;font-family:var(--display);font-size:2.6rem;font-weight:800;line-height:1}
+    .plan .price small{font-size:1rem;color:var(--muted);font-weight:500}
+    .plan ul{list-style:none;margin:10px 0;display:flex;flex-direction:column;gap:10px}
+    .plan ul li{padding-left:26px;position:relative;color:var(--muted);font-size:.94rem}
+    .plan ul li::before{content:"✓";position:absolute;left:0;color:var(--blue);font-weight:700}
+    .plan .btn{margin-top:auto;justify-content:center;width:100%}
+
+    .test-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(300px,1fr));gap:22px}
+    .test{background:#fff;border:1px solid var(--border);border-radius:16px;padding:28px;display:flex;flex-direction:column;gap:16px}
+    .test p{color:var(--ink);font-size:1.02rem}
+    .test-foot{display:flex;justify-content:space-between;align-items:center;padding-top:16px;border-top:1px solid var(--border)}
+    .test-meta strong{display:block;font-weight:700;font-size:.95rem}
+    .test-meta span{color:var(--muted);font-size:.85rem}
+    .metric-badge{background:var(--accent-soft);color:var(--blue);padding:6px 12px;border-radius:8px;font-weight:700;font-size:.82rem}
+
+    .cta-band{background:linear-gradient(135deg,#0e1322,#1c2540);color:#fff;border-radius:24px;padding:66px 40px;text-align:center;margin:0 28px}
+    .cta-band h2{font-size:clamp(1.8rem,3.2vw,2.8rem);color:#fff;margin-bottom:14px}
+    .cta-band p{color:rgba(255,255,255,.7);max-width:560px;margin:0 auto 28px}
+
+    footer{border-top:1px solid var(--border);padding:40px 28px;color:var(--muted);font-size:.88rem;display:flex;justify-content:space-between;flex-wrap:wrap;gap:16px}
+    footer .dot{width:8px;height:8px;border-radius:50%;background:#22c55e;display:inline-block;margin-right:6px}
+
+    @media (max-width:900px){
+      .bento{grid-template-columns:1fr}
+      .bento-card{grid-column:span 1 !important}
+      .how-grid{grid-template-columns:1fr 1fr}
+    }
+    @media (max-width:600px){ .how-grid{grid-template-columns:1fr} }
+  </style>
+</head>
+<body>
+
+<nav class="nav">
+  <a href="#" class="nav-logo">
+    <span class="mark">V</span>Voltline
+  </a>
+  <div class="nav-cta">
+    <a href="#pricing" class="btn btn-ghost">Pricing</a>
+    <a href="#contact" class="btn btn-outline">Book a demo</a>
+    <a href="#contact" class="btn btn-primary">Start free →</a>
+  </div>
+</nav>
+
+<section class="hero">
+  <div class="wrap" style="position:relative;text-align:center">
+    <span class="badge">✦ NEW · Series A raised</span>
+    <h1>Your inbox, answered. Automatically.</h1>
+    <p class="sub">Voltline reads every email, drafts the reply, files attachments, and books meetings — so you focus on work that matters, not the inbox.</p>
+    <div class="hero-ctas">
+      <a href="#contact" class="btn btn-blue">Start free →</a>
+      <a href="#contact" class="btn btn-outline">Book a demo</a>
+    </div>
+    <div class="hero-shot fallback">
+      Your product screenshot
+    </div>
+  </div>
+</section>
+
+
+<div class="logo-strip">
+  <div class="wrap">
+    <div class="label">Trusted by teams at</div>
+    <div class="logo-strip-grid">
+      
+        <span class="logo-name">Stripe</span>
+      
+        <span class="logo-name">Linear</span>
+      
+        <span class="logo-name">Notion</span>
+      
+        <span class="logo-name">Ramp</span>
+      
+        <span class="logo-name">Figma</span>
+      
+    </div>
+  </div>
+</div>
+
+
+<section id="features">
+  <div class="wrap">
+    <div class="sec-head">
+      <span class="eyebrow">Features</span>
+      <h2>Everything you need, nothing you don't.</h2>
+      <p>Focus on your product. We'll handle the plumbing.</p>
+    </div>
+    <div class="bento">
+      
+        <article class="bento-card">
+          <h3>Smart reply drafting</h3>
+          <p>Trained on your writing style — every draft sounds like you wrote it yourself.</p>
+          <span class="metric">2.4× faster</span>
+        </article>
+      
+        <article class="bento-card">
+          <h3>Meeting scheduler</h3>
+          <p>Shares your real-time calendar, holds tentative blocks, and books without back-and-forth.</p>
+          <span class="metric">Zero emails</span>
+        </article>
+      
+        <article class="bento-card">
+          <h3>Auto-file attachments</h3>
+          <p>Invoices, contracts, receipts — filed in the right Drive folder automatically.</p>
+          <span class="metric">100% coverage</span>
+        </article>
+      
+        <article class="bento-card">
+          <h3>Priority scoring</h3>
+          <p>Ranks every new message by urgency so you only open the ones that matter.</p>
+          <span class="metric">Top 12% only</span>
+        </article>
+      
+        <article class="bento-card">
+          <h3>Team inbox</h3>
+          <p>Shared queues, assignments, and status — built for small teams.</p>
+          
+        </article>
+      
+        <article class="bento-card">
+          <h3>Privacy-first</h3>
+          <p>SOC 2 Type II. On-device models for the sensitive stuff.</p>
+          <span class="metric">SOC 2 certified</span>
+        </article>
+      
+    </div>
+  </div>
+</section>
+
+<section class="how" id="how">
+  <div class="wrap">
+    <div class="sec-head">
+      <span class="eyebrow">How it works</span>
+      <h2>Up and running in four quick steps</h2>
+    </div>
+    <div class="how-grid">
+      
+        <div class="step">
+          <h3>Connect your inbox</h3>
+          <p>Gmail or Outlook, takes 30 seconds. We never store message contents.</p>
+        </div>
+      
+        <div class="step">
+          <h3>Voltline learns</h3>
+          <p>We analyze how you write and respond — tone, sign-off, length, quirks.</p>
+        </div>
+      
+        <div class="step">
+          <h3>Drafts appear</h3>
+          <p>Every new email comes with a draft reply you just review and send.</p>
+        </div>
+      
+        <div class="step">
+          <h3>You reclaim hours</h3>
+          <p>Typical user saves 8 hours a week on inbox management.</p>
+        </div>
+      
+    </div>
+  </div>
+</section>
+
+<section id="pricing">
+  <div class="wrap">
+    <div class="sec-head">
+      <span class="eyebrow">Pricing</span>
+      <h2>Simple, usage-based pricing</h2>
+      <p>Start free. Upgrade when you're ready.</p>
+    </div>
+    <div class="price-grid">
+      
+        <div class="plan">
+          <h3>Starter</h3>
+          <span class="tg">For solo operators</span>
+          <div class="price">
+            $19<small>/mo</small>
+          </div>
+          <span class="tg">Billed annually: $190/yr</span>
+          
+            <ul><li>Up to 500 emails/mo</li><li>Smart drafts</li><li>Community support</li></ul>
+          
+          <a href="#contact" class="btn btn-outline">Start free</a>
+        </div>
+      
+        <div class="plan popular">
+          <h3>Pro</h3>
+          <span class="tg">For founders who live in email</span>
+          <div class="price">
+            $49<small>/mo</small>
+          </div>
+          <span class="tg">Billed annually: $490/yr</span>
+          
+            <ul><li>Unlimited emails</li><li>Meeting scheduler</li><li>Auto-file attachments</li><li>Priority support</li></ul>
+          
+          <a href="#contact" class="btn btn-blue">Start free</a>
+        </div>
+      
+        <div class="plan">
+          <h3>Team</h3>
+          <span class="tg">For small teams</span>
+          <div class="price">
+            $149<small>/mo</small>
+          </div>
+          <span class="tg">Billed annually: $1490/yr</span>
+          
+            <ul><li>Everything in Pro</li><li>Shared inboxes</li><li>Team analytics</li><li>Dedicated success manager</li></ul>
+          
+          <a href="#contact" class="btn btn-outline">Contact sales</a>
+        </div>
+      
+    </div>
+  </div>
+</section>
+
+
+<section class="how">
+  <div class="wrap">
+    <div class="sec-head">
+      <span class="eyebrow">Customers</span>
+      <h2>Teams shipping with Voltline</h2>
+    </div>
+    <div class="test-grid">
+      
+        <div class="test">
+          <p>"Voltline saved me 10 hours a week. I cannot imagine email without it."</p>
+          <div class="test-foot">
+            <div class="test-meta">
+              <strong>Sarah Chen</strong>
+              <span>Founder · Helix</span>
+            </div>
+            <span class="metric-badge">10 hrs saved/wk</span>
+          </div>
+        </div>
+      
+        <div class="test">
+          <p>"Our support team triages 4× faster now. Game-changer for small teams."</p>
+          <div class="test-foot">
+            <div class="test-meta">
+              <strong>Marcus Lee</strong>
+              <span>Head of CX · Northbeam</span>
+            </div>
+            <span class="metric-badge">+312% throughput</span>
+          </div>
+        </div>
+      
+    </div>
+  </div>
+</section>
+
+
+<section id="contact">
+  <div class="cta-band">
+    <h2>Reclaim your inbox today</h2>
+    <p>Free for 14 days. No credit card. Cancel anytime.</p>
+    <a href="mailto:hello@apexstudio.co" class="btn btn-blue">Start free trial →</a>
+  </div>
+</section>
+
+<footer>
+  <div>© 2015 Voltline. All rights reserved.</div>
+  <div><span class="dot"></span>All systems operational · <a href="mailto:hello@apexstudio.co">hello@apexstudio.co</a></div>
+</footer>
+
+</body>
+</html>

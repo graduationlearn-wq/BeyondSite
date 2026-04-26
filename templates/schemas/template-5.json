@@ -7,6 +7,10 @@
       "id": "hero",
       "title": "Hero",
       "aiable": true,
+      "hint": {
+        "label": "The first thing visitors see",
+        "description": "The top banner of your homepage — big headline, quick intro, and two buttons. A strong headline here can turn a browser into a paying customer. Keep it clear: what you do and why they should pick you."
+      },
       "fields": [
         { "id": "heroEyebrow", "label": "Eyebrow (e.g. Trusted since 2015)", "type": "text", "max": 60, "aiable": true },
         { "id": "heroHeadline", "label": "Headline", "type": "text", "max": 90, "aiable": true },
@@ -20,6 +24,10 @@
     {
       "id": "trust",
       "title": "Trust Strip",
+      "hint": {
+        "label": "Quick credibility badges",
+        "description": "A thin strip just under the hero showing things like 'BBB Accredited' or '20+ years experience'. Builds trust in two seconds, before visitors even scroll."
+      },
       "fields": [
         {
           "id": "trustItems", "type": "repeater", "min": 2, "max": 6, "itemLabel": "Trust item",
@@ -33,6 +41,10 @@
       "id": "services",
       "title": "Services",
       "aiable": true,
+      "hint": {
+        "label": "What you actually offer",
+        "description": "A grid of cards showing each service you provide — icon, name, short description, and optional starting price. This is usually the most-clicked section on a local business site."
+      },
       "fields": [
         {
           "id": "services", "type": "repeater", "min": 2, "max": 8, "itemLabel": "Service",
@@ -48,6 +60,10 @@
     {
       "id": "numbers",
       "title": "Numbers / Stats",
+      "hint": {
+        "label": "Your proof in numbers",
+        "description": "Big bold stats like '500+ jobs completed' or '15 years serving Denver'. Four numbers max — this section rewards specifics over vague claims."
+      },
       "fields": [
         {
           "id": "stats", "type": "repeater", "min": 2, "max": 4, "itemLabel": "Stat",
@@ -62,6 +78,10 @@
       "id": "about",
       "title": "About",
       "aiable": true,
+      "hint": {
+        "label": "Your story",
+        "description": "Tell visitors who you are, how you started, and why you care. Also set the emergency line (shown as a small banner) and the neighborhoods you serve."
+      },
       "fields": [
         { "id": "aboutHeadline", "label": "About headline", "type": "text", "max": 90, "aiable": true },
         { "id": "aboutBody",     "label": "About body",     "type": "textarea", "rows": 5, "max": 600, "aiable": true },
@@ -75,6 +95,10 @@
     {
       "id": "hoursList",
       "title": "Business Hours (day-by-day)",
+      "hint": {
+        "label": "When you're open",
+        "description": "A day-by-day breakdown shown in a clean card on the site. Visitors check this before they call. Mark days as closed if you're not open that day."
+      },
       "fields": [
         {
           "id": "hoursList", "type": "repeater", "min": 1, "max": 7, "itemLabel": "Day",
@@ -90,6 +114,10 @@
     {
       "id": "testimonials",
       "title": "Testimonials",
+      "hint": {
+        "label": "What customers say",
+        "description": "Real quotes from real customers, with their name and the service they received. More persuasive than any marketing copy you could write yourself."
+      },
       "fields": [
         {
           "id": "testimonials", "type": "repeater", "min": 0, "max": 6, "itemLabel": "Review",
@@ -105,6 +133,10 @@
       "id": "faq",
       "title": "FAQ",
       "aiable": true,
+      "hint": {
+        "label": "Answer before they ask",
+        "description": "Common questions you get all the time. Reduces phone calls and helps visitors self-serve. Click the ✨ AI button to auto-generate questions from your business description."
+      },
       "fields": [
         {
           "id": "faqs", "type": "repeater", "min": 0, "max": 8, "itemLabel": "FAQ",

@@ -1,153 +1,10 @@
-<%
-  // ── SAFE LOCALS (Round C — schema-driven) ──────────────────
-  const L = locals || {};
-  const esc = (s) => (s == null ? '' : String(s));
-  const def = (v, d) => (v && String(v).trim() ? v : d);
-  const bn     = esc(L.businessName) || 'Acme Protocol';
-  const tagln  = esc(L.tagline)      || 'Trustless infrastructure for the next billion users.';
-  const accent = L.primaryColor      || '#00e5ff';
-  const year   = L.year              || new Date().getFullYear();
-  const tone   = esc(L.tone)         || 'professional';
 
-  // Hero
-  const heroBadgeV         = def(L.heroBadge, `${tone.charAt(0).toUpperCase()+tone.slice(1)} Protocol · Live`);
-  // Headline split — if not given, derive from businessName
-  const bnParts = bn.split(/\s+/);
-  const heroHeadlineLeadV   = def(L.heroHeadlineLead,   bnParts.length > 1 ? bnParts.slice(0,-1).join(' ') : bn);
-  const heroHeadlineAccentV = def(L.heroHeadlineAccent, bnParts.length > 1 ? bnParts.slice(-1)[0]          : '');
-  const heroSubV          = def(L.heroSub, tagln);
-  const heroCtaPrimaryV   = def(L.heroCtaPrimary,   'Explore Services');
-  const heroCtaSecondaryV = def(L.heroCtaSecondary, 'Learn More');
-  const heroPanelTitleV   = def(L.heroPanelTitle,   bn + ' · Dashboard');
-  const heroPortfolioChipsList = (Array.isArray(L.heroPortfolioChips) && L.heroPortfolioChips.length)
-    ? L.heroPortfolioChips
-    : [
-        { label:'Total Value',      value:'$284,910', change:'↑ +12.4%' },
-        { label:'24h Change',       value:'+$8,240',  change:'↑ +3.2%' },
-        { label:'Active Positions', value:'',          change:'Across portfolio' }
-      ];
-
-  // Ticker tokens
-  const tickerTokensList = (Array.isArray(L.tickerTokens) && L.tickerTokens.length)
-    ? L.tickerTokens.map(t => ({
-        symbol: esc(t.symbol),
-        price:  esc(t.price),
-        up:     (typeof t.up === 'string' ? t.up.toLowerCase() === 'up' : !!t.up),
-        change: esc(t.change)
-      }))
-    : [
-        { symbol:'BTC',   price:'$67,420', up:true,  change:'2.4%' },
-        { symbol:'ETH',   price:'$3,580',  up:true,  change:'1.8%' },
-        { symbol:'SOL',   price:'$184',    up:false, change:'0.9%' },
-        { symbol:'BNB',   price:'$412',    up:true,  change:'3.1%' },
-        { symbol:'ARB',   price:'$1.24',   up:true,  change:'5.2%' },
-        { symbol:'OP',    price:'$2.18',   up:true,  change:'1.4%' },
-        { symbol:'AVAX',  price:'$38.4',   up:true,  change:'2.8%' },
-        { symbol:'MATIC', price:'$0.92',   up:false, change:'1.2%' }
-      ];
-
-  // Services
-  const servicesLabelV     = def(L.servicesLabel, 'What We Build');
-  const servicesHeadline1V = def(L.servicesHeadline1, 'The full stack.');
-  const servicesHeadline2V = def(L.servicesHeadline2, 'Nothing missing.');
-  const servicesList = (Array.isArray(L.services) && L.services.length && (L.services[0].name || L.services[0].title))
-    ? L.services
-    : [
-        { name:'Smart Contract Engineering', body:'Audited, gas-optimised contracts shipped to mainnet — Solidity, Vyper, and Move.' },
-        { name:'Protocol Architecture',       body:'Modular system design that survives forks, upgrades, and adversarial conditions.' },
-        { name:'Wallet & Custody',            body:'Self-custody and MPC infrastructure with hardware-backed key management.' },
-        { name:'Cross-chain Routing',         body:'High-throughput bridge and routing infrastructure across 10+ chains.' },
-        { name:'Compliance & KYT',            body:'On-chain analytics and risk scoring built for regulated counterparties.' },
-        { name:'Developer Tooling',           body:'SDKs, CLIs, and dashboards that make protocol integration painless.' }
-      ];
-
-  // About manifesto
-  const aboutLabelV        = def(L.aboutLabel, 'Our Foundation');
-  const aboutQuoteLine1V   = def(L.aboutQuoteLine1,   "We didn't build");
-  const aboutQuoteAccent1V = def(L.aboutQuoteAccent1, bn + '.');
-  const aboutQuoteLine2V   = def(L.aboutQuoteLine2,   'to be another platform.');
-  const aboutQuoteLine3V   = def(L.aboutQuoteLine3,   'We built it to be the');
-  const aboutQuoteAccent2V = def(L.aboutQuoteAccent2, 'last one');
-  const aboutQuoteTailV    = def(L.aboutQuoteTail,    'you need.');
-  const aboutBodyV         = def(L.aboutBody || L.about,
-    'Founded by infrastructure engineers who shipped the first generation of on-chain primitives, the protocol exists to make decentralised systems boringly reliable. Our architecture is non-custodial by design, our contracts are audited and open-source, and our infrastructure is monitored on-chain around the clock. We don\'t ask you to trust us — we make trust unnecessary. Every team that builds on us gets direct access to protocol engineers, not a support ticket queue. That\'s the difference between a vendor and a partner.');
-  const aboutCtaTextV      = def(L.aboutCtaText, 'Start Building →');
-  const dataRowsList = (Array.isArray(L.dataRows) && L.dataRows.length)
-    ? L.dataRows
-    : [
-        { key:'Total value secured on-chain', value:'$2.4B+',   sub:'since protocol launch' },
-        { key:'Infrastructure uptime',         value:'99.98%',   sub:'zero critical incidents' },
-        { key:'Active developer teams',        value:'340+',     sub:'across ' + servicesList.length + ' verticals' },
-        { key:'Transaction finality',          value:'<400ms',   sub:'median, all chains' },
-        { key:'Countries with active users',   value:'80+',      sub:'global footprint' }
-      ];
-
-  // Chains marquee
-  const chainsLabelV = def(L.chainsLabel, 'Supported Chains');
-  const chainsList = (Array.isArray(L.chains) && L.chains.length)
-    ? L.chains
-    : [
-        { name:'Ethereum',  color:'#627eea' },
-        { name:'Bitcoin',   color:'#f7931a' },
-        { name:'Solana',    color:'#9945ff' },
-        { name:'Polygon',   color:'#8247e5' },
-        { name:'Arbitrum',  color:'#12aaff' },
-        { name:'Optimism',  color:'#ff0420' },
-        { name:'Avalanche', color:'#e84142' },
-        { name:'BNB Chain', color:'#f0b90b' },
-        { name:'Base',      color:'#0052ff' },
-        { name:'Cosmos',    color:'#6f7390' }
-      ];
-
-  // Testimonials
-  const testimonialsLabelV  = def(L.testimonialsLabel,  'Client Voices');
-  const testimonialsRatingV = def(L.testimonialsRating, 'Rated 4.9 across 200+ reviews');
-  const testimonialsList = (Array.isArray(L.testimonials) && L.testimonials.length)
-    ? L.testimonials
-    : [
-        { quote:'The infrastructure is rock solid. We processed over *$40M in transactions without a single failure.* This is what institutional-grade actually looks like.', name:'Karan N.', role:'CTO, ChainVault' },
-        { quote:'Switched from two other providers. The difference in *latency and reliability is night and day.* Our traders noticed within the first hour.',           name:'Riya J.',  role:'Head of Trading, NexFi' },
-        { quote:'Compliance-ready, developer-friendly, and *genuinely fast support.* Rare combination in this space. Building our next three products on their stack.',    name:'Alex L.',  role:'Founder, DeFiCore' }
-      ];
-
-  // CTA
-  const ctaEyebrowV        = def(L.ctaEyebrow, 'Ready to Ship');
-  const ctaHeadlineLeadV   = def(L.ctaHeadlineLead,   'Go on-chain with');
-  const ctaHeadlineAccentV = def(L.ctaHeadlineAccent, bn + '.');
-  const ctaBodyV           = def(L.ctaBody, 'Join the protocol trusted by leading teams across DeFi, CeFi, and Web3 infrastructure. No lengthy onboarding — deploy in days, not months.');
-  const ctaButtonV         = def(L.ctaButton, 'Start Building →');
-  const ctaNoteV           = def(L.ctaNote,   'Response within 24 hours · NDA available');
-
-  // Contact perks
-  const contactPerksList = (Array.isArray(L.contactPerks) && L.contactPerks.length)
-    ? L.contactPerks
-    : [
-        { text:'Response within 24 hours, guaranteed' },
-        { text:'NDA available on request' },
-        { text:'No commitment to start the conversation' },
-        { text:'Direct access to protocol engineers' }
-      ];
-
-  // Helpers
-  function initialsOf(name) {
-    if (!name) return '·';
-    const parts = String(name).trim().split(/\s+/);
-    const a = (parts[0] || '')[0] || '';
-    const b = (parts[1] || '')[0] || (parts[0] || '').slice(1,2);
-    return (a + b).toUpperCase();
-  }
-  // Render quote with *italic* phrases
-  function quoteHTML(q) {
-    return esc(q).replace(/\*([^*]+)\*/g, '<em>$1</em>');
-  }
-  const bnTickerSymbol = (bn.replace(/\s+/g,'').slice(0,4) || 'XXX').toUpperCase();
-%>
 <!DOCTYPE html>
 <html lang="en">
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title><%= bn %> — <%= tagln %></title>
+  <title>Helix Protocol — Trustless infrastructure for the next billion users.</title>
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link href="https://fonts.googleapis.com/css2?family=Syne:wght@400;600;700;800&family=Inter:wght@300;400;500&display=swap" rel="stylesheet">
   <style>
@@ -791,7 +648,7 @@
 
   <!-- NAV -->
   <nav class="nav" id="nav">
-    <a href="#top" class="nav-logo"><span class="ndot"></span><%= bn %></a>
+    <a href="#top" class="nav-logo"><span class="ndot"></span>Helix Protocol</a>
     <ul class="nav-links">
       <li><a href="#services">Services</a></li>
       <li><a href="#about">About</a></li>
@@ -804,15 +661,15 @@
   <section class="hw" id="top">
     <div class="hs">
       <div class="hh" id="hh">
-        <div class="hbadge"><span class="bpulse"></span><%= esc(heroBadgeV) %></div>
+        <div class="hbadge"><span class="bpulse"></span>Mainnet · Live</div>
         <h1 class="htitle">
-          <%= esc(heroHeadlineLeadV) %>
-          <% if (heroHeadlineAccentV) { %><span class="cy"><%= esc(heroHeadlineAccentV) %></span><% } %>
+          Trustless infra for
+          <span class="cy">Web3.</span>
         </h1>
-        <p class="hsub"><%= esc(heroSubV) %></p>
+        <p class="hsub">Multi-chain settlement, routing, and custody primitives — audited, open-source, and battle-tested across $2.4B+ in on-chain value.</p>
         <div class="hacts">
-          <a href="#services" class="btnp"><%= esc(heroCtaPrimaryV) %></a>
-          <a href="#about" class="btng"><%= esc(heroCtaSecondaryV) %></a>
+          <a href="#services" class="btnp">Read the Docs</a>
+          <a href="#about" class="btng">Talk to Engineers</a>
         </div>
       </div>
       <div class="pstage">
@@ -821,16 +678,22 @@
           <div class="cinner">
             <div class="ctool">
               <div class="cdots"><div class="cdot dr"></div><div class="cdot da"></div><div class="cdot dg"></div></div>
-              <span class="ctitle"><%= esc(heroPanelTitleV) %></span>
+              <span class="ctitle">Helix · Console</span>
               <span class="cbadge">● LIVE</span>
             </div>
             <div class="cbody">
               <div class="csidebar">
                 <span class="slabel">Navigation</span>
                 <div class="sitem act"><span class="sico">◈</span> Overview</div>
-                <% servicesList.slice(0,4).forEach(function(s,i){ %>
-                  <div class="sitem"><span class="sico"><%= ['◇','△','○','□'][i] || '·' %></span> <%= esc(s.name) %></div>
-                <% }); %>
+                
+                  <div class="sitem"><span class="sico">◇</span> Smart Contract Engineering</div>
+                
+                  <div class="sitem"><span class="sico">△</span> Protocol Architecture</div>
+                
+                  <div class="sitem"><span class="sico">○</span> Wallet &amp; Custody</div>
+                
+                  <div class="sitem"><span class="sico">□</span> Cross-chain Routing</div>
+                
                 <span class="slabel" style="margin-top:12px">Account</span>
                 <div class="sitem"><span class="sico">⬡</span> Portfolio</div>
                 <div class="sitem"><span class="sico">◎</span> Settings</div>
@@ -838,17 +701,25 @@
               <div class="cmain">
                 <p class="cmtitle">Portfolio Overview</p>
                 <div class="srow">
-                  <% heroPortfolioChipsList.forEach(function(c){
-                       var raw = esc(c.change);
-                       var dirCls = /↑|\+|up/i.test(raw) ? 'up' : (/↓|−|-|down/i.test(raw) ? 'dn' : '');
-                       var val = c.value ? esc(c.value) : String(servicesList.length);
-                  %>
+                  
                   <div class="schip">
-                    <div class="scl"><%= esc(c.label) %></div>
-                    <div class="scv"><%= val %></div>
-                    <div class="scd <%= dirCls %>" <% if (!dirCls) { %>style="color:var(--txm)"<% } %>><%= raw %></div>
+                    <div class="scl">Total Value Locked</div>
+                    <div class="scv">$2.4B+</div>
+                    <div class="scd up" >↑ +12.4% MoM</div>
                   </div>
-                  <% }); %>
+                  
+                  <div class="schip">
+                    <div class="scl">24h Settlement</div>
+                    <div class="scv">$48.2M</div>
+                    <div class="scd up" >↑ +3.2%</div>
+                  </div>
+                  
+                  <div class="schip">
+                    <div class="scl">Chains Supported</div>
+                    <div class="scv">12</div>
+                    <div class="scd " style="color:var(--txm)">Live across all</div>
+                  </div>
+                  
                 </div>
                 <div class="charea">
                   <svg class="chsvg" viewBox="0 0 600 160" preserveAspectRatio="none">
@@ -888,7 +759,7 @@
                 </div>
                 <div class="trow">
                   <div class="tico" style="background:rgba(0,229,255,.1);color:#00e5ff">◈</div>
-                  <div class="tnw"><span class="tn"><%= esc(bnParts[0] || bn) %></span><span class="ts"><%= bnTickerSymbol %></span></div>
+                  <div class="tnw"><span class="tn">Helix</span><span class="ts">HELI</span></div>
                   <div><div class="tp">$142.80</div><div class="tc up">+8.6%</div></div>
                 </div>
                 <div class="trow">
@@ -907,10 +778,40 @@
   <!-- TICKER -->
   <div class="ticker">
     <div class="ttrack" id="ttrack">
-      <% var tkrd=[...tickerTokensList,...tickerTokensList]; %>
-      <% tkrd.forEach(function(t){ %>
-        <span class="titem"><span class="tsym"><%= esc(t.symbol) %></span><span class="tprice"><%= esc(t.price) %></span><span class="<%= t.up?'tup':'tdown' %>"><%= t.up?'↑':'↓' %><%= esc(t.change) %></span></span>
-      <% }); %>
+      
+      
+        <span class="titem"><span class="tsym">BTC</span><span class="tprice">$67,420</span><span class="tup">↑2.4%</span></span>
+      
+        <span class="titem"><span class="tsym">ETH</span><span class="tprice">$3,580</span><span class="tup">↑1.8%</span></span>
+      
+        <span class="titem"><span class="tsym">SOL</span><span class="tprice">$184</span><span class="tdown">↓0.9%</span></span>
+      
+        <span class="titem"><span class="tsym">BNB</span><span class="tprice">$412</span><span class="tup">↑3.1%</span></span>
+      
+        <span class="titem"><span class="tsym">ARB</span><span class="tprice">$1.24</span><span class="tup">↑5.2%</span></span>
+      
+        <span class="titem"><span class="tsym">OP</span><span class="tprice">$2.18</span><span class="tup">↑1.4%</span></span>
+      
+        <span class="titem"><span class="tsym">AVAX</span><span class="tprice">$38.4</span><span class="tup">↑2.8%</span></span>
+      
+        <span class="titem"><span class="tsym">MATIC</span><span class="tprice">$0.92</span><span class="tdown">↓1.2%</span></span>
+      
+        <span class="titem"><span class="tsym">BTC</span><span class="tprice">$67,420</span><span class="tup">↑2.4%</span></span>
+      
+        <span class="titem"><span class="tsym">ETH</span><span class="tprice">$3,580</span><span class="tup">↑1.8%</span></span>
+      
+        <span class="titem"><span class="tsym">SOL</span><span class="tprice">$184</span><span class="tdown">↓0.9%</span></span>
+      
+        <span class="titem"><span class="tsym">BNB</span><span class="tprice">$412</span><span class="tup">↑3.1%</span></span>
+      
+        <span class="titem"><span class="tsym">ARB</span><span class="tprice">$1.24</span><span class="tup">↑5.2%</span></span>
+      
+        <span class="titem"><span class="tsym">OP</span><span class="tprice">$2.18</span><span class="tup">↑1.4%</span></span>
+      
+        <span class="titem"><span class="tsym">AVAX</span><span class="tprice">$38.4</span><span class="tup">↑2.8%</span></span>
+      
+        <span class="titem"><span class="tsym">MATIC</span><span class="tprice">$0.92</span><span class="tdown">↓1.2%</span></span>
+      
     </div>
   </div>
 
@@ -920,92 +821,225 @@
   <section id="services" class="services-wrap">
     <div class="services-header reveal">
       <div class="services-hed-left">
-        <p class="services-label"><%= esc(servicesLabelV) %></p>
-        <h2 class="services-title"><%= esc(servicesHeadline1V) %><br><%= esc(servicesHeadline2V) %></h2>
+        <p class="services-label">What We Build</p>
+        <h2 class="services-title">The full stack.<br>Nothing missing.</h2>
       </div>
-      <div class="services-count"><%= servicesList.length < 10 ? '0' : '' %><%= servicesList.length %></div>
+      <div class="services-count">06</div>
     </div>
     <ul class="svc-list">
-      <% servicesList.forEach(function(s, i){ var n = String(i+1).padStart(2,'0'); %>
+      
       <li class="svc-item reveal">
-        <span class="svc-num"><%= n %></span>
-        <span class="svc-name"><%= esc(s.name) %></span>
+        <span class="svc-num">01</span>
+        <span class="svc-name">Smart Contract Engineering</span>
         <div class="svc-right">
-          <span class="svc-desc"><%= esc(s.body || ('Enterprise-grade ' + esc(s.name).toLowerCase() + ' built for speed and scale.')) %></span>
+          <span class="svc-desc">Audited, gas-optimised contracts in Solidity, Vyper, and Move — shipped to mainnet with full test coverage.</span>
           <span class="svc-arrow">↗</span>
         </div>
       </li>
-      <% }); %>
+      
+      <li class="svc-item reveal">
+        <span class="svc-num">02</span>
+        <span class="svc-name">Protocol Architecture</span>
+        <div class="svc-right">
+          <span class="svc-desc">Modular system design that survives forks, upgrades, and adversarial conditions — without forklift migrations.</span>
+          <span class="svc-arrow">↗</span>
+        </div>
+      </li>
+      
+      <li class="svc-item reveal">
+        <span class="svc-num">03</span>
+        <span class="svc-name">Wallet &amp; Custody</span>
+        <div class="svc-right">
+          <span class="svc-desc">Self-custody and MPC infrastructure with hardware-backed key management for institutional desks.</span>
+          <span class="svc-arrow">↗</span>
+        </div>
+      </li>
+      
+      <li class="svc-item reveal">
+        <span class="svc-num">04</span>
+        <span class="svc-name">Cross-chain Routing</span>
+        <div class="svc-right">
+          <span class="svc-desc">High-throughput bridge and routing infrastructure across 12 chains with sub-second median finality.</span>
+          <span class="svc-arrow">↗</span>
+        </div>
+      </li>
+      
+      <li class="svc-item reveal">
+        <span class="svc-num">05</span>
+        <span class="svc-name">Compliance &amp; KYT</span>
+        <div class="svc-right">
+          <span class="svc-desc">On-chain analytics, address screening, and risk scoring built for regulated counterparties.</span>
+          <span class="svc-arrow">↗</span>
+        </div>
+      </li>
+      
+      <li class="svc-item reveal">
+        <span class="svc-num">06</span>
+        <span class="svc-name">Developer Tooling</span>
+        <div class="svc-right">
+          <span class="svc-desc">TypeScript SDKs, REST and gRPC APIs, and observability dashboards that make integration painless.</span>
+          <span class="svc-arrow">↗</span>
+        </div>
+      </li>
+      
     </ul>
   </section>
 
   <!-- ABOUT — manifesto -->
   <section id="about" class="about-wrap">
     <div class="about-manifesto">
-      <p class="manifesto-label reveal"><%= esc(aboutLabelV) %></p>
+      <p class="manifesto-label reveal">Our Foundation</p>
       <h2 class="manifesto-quote reveal rd1">
-        <%= esc(aboutQuoteLine1V) %> <span class="cy"><%= esc(aboutQuoteAccent1V) %></span><br>
-        <span class="dim"><%= esc(aboutQuoteLine2V) %></span><br>
-        <%= esc(aboutQuoteLine3V) %> <span class="cy"><%= esc(aboutQuoteAccent2V) %></span> <%= esc(aboutQuoteTailV) %>
+        We didn&#39;t build <span class="cy">Helix.</span><br>
+        <span class="dim">to be another platform.</span><br>
+        We built it to be the <span class="cy">last one</span> you need.
       </h2>
     </div>
     <div class="about-body-grid">
       <div class="about-text reveal">
-        <% String(aboutBodyV).split(/\n\s*\n/).forEach(function(para, i){ %>
-          <p<% if (i>0) { %> style="margin-top:20px"<% } %>><%= esc(para) %></p>
-        <% }); %>
-        <% if (aboutCtaTextV) { %>
-          <a href="#contact" class="btnp" style="margin-top:36px;display:inline-block;border-radius:8px"><%= esc(aboutCtaTextV) %></a>
-        <% } %>
+        
+          <p>Helix Protocol was founded in 2021 by two infrastructure engineers — one from Coinbase Custody, one from Polygon — who watched the on-chain ecosystem fragment into incompatible silos and decided to build the connective tissue that should have existed all along.</p>
+        
+          <p style="margin-top:20px">Our architecture is non-custodial by design, our contracts are audited by Trail of Bits and OpenZeppelin, and our infrastructure is monitored on-chain around the clock. We do not ask you to trust us — we make trust unnecessary. Every contract is open-source, every upgrade is timelocked, every parameter is publicly governed.</p>
+        
+          <p style="margin-top:20px">Every team that builds on Helix gets direct access to protocol engineers, not a support ticket queue. That is the difference between a vendor and a partner — and that is the only kind of company we know how to be.</p>
+        
+        
+          <a href="#contact" class="btnp" style="margin-top:36px;display:inline-block;border-radius:8px">Start Building →</a>
+        
       </div>
       <div class="about-data reveal rd1">
-        <% dataRowsList.forEach(function(r){ %>
+        
         <div class="data-row">
-          <span class="data-key"><%= esc(r.key) %></span>
-          <div><div class="data-val"><%= esc(r.value) %></div><% if (r.sub) { %><span class="data-sub"><%= esc(r.sub) %></span><% } %></div>
+          <span class="data-key">Total value secured on-chain</span>
+          <div><div class="data-val">$2.4B+</div><span class="data-sub">since protocol launch in 2021</span></div>
         </div>
-        <% }); %>
+        
+        <div class="data-row">
+          <span class="data-key">Infrastructure uptime</span>
+          <div><div class="data-val">99.98%</div><span class="data-sub">zero critical incidents to date</span></div>
+        </div>
+        
+        <div class="data-row">
+          <span class="data-key">Active developer teams</span>
+          <div><div class="data-val">340+</div><span class="data-sub">across DeFi, CeFi, and infra</span></div>
+        </div>
+        
+        <div class="data-row">
+          <span class="data-key">Transaction finality</span>
+          <div><div class="data-val">&lt;400ms</div><span class="data-sub">median, all supported chains</span></div>
+        </div>
+        
+        <div class="data-row">
+          <span class="data-key">Countries with active users</span>
+          <div><div class="data-val">80+</div><span class="data-sub">global protocol footprint</span></div>
+        </div>
+        
       </div>
     </div>
   </section>
 
   <!-- CHAIN MARQUEE -->
   <div class="chains-wrap">
-    <div class="chains-label"><%= esc(chainsLabelV) %></div>
+    <div class="chains-label">Supported Chains</div>
     <div class="chains-track">
-      <% var chainsDouble = [...chainsList,...chainsList]; %>
-      <% chainsDouble.forEach(function(c){ %>
-        <span class="chain-item"><span class="chain-dot" style="background:<%= esc(c.color || '#888') %>"></span><%= esc(c.name) %></span>
-      <% }); %>
+      
+      
+        <span class="chain-item"><span class="chain-dot" style="background:#627eea"></span>Ethereum</span>
+      
+        <span class="chain-item"><span class="chain-dot" style="background:#f7931a"></span>Bitcoin</span>
+      
+        <span class="chain-item"><span class="chain-dot" style="background:#9945ff"></span>Solana</span>
+      
+        <span class="chain-item"><span class="chain-dot" style="background:#8247e5"></span>Polygon</span>
+      
+        <span class="chain-item"><span class="chain-dot" style="background:#12aaff"></span>Arbitrum</span>
+      
+        <span class="chain-item"><span class="chain-dot" style="background:#ff0420"></span>Optimism</span>
+      
+        <span class="chain-item"><span class="chain-dot" style="background:#e84142"></span>Avalanche</span>
+      
+        <span class="chain-item"><span class="chain-dot" style="background:#f0b90b"></span>BNB Chain</span>
+      
+        <span class="chain-item"><span class="chain-dot" style="background:#0052ff"></span>Base</span>
+      
+        <span class="chain-item"><span class="chain-dot" style="background:#6f7390"></span>Cosmos</span>
+      
+        <span class="chain-item"><span class="chain-dot" style="background:#627eea"></span>Ethereum</span>
+      
+        <span class="chain-item"><span class="chain-dot" style="background:#f7931a"></span>Bitcoin</span>
+      
+        <span class="chain-item"><span class="chain-dot" style="background:#9945ff"></span>Solana</span>
+      
+        <span class="chain-item"><span class="chain-dot" style="background:#8247e5"></span>Polygon</span>
+      
+        <span class="chain-item"><span class="chain-dot" style="background:#12aaff"></span>Arbitrum</span>
+      
+        <span class="chain-item"><span class="chain-dot" style="background:#ff0420"></span>Optimism</span>
+      
+        <span class="chain-item"><span class="chain-dot" style="background:#e84142"></span>Avalanche</span>
+      
+        <span class="chain-item"><span class="chain-dot" style="background:#f0b90b"></span>BNB Chain</span>
+      
+        <span class="chain-item"><span class="chain-dot" style="background:#0052ff"></span>Base</span>
+      
+        <span class="chain-item"><span class="chain-dot" style="background:#6f7390"></span>Cosmos</span>
+      
     </div>
   </div>
 
   <!-- TESTIMONIALS — editorial pull quotes -->
   <section id="testimonials" class="testi-wrap">
     <div class="testi-top reveal">
-      <p class="testi-label"><%= esc(testimonialsLabelV) %></p>
-      <% if (testimonialsRatingV) { %>
+      <p class="testi-label">Client Voices</p>
+      
       <div class="testi-stars-row">
         <span class="star-gold">★★★★★</span>
-        &nbsp;<%= esc(testimonialsRatingV) %>
+        &nbsp;Rated 4.9 across 200+ developer teams
       </div>
-      <% } %>
+      
     </div>
     <div class="testi-stack">
-      <% testimonialsList.forEach(function(t, i){ %>
-      <div class="testi-entry reveal<% if (i>0) { %> rd<%= Math.min(i,3) %><% } %>">
+      
+      <div class="testi-entry reveal">
         <div class="testi-meta">
-          <div class="testi-avatar"><%= initialsOf(t.name) %></div>
-          <span class="testi-name"><%= esc(t.name) %></span>
-          <span class="testi-role"><%= esc(t.role) %></span>
+          <div class="testi-avatar">KN</div>
+          <span class="testi-name">Karan Nair</span>
+          <span class="testi-role">CTO · ChainVault</span>
           <span class="testi-rating">★★★★★</span>
         </div>
         <div class="testi-quote-wrap">
           <span class="testi-mark">"</span>
-          <p class="testi-quote">"<%- quoteHTML(t.quote) %>"</p>
+          <p class="testi-quote">"The infrastructure is rock solid. We processed over <em>$40M in settlements without a single failure</em> in our first quarter on Helix. This is what institutional-grade actually looks like."</p>
         </div>
       </div>
-      <% }); %>
+      
+      <div class="testi-entry reveal rd1">
+        <div class="testi-meta">
+          <div class="testi-avatar">RJ</div>
+          <span class="testi-name">Riya Joshi</span>
+          <span class="testi-role">Head of Trading · NexFi</span>
+          <span class="testi-rating">★★★★★</span>
+        </div>
+        <div class="testi-quote-wrap">
+          <span class="testi-mark">"</span>
+          <p class="testi-quote">"Switched from two other providers to Helix. The difference in <em>latency and reliability is night and day.</em> Our market-makers noticed within the first hour of cutover."</p>
+        </div>
+      </div>
+      
+      <div class="testi-entry reveal rd2">
+        <div class="testi-meta">
+          <div class="testi-avatar">AL</div>
+          <span class="testi-name">Alex Lin</span>
+          <span class="testi-role">Founder · DeFiCore</span>
+          <span class="testi-rating">★★★★★</span>
+        </div>
+        <div class="testi-quote-wrap">
+          <span class="testi-mark">"</span>
+          <p class="testi-quote">"Compliance-ready, developer-friendly, and <em>genuinely fast support from actual engineers.</em> Rare combination in this space. Building our next three products on their stack."</p>
+        </div>
+      </div>
+      
     </div>
   </section>
 
@@ -1014,13 +1048,13 @@
     <div class="cta-mesh"></div>
     <div class="cta-inner">
       <div class="cta-text-block">
-        <p class="cta-eyebrow"><%= esc(ctaEyebrowV) %></p>
-        <h2 class="cta-title"><%= esc(ctaHeadlineLeadV) %><br><span><%= esc(ctaHeadlineAccentV) %></span></h2>
-        <p class="cta-sub"><%= esc(ctaBodyV) %></p>
+        <p class="cta-eyebrow">Ready to Ship</p>
+        <h2 class="cta-title">Go on-chain with<br><span>Helix.</span></h2>
+        <p class="cta-sub">Join the protocol trusted by 340+ teams across DeFi, CeFi, and Web3 infrastructure. No lengthy onboarding — deploy to testnet in days, mainnet in weeks.</p>
       </div>
       <div class="cta-actions">
-        <a href="#contact" class="btnp"><%= esc(ctaButtonV) %></a>
-        <% if (ctaNoteV) { %><span class="cta-note"><%= esc(ctaNoteV) %></span><% } %>
+        <a href="#contact" class="btnp">Start Building →</a>
+        <span class="cta-note">Response within 24 hours · NDA available</span>
       </div>
     </div>
   </div>
@@ -1035,9 +1069,15 @@
           <p class="contact-body">Tell us what you're working on. Our team responds to all serious enquiries within one business day.</p>
         </div>
         <div class="contact-perks">
-          <% contactPerksList.forEach(function(p){ %>
-          <div class="cperk"><span class="cperk-dot"></span><%= esc(p.text || p) %></div>
-          <% }); %>
+          
+          <div class="cperk"><span class="cperk-dot"></span>Response within 24 hours, guaranteed</div>
+          
+          <div class="cperk"><span class="cperk-dot"></span>NDA available on request</div>
+          
+          <div class="cperk"><span class="cperk-dot"></span>No commitment to start the conversation</div>
+          
+          <div class="cperk"><span class="cperk-dot"></span>Direct access to protocol engineers</div>
+          
         </div>
       </div>
       <div class="contact-right">
@@ -1051,7 +1091,7 @@
             <label>Service of Interest</label>
             <select>
               <option value="" disabled selected>Select a service</option>
-              <% servicesList.forEach(function(s){ %><option value="<%= esc(s.name) %>"><%= esc(s.name) %></option><% }); %>
+              <option value="Smart Contract Engineering">Smart Contract Engineering</option><option value="Protocol Architecture">Protocol Architecture</option><option value="Wallet &amp; Custody">Wallet &amp; Custody</option><option value="Cross-chain Routing">Cross-chain Routing</option><option value="Compliance &amp; KYT">Compliance &amp; KYT</option><option value="Developer Tooling">Developer Tooling</option>
               <option value="other">Other / Multiple</option>
             </select>
           </div>
@@ -1065,8 +1105,8 @@
   <!-- FOOTER -->
   <footer class="footer">
     <div>
-      <span class="fbrand"><%= bn %></span>
-      <p class="fdesc"><%= tagln %></p>
+      <span class="fbrand">Helix Protocol</span>
+      <p class="fdesc">Trustless infrastructure for the next billion users.</p>
       <div class="fstatus"><span class="sdot"></span>All systems operational</div>
     </div>
     <div>
@@ -1082,7 +1122,7 @@
     <div>
       <p class="fct">Services</p>
       <ul class="flinks">
-        <% servicesList.forEach(function(s){ %><li><a href="#services"><%= esc(s.name) %></a></li><% }); %>
+        <li><a href="#services">Smart Contract Engineering</a></li><li><a href="#services">Protocol Architecture</a></li><li><a href="#services">Wallet &amp; Custody</a></li><li><a href="#services">Cross-chain Routing</a></li><li><a href="#services">Compliance &amp; KYT</a></li><li><a href="#services">Developer Tooling</a></li>
       </ul>
     </div>
     <div>
@@ -1097,7 +1137,7 @@
     </div>
   </footer>
   <div class="fbot">
-    <span class="fcopy">© <%= year %> <%= bn %>. All rights reserved.</span>
+    <span class="fcopy">© 2026 Helix Protocol. All rights reserved.</span>
     <div class="flinks-bot">
       <a href="#">Privacy</a>
       <a href="#">Terms</a>

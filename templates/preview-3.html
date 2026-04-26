@@ -1,126 +1,10 @@
-<%
-  // ── SAFE LOCALS (Round C — schema-driven) ──────────────────
-  const L = locals || {};
-  const esc = (s) => (s == null ? '' : String(s));
-  const def = (v, d) => (v && String(v).trim() ? v : d);
-  const bn     = esc(L.businessName) || 'Apex Studio';
-  const tagln  = esc(L.tagline)      || 'Precision-engineered software, deployed.';
-  const accent = L.primaryColor      || '#00ff41';
-  const year   = L.year              || new Date().getFullYear();
-  const tone   = esc(L.tone)         || 'professional';
-  const aboutBodyV = def(L.aboutBody || L.about,
-    'A small, senior engineering studio shipping production-grade software. We pair experienced operators with modern tooling to take an idea from spec to deploy in weeks, not quarters.');
 
-  // ── Hero
-  const heroPromptCmdV    = def(L.heroPromptCmd, `./launch.sh --mode=${tone}`);
-  const heroSubV          = def(L.heroSub, '');
-  const heroCtaPrimaryV   = def(L.heroCtaPrimary,   '▶ run services.sh');
-  const heroCtaSecondaryV = def(L.heroCtaSecondary, 'cat README.md');
-  const heroMetaStatusV   = def(L.heroMetaStatus,   '● ONLINE');
-  const heroMetaBuildV    = def(L.heroMetaBuild,    `v${year}.stable`);
-  const heroTypingLinesList = (Array.isArray(L.heroTypingLines) && L.heroTypingLines.length)
-    ? L.heroTypingLines.map(t => esc(t && (t.text || t)).trim()).filter(Boolean)
-    : [tagln, '> Precision execution. Every time.', '> Your vision. Our architecture.'];
-
-  // ── Status bar
-  const statusItemsList = (Array.isArray(L.statusItems) && L.statusItems.length)
-    ? L.statusItems.map(t => esc(t && (t.text || t)).trim()).filter(Boolean)
-    : ['TypeScript','Cloud-native','Production-grade','Open source','Continuous delivery','Performance','Reliability','Security'];
-
-  // ── About
-  const aboutFileNameV     = def(L.aboutFileName, 'about.ts');
-  const aboutHeadlineLeadV = def(L.aboutHeadlineLead, 'What runs');
-  const aboutHeadlineTailV = def(L.aboutHeadlineTail, 'in our stack.');
-  const aboutMetaV         = def(L.aboutMeta, 'Battle-tested expertise across every module we ship. Each capability is production-grade and ready to deploy on your project.');
-  const stackItemsList = (Array.isArray(L.stackItems) && L.stackItems.length)
-    ? L.stackItems
-    : [
-        { name:'TypeScript',          percent:'95' },
-        { name:'Cloud Architecture',  percent:'92' },
-        { name:'Distributed Systems', percent:'88' },
-        { name:'Security',            percent:'90' },
-        { name:'DevOps',              percent:'85' },
-        { name:'Frontend',            percent:'78' }
-      ];
-
-  // ── Services
-  const servicesHeadlineLeadV = def(L.servicesHeadlineLead, 'Technical');
-  const servicesHeadlineTailV = def(L.servicesHeadlineTail, 'Capabilities');
-  const servicesMetaV         = def(L.servicesMeta, 'Every service is a production-ready module built for real-world performance and scalability.');
-  const servicesList = (Array.isArray(L.services) && L.services.length && (L.services[0].name || L.services[0].title))
-    ? L.services
-    : [
-        { name:'Engineering',     body:'Production-grade systems design, implementation, and delivery.',                              status:'ACTIVE' },
-        { name:'Architecture',    body:'Cloud-native blueprints that scale with your business — without surprise costs.',           status:'ACTIVE' },
-        { name:'Infrastructure',  body:'CI/CD pipelines, observability, and security baked in from day one.',                       status:'ACTIVE' },
-        { name:'Performance',     body:'Profiling, tuning, and reliability engineering for high-traffic systems.',                  status:'ACTIVE' },
-        { name:'Integrations',    body:'Third-party APIs, internal tools, and data pipelines connected cleanly.',                   status:'ACTIVE' },
-        { name:'Advisory',        body:'Senior eyes on a tricky decision, paid by the day. No retainers.',                          status:'ACTIVE' }
-      ];
-
-  // ── Process
-  const processHeadlineLeadV = def(L.processHeadlineLead, 'How We');
-  const processHeadlineTailV = def(L.processHeadlineTail, 'Execute');
-  const processStepsList = (Array.isArray(L.processSteps) && L.processSteps.length)
-    ? L.processSteps
-    : [
-        { hash:'a1f3e9c', phase:'PHASE 01', title:'init: Discovery & Scoping',     body:'We run a deep diagnostic on your business — goals, constraints, competitive landscape, and the outcome metrics that actually matter.', branch:'branch: discovery' },
-        { hash:'b8d2c4f', phase:'PHASE 02', title:'feat: Strategy Architecture',   body:'We design a bespoke execution blueprint grounded in data. Every decision is documented, reasoned, and tied to outcomes — not assumptions.', branch:'branch: strategy' },
-        { hash:'c5a7b1d', phase:'PHASE 03', title:'build: Precision Execution',    body:'Our team ships fast without cutting corners. Transparent status updates, on-time delivery, and zero compromise on quality at each sprint.', branch:'branch: production' },
-        { hash:'d9e1f6a', phase:'PHASE 04', title:'deploy: Growth & Optimization', body:'Post-launch, we monitor, iterate, and compound — ensuring your investment appreciates over time with continuous performance refinement.', branch:'branch: main ← merged' }
-      ];
-
-  // ── Numbers
-  const numberStatsList = (Array.isArray(L.numberStats) && L.numberStats.length)
-    ? L.numberStats
-    : [
-        { value:'500', suffix:'+',  label:'projects_shipped' },
-        { value:'99',  suffix:'%',  label:'client_retention' },
-        { value:'12',  suffix:'yr', label:'years_in_production' },
-        { value:'24',  suffix:'hr', label:'response_time' }
-      ];
-
-  // ── Testimonials
-  const testimonialsList = (Array.isArray(L.testimonials) && L.testimonials.length)
-    ? L.testimonials
-    : [
-        { quote:'Working with this team was like finding a senior engineer who truly cares about the outcome. Methodical, precise, and exceptional at every level.', name:'Michael R.', role:'Director of Operations' },
-        { quote:'Rare to find a team that ships fast AND thinks deeply. They anticipated every edge case before we could even file the issue. That is mastery.',     name:'Sarah L.',   role:'Founder & CEO' },
-        { quote:'The documentation alone was worth the engagement. Every decision was traceable, every output was clean. This is engineering at its best.',          name:'James K.',   role:'Head of Strategy' }
-      ];
-
-  // ── CTA
-  const ctaHeadlineLeadV = def(L.ctaHeadlineLead, 'Ready to ship');
-  const ctaHeadlineTailV = def(L.ctaHeadlineTail, 'something great?');
-  const ctaBodyV         = def(L.ctaBody, `Open a connection with ${bn}. We respond within 24 hours.`);
-  const ctaButtonV       = def(L.ctaButton, '$ ./start_project.sh →');
-
-  // ── Helpers
-  function initialsOf(name) {
-    if (!name) return '·';
-    const parts = String(name).trim().split(/\s+/);
-    const a = (parts[0] || '')[0] || '';
-    const b = (parts[1] || '')[0] || (parts[0] || '').slice(1,2);
-    return (a + b).toUpperCase();
-  }
-  const slugLow   = (s) => String(s||'').toLowerCase().replace(/\s+/g,'');
-  const snakeCase = (s) => String(s||'').toLowerCase().replace(/\s+/g,'_');
-
-  // Hero meta — modules count derives from servicesList if not supplied
-  const heroMetaModulesV = def(L.heroMetaModules, String(servicesList.length).padStart(2,'0') + ' loaded');
-
-  // Footer + contact (from _base)
-  const emailV   = esc(L.email);
-  const phoneV   = esc(L.phone);
-  const addressV = esc(L.address);
-  const hoursV   = esc(L.hours) || 'Mon–Fri, 09:00–18:00';
-%>
 <!DOCTYPE html>
 <html lang="en">
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title><%= bn %> | <%= tagln %></title>
+  <title>Forge Labs | &gt; Production-grade software, deployed.</title>
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:ital,wght@0,300;0,400;0,500;0,700;1,300&family=Inter:wght@300;400;500;600&display=swap" rel="stylesheet">
   <style>
@@ -883,7 +767,7 @@
       <span class="t-green"></span>
     </div>
     <div class="nav-bar-title">
-      <span class="hl">~/</span><%= slugLow(bn) %>
+      <span class="hl">~/</span>forgelabs
       <span class="hl"> — </span>zsh
     </div>
     <ul class="nav-links">
@@ -897,32 +781,32 @@
   <!-- HERO -->
   <section id="home" class="hero">
     <div class="hero-prompt">
-      <span class="path">user@<%= slugLow(bn) %>:~</span>
-      <span class="dollar"> $ </span><%= esc(heroPromptCmdV) %>
+      <span class="path">user@forgelabs:~</span>
+      <span class="dollar"> $ </span>./launch.sh --mode=production
     </div>
     <h1 class="hero-headline">
-      <span class="txt-dim">// </span><span class="txt-green"><%= bn %></span>
+      <span class="txt-dim">// </span><span class="txt-green">Forge Labs</span>
     </h1>
     <div class="hero-typing-line" id="heroType">&nbsp;<span class="hero-cursor"></span></div>
-    <% if (heroSubV) { %>
-      <p style="font-family:var(--mono);font-size:.92rem;color:var(--muted);font-weight:300;max-width:680px;margin:-24px 0 36px;line-height:1.7"><%= esc(heroSubV) %></p>
-    <% } %>
+    
+      <p style="font-family:var(--mono);font-size:.92rem;color:var(--muted);font-weight:300;max-width:680px;margin:-24px 0 36px;line-height:1.7">A senior engineering studio for software teams that have outgrown contractors but aren&#39;t ready for a 50-person agency. Six engineers, one shared Slack, no junior layer.</p>
+    
     <div class="hero-actions">
-      <a href="#services" class="btn-primary"><%= esc(heroCtaPrimaryV) %></a>
-      <a href="#about" class="btn-ghost"><%= esc(heroCtaSecondaryV) %></a>
+      <a href="#services" class="btn-primary">▶ run services.sh</a>
+      <a href="#about" class="btn-ghost">cat README.md</a>
     </div>
     <div class="hero-meta">
       <div class="hero-meta-item">
         <div class="meta-label">STATUS</div>
-        <div class="meta-val"><%= esc(heroMetaStatusV) %></div>
+        <div class="meta-val">● ONLINE</div>
       </div>
       <div class="hero-meta-item">
         <div class="meta-label">MODULES</div>
-        <div class="meta-val"><%= esc(heroMetaModulesV) %></div>
+        <div class="meta-val">06 loaded</div>
       </div>
       <div class="hero-meta-item">
         <div class="meta-label">BUILD</div>
-        <div class="meta-val"><%= esc(heroMetaBuildV) %></div>
+        <div class="meta-val">v2026.stable</div>
       </div>
     </div>
   </section>
@@ -930,10 +814,72 @@
   <!-- STATUS BAR -->
   <div class="statusbar">
     <div class="statusbar-track" id="statusbar">
-      <% const statItems = [...statusItemsList, ...statusItemsList, ...statusItemsList, ...statusItemsList]; %>
-      <% statItems.forEach(function(p){ %>
-        <span class="statusbar-item"><%= esc(p) %></span>
-      <% }); %>
+      
+      
+        <span class="statusbar-item">TypeScript</span>
+      
+        <span class="statusbar-item">Cloud-native</span>
+      
+        <span class="statusbar-item">Production-grade</span>
+      
+        <span class="statusbar-item">Open source</span>
+      
+        <span class="statusbar-item">Continuous delivery</span>
+      
+        <span class="statusbar-item">Performance</span>
+      
+        <span class="statusbar-item">Reliability</span>
+      
+        <span class="statusbar-item">Security</span>
+      
+        <span class="statusbar-item">TypeScript</span>
+      
+        <span class="statusbar-item">Cloud-native</span>
+      
+        <span class="statusbar-item">Production-grade</span>
+      
+        <span class="statusbar-item">Open source</span>
+      
+        <span class="statusbar-item">Continuous delivery</span>
+      
+        <span class="statusbar-item">Performance</span>
+      
+        <span class="statusbar-item">Reliability</span>
+      
+        <span class="statusbar-item">Security</span>
+      
+        <span class="statusbar-item">TypeScript</span>
+      
+        <span class="statusbar-item">Cloud-native</span>
+      
+        <span class="statusbar-item">Production-grade</span>
+      
+        <span class="statusbar-item">Open source</span>
+      
+        <span class="statusbar-item">Continuous delivery</span>
+      
+        <span class="statusbar-item">Performance</span>
+      
+        <span class="statusbar-item">Reliability</span>
+      
+        <span class="statusbar-item">Security</span>
+      
+        <span class="statusbar-item">TypeScript</span>
+      
+        <span class="statusbar-item">Cloud-native</span>
+      
+        <span class="statusbar-item">Production-grade</span>
+      
+        <span class="statusbar-item">Open source</span>
+      
+        <span class="statusbar-item">Continuous delivery</span>
+      
+        <span class="statusbar-item">Performance</span>
+      
+        <span class="statusbar-item">Reliability</span>
+      
+        <span class="statusbar-item">Security</span>
+      
     </div>
   </div>
 
@@ -947,26 +893,36 @@
               <span class="term-dot r"></span>
               <span class="term-dot o"></span>
               <span class="term-dot g"></span>
-              <span class="term-title"><%= esc(aboutFileNameV) %> — <%= bn %></span>
+              <span class="term-title">about.ts — Forge Labs</span>
             </div>
             <div class="term-body">
               <div class="about-code">
-                <div><span class="code-cmt">// About <%= bn %></span></div>
+                <div><span class="code-cmt">// About Forge Labs</span></div>
                 <br>
                 <div><span class="code-kw">const</span> <span class="code-var">company</span> = {</div>
-                <div class="code-indent"><span class="code-fn">name</span>: <span class="code-str">"<%= bn %>"</span>,</div>
-                <div class="code-indent"><span class="code-fn">tagline</span>: <span class="code-str">"<%= tagln %>"</span>,</div>
-                <div class="code-indent"><span class="code-fn">founded</span>: <span class="code-num"><%= L.foundedYear || year %></span>,</div>
-                <div class="code-indent"><span class="code-fn">mode</span>: <span class="code-str">"<%= tone %>"</span>,</div>
+                <div class="code-indent"><span class="code-fn">name</span>: <span class="code-str">"Forge Labs"</span>,</div>
+                <div class="code-indent"><span class="code-fn">tagline</span>: <span class="code-str">"&gt; Production-grade software, deployed."</span>,</div>
+                <div class="code-indent"><span class="code-fn">founded</span>: <span class="code-num">2018</span>,</div>
+                <div class="code-indent"><span class="code-fn">mode</span>: <span class="code-str">"professional"</span>,</div>
                 <div class="code-indent"><span class="code-fn">services</span>: [</div>
-                <% servicesList.forEach(function(s){ %>
-                <div class="code-indent" style="padding-left:48px"><span class="code-str">"<%= esc(s.name) %>"</span>,</div>
-                <% }); %>
+                
+                <div class="code-indent" style="padding-left:48px"><span class="code-str">"Backend Engineering"</span>,</div>
+                
+                <div class="code-indent" style="padding-left:48px"><span class="code-str">"Cloud Architecture"</span>,</div>
+                
+                <div class="code-indent" style="padding-left:48px"><span class="code-str">"Infrastructure &amp; DevOps"</span>,</div>
+                
+                <div class="code-indent" style="padding-left:48px"><span class="code-str">"Performance Engineering"</span>,</div>
+                
+                <div class="code-indent" style="padding-left:48px"><span class="code-str">"Security &amp; Compliance"</span>,</div>
+                
+                <div class="code-indent" style="padding-left:48px"><span class="code-str">"Senior Advisory"</span>,</div>
+                
                 <div class="code-indent">],</div>
                 <div>};</div>
                 <br>
                 <div><span class="code-cmt">/**</span></div>
-                <div><span class="code-cmt"> * <%= esc(aboutBodyV).replace(/\n/g, ' ') %></span></div>
+                <div><span class="code-cmt"> * Forge Labs was founded in 2018 by two former infrastructure engineers — one from Stripe, one from Cloudflare — who got tired of watching ambitious software projects get diluted by big agencies and unreliable contractors. The studio has stayed deliberately small: six senior engineers, one designer, one operations lead. No interns, no offshore subcontractors, no handoffs. Every project is run by people you have met, with a single shared Slack channel and weekly demo calls. We have shipped production systems for fintechs, AI labs, and developer-tooling startups across three continents — and we are still measured the same way our customers are: by uptime, latency, and revenue impact.</span></div>
                 <div><span class="code-cmt"> */</span></div>
                 <br>
                 <div><span class="code-kw">export default</span> <span class="code-var">company</span>;</div>
@@ -976,16 +932,41 @@
         </div>
         <div class="about-right reveal reveal-delay-1">
           <div class="section-comment">// core competencies</div>
-          <h2 class="section-title"><%= esc(aboutHeadlineLeadV) %><br>in our <span class="hl"><%= esc(aboutHeadlineTailV.replace(/^in our /i,'')) %></span></h2>
+          <h2 class="section-title">What runs<br>in our <span class="hl">stack.</span></h2>
           <p style="font-size:.88rem;color:var(--muted);margin:16px 0 32px;font-weight:300;line-height:1.8">
-            <%= esc(aboutMetaV) %>
+            Battle-tested expertise across every module we ship. Each capability is production-grade and deployed for real customers running real load.
           </p>
-          <% stackItemsList.forEach(function(s){ var pct = parseInt(s.percent,10); if (isNaN(pct)) pct = 80; %>
+          
           <div class="stack-item">
-            <div class="stack-label"><%= esc(s.name) %><span><%= pct %>%</span></div>
-            <div class="stack-bar"><div class="stack-fill" data-width="<%= pct %>"></div></div>
+            <div class="stack-label">TypeScript<span>95%</span></div>
+            <div class="stack-bar"><div class="stack-fill" data-width="95"></div></div>
           </div>
-          <% }); %>
+          
+          <div class="stack-item">
+            <div class="stack-label">Cloud Architecture<span>92%</span></div>
+            <div class="stack-bar"><div class="stack-fill" data-width="92"></div></div>
+          </div>
+          
+          <div class="stack-item">
+            <div class="stack-label">Distributed Systems<span>88%</span></div>
+            <div class="stack-bar"><div class="stack-fill" data-width="88"></div></div>
+          </div>
+          
+          <div class="stack-item">
+            <div class="stack-label">Security Engineering<span>90%</span></div>
+            <div class="stack-bar"><div class="stack-fill" data-width="90"></div></div>
+          </div>
+          
+          <div class="stack-item">
+            <div class="stack-label">DevOps &amp; SRE<span>87%</span></div>
+            <div class="stack-bar"><div class="stack-fill" data-width="87"></div></div>
+          </div>
+          
+          <div class="stack-item">
+            <div class="stack-label">Frontend Performance<span>78%</span></div>
+            <div class="stack-bar"><div class="stack-fill" data-width="78"></div></div>
+          </div>
+          
         </div>
       </div>
     </div>
@@ -996,20 +977,55 @@
     <div class="container">
       <div class="services-header reveal">
         <div class="section-comment">// ls -la ./services/</div>
-        <h2 class="section-title"><%= esc(servicesHeadlineLeadV) %> <span class="hl"><%= esc(servicesHeadlineTailV) %></span></h2>
+        <h2 class="section-title">Technical <span class="hl">Capabilities</span></h2>
         <p style="font-size:.88rem;color:var(--muted);margin-top:12px;font-weight:300;max-width:520px;line-height:1.8">
-          <%= esc(servicesMetaV) %>
+          Every service is a production-ready module engineered for real load, audited for security, and shipped on a schedule we will commit to in writing.
         </p>
       </div>
       <div class="services-grid">
-        <% servicesList.forEach(function(s, i){ var n = String(i+1).padStart(2,'0'); %>
-        <div class="service-card reveal reveal-delay-<%= i % 3 %>">
-          <div class="service-id">MODULE_<%= n %>.ts</div>
-          <h3 class="service-name"><%= esc(s.name) %></h3>
-          <p class="service-desc"><%= esc(s.body || ('High-performance ' + esc(s.name).toLowerCase() + ' module engineered for scale.')) %></p>
-          <% if (s.status) { %><span class="service-tag">STATUS: <%= esc(s.status) %></span><% } %>
+        
+        <div class="service-card reveal reveal-delay-0">
+          <div class="service-id">MODULE_01.ts</div>
+          <h3 class="service-name">Backend Engineering</h3>
+          <p class="service-desc">TypeScript and Go services, message queues, and API design — built to scale and handed off documented.</p>
+          <span class="service-tag">STATUS: ACTIVE</span>
         </div>
-        <% }); %>
+        
+        <div class="service-card reveal reveal-delay-1">
+          <div class="service-id">MODULE_02.ts</div>
+          <h3 class="service-name">Cloud Architecture</h3>
+          <p class="service-desc">AWS, GCP, and Cloudflare blueprints that scale with your customers without scaling your invoice.</p>
+          <span class="service-tag">STATUS: ACTIVE</span>
+        </div>
+        
+        <div class="service-card reveal reveal-delay-2">
+          <div class="service-id">MODULE_03.ts</div>
+          <h3 class="service-name">Infrastructure &amp; DevOps</h3>
+          <p class="service-desc">CI/CD, observability, and SRE practices baked in from sprint one — not bolted on at launch.</p>
+          <span class="service-tag">STATUS: ACTIVE</span>
+        </div>
+        
+        <div class="service-card reveal reveal-delay-0">
+          <div class="service-id">MODULE_04.ts</div>
+          <h3 class="service-name">Performance Engineering</h3>
+          <p class="service-desc">Profiling, tuning, and reliability work for systems with real traffic and real revenue at stake.</p>
+          <span class="service-tag">STATUS: ACTIVE</span>
+        </div>
+        
+        <div class="service-card reveal reveal-delay-1">
+          <div class="service-id">MODULE_05.ts</div>
+          <h3 class="service-name">Security &amp; Compliance</h3>
+          <p class="service-desc">Threat modelling, audits, SOC 2 readiness — the unsexy work that ships you to enterprise customers.</p>
+          <span class="service-tag">STATUS: ACTIVE</span>
+        </div>
+        
+        <div class="service-card reveal reveal-delay-2">
+          <div class="service-id">MODULE_06.ts</div>
+          <h3 class="service-name">Senior Advisory</h3>
+          <p class="service-desc">Senior eyes on a tricky decision, paid by the day. No retainers, no junior shadows, no upsells.</p>
+          <span class="service-tag">STATUS: ACTIVE</span>
+        </div>
+        
       </div>
     </div>
   </section>
@@ -1019,39 +1035,90 @@
     <div class="container">
       <div class="process-header reveal">
         <div class="section-comment">// git log --oneline --graph</div>
-        <h2 class="section-title"><%= esc(processHeadlineLeadV) %> <span class="hl"><%= esc(processHeadlineTailV) %></span></h2>
+        <h2 class="section-title">How We <span class="hl">Execute</span></h2>
       </div>
       <div class="git-log">
-        <% processStepsList.forEach(function(p, i){ %>
-        <div class="git-entry reveal<% if (i>0) { %> reveal-delay-<%= Math.min(i,3) %><% } %>">
+        
+        <div class="git-entry reveal">
           <div class="git-meta">
-            <span class="git-hash"><%= esc(p.hash || ('00' + (i+1) + 'aaaa').slice(-7)) %></span>
-            <span class="git-date"><%= esc(p.phase || ('PHASE ' + String(i+1).padStart(2,'0'))) %></span>
+            <span class="git-hash">a1f3e9c</span>
+            <span class="git-date">PHASE 01</span>
           </div>
           <div class="git-spine"><div class="git-node"></div><div class="git-line"></div></div>
           <div class="git-content">
-            <h3 class="git-title"><%= esc(p.title) %></h3>
-            <p class="git-body"><%= esc(p.body) %></p>
-            <% if (p.branch) { %><span class="git-tag"><%= esc(p.branch) %></span><% } %>
+            <h3 class="git-title">init: Discovery &amp; Scoping</h3>
+            <p class="git-body">A five-day diagnostic — code review, stakeholder interviews, traffic analysis, and a written scope you can hand to your CFO.</p>
+            <span class="git-tag">branch: discovery</span>
           </div>
         </div>
-        <% }); %>
+        
+        <div class="git-entry reveal reveal-delay-1">
+          <div class="git-meta">
+            <span class="git-hash">b8d2c4f</span>
+            <span class="git-date">PHASE 02</span>
+          </div>
+          <div class="git-spine"><div class="git-node"></div><div class="git-line"></div></div>
+          <div class="git-content">
+            <h3 class="git-title">feat: Architecture &amp; Plan</h3>
+            <p class="git-body">A bespoke execution blueprint with sequencing, dependencies, and risk callouts. Every decision documented before any code is written.</p>
+            <span class="git-tag">branch: planning</span>
+          </div>
+        </div>
+        
+        <div class="git-entry reveal reveal-delay-2">
+          <div class="git-meta">
+            <span class="git-hash">c5a7b1d</span>
+            <span class="git-date">PHASE 03</span>
+          </div>
+          <div class="git-spine"><div class="git-node"></div><div class="git-line"></div></div>
+          <div class="git-content">
+            <h3 class="git-title">build: Precision Execution</h3>
+            <p class="git-body">Two-week sprints with weekly demos. You see the running system on day three and every Friday after that. No surprises at launch.</p>
+            <span class="git-tag">branch: production</span>
+          </div>
+        </div>
+        
+        <div class="git-entry reveal reveal-delay-3">
+          <div class="git-meta">
+            <span class="git-hash">d9e1f6a</span>
+            <span class="git-date">PHASE 04</span>
+          </div>
+          <div class="git-spine"><div class="git-node"></div><div class="git-line"></div></div>
+          <div class="git-content">
+            <h3 class="git-title">deploy: Launch &amp; Optimise</h3>
+            <p class="git-body">Post-launch we monitor, iterate, and compound — your investment appreciates over time as we tune for the load you actually have.</p>
+            <span class="git-tag">branch: main ← merged</span>
+          </div>
+        </div>
+        
       </div>
     </div>
   </section>
 
   <!-- NUMBERS -->
   <div class="numbers">
-    <div class="numbers-grid container" style="padding:0;<% if (numberStatsList.length !== 4) { %>grid-template-columns:repeat(<%= Math.max(1,Math.min(numberStatsList.length,4)) %>,1fr);<% } %>">
-      <% numberStatsList.forEach(function(n, i){
-           var raw = String(n.value || '').replace(/[^0-9.]/g,'');
-           var num = raw === '' ? 0 : parseFloat(raw);
-      %>
-      <div class="num-item reveal<% if (i>0) { %> reveal-delay-<%= Math.min(i,3) %><% } %>">
-        <div class="num-val" data-target="<%= num %>" data-suffix="<%= esc(n.suffix || '') %>">0<%= esc(n.suffix || '') %></div>
-        <div class="num-label">// <%= esc(n.label || '') %></div>
+    <div class="numbers-grid container" style="padding:0;">
+      
+      <div class="num-item reveal">
+        <div class="num-val" data-target="500" data-suffix="+">0+</div>
+        <div class="num-label">// projects_shipped</div>
       </div>
-      <% }); %>
+      
+      <div class="num-item reveal reveal-delay-1">
+        <div class="num-val" data-target="99" data-suffix="%">0%</div>
+        <div class="num-label">// client_retention</div>
+      </div>
+      
+      <div class="num-item reveal reveal-delay-2">
+        <div class="num-val" data-target="8" data-suffix="yr">0yr</div>
+        <div class="num-label">// years_in_production</div>
+      </div>
+      
+      <div class="num-item reveal reveal-delay-3">
+        <div class="num-val" data-target="24" data-suffix="hr">0hr</div>
+        <div class="num-label">// response_sla</div>
+      </div>
+      
     </div>
   </div>
 
@@ -1063,17 +1130,37 @@
         <h2 class="section-title">Client <span class="hl">Output</span></h2>
       </div>
       <div class="testi-grid">
-        <% testimonialsList.slice(0,3).forEach(function(t, i){ var n = String(i+1).padStart(3,'0'); %>
-        <div class="testi-card reveal<% if (i>0) { %> reveal-delay-<%= Math.min(i,3) %><% } %>">
-          <div class="testi-output-line">stdout · review_<%= n %>.log</div>
+        
+        <div class="testi-card reveal">
+          <div class="testi-output-line">stdout · review_001.log</div>
           <div class="testi-stars">★★★★★</div>
-          <p class="testi-quote">"<%= esc(t.quote) %>"</p>
+          <p class="testi-quote">"Working with Forge was like finding a senior engineer who actually cares about the outcome. Methodical, precise, and exceptional at every level. We will work with them again on the next product."</p>
           <div class="testi-author">
-            <div class="testi-avatar"><%= initialsOf(t.name) %></div>
-            <div><span class="testi-name"><%= esc(t.name) %></span><span class="testi-role"><%= esc(t.role) %></span></div>
+            <div class="testi-avatar">MR</div>
+            <div><span class="testi-name">Michael Reyes</span><span class="testi-role">CTO · Helix Logistics</span></div>
           </div>
         </div>
-        <% }); %>
+        
+        <div class="testi-card reveal reveal-delay-1">
+          <div class="testi-output-line">stdout · review_002.log</div>
+          <div class="testi-stars">★★★★★</div>
+          <p class="testi-quote">"Rare to find a team that ships fast AND thinks deeply. They anticipated edge cases before we could even file the issue. The code review feedback alone justified the engagement."</p>
+          <div class="testi-author">
+            <div class="testi-avatar">SL</div>
+            <div><span class="testi-name">Sarah Lin</span><span class="testi-role">Founder &amp; CEO · Northbeam</span></div>
+          </div>
+        </div>
+        
+        <div class="testi-card reveal reveal-delay-2">
+          <div class="testi-output-line">stdout · review_003.log</div>
+          <div class="testi-stars">★★★★★</div>
+          <p class="testi-quote">"The architecture document Forge wrote for us has been used by every engineer we have hired since. Every decision was traceable, every output was clean. This is engineering at its best."</p>
+          <div class="testi-author">
+            <div class="testi-avatar">JK</div>
+            <div><span class="testi-name">James Kowalski</span><span class="testi-role">Head of Platform · Orbit</span></div>
+          </div>
+        </div>
+        
       </div>
     </div>
   </section>
@@ -1081,10 +1168,10 @@
   <!-- CTA BAND -->
   <div class="cta-band reveal">
     <div class="cta-text">
-      <h2 class="cta-title"><%= esc(ctaHeadlineLeadV) %><br><%= esc(ctaHeadlineTailV) %></h2>
-      <p class="cta-sub"><%= esc(ctaBodyV) %></p>
+      <h2 class="cta-title">Ready to ship<br>something great?</h2>
+      <p class="cta-sub">Open a connection with Forge Labs. We respond within 24 hours, in writing, with a calendar link and a scoping doc.</p>
     </div>
-    <a href="#contact" class="btn-dark"><%= esc(ctaButtonV) %></a>
+    <a href="#contact" class="btn-dark">$ ./start_project.sh →</a>
   </div>
 
   <!-- CONTACT -->
@@ -1098,7 +1185,7 @@
           <div class="contact-info">
             <div class="info-row">
               <span class="info-key">uptime:</span>
-              <span class="info-val"><%= esc(hoursV) %></span>
+              <span class="info-val">Mon–Fri, 09:00–18:00 PT</span>
             </div>
             <div class="info-row">
               <span class="info-key">latency:</span>
@@ -1142,7 +1229,7 @@
                   <label>service_type</label>
                   <select>
                     <option value="" disabled selected>-- select module --</option>
-                    <% servicesList.forEach(function(s){ %><option value="<%= esc(s.name) %>"><%= esc(s.name) %></option><% }); %>
+                    <option value="Backend Engineering">Backend Engineering</option><option value="Cloud Architecture">Cloud Architecture</option><option value="Infrastructure &amp; DevOps">Infrastructure &amp; DevOps</option><option value="Performance Engineering">Performance Engineering</option><option value="Security &amp; Compliance">Security &amp; Compliance</option><option value="Senior Advisory">Senior Advisory</option>
                     <option value="other">other / multiple</option>
                   </select>
                 </div>
@@ -1164,8 +1251,8 @@
     <div class="container">
       <div class="footer-top">
         <div>
-          <span class="footer-brand"><%= snakeCase(bn) %>/</span>
-          <p class="footer-tagline"><span style="color:var(--green-dim)">$</span> <%= tagln %></p>
+          <span class="footer-brand">forge_labs/</span>
+          <p class="footer-tagline"><span style="color:var(--green-dim)">$</span> &gt; Production-grade software, deployed.</p>
         </div>
         <div>
           <p class="footer-col-title">// navigation</p>
@@ -1179,7 +1266,7 @@
         <div>
           <p class="footer-col-title">// modules</p>
           <ul class="footer-links">
-            <% servicesList.forEach(function(s){ %><li><a href="#services"><%= snakeCase(s.name) %></a></li><% }); %>
+            <li><a href="#services">backend_engineering</a></li><li><a href="#services">cloud_architecture</a></li><li><a href="#services">infrastructure_&amp;_devops</a></li><li><a href="#services">performance_engineering</a></li><li><a href="#services">security_&amp;_compliance</a></li><li><a href="#services">senior_advisory</a></li>
           </ul>
         </div>
         <div>
@@ -1193,7 +1280,7 @@
         </div>
       </div>
       <div class="footer-bottom">
-        <span><span style="color:var(--green-dim)">©</span> <%= year %> <%= bn %>. All systems operational.</span>
+        <span><span style="color:var(--green-dim)">©</span> 2026 Forge Labs. All systems operational.</span>
         <div class="footer-bottom-links">
           <a href="#">privacy</a>
           <a href="#">terms</a>
@@ -1233,8 +1320,8 @@
 
     // ── TYPING HERO
     const typeEl = document.getElementById('heroType');
-    const phrases = <%- JSON.stringify(heroTypingLinesList) %>;
-    if (!phrases.length) phrases.push('<%= tagln.replace(/'/g, "\\'") %>');
+    const phrases = ["> Production-grade software, deployed.","> Senior engineers. No juniors learning on your dime.","> From scoping to deploy in weeks, not quarters.","> Async-first. Documented. Predictable."];
+    if (!phrases.length) phrases.push('&gt; Production-grade software, deployed.');
     let pi = 0, ci = 0, deleting = false;
     function type() {
       const phrase = phrases[pi];

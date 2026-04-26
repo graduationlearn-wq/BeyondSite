@@ -1,0 +1,420 @@
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Riverbend Plumbing | Local Experts</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@500;700;900&family=DM+Sans:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+  <style>
+    *,*::before,*::after{margin:0;padding:0;box-sizing:border-box}
+    :root{
+      --cream:#faf7f2;--cream-dark:#f2ece0;
+      --navy:#1a2332;--navy-deep:#111b27;
+      --terra:#c4622d;--terra-lt:#d4774a;
+      --amber:#d4a053;
+      --border:rgba(26,35,50,.1);
+      --text:#1a2332;--muted:rgba(26,35,50,.62);--dim:rgba(26,35,50,.38);
+      --white:#fff;
+      --serif:'Playfair Display',Georgia,serif;
+      --sans:'DM Sans',system-ui,sans-serif;
+      --radius:4px;
+    }
+    html{scroll-behavior:smooth}
+    body{font-family:var(--sans);background:var(--cream);color:var(--text);line-height:1.65;overflow-x:hidden;-webkit-font-smoothing:antialiased}
+    a{color:inherit;text-decoration:none}
+    img{max-width:100%;display:block}
+    .wrap{max-width:1180px;margin:0 auto;padding:0 32px}
+    .eyebrow{display:inline-block;font-size:.72rem;font-weight:600;text-transform:uppercase;letter-spacing:.18em;color:var(--terra)}
+
+    /* ── TOPBAR ─── */
+    .topbar{background:var(--navy);padding:10px 32px;display:flex;align-items:center;justify-content:space-between;gap:16px;color:rgba(255,255,255,.75);font-size:.78rem}
+    .topbar-left{display:flex;gap:22px;flex-wrap:wrap}
+    .topbar-item{display:flex;align-items:center;gap:8px;letter-spacing:.03em}
+    .topbar-item .dot{width:6px;height:6px;border-radius:50%;background:var(--amber);animation:pulse 2.2s ease-in-out infinite}
+    @keyframes pulse{0%,100%{opacity:1;transform:scale(1)}50%{opacity:.5;transform:scale(1.5)}}
+    .topbar-cta{color:var(--amber);font-weight:600;letter-spacing:.04em;border-bottom:1px solid rgba(212,160,83,.45)}
+
+    /* ── NAV ─── */
+    .nav{position:sticky;top:0;z-index:500;background:var(--white);border-bottom:1px solid var(--border);padding:0 32px;height:72px;display:flex;align-items:center;justify-content:space-between;box-shadow:0 1px 16px rgba(26,35,50,.06)}
+    .nav-logo{font-family:var(--serif);font-size:1.45rem;font-weight:700;color:var(--navy)}
+    .nav-logo span{color:var(--terra)}
+    .nav-logo img{height:34px}
+    .nav-book{display:inline-flex;align-items:center;gap:8px;background:var(--terra);color:#fff;padding:11px 22px;font-weight:600;font-size:.85rem;border-radius:var(--radius);letter-spacing:.02em}
+
+    /* ── HERO ─── */
+    .hero{padding:90px 0 110px;position:relative;overflow:hidden}
+    .hero::before{content:"";position:absolute;inset:0;background:radial-gradient(900px 500px at 90% 10%,rgba(196,98,45,.08),transparent 60%);pointer-events:none}
+    .hero-grid{display:grid;grid-template-columns:1.15fr .85fr;gap:64px;align-items:center;position:relative}
+    .hero h1{font-family:var(--serif);font-size:clamp(2.4rem,4.6vw,4rem);line-height:1.05;letter-spacing:-.02em;color:var(--navy);font-weight:700;margin:18px 0 22px}
+    .hero h1 em{font-style:italic;color:var(--terra)}
+    .hero-sub{font-size:1.1rem;color:var(--muted);max-width:540px;margin-bottom:34px}
+    .hero-ctas{display:flex;gap:14px;flex-wrap:wrap}
+    .btn{display:inline-flex;align-items:center;gap:8px;padding:14px 26px;border-radius:var(--radius);font-weight:600;font-size:.94rem;letter-spacing:.01em;cursor:pointer;border:0}
+    .btn-primary{background:var(--terra);color:#fff}
+    .btn-ghost{background:transparent;color:var(--navy);border:1.5px solid var(--navy)}
+    .hero-badges{display:flex;gap:10px;flex-wrap:wrap;margin-top:38px}
+    .hero-badge{display:inline-flex;align-items:center;gap:8px;padding:7px 14px;background:rgba(26,35,50,.05);border-radius:20px;font-size:.78rem;color:var(--muted)}
+    .hero-badge::before{content:"✓";color:var(--terra);font-weight:700}
+
+    .quote-card{background:#fff;border-radius:10px;padding:36px;box-shadow:0 18px 60px rgba(26,35,50,.08);border:1px solid var(--border);position:relative}
+    .quote-card::before{content:"";position:absolute;top:-12px;left:36px;width:24px;height:24px;background:var(--terra);border-radius:2px;transform:rotate(45deg)}
+    .quote-card h3{font-family:var(--serif);font-size:1.6rem;color:var(--navy);margin-bottom:12px}
+    .quote-card p{color:var(--muted);font-size:.98rem}
+    .quote-card-foot{margin-top:24px;padding-top:20px;border-top:1px dashed var(--border);display:flex;gap:14px;align-items:center;font-size:.84rem;color:var(--muted)}
+    .quote-card-foot .dot{width:10px;height:10px;border-radius:50%;background:#22c55e;box-shadow:0 0 0 4px rgba(34,197,94,.18)}
+
+    /* ── TRUST STRIP ─── */
+    .trust-strip{background:var(--navy);color:#fff;padding:22px 0}
+    .trust-strip-grid{display:flex;justify-content:space-around;gap:24px;flex-wrap:wrap;font-size:.86rem;letter-spacing:.03em}
+    .trust-strip-item{display:flex;align-items:center;gap:10px;opacity:.85}
+    .trust-strip-item::before{content:"◆";color:var(--amber)}
+
+    /* ── SECTIONS ─── */
+    section{padding:86px 0}
+    .section-head{text-align:center;margin-bottom:56px}
+    .section-head h2{font-family:var(--serif);font-size:clamp(2rem,3.2vw,2.8rem);color:var(--navy);line-height:1.15;margin-top:10px}
+
+    /* ── SERVICES ─── */
+    .services{background:var(--cream-dark)}
+    .services-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(260px,1fr));gap:22px}
+    .svc{background:#fff;padding:32px 28px;border-radius:6px;border:1px solid var(--border);transition:transform .25s,border-color .25s;display:flex;flex-direction:column;gap:10px}
+    .svc:hover{transform:translateY(-4px);border-color:var(--terra)}
+    .svc-icon{font-size:1.9rem;margin-bottom:4px}
+    .svc h3{font-family:var(--serif);font-size:1.35rem;color:var(--navy)}
+    .svc p{color:var(--muted);font-size:.95rem}
+    .svc-price{margin-top:auto;padding-top:14px;font-weight:600;color:var(--terra);font-size:.92rem}
+
+    /* ── NUMBERS ─── */
+    .numbers{background:var(--navy);color:#fff;padding:70px 0}
+    .numbers-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(180px,1fr));gap:30px;text-align:center}
+    .num-v{font-family:var(--serif);font-size:clamp(2.4rem,4vw,3.5rem);font-weight:700;color:var(--amber);line-height:1}
+    .num-l{margin-top:8px;font-size:.88rem;letter-spacing:.04em;color:rgba(255,255,255,.7);text-transform:uppercase}
+
+    /* ── ABOUT / HOURS ─── */
+    .about-grid{display:grid;grid-template-columns:1.1fr .9fr;gap:56px;align-items:start}
+    .about h2{font-family:var(--serif);font-size:clamp(1.9rem,3vw,2.6rem);color:var(--navy);line-height:1.15;margin:14px 0 22px}
+    .about p{color:var(--muted);margin-bottom:18px}
+    .hours-card{background:var(--white);border:1px solid var(--border);border-radius:8px;padding:28px;box-shadow:0 10px 30px rgba(26,35,50,.04)}
+    .hours-card h3{font-family:var(--serif);font-size:1.25rem;color:var(--navy);margin-bottom:14px}
+    .hours-row{display:flex;justify-content:space-between;padding:10px 0;border-bottom:1px dashed var(--border);font-size:.92rem}
+    .hours-row:last-child{border-bottom:0}
+    .hours-row .day{color:var(--navy);font-weight:500}
+    .hours-row .time{color:var(--muted)}
+    .hours-row .closed{color:#c1432d;font-weight:600}
+    .emergency{margin-top:20px;padding:16px 18px;background:rgba(196,98,45,.08);border-left:4px solid var(--terra);border-radius:4px;font-size:.9rem;color:var(--navy)}
+    .areas{margin-top:26px}
+    .area-tag{display:inline-block;background:var(--cream-dark);color:var(--navy);padding:6px 14px;border-radius:20px;font-size:.78rem;margin:4px 5px 0 0}
+
+    /* ── REVIEWS ─── */
+    .reviews{background:var(--cream-dark)}
+    .reviews-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(280px,1fr));gap:22px}
+    .review{background:#fff;border:1px solid var(--border);border-radius:6px;padding:28px;position:relative}
+    .review::before{content:"\201C";font-family:var(--serif);font-size:4rem;color:var(--terra);position:absolute;top:-8px;left:18px;line-height:1}
+    .review p{color:var(--text);font-size:.98rem;margin:10px 0 20px}
+    .review-meta{display:flex;flex-direction:column;gap:2px;font-size:.85rem;color:var(--muted)}
+    .review-meta strong{color:var(--navy);font-weight:600;font-size:.95rem}
+
+    /* ── FAQ ─── */
+    .faq-list{max-width:820px;margin:0 auto;border-top:1px solid var(--border)}
+    details{border-bottom:1px solid var(--border);padding:22px 0}
+    details summary{cursor:pointer;list-style:none;font-family:var(--serif);font-size:1.2rem;color:var(--navy);display:flex;justify-content:space-between;align-items:center}
+    details summary::-webkit-details-marker{display:none}
+    details summary::after{content:"+";font-size:1.6rem;color:var(--terra);transition:transform .25s}
+    details[open] summary::after{transform:rotate(45deg)}
+    details p{color:var(--muted);margin-top:14px;font-size:.98rem}
+
+    /* ── CONTACT / FOOTER ─── */
+    .contact{background:var(--navy);color:#fff}
+    .contact h2{color:#fff}
+    .contact-grid{display:grid;grid-template-columns:1fr 1fr;gap:54px;align-items:start}
+    .contact-info p{color:rgba(255,255,255,.7);margin-bottom:12px;display:flex;gap:10px;align-items:center}
+    .contact-info strong{color:var(--amber)}
+    form.contact-form{background:rgba(255,255,255,.04);padding:28px;border-radius:8px;border:1px solid rgba(255,255,255,.08)}
+    form.contact-form label{display:block;font-size:.8rem;color:rgba(255,255,255,.6);margin-bottom:6px;letter-spacing:.04em}
+    form.contact-form input,form.contact-form textarea{width:100%;background:rgba(255,255,255,.05);border:1px solid rgba(255,255,255,.1);color:#fff;padding:11px 14px;font-family:inherit;border-radius:4px;margin-bottom:14px;font-size:.94rem}
+    form.contact-form button{background:var(--terra);color:#fff;border:0;padding:12px 26px;border-radius:4px;font-weight:600;cursor:pointer}
+
+    footer{background:var(--navy-deep);color:rgba(255,255,255,.55);padding:28px 0;text-align:center;font-size:.82rem;letter-spacing:.03em}
+
+    @media (max-width:900px){
+      .hero-grid,.about-grid,.contact-grid{grid-template-columns:1fr;gap:40px}
+      .nav{padding:0 18px}.topbar{padding:10px 18px}.wrap{padding:0 18px}
+      section{padding:60px 0}
+    }
+  </style>
+</head>
+<body>
+
+<div class="topbar">
+  <div class="topbar-left">
+    <span class="topbar-item"><span class="dot"></span>Mon–Fri · 9am–6pm PT</span>
+    <span class="topbar-item">📞 +1 (555) 123-4567</span>
+  </div>
+  <a class="topbar-cta" href="#contact">Get a Free Quote →</a>
+</div>
+
+<nav class="nav">
+  <a href="#" class="nav-logo">
+    Riverbend<span> Plumbing</span>
+    
+  </a>
+  <a class="nav-book" href="#contact">Get a Free Quote</a>
+</nav>
+
+<section class="hero">
+  <div class="wrap hero-grid">
+    <div>
+      <span class="eyebrow">Trusted in Denver since 2010</span>
+      <h1>Fast, honest plumbing when you need it most.</h1>
+      <p class="hero-sub">Clogged drain at 2am? Leaky water heater? We dispatch within 60 minutes — flat-rate pricing, no surprises.</p>
+      <div class="hero-ctas">
+        <a href="#contact" class="btn btn-primary">Get a Free Quote →</a>
+        <a href="tel:+1 (555) 123-4567" class="btn btn-ghost">📞 Call (555) 123-4567</a>
+      </div>
+      
+      <div class="hero-badges">
+        <span class="hero-badge">BBB Accredited</span><span class="hero-badge">200+ Clients</span><span class="hero-badge">Fully Insured</span><span class="hero-badge">5-Star Rated</span>
+      </div>
+      
+    </div>
+    <aside class="quote-card">
+      <h3>Licensed · Insured · Local</h3>
+      <p>15 years serving the Denver metro with same-day service and written guarantees on every job.</p>
+      <div class="quote-card-foot"><span class="dot"></span> Usually responds within 1 hour</div>
+    </aside>
+  </div>
+</section>
+
+
+<div class="trust-strip">
+  <div class="wrap trust-strip-grid">
+    <span class="trust-strip-item">BBB Accredited</span><span class="trust-strip-item">200+ Clients</span><span class="trust-strip-item">Fully Insured</span><span class="trust-strip-item">5-Star Rated</span>
+  </div>
+</div>
+
+
+
+<section class="services" id="services">
+  <div class="wrap">
+    <div class="section-head">
+      <span class="eyebrow">What we do</span>
+      <h2>Services we offer</h2>
+    </div>
+    <div class="services-grid">
+      
+      <article class="svc">
+        <div class="svc-icon">🚿</div>
+        <h3>Drain Cleaning</h3>
+        <p>Clogs, backups, and slow drains — hydro-jetting available.</p>
+        <div class="svc-price">From $99</div>
+      </article>
+      
+      <article class="svc">
+        <div class="svc-icon">🔧</div>
+        <h3>Water Heater Service</h3>
+        <p>Repair, replacement, and tankless conversions. Same-day in most cases.</p>
+        <div class="svc-price">From $149</div>
+      </article>
+      
+      <article class="svc">
+        <div class="svc-icon">💧</div>
+        <h3>Leak Detection</h3>
+        <p>Thermal imaging to find leaks without tearing up your walls.</p>
+        <div class="svc-price">From $185</div>
+      </article>
+      
+      <article class="svc">
+        <div class="svc-icon">🚽</div>
+        <h3>Toilet &amp; Fixture</h3>
+        <p>Installs, repairs, and upgrades. Low-flow, bidet, comfort-height — all handled.</p>
+        <div class="svc-price">From $125</div>
+      </article>
+      
+    </div>
+  </div>
+</section>
+
+
+
+<section class="numbers">
+  <div class="wrap numbers-grid">
+    
+    <div>
+      <div class="num-v">200+</div>
+      <div class="num-l">Happy Clients</div>
+    </div>
+    
+    <div>
+      <div class="num-v">15</div>
+      <div class="num-l">Years Experience</div>
+    </div>
+    
+    <div>
+      <div class="num-v">50+</div>
+      <div class="num-l">Awards Won</div>
+    </div>
+    
+    <div>
+      <div class="num-v">24/7</div>
+      <div class="num-l">Emergency Support</div>
+    </div>
+    
+  </div>
+</section>
+
+
+<section class="about" id="about">
+  <div class="wrap about-grid">
+    <div>
+      <span class="eyebrow">About us</span>
+      <h2>Three generations of plumbers serving Denver</h2>
+      <p>Started in 1998 by Hank Riverbend, now run by his sons Cole and Jake. We treat every home like our grandmother lives there — boots off at the door, clean-up always, and we will not leave until you are satisfied.</p>
+      <div class="emergency">🚨 24/7 Emergency Service — call anytime</div>
+      
+        <div class="areas">
+          <strong style="font-size:.85rem;color:var(--muted);text-transform:uppercase;letter-spacing:.08em;">Areas we serve</strong><br>
+          <span class="area-tag">Downtown Denver</span><span class="area-tag">Highlands</span><span class="area-tag">Cherry Creek</span><span class="area-tag">Capitol Hill</span><span class="area-tag">Washington Park</span><span class="area-tag">Five Points</span>
+        </div>
+      
+    </div>
+    <div class="hours-card">
+      <h3>Business Hours</h3>
+      
+        
+          <div class="hours-row">
+            <span class="day">Monday</span>
+            <span class="time">7:00 AM – 7:00 PM</span>
+          </div>
+        
+          <div class="hours-row">
+            <span class="day">Tuesday</span>
+            <span class="time">7:00 AM – 7:00 PM</span>
+          </div>
+        
+          <div class="hours-row">
+            <span class="day">Wednesday</span>
+            <span class="time">7:00 AM – 7:00 PM</span>
+          </div>
+        
+          <div class="hours-row">
+            <span class="day">Thursday</span>
+            <span class="time">7:00 AM – 7:00 PM</span>
+          </div>
+        
+          <div class="hours-row">
+            <span class="day">Friday</span>
+            <span class="time">7:00 AM – 7:00 PM</span>
+          </div>
+        
+          <div class="hours-row">
+            <span class="day">Saturday</span>
+            <span class="time">8:00 AM – 4:00 PM</span>
+          </div>
+        
+          <div class="hours-row">
+            <span class="day">Sunday</span>
+            <span class="closed">Closed</span>
+            
+          </div>
+        
+      
+    </div>
+  </div>
+</section>
+
+
+<section class="reviews">
+  <div class="wrap">
+    <div class="section-head">
+      <span class="eyebrow">Reviews</span>
+      <h2>What our customers say</h2>
+    </div>
+    <div class="reviews-grid">
+      
+      <div class="review">
+        <p>Apex transformed our brand from the ground up. Work is worth every penny.</p>
+        <div class="review-meta">
+          <strong>Sarah Chen</strong>
+          <span>CEO · Helix Health</span>
+        </div>
+      </div>
+      
+      <div class="review">
+        <p>The team is sharp, responsive, and genuinely invested in the outcome.</p>
+        <div class="review-meta">
+          <strong>Marcus Lee</strong>
+          <span>Founder · Northbeam</span>
+        </div>
+      </div>
+      
+      <div class="review">
+        <p>Best creative partner we have ever worked with. Would hire again in a heartbeat.</p>
+        <div class="review-meta">
+          <strong>Priya Raman</strong>
+          <span>VP Marketing · Orbit</span>
+        </div>
+      </div>
+      
+    </div>
+  </div>
+</section>
+
+
+
+<section>
+  <div class="wrap">
+    <div class="section-head">
+      <span class="eyebrow">FAQ</span>
+      <h2>Questions, answered</h2>
+    </div>
+    <div class="faq-list">
+      
+        <details>
+          <summary>How long does a typical project take?</summary>
+          <p>Brand projects run 6–8 weeks. Web design typically 8–12 weeks depending on scope.</p>
+        </details>
+      
+        <details>
+          <summary>Do you offer ongoing support?</summary>
+          <p>Yes — most clients stay on a monthly retainer for iterations, analytics, and campaigns.</p>
+        </details>
+      
+        <details>
+          <summary>What is your pricing model?</summary>
+          <p>Fixed-price per project for defined scope, or hourly for ongoing work. We share ballpark costs on the intro call.</p>
+        </details>
+      
+    </div>
+  </div>
+</section>
+
+
+<section class="contact" id="contact">
+  <div class="wrap contact-grid">
+    <div>
+      <span class="eyebrow">Get in touch</span>
+      <h2 style="font-family:var(--serif);font-size:clamp(1.9rem,3vw,2.6rem);margin-top:10px;">Let's take care of it, together.</h2>
+      <div class="contact-info" style="margin-top:24px">
+        <p><strong>Call:</strong> +1 (555) 123-4567</p>
+        <p><strong>Email:</strong> hello@apexstudio.co</p>
+        <p><strong>Visit:</strong> 88 Market Street, Suite 400
+San Francisco, CA 94103</p>
+        <p><strong>Hours:</strong> Mon–Fri · 9am–6pm PT</p>
+      </div>
+    </div>
+    <form class="contact-form" onsubmit="event.preventDefault(); this.reset(); alert('Thanks — we\'ll be in touch.');">
+      <label>Name</label><input type="text" required>
+      <label>Phone</label><input type="tel">
+      <label>Email</label><input type="email" required>
+      <label>What do you need?</label><textarea rows="3"></textarea>
+      <button type="submit">Get a Free Quote</button>
+    </form>
+  </div>
+</section>
+
+<footer>© 2015 Riverbend Plumbing · Licensed & Insured · All rights reserved</footer>
+
+</body>
+</html>

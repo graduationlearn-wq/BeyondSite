@@ -2,11 +2,19 @@
   "id": "template-8",
   "name": "Insurance Advisor",
   "extends": "_base",
+  "complianceReview": {
+    "title": "Regulatory content — please have your compliance team review before publishing.",
+    "body": "This template displays IRDAI licence number, regulator details, claim-process descriptions, and policy summaries. AI-suggested copy is a starting draft only — final wording must reflect your actual IRDAI registration, the real claim-settlement process, and current IRDAI guidelines. Misleading insurance representations can be a regulatory violation."
+  },
   "sections": [
     {
       "id": "hero",
       "title": "Hero",
       "aiable": true,
+      "hint": {
+        "label": "The first impression",
+        "description": "A headline, sub-line, two buttons, and a quote-request card. For insurance the quote card is everything — visitors want to compare numbers before they'll consider a call."
+      },
       "fields": [
         { "id": "heroTag",      "label": "Nav tag (e.g. Licensed Insurance Professional)", "type": "text", "max": 60 },
         { "id": "heroEyebrow",  "label": "Eyebrow", "type": "text", "max": 60, "placeholder": "Protecting families since 2010", "aiable": true },
@@ -21,6 +29,10 @@
     {
       "id": "trust",
       "title": "Trust Strip",
+      "hint": {
+        "label": "Licenses and credentials",
+        "description": "A strip showing things like 'IRDAI Licensed' or '24/7 Claim Support'. In insurance, trust signals are non-negotiable — this is where they live."
+      },
       "fields": [
         {
           "id": "trustItems", "type": "repeater", "min": 2, "max": 6, "itemLabel": "Trust item",
@@ -34,6 +46,10 @@
       "id": "policies",
       "title": "Policies Offered",
       "aiable": true,
+      "hint": {
+        "label": "What you sell",
+        "description": "The policy types you offer — Term Life, Health, Auto, Home, etc. Each one gets an icon, name, and short description. Most visitors land here first."
+      },
       "fields": [
         {
           "id": "policies", "type": "repeater", "min": 2, "max": 8, "itemLabel": "Policy",
@@ -49,6 +65,10 @@
       "id": "whyChoose",
       "title": "Why Choose Us",
       "aiable": true,
+      "hint": {
+        "label": "Why you, not a competitor",
+        "description": "A checklist of benefits plus optional stat boxes like '₹480Cr claims settled'. Answer the question every visitor is already asking: 'why should I buy from you?'"
+      },
       "fields": [
         { "id": "whyHeadline", "label": "Section headline", "type": "text", "max": 90, "aiable": true },
         {
@@ -68,6 +88,10 @@
       "id": "advisor",
       "title": "About the Advisor",
       "aiable": true,
+      "hint": {
+        "label": "The human behind the policy",
+        "description": "Your photo, bio, and credentials. Insurance is a relationship business — putting a real face here massively increases inquiries compared to a faceless company page."
+      },
       "fields": [
         { "id": "advisorName",  "label": "Advisor name",   "type": "text", "max": 80 },
         { "id": "advisorPhoto", "label": "Advisor photo",  "type": "image", "accept": "image/png,image/jpeg,image/webp", "maxSizeMB": 2, "uploadLabel": "Upload photo" },
@@ -82,6 +106,10 @@
       "id": "claimProcess",
       "title": "Claim Process",
       "aiable": true,
+      "hint": {
+        "label": "What happens after a claim",
+        "description": "3 to 5 steps showing your claim process. Visitors fear claim hassles more than premiums — a clear process here is often what closes the deal."
+      },
       "fields": [
         {
           "id": "claimSteps", "type": "repeater", "min": 3, "max": 5, "itemLabel": "Step",
@@ -95,6 +123,10 @@
     {
       "id": "testimonials",
       "title": "Testimonials",
+      "hint": {
+        "label": "Client stories",
+        "description": "Quotes from real clients — include the policy type and any context. 'Got my claim settled in 7 days' is worth more than any marketing line."
+      },
       "fields": [
         {
           "id": "testimonials", "type": "repeater", "min": 0, "max": 6, "itemLabel": "Testimonial",
@@ -109,6 +141,11 @@
     {
       "id": "compliance",
       "title": "Compliance / License",
+      "hint": {
+        "label": "The fine print (required)",
+        "description": "Your license number and regulator name. Shown in the footer as a small badge. Required for compliance in most jurisdictions — don't skip this.",
+        "mockupTarget": "footer"
+      },
       "fields": [
         { "id": "licenseNumber", "label": "IRDAI / License number", "type": "text", "max": 60 },
         { "id": "regulator",     "label": "Regulator name",         "type": "text", "max": 60, "placeholder": "IRDAI" }

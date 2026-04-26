@@ -1,0 +1,166 @@
+{
+  "id": "template-3",
+  "name": "Terminal",
+  "extends": "_base",
+  "sections": [
+    {
+      "id": "hero",
+      "title": "Hero",
+      "aiable": true,
+      "hint": {
+        "label": "The boot screen",
+        "description": "A faux-terminal hero — a shell prompt up top, your business name as the headline, then a typing line that cycles through short taglines. The status meta below the buttons is the tiny three-up panel (Status / Modules / Build)."
+      },
+      "fields": [
+        { "id": "heroPromptCmd",   "label": "Prompt command (after $)", "type": "text", "max": 80,  "placeholder": "./launch.sh --mode=professional" },
+        { "id": "heroSub",         "label": "Sub-headline (single line)", "type": "text", "max": 140, "aiable": true },
+        { "id": "heroCtaPrimary",  "label": "Primary CTA text",   "type": "text", "max": 30, "placeholder": "▶ run services.sh" },
+        { "id": "heroCtaSecondary","label": "Secondary CTA text", "type": "text", "max": 30, "placeholder": "cat README.md" },
+        {
+          "id": "heroTypingLines", "label": "Typing-line phrases (cycle)", "type": "repeater", "min": 1, "max": 6, "itemLabel": "Phrase", "aiable": true,
+          "item": [
+            { "id": "text", "label": "Phrase (e.g. > Shipping precision-engineered software.)", "type": "text", "max": 100 }
+          ]
+        },
+        { "id": "heroMetaStatus",  "label": "Meta · Status value",  "type": "text", "max": 30, "placeholder": "● ONLINE" },
+        { "id": "heroMetaModules", "label": "Meta · Modules value", "type": "text", "max": 30, "placeholder": "06 loaded" },
+        { "id": "heroMetaBuild",   "label": "Meta · Build value",   "type": "text", "max": 30, "placeholder": "v2026.stable" }
+      ]
+    },
+    {
+      "id": "statusbar",
+      "title": "Status Bar",
+      "hint": {
+        "label": "The scrolling strip",
+        "description": "A thin marquee under the hero showing your modules / services / keywords scrolling sideways. Adds motion and signals breadth."
+      },
+      "fields": [
+        {
+          "id": "statusItems", "type": "repeater", "min": 3, "max": 12, "itemLabel": "Item",
+          "item": [
+            { "id": "text", "label": "Item (e.g. Authentication)", "type": "text", "max": 40 }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "about",
+      "title": "About",
+      "aiable": true,
+      "hint": {
+        "label": "The about.ts code window + stack bars",
+        "description": "Left card looks like a TypeScript file showing your company config. Right side has 'capability bars' — each shows a discipline and a fluency percentage. Both feel native to a developer audience."
+      },
+      "fields": [
+        { "id": "aboutFileName",   "label": "Code window filename", "type": "text", "max": 40, "placeholder": "about.ts" },
+        { "id": "aboutBody",       "label": "About body (shown as a JSDoc comment)", "type": "textarea", "rows": 5, "max": 600, "aiable": true },
+        { "id": "aboutHeadlineLead", "label": "Right-side headline · line 1", "type": "text", "max": 40, "placeholder": "What runs" },
+        { "id": "aboutHeadlineTail", "label": "Right-side headline · line 2 (accent word)", "type": "text", "max": 40, "placeholder": "in our stack." },
+        { "id": "aboutMeta",       "label": "Right-side caption", "type": "textarea", "rows": 2, "max": 200, "aiable": true },
+        {
+          "id": "stackItems", "label": "Stack bars (capabilities + fluency)", "type": "repeater", "min": 0, "max": 8, "itemLabel": "Capability",
+          "item": [
+            { "id": "name",    "label": "Capability name",        "type": "text", "max": 40, "placeholder": "TypeScript" },
+            { "id": "percent", "label": "Fluency % (number)",      "type": "text", "max": 4,  "placeholder": "95" }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "services",
+      "title": "Services",
+      "aiable": true,
+      "hint": {
+        "label": "Modules grid",
+        "description": "Each service is a 'MODULE_0n.ts' card with a name, a short description, and an ACTIVE status pill. Keep it benefit-led — the dev aesthetic doesn't excuse vague copy."
+      },
+      "fields": [
+        { "id": "servicesHeadlineLead", "label": "Headline · line 1", "type": "text", "max": 40, "placeholder": "Technical" },
+        { "id": "servicesHeadlineTail", "label": "Headline · accent word(s)", "type": "text", "max": 40, "placeholder": "Capabilities" },
+        { "id": "servicesMeta",         "label": "Section caption",   "type": "textarea", "rows": 2, "max": 240, "aiable": true },
+        {
+          "id": "services", "type": "repeater", "min": 3, "max": 9, "itemLabel": "Service",
+          "item": [
+            { "id": "name",   "label": "Service name",      "type": "text", "required": true, "max": 60 },
+            { "id": "body",   "label": "Short description", "type": "textarea", "rows": 2, "max": 220, "aiable": true },
+            { "id": "status", "label": "Status tag (optional, e.g. ACTIVE)", "type": "text", "max": 30, "placeholder": "ACTIVE" }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "process",
+      "title": "Process (git log)",
+      "aiable": true,
+      "hint": {
+        "label": "git log — 4 phases",
+        "description": "How an engagement runs, styled as four git commits with short hashes and branch names. Keep titles to verbs (init / feat / build / deploy work well) — devs read them faster."
+      },
+      "fields": [
+        { "id": "processHeadlineLead", "label": "Headline · line 1",       "type": "text", "max": 40, "placeholder": "How We" },
+        { "id": "processHeadlineTail", "label": "Headline · accent word",  "type": "text", "max": 40, "placeholder": "Execute" },
+        {
+          "id": "processSteps", "type": "repeater", "min": 4, "max": 4, "itemLabel": "Phase",
+          "item": [
+            { "id": "hash",   "label": "Short hash (7 hex chars)", "type": "text", "max": 8,  "placeholder": "a1f3e9c" },
+            { "id": "phase",  "label": "Phase label",              "type": "text", "max": 20, "placeholder": "PHASE 01" },
+            { "id": "title",  "label": "Commit title (verb: short summary)", "type": "text", "required": true, "max": 80, "placeholder": "init: Discovery & Scoping" },
+            { "id": "body",   "label": "Body",   "type": "textarea", "rows": 3, "max": 240, "aiable": true },
+            { "id": "branch", "label": "Branch tag (optional)", "type": "text", "max": 40, "placeholder": "branch: discovery" }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "numbers",
+      "title": "Numbers",
+      "hint": {
+        "label": "Big four stats",
+        "description": "A wide band of four animated counters. Specific numbers (e.g. '500+ projects shipped', '<400ms response') beat vague claims. Stick to four for visual balance."
+      },
+      "fields": [
+        {
+          "id": "numberStats", "type": "repeater", "min": 2, "max": 4, "itemLabel": "Stat",
+          "item": [
+            { "id": "value",  "label": "Number (digits only is fine, e.g. 500)", "type": "text", "max": 12 },
+            { "id": "suffix", "label": "Suffix (e.g. +, %, yr, hr)", "type": "text", "max": 6 },
+            { "id": "label",  "label": "Label (snake_case looks best)", "type": "text", "max": 60, "placeholder": "projects_shipped" }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "testimonials",
+      "title": "Testimonials",
+      "hint": {
+        "label": "Client log entries",
+        "description": "Each quote shown as a 'review_00n.log' stdout entry. Initials are auto-generated from the name. Quotes about precision, pace, or documentation rate quality work best in this aesthetic."
+      },
+      "fields": [
+        {
+          "id": "testimonials", "type": "repeater", "min": 0, "max": 6, "itemLabel": "Review",
+          "item": [
+            { "id": "quote", "label": "Quote",       "type": "textarea", "rows": 3, "max": 320 },
+            { "id": "name",  "label": "Reviewer",    "type": "text", "max": 60 },
+            { "id": "role",  "label": "Role / title","type": "text", "max": 80 }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "cta",
+      "title": "CTA Band",
+      "aiable": true,
+      "hint": {
+        "label": "The closing nudge",
+        "description": "A wide call-to-action — two-line headline, one supporting sentence, one button styled as a shell command. Keep button copy as a verb-led command (e.g. './start_project.sh →')."
+      },
+      "fields": [
+        { "id": "ctaHeadlineLead",  "label": "Headline · line 1",     "type": "text", "max": 40,  "placeholder": "Ready to ship",          "aiable": true },
+        { "id": "ctaHeadlineTail",  "label": "Headline · line 2",     "type": "text", "max": 40,  "placeholder": "something great?",       "aiable": true },
+        { "id": "ctaBody",          "label": "Supporting line",       "type": "text", "max": 180, "aiable": true },
+        { "id": "ctaButton",        "label": "Button text",           "type": "text", "max": 40,  "placeholder": "$ ./start_project.sh →" }
+      ]
+    }
+  ]
+}

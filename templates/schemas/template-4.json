@@ -1,0 +1,172 @@
+{
+  "id": "template-4",
+  "name": "Web3 / Protocol",
+  "extends": "_base",
+  "sections": [
+    {
+      "id": "hero",
+      "title": "Hero",
+      "aiable": true,
+      "hint": {
+        "label": "Cyan-accent headline + dashboard card",
+        "description": "Headline on the left (the LAST word gets the cyan accent), with a tilted 'protocol dashboard' card on the right. Keep the headline tight — three or four words sells the look."
+      },
+      "fields": [
+        { "id": "heroBadge",       "label": "Hero badge (e.g. Live Protocol)", "type": "text", "max": 60, "placeholder": "Live · Protocol" },
+        { "id": "heroHeadlineLead",  "label": "Headline · everything except the last word", "type": "text", "max": 40, "placeholder": "Trustless infra for", "aiable": true },
+        { "id": "heroHeadlineAccent","label": "Headline · accent word (cyan)", "type": "text", "max": 30, "placeholder": "Web3.", "aiable": true },
+        { "id": "heroSub",         "label": "Sub-headline", "type": "textarea", "rows": 3, "max": 240, "aiable": true },
+        { "id": "heroCtaPrimary",  "label": "Primary CTA text",   "type": "text", "max": 30, "placeholder": "Explore Services" },
+        { "id": "heroCtaSecondary","label": "Secondary CTA text", "type": "text", "max": 30, "placeholder": "Learn More" },
+        { "id": "heroPanelTitle",  "label": "Dashboard panel title", "type": "text", "max": 60, "placeholder": "Protocol · Dashboard" },
+        {
+          "id": "heroPortfolioChips", "label": "Portfolio chips (3 stats on the dashboard)", "type": "repeater", "min": 0, "max": 3, "itemLabel": "Chip",
+          "item": [
+            { "id": "label",  "label": "Label (e.g. Total Value)", "type": "text", "max": 30 },
+            { "id": "value",  "label": "Value (e.g. $284,910)",     "type": "text", "max": 20 },
+            { "id": "change", "label": "Change line (e.g. ↑ +12.4%)", "type": "text", "max": 30 }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "ticker",
+      "title": "Token Ticker",
+      "hint": {
+        "label": "The price marquee",
+        "description": "A horizontal scrolling band of token tickers and prices. Used purely for atmosphere — visitors scan it to feel 'something is happening here'."
+      },
+      "fields": [
+        {
+          "id": "tickerTokens", "type": "repeater", "min": 4, "max": 12, "itemLabel": "Token",
+          "item": [
+            { "id": "symbol", "label": "Symbol (e.g. BTC)", "type": "text", "max": 8 },
+            { "id": "price",  "label": "Price (e.g. $67,420)", "type": "text", "max": 16 },
+            { "id": "up",     "label": "Direction", "type": "select", "options": ["up","down"] },
+            { "id": "change", "label": "Change (e.g. 2.4%)", "type": "text", "max": 12 }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "services",
+      "title": "Services",
+      "aiable": true,
+      "hint": {
+        "label": "Indexed list — full-width rows",
+        "description": "An editorial numbered list — each row has a number, a service name, a short description on the right, and a hover arrow. Tight, benefit-led copy reads best here."
+      },
+      "fields": [
+        { "id": "servicesLabel",     "label": "Section eyebrow",  "type": "text", "max": 40, "placeholder": "What We Build" },
+        { "id": "servicesHeadline1", "label": "Headline · line 1", "type": "text", "max": 40, "placeholder": "The full stack." },
+        { "id": "servicesHeadline2", "label": "Headline · line 2", "type": "text", "max": 40, "placeholder": "Nothing missing.", "aiable": true },
+        {
+          "id": "services", "type": "repeater", "min": 3, "max": 9, "itemLabel": "Service",
+          "item": [
+            { "id": "name", "label": "Service name",      "type": "text", "required": true, "max": 60 },
+            { "id": "body", "label": "Short description", "type": "textarea", "rows": 2, "max": 200, "aiable": true }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "about",
+      "title": "About / Manifesto",
+      "aiable": true,
+      "hint": {
+        "label": "The manifesto pull-quote + data wall",
+        "description": "A bold three-line manifesto on top (two phrases get the cyan accent), three-paragraph body on the left, and a 'data wall' on the right with five key/value rows. The data points should be specific and a little bit boastful."
+      },
+      "fields": [
+        { "id": "aboutLabel",        "label": "Section eyebrow", "type": "text", "max": 40, "placeholder": "Our Foundation" },
+        { "id": "aboutQuoteLine1",   "label": "Manifesto · line 1 prefix", "type": "text", "max": 40, "placeholder": "We didn't build" },
+        { "id": "aboutQuoteAccent1", "label": "Manifesto · line 1 accent (cyan)", "type": "text", "max": 30, "placeholder": "Acme.", "aiable": true },
+        { "id": "aboutQuoteLine2",   "label": "Manifesto · line 2", "type": "text", "max": 60, "placeholder": "to be another platform.", "aiable": true },
+        { "id": "aboutQuoteLine3",   "label": "Manifesto · line 3 prefix", "type": "text", "max": 40, "placeholder": "We built it to be the" },
+        { "id": "aboutQuoteAccent2", "label": "Manifesto · line 3 accent (cyan)", "type": "text", "max": 30, "placeholder": "last one", "aiable": true },
+        { "id": "aboutQuoteTail",    "label": "Manifesto · line 3 suffix", "type": "text", "max": 40, "placeholder": "you need." },
+        { "id": "aboutBody",         "label": "About body (paragraphs separated by blank line)", "type": "textarea", "rows": 8, "max": 900, "aiable": true },
+        { "id": "aboutCtaText",      "label": "About CTA button (optional)", "type": "text", "max": 40, "placeholder": "Start Building →" },
+        {
+          "id": "dataRows", "label": "Data wall rows", "type": "repeater", "min": 0, "max": 6, "itemLabel": "Row",
+          "item": [
+            { "id": "key",   "label": "Key (e.g. Total value secured)", "type": "text", "max": 60 },
+            { "id": "value", "label": "Value (e.g. $2.4B+)",             "type": "text", "max": 20 },
+            { "id": "sub",   "label": "Sub-line (optional, e.g. since launch)", "type": "text", "max": 60 }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "chains",
+      "title": "Supported Chains",
+      "hint": {
+        "label": "The chains marquee",
+        "description": "A scrolling strip of chains you support — each rendered as a coloured dot + name. Adds breadth signalling for crypto-native audiences."
+      },
+      "fields": [
+        { "id": "chainsLabel", "label": "Section caption", "type": "text", "max": 40, "placeholder": "Supported Chains" },
+        {
+          "id": "chains", "type": "repeater", "min": 3, "max": 12, "itemLabel": "Chain",
+          "item": [
+            { "id": "name",  "label": "Chain name (e.g. Ethereum)", "type": "text", "max": 30 },
+            { "id": "color", "label": "Dot colour (hex)", "type": "text", "max": 12, "placeholder": "#627eea" }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "testimonials",
+      "title": "Testimonials",
+      "hint": {
+        "label": "Pull-quote stack",
+        "description": "Three editorial pull-quotes — each with avatar initials, name, role, rating, and a long quote. The quoted text supports italics by wrapping a phrase in *asterisks* (Round C only)."
+      },
+      "fields": [
+        { "id": "testimonialsLabel", "label": "Section eyebrow", "type": "text", "max": 40, "placeholder": "Client Voices" },
+        { "id": "testimonialsRating", "label": "Rating line (e.g. Rated 4.9 across 200+ reviews)", "type": "text", "max": 80 },
+        {
+          "id": "testimonials", "type": "repeater", "min": 0, "max": 6, "itemLabel": "Quote",
+          "item": [
+            { "id": "quote", "label": "Quote (wrap a phrase in *asterisks* to italicise)", "type": "textarea", "rows": 3, "max": 360 },
+            { "id": "name",  "label": "Name", "type": "text", "max": 60 },
+            { "id": "role",  "label": "Role / company", "type": "text", "max": 80 }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "cta",
+      "title": "CTA Band",
+      "aiable": true,
+      "hint": {
+        "label": "Final nudge",
+        "description": "A glowing full-bleed call-to-action — short eyebrow, two-line headline (last word in cyan), supporting copy, and a button. Keep the supporting line action-oriented, not aspirational."
+      },
+      "fields": [
+        { "id": "ctaEyebrow",    "label": "Eyebrow",            "type": "text", "max": 40,  "placeholder": "Ready to Ship" },
+        { "id": "ctaHeadlineLead","label": "Headline · line 1", "type": "text", "max": 40,  "placeholder": "Go on-chain with",     "aiable": true },
+        { "id": "ctaHeadlineAccent","label": "Headline · accent word (cyan)", "type": "text", "max": 30, "placeholder": "Acme.", "aiable": true },
+        { "id": "ctaBody",       "label": "Supporting line",    "type": "text", "max": 220, "aiable": true },
+        { "id": "ctaButton",     "label": "Button text",        "type": "text", "max": 30,  "placeholder": "Start Building →" },
+        { "id": "ctaNote",       "label": "Note next to button","type": "text", "max": 100, "placeholder": "Response within 24 hours · NDA available" }
+      ]
+    },
+    {
+      "id": "contactPerks",
+      "title": "Contact Perks",
+      "hint": {
+        "label": "Why it's safe to enquire",
+        "description": "A short list of reassurance bullets shown next to the contact form — typically four of them. 'Response in 24 hours', 'NDA available', 'No commitment to start' — that kind of thing."
+      },
+      "fields": [
+        {
+          "id": "contactPerks", "type": "repeater", "min": 0, "max": 6, "itemLabel": "Perk",
+          "item": [
+            { "id": "text", "label": "Perk text", "type": "text", "max": 120 }
+          ]
+        }
+      ]
+    }
+  ]
+}

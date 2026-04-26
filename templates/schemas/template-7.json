@@ -7,6 +7,10 @@
       "id": "hero",
       "title": "Hero",
       "aiable": true,
+      "hint": {
+        "label": "Your product pitch in 5 seconds",
+        "description": "Centered headline, sub-line, two buttons, and a product screenshot. The screenshot does a lot of the selling — upload a clean shot of your app's UI."
+      },
       "fields": [
         { "id": "heroBadge",    "label": "Small badge (e.g. NEW · Series A raised)", "type": "text", "max": 50, "aiable": true },
         { "id": "heroHeadline", "label": "Headline", "type": "text", "max": 90, "aiable": true },
@@ -19,6 +23,10 @@
     {
       "id": "logoStrip",
       "title": "Customer Logos",
+      "hint": {
+        "label": "Social proof via logos",
+        "description": "Customer logos shown as a muted strip — 'As used at Stripe, Linear, Notion'. Even three recognizable logos massively boost perceived credibility."
+      },
       "fields": [
         {
           "id": "logos", "type": "repeater", "min": 0, "max": 10, "itemLabel": "Customer",
@@ -33,6 +41,10 @@
       "id": "features",
       "title": "Features (bento)",
       "aiable": true,
+      "hint": {
+        "label": "What makes you different",
+        "description": "A bento grid — the first feature takes the biggest tile, the rest are smaller. Each gets a title, body, and an optional metric like '2.4× faster' to back up the claim."
+      },
       "fields": [
         {
           "id": "features", "type": "repeater", "min": 3, "max": 6, "itemLabel": "Feature",
@@ -48,6 +60,10 @@
       "id": "howItWorks",
       "title": "How it works (4 steps)",
       "aiable": true,
+      "hint": {
+        "label": "The 4-step explainer",
+        "description": "How your product actually works, in four simple steps. Skeptical visitors who aren't sure what you do will finally get it after reading this."
+      },
       "fields": [
         {
           "id": "howItWorks", "type": "repeater", "min": 4, "max": 4, "itemLabel": "Step",
@@ -61,6 +77,10 @@
     {
       "id": "pricing",
       "title": "Pricing",
+      "hint": {
+        "label": "Your paid plans",
+        "description": "2 to 4 plans, each with name, price, and included features. Mark one plan as 'popular' to guide the choice — this reliably pushes more visitors toward that tier."
+      },
       "fields": [
         { "id": "currencySymbol", "label": "Currency symbol", "type": "text", "max": 3, "placeholder": "$" },
         {
@@ -83,6 +103,10 @@
     {
       "id": "testimonials",
       "title": "Testimonials",
+      "hint": {
+        "label": "Wins from real customers",
+        "description": "Quotes with name, role, and a metric like '+312% conversion'. For SaaS, the metric matters more than the quote itself — specifics beat adjectives."
+      },
       "fields": [
         {
           "id": "testimonials", "type": "repeater", "min": 0, "max": 6, "itemLabel": "Testimonial",
@@ -99,6 +123,10 @@
       "id": "cta",
       "title": "CTA Band",
       "aiable": true,
+      "hint": {
+        "label": "The final nudge",
+        "description": "A big band near the bottom that pushes visitors to sign up. Headline + a single button. Keep it action-oriented — 'Start free trial', not 'Learn more'."
+      },
       "fields": [
         { "id": "ctaHeadline", "label": "CTA headline",        "type": "text", "max": 80,  "aiable": true },
         { "id": "ctaBody",     "label": "CTA supporting line", "type": "text", "max": 140, "aiable": true },

@@ -1,0 +1,397 @@
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Ananya Sharma &amp; Associates | Honest advice. Policies that actually pay.</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:wght@500;600;700&family=DM+Sans:wght@400;500;600;700&display=swap" rel="stylesheet">
+  <style>
+    *,*::before,*::after{margin:0;padding:0;box-sizing:border-box}
+    :root{
+      --forest:#0e1e0e;--forest-d:#0a160a;--forest-m:#16291a;
+      --gold:#15513a;--gold-lt:#d4ac4d;
+      --cream:#faf6ec;--cream-d:#efe9d6;
+      --ink:#0e1e0e;--muted:rgba(14,30,14,.6);--dim:rgba(14,30,14,.4);
+      --border:rgba(14,30,14,.12);
+      --serif:'Cormorant Garamond',Georgia,serif;
+      --sans:'DM Sans',system-ui,sans-serif;
+    }
+    html{scroll-behavior:smooth}
+    body{font-family:var(--sans);background:var(--cream);color:var(--ink);line-height:1.65;-webkit-font-smoothing:antialiased}
+    a{color:inherit;text-decoration:none}
+    .wrap{max-width:1200px;margin:0 auto;padding:0 32px}
+    .eyebrow{display:inline-block;font-size:.75rem;font-weight:600;text-transform:uppercase;letter-spacing:.22em;color:var(--gold)}
+    h1,h2,h3{font-family:var(--serif);letter-spacing:-.01em;line-height:1.12}
+    .btn{display:inline-flex;align-items:center;gap:8px;padding:14px 26px;border-radius:3px;font-weight:600;font-size:.92rem;cursor:pointer;border:0;letter-spacing:.02em;font-family:var(--sans)}
+    .btn-gold{background:var(--gold);color:var(--forest)}
+    .btn-ghost{background:transparent;color:var(--cream);border:1.5px solid var(--gold)}
+    .btn-outline-ink{background:transparent;color:var(--forest);border:1.5px solid var(--forest)}
+
+    /* ── TOP STRIP ─── */
+    .topstrip{background:var(--forest-d);color:rgba(255,255,255,.68);font-size:.78rem;padding:9px 32px;display:flex;justify-content:space-between;gap:16px}
+    .topstrip span{display:inline-flex;align-items:center;gap:8px}
+    .topstrip .dot{width:7px;height:7px;border-radius:50%;background:var(--gold);animation:pulse 2s ease-in-out infinite}
+    @keyframes pulse{0%,100%{opacity:1;transform:scale(1)}50%{opacity:.45;transform:scale(1.4)}}
+
+    /* ── NAV ─── */
+    .nav{background:var(--cream);border-bottom:1px solid var(--border);padding:0 32px;height:78px;display:flex;align-items:center;justify-content:space-between;position:sticky;top:0;z-index:500}
+    .nav-logo{display:flex;align-items:center;gap:14px}
+    .nav-logo .mark{width:44px;height:44px;border-radius:50%;background:var(--forest);display:grid;place-items:center;color:var(--gold);font-family:var(--serif);font-size:1.5rem;font-weight:700}
+    .nav-logo img{height:40px}
+    .nav-logo .name{font-family:var(--serif);font-size:1.4rem;color:var(--forest);font-weight:700;line-height:1}
+    .nav-logo .tag{font-size:.68rem;letter-spacing:.18em;text-transform:uppercase;color:var(--muted);margin-top:2px}
+
+    /* ── HERO ─── */
+    .hero{background:linear-gradient(180deg,var(--cream),var(--cream-d));padding:80px 0 100px;position:relative;overflow:hidden}
+    .hero::before{content:"";position:absolute;width:600px;height:600px;border-radius:50%;background:radial-gradient(closest-side,rgba(184,144,42,.18),transparent);top:-150px;right:-180px;pointer-events:none}
+    .hero-grid{display:grid;grid-template-columns:1.1fr .9fr;gap:70px;align-items:center;position:relative}
+    .hero h1{font-size:clamp(2.6rem,5vw,4.4rem);font-weight:700;color:var(--forest);margin:22px 0 24px}
+    .hero h1 em{font-style:italic;color:var(--gold)}
+    .hero p.sub{color:var(--muted);font-size:1.1rem;max-width:540px;margin-bottom:32px}
+    .hero-ctas{display:flex;gap:12px;flex-wrap:wrap}
+
+    .quote-card{background:#fff;border-radius:8px;padding:40px 36px;box-shadow:0 30px 70px rgba(14,30,14,.12);border:1px solid var(--border);position:relative}
+    .quote-card::before{content:"";position:absolute;width:70px;height:70px;border:3px solid var(--gold);border-radius:50%;top:-34px;left:50%;transform:translateX(-50%);background:#fff;background-image:radial-gradient(circle,var(--gold) 30%,transparent 35%);animation:spin 30s linear infinite}
+    @keyframes spin{to{transform:translateX(-50%) rotate(360deg)}}
+    .quote-card h3{font-size:1.7rem;color:var(--forest);margin-bottom:12px;margin-top:14px;text-align:center}
+    .quote-card p{color:var(--muted);text-align:center;margin-bottom:22px;font-size:.96rem}
+    .quote-card .field{display:flex;flex-direction:column;gap:6px;margin-bottom:12px}
+    .quote-card label{font-size:.74rem;color:var(--muted);letter-spacing:.12em;text-transform:uppercase}
+    .quote-card input,.quote-card select{padding:11px 14px;border:1px solid var(--border);font-family:inherit;font-size:.94rem;background:var(--cream)}
+    .quote-card button{background:var(--forest);color:var(--gold);border:0;padding:14px;font-weight:600;letter-spacing:.04em;cursor:pointer;margin-top:8px;font-family:inherit;text-transform:uppercase;font-size:.82rem}
+
+    /* ── TRUST BAR ─── */
+    .trustbar{background:var(--forest);color:rgba(255,255,255,.78);padding:22px 0;font-size:.88rem}
+    .trustbar-grid{display:flex;flex-wrap:wrap;justify-content:space-around;gap:22px;align-items:center}
+    .trustbar-item{display:inline-flex;align-items:center;gap:10px;letter-spacing:.04em}
+    .trustbar-item::before{content:"◆";color:var(--gold)}
+
+    /* ── SECTIONS ─── */
+    section{padding:92px 0}
+    .sec-head{text-align:center;max-width:740px;margin:0 auto 60px}
+    .sec-head h2{font-size:clamp(2rem,3.4vw,2.9rem);color:var(--forest);margin-top:12px}
+    .sec-head p{color:var(--muted);margin-top:12px}
+
+    /* ── POLICIES ─── */
+    .policies-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(260px,1fr));gap:22px}
+    .pol{background:#fff;border:1px solid var(--border);padding:32px 28px;display:flex;flex-direction:column;gap:10px;border-radius:4px;transition:transform .25s,border-color .25s}
+    .pol:hover{transform:translateY(-4px);border-color:var(--gold)}
+    .pol-icon{font-size:2rem;color:var(--gold);margin-bottom:4px}
+    .pol h3{font-size:1.4rem;color:var(--forest)}
+    .pol p{color:var(--muted);font-size:.94rem}
+
+    /* ── WHY ─── */
+    .why{background:#fff}
+    .why-grid{display:grid;grid-template-columns:1fr 1fr;gap:56px;align-items:start}
+    .why h2{font-size:clamp(2rem,3.2vw,2.8rem);color:var(--forest);margin-bottom:22px}
+    .why ul{list-style:none;display:flex;flex-direction:column;gap:16px}
+    .why li{padding-left:34px;position:relative;color:var(--forest);font-size:1.02rem}
+    .why li::before{content:"✓";position:absolute;left:0;top:-1px;width:22px;height:22px;background:var(--gold);color:var(--forest);border-radius:50%;display:grid;place-items:center;font-size:.78rem;font-weight:700}
+    .stats-pair{display:grid;grid-template-columns:1fr 1fr;gap:20px}
+    .stat-box{background:var(--forest);color:#fff;padding:32px 24px;border-radius:6px;text-align:center}
+    .stat-box .v{font-family:var(--serif);font-size:2.8rem;color:var(--gold);font-weight:700;line-height:1}
+    .stat-box .l{margin-top:8px;font-size:.82rem;letter-spacing:.06em;text-transform:uppercase;color:rgba(255,255,255,.72)}
+
+    /* ── ADVISOR ─── */
+    .advisor{background:var(--cream-d)}
+    .advisor-grid{display:grid;grid-template-columns:.8fr 1.2fr;gap:56px;align-items:center}
+    .advisor-photo{width:100%;max-width:380px;aspect-ratio:4/5;background:linear-gradient(135deg,var(--forest),var(--forest-m));border-radius:6px;display:grid;place-items:center;color:var(--gold);font-family:var(--serif);font-size:4rem;overflow:hidden}
+    .advisor-photo img{width:100%;height:100%;object-fit:cover}
+    .advisor h2{font-size:clamp(2rem,3.2vw,2.8rem);color:var(--forest);margin-bottom:18px}
+    .advisor p{color:var(--muted);margin-bottom:20px}
+    .cred-list{list-style:none;display:flex;flex-direction:column;gap:10px;margin-top:20px}
+    .cred-list li{padding-left:24px;position:relative;font-weight:500;font-size:.95rem;color:var(--forest)}
+    .cred-list li::before{content:"◆";color:var(--gold);position:absolute;left:0}
+
+    /* ── CLAIM PROCESS ─── */
+    .claim-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(220px,1fr));gap:22px;counter-reset:cstep}
+    .claim-step{background:#fff;border:1px solid var(--border);border-radius:4px;padding:28px;position:relative}
+    .claim-step::before{counter-increment:cstep;content:counter(cstep,decimal-leading-zero);position:absolute;top:-16px;left:22px;width:40px;height:40px;background:var(--gold);color:var(--forest);border-radius:50%;display:grid;place-items:center;font-family:var(--serif);font-weight:700;font-size:1.12rem}
+    .claim-step h3{color:var(--forest);margin:14px 0 8px;font-size:1.25rem}
+    .claim-step p{color:var(--muted);font-size:.94rem}
+
+    /* ── TESTIMONIALS ─── */
+    .tests{background:#fff}
+    .tests-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(280px,1fr));gap:22px}
+    .t{background:var(--cream);border:1px solid var(--border);padding:28px;border-radius:4px;position:relative}
+    .t::before{content:"\201C";font-family:var(--serif);color:var(--gold);font-size:4rem;position:absolute;top:-4px;left:18px;line-height:1}
+    .t p{margin:10px 0 20px;color:var(--forest)}
+    .t-meta{padding-top:14px;border-top:1px solid var(--border)}
+    .t-meta strong{color:var(--forest);font-weight:600}
+    .t-meta span{display:block;color:var(--muted);font-size:.86rem}
+
+    /* ── CONTACT / FOOTER ─── */
+    .contact{background:var(--forest);color:rgba(255,255,255,.82)}
+    .contact .sec-head h2{color:#fff}
+    .contact .sec-head p{color:rgba(255,255,255,.6)}
+    .contact-grid{display:grid;grid-template-columns:1fr 1fr;gap:54px;align-items:start}
+    .contact-info p{display:flex;gap:12px;margin-bottom:14px;color:rgba(255,255,255,.72)}
+    .contact-info p strong{color:var(--gold)}
+    form.advisor-form{background:rgba(255,255,255,.04);padding:28px;border-radius:6px;border:1px solid rgba(255,255,255,.1)}
+    form.advisor-form label{display:block;color:rgba(255,255,255,.62);font-size:.78rem;letter-spacing:.06em;margin-bottom:5px}
+    form.advisor-form input,form.advisor-form textarea,form.advisor-form select{width:100%;background:rgba(255,255,255,.05);border:1px solid rgba(255,255,255,.12);color:#fff;padding:11px 14px;font-family:inherit;border-radius:3px;margin-bottom:14px;font-size:.94rem}
+    form.advisor-form button{background:var(--gold);color:var(--forest);border:0;padding:13px 28px;font-weight:700;cursor:pointer;letter-spacing:.04em;text-transform:uppercase;font-size:.82rem}
+
+    footer{background:var(--forest-d);color:rgba(255,255,255,.55);padding:32px 0;font-size:.82rem;text-align:center;line-height:1.7}
+    footer .license{display:inline-block;margin-top:8px;padding:5px 14px;background:rgba(184,144,42,.14);color:var(--gold);border-radius:2px;letter-spacing:.08em;font-size:.74rem;text-transform:uppercase}
+
+    .floating-cta{position:fixed;bottom:24px;right:24px;z-index:600;background:var(--gold);color:var(--forest);padding:14px 22px;border-radius:50px;font-weight:700;box-shadow:0 12px 30px rgba(184,144,42,.4);display:inline-flex;align-items:center;gap:8px;font-size:.88rem}
+
+    @media (max-width:900px){
+      .hero-grid,.why-grid,.advisor-grid,.contact-grid{grid-template-columns:1fr;gap:40px}
+      section{padding:60px 0}
+      .topstrip,.nav{padding-left:18px;padding-right:18px}
+      .wrap{padding:0 18px}
+    }
+  </style>
+</head>
+<body>
+
+<div class="topstrip">
+  <span><span class="dot"></span>Office hours: Mon–Fri · 9am–6pm PT</span>
+  <span>📞 +1 (555) 123-4567 · hello@apexstudio.co</span>
+</div>
+
+<nav class="nav">
+  <div class="nav-logo">
+    <span class="mark">A</span>
+    <div>
+      <div class="name">Ananya Sharma &amp; Associates</div>
+      <div class="tag">Licensed Insurance Professional</div>
+    </div>
+  </div>
+  <a href="#contact" class="btn btn-gold">Get Free Quote →</a>
+</nav>
+
+<section class="hero">
+  <div class="wrap hero-grid">
+    <div>
+      <span class="eyebrow">Protecting families since 2010</span>
+      <h1>Insurance made simple, honest, and actually useful.</h1>
+      <p class="sub">Independent IRDAI-licensed advisor. I help families pick the right policy — not the one that pays me the biggest commission.</p>
+      <div class="hero-ctas">
+        <a href="#contact" class="btn btn-gold">Get Free Quote</a>
+        <a href="tel:+1 (555) 123-4567" class="btn btn-outline-ink">📞 Call Advisor</a>
+      </div>
+    </div>
+    <aside class="quote-card">
+      <h3>Get a personalized quote in 60 seconds</h3>
+      <p>No obligation. No spam. Just honest numbers from someone who does this for a living.</p>
+      <div class="field"><label>Full name</label><input type="text" placeholder="Your name"></div>
+      <div class="field"><label>Phone</label><input type="tel" placeholder="+91 …"></div>
+      <div class="field"><label>Email</label><input type="email" placeholder="you@example.com"></div>
+      <div class="field">
+        <label>Policy of interest</label>
+        <select>
+          <option>Term Life</option><option>Health</option><option>Motor</option><option>Home</option>
+        </select>
+      </div>
+      <button type="button" onclick="alert('Thanks! An advisor will reach out shortly.')">Get Free Quote</button>
+    </aside>
+  </div>
+</section>
+
+
+<div class="trustbar">
+  <div class="wrap trustbar-grid">
+    <span class="trustbar-item">IRDAI Licensed</span><span class="trustbar-item">96% Claim Settlement</span><span class="trustbar-item">15 Years Experience</span><span class="trustbar-item">24/7 Claim Support</span>
+  </div>
+</div>
+
+
+
+<section id="policies">
+  <div class="wrap">
+    <div class="sec-head">
+      <span class="eyebrow">Policies offered</span>
+      <h2>Coverage for every milestone</h2>
+      <p>Compare plans across leading insurers and pick the one that actually fits your family.</p>
+    </div>
+    <div class="policies-grid">
+      
+        <article class="pol">
+          <div class="pol-icon">🛡</div>
+          <h3>Term Life</h3>
+          <p>High-coverage protection for your family at the lowest premium possible.</p>
+        </article>
+      
+        <article class="pol">
+          <div class="pol-icon">🏥</div>
+          <h3>Health</h3>
+          <p>Cashless hospitalization across 8,000+ network hospitals with no sub-limits.</p>
+        </article>
+      
+        <article class="pol">
+          <div class="pol-icon">🚗</div>
+          <h3>Motor</h3>
+          <p>Comprehensive car and bike insurance with zero-depreciation add-on included.</p>
+        </article>
+      
+        <article class="pol">
+          <div class="pol-icon">🏠</div>
+          <h3>Home</h3>
+          <p>Protects your home, contents, and valuables against fire, theft, and natural disasters.</p>
+        </article>
+      
+    </div>
+  </div>
+</section>
+
+
+<section class="why">
+  <div class="wrap why-grid">
+    <div>
+      <span class="eyebrow">Why choose us</span>
+      <h2>Why clients stay for decades</h2>
+      <ul>
+        <li>Independent advice — I work for you, not any one insurance company</li><li>Claim assistance included — I handle the paperwork when you need to claim</li><li>Annual review at no cost — policies change, families change, coverage should too</li><li>One advisor for life — you will never be passed off to a call center</li><li>Transparent commission disclosure — you see exactly what I earn on every policy</li>
+      </ul>
+    </div>
+    <div class="stats-pair">
+      
+      <div class="stat-box">
+        <div class="v">₹480Cr</div>
+        <div class="l">Claims Settled</div>
+      </div>
+      
+      <div class="stat-box">
+        <div class="v">12,000+</div>
+        <div class="l">Families Covered</div>
+      </div>
+      
+      <div class="stat-box">
+        <div class="v">96%</div>
+        <div class="l">Settlement Rate</div>
+      </div>
+      
+      <div class="stat-box">
+        <div class="v">15+</div>
+        <div class="l">Years Experience</div>
+      </div>
+      
+    </div>
+  </div>
+</section>
+
+<section class="advisor" id="advisor">
+  <div class="wrap advisor-grid">
+    <div class="advisor-photo">
+      A
+    </div>
+    <div>
+      <span class="eyebrow">About Ananya Sharma</span>
+      <h2>Your trusted family advisor</h2>
+      <p>Ananya has spent 15 years helping families in Mumbai pick insurance that actually pays out when it matters. IRDAI-licensed since 2010, she specializes in complex family situations — blended households, business owners, and NRIs.</p>
+      <ul class="cred-list">
+        <li>IRDAI Licensed · Since 2010</li><li>Certified Financial Planner (CFP)</li><li>MDRT Member · 2018, 2019, 2020, 2021, 2022, 2023</li><li>MA Economics · Delhi University</li>
+      </ul>
+    </div>
+  </div>
+</section>
+
+
+<section id="claim">
+  <div class="wrap">
+    <div class="sec-head">
+      <span class="eyebrow">Claim process</span>
+      <h2>A simple, supported claim journey</h2>
+      <p>We don't just sell the policy — we stand with you when it's time to claim.</p>
+    </div>
+    <div class="claim-grid">
+      
+        <div class="claim-step">
+          <h3>Call me first</h3>
+          <p>Before filing anything — one call and I walk you through what to do next.</p>
+        </div>
+      
+        <div class="claim-step">
+          <h3>Document check</h3>
+          <p>I review every form before submission so nothing gets rejected on technicalities.</p>
+        </div>
+      
+        <div class="claim-step">
+          <h3>Submission &amp; follow-up</h3>
+          <p>I submit the claim and follow up with the insurer directly, daily if needed.</p>
+        </div>
+      
+        <div class="claim-step">
+          <h3>Payout confirmation</h3>
+          <p>I confirm the transfer and only close the case once money is in your account.</p>
+        </div>
+      
+    </div>
+  </div>
+</section>
+
+
+
+<section class="tests">
+  <div class="wrap">
+    <div class="sec-head">
+      <span class="eyebrow">Testimonials</span>
+      <h2>Families we've helped protect</h2>
+    </div>
+    <div class="tests-grid">
+      
+        <div class="t">
+          <p>Got my hospitalization claim settled in 9 days. Ananya handled everything — I did not chase the insurer once.</p>
+          <div class="t-meta">
+            <strong>Rohit Kapoor</strong>
+            <span>Health policy · claim 2024</span>
+          </div>
+        </div>
+      
+        <div class="t">
+          <p>15 years with Ananya. My kids now use her too. Could not recommend higher.</p>
+          <div class="t-meta">
+            <strong>Dr. Meera Iyer</strong>
+            <span>Term + Health policies</span>
+          </div>
+        </div>
+      
+    </div>
+  </div>
+</section>
+
+
+<section class="contact" id="contact">
+  <div class="wrap">
+    <div class="sec-head">
+      <span class="eyebrow">Get in touch</span>
+      <h2>Let's protect what matters, together.</h2>
+      <p>Share a few details — we'll be in touch within 24 hours with a personalized plan.</p>
+    </div>
+    <div class="contact-grid">
+      <div class="contact-info">
+        <p><strong>Call</strong> +1 (555) 123-4567</p>
+        <p><strong>Email</strong> hello@apexstudio.co</p>
+        <p><strong>Office</strong> 88 Market Street, Suite 400
+San Francisco, CA 94103</p>
+        <p><strong>Hours</strong> Mon–Fri · 9am–6pm PT</p>
+      </div>
+      <form class="advisor-form" onsubmit="event.preventDefault(); this.reset(); alert('Thanks — we will be in touch within 24 hours.')">
+        <label>Name</label><input type="text" required>
+        <label>Phone</label><input type="tel" required>
+        <label>Email</label><input type="email">
+        <label>Policy of interest</label>
+        <select>
+          <option>Term Life</option><option>Health</option><option>Motor</option><option>Home</option>
+        </select>
+        <label>How can we help?</label><textarea rows="3"></textarea>
+        <button type="submit">Request Callback</button>
+      </form>
+    </div>
+  </div>
+</section>
+
+<footer>
+  © 2015 Ananya Sharma &amp; Associates. All rights reserved.<br>
+  <span class="license">IRDAI · IRDAI/LI/2010/44821</span>
+</footer>
+
+<a href="#contact" class="floating-cta">💬 Get Free Quote</a>
+
+</body>
+</html>

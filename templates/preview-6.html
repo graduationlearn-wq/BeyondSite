@@ -1,184 +1,10 @@
-<%
-  // ── Read schema values safely from locals ──
-  const L = locals || {};
-  const esc = (s) => (s == null ? '' : String(s));
-  const def = (v, d) => (v && String(v).trim() ? v : d);
 
-  const bn     = esc(L.businessName) || 'Meridian Capital';
-  const tag    = esc(L.tagline)      || 'Banking built for the long term.';
-  const year   = esc(L.foundedYear)  || new Date().getFullYear();
-  const accent = L.primaryColor      || '#b89a3e';
-
-  // Compliance bar
-  const regulatorLineV    = def(L.regulatorLine, 'Regulated Entity · RBI Registered · CIN: U65100MH2010PLC000000');
-  const insuranceLineV    = esc(L.insuranceLine);
-  const pmlaLinkLabelV    = def(L.pmlaLinkLabel, 'PMLA Policy');
-  const grievanceLinkLabelV = def(L.grievanceLinkLabel, 'Grievance Redressal');
-
-  // Hero
-  const heroEyebrowV       = def(L.heroEyebrow, `Trusted Financial Partner Since ${year}`);
-  const heroHeadlineLeadV  = def(L.heroHeadlineLead, 'Grow Your');
-  const heroHeadlineBodyV  = def(L.heroHeadlineBody, 'Wealth with');
-  const heroHeadlineEmphV  = def(L.heroHeadlineEmph, 'Confidence.');
-  const heroSubV           = def(L.heroSub, tag);
-  const heroCtaPrimaryV    = def(L.heroCtaPrimary, 'Open Account →');
-  const heroCtaSecondaryV  = def(L.heroCtaSecondary, 'Explore Services');
-
-  const heroTrustBadgesList = (Array.isArray(L.heroTrustBadges) && L.heroTrustBadges.length)
-    ? L.heroTrustBadges
-    : [
-        { icon: '🏛', label: 'RBI Regulated' },
-        { icon: '🛡', label: 'DICGC Insured' },
-        { icon: '⭐', label: 'ISO 27001' }
-      ];
-
-  const ratesPanelTitleV  = def(L.ratesPanelTitle, 'Live Indicative Rates');
-  const ratesPanelFooterV = def(L.ratesPanelFooter, '* Rates are indicative. Subject to change without notice. T&C apply.');
-
-  const heroRatesList = (Array.isArray(L.heroRates) && L.heroRates.length)
-    ? L.heroRates
-    : [
-        { name: 'Fixed Deposit',  detail: '12–24 months',     rate: '7.85%', tag: 'p.a. compounding' },
-        { name: 'Personal Loan',  detail: 'Starting from',     rate: '10.5%', tag: 'p.a.' },
-        { name: 'Home Loan',      detail: 'Floating rate',     rate: '8.45%', tag: 'p.a. linked to RLLR' }
-      ];
-
-  // Marquee
-  const marqueeList = (Array.isArray(L.marqueeItems) && L.marqueeItems.length)
-    ? L.marqueeItems.map(m => esc(m && m.text)).filter(Boolean)
-    : ['Fixed Deposit','Recurring Deposit','Home Loan','Personal Loan','Gold Loan','Wealth Management','Mutual Funds','Insurance'];
-  const mqi = [...marqueeList, ...marqueeList, ...marqueeList, ...marqueeList];
-
-  // Services
-  const servicesLabelV    = def(L.servicesLabel, 'Our Services');
-  const servicesHeadlineV = def(L.servicesHeadline, 'Financial solutions for every life stage.');
-  const servicesBodyV     = def(L.servicesBody, 'From your first savings account to your retirement corpus — we are with you at every milestone, with products built around your needs.');
-  const servicesList = (Array.isArray(L.services) && L.services.length)
-    ? L.services
-    : [
-        { icon: '🏦', name: 'Savings & Deposits',  body: 'Accessible savings accounts and fixed deposits with transparent rates and flexible tenures.' },
-        { icon: '📈', name: 'Wealth Management',   body: 'Goal-based wealth planning with dedicated advisors who sit on your side of the table.' },
-        { icon: '🏠', name: 'Home Loans',           body: 'Competitive floating rates with quick sanction and dedicated processing support.' },
-        { icon: '💳', name: 'Personal Loans',       body: 'Pre-approved loans up to ₹30L with 48-hour disbursal for existing customers.' },
-        { icon: '🛡️', name: 'Insurance',           body: 'Life, health, and general insurance matched to your life stage and risk profile.' },
-        { icon: '📋', name: 'Business Banking',     body: 'Working-capital, term loans, and cash-management tuned for SMEs and mid-market.' }
-      ];
-
-  // Numbers
-  const numberStatsList = (Array.isArray(L.numberStats) && L.numberStats.length)
-    ? L.numberStats
-    : [
-        { value: '25',  suffix: 'B+', label: 'Assets Under Management' },
-        { value: '4',   suffix: 'L+', label: 'Satisfied Customers' },
-        { value: '15',  suffix: 'yr', label: 'Years of Trust' },
-        { value: '98',  suffix: '%',  label: 'Renewal Rate' }
-      ];
-
-  // About
-  const aboutLabelV        = def(L.aboutLabel, 'Our Heritage');
-  const aboutHeadlineLeadV = def(L.aboutHeadlineLead, 'Stability you can');
-  const aboutHeadlineEmphV = def(L.aboutHeadlineEmph, 'bank on.');
-  const aboutBodyV         = def(L.aboutBody, `${bn} has served depositors and borrowers with one consistent promise: honest rates, clear paperwork, and real people at the other end of the phone. We're regulated, we're transparent about our numbers, and we measure success the way our customers do — by the relationships that outlast market cycles.`);
-
-  const pillarsList = (Array.isArray(L.pillars) && L.pillars.length)
-    ? L.pillars
-    : [
-        { title: 'Regulatory Compliance', body: 'Fully compliant with RBI, SEBI, and IRDAI guidelines — your assets are safe and protected.' },
-        { title: 'Transparent Pricing',    body: 'No hidden fees, no fine print surprises — all terms disclosed upfront before you sign.' },
-        { title: 'Relationship First',     body: 'Dedicated relationship manager for every client. Real people, not bots, when you need help.' }
-      ];
-
-  const heritageStatsList = (Array.isArray(L.heritageStats) && L.heritageStats.length)
-    ? L.heritageStats
-    : [
-        { value: '25', suffix: 'Yr', label: 'In Operation' },
-        { value: '99', suffix: '.9%', label: 'Uptime' },
-        { value: '48', suffix: 'hr',  label: 'Loan Disbursal' },
-        { value: '7',  suffix: '★',   label: 'CRISIL Rating' }
-      ];
-
-  const certificationsList = (Array.isArray(L.certifications) && L.certifications.length)
-    ? L.certifications.map(c => esc(c && c.label)).filter(Boolean)
-    : ['RBI Licensed','DICGC Member','ISO 27001','IBA Member','PMLA Compliant'];
-
-  // Rates
-  const ratesLabelV        = def(L.ratesLabel, 'Indicative Rates');
-  const ratesHeadlineLeadV = def(L.ratesHeadlineLead, 'Competitive rates,');
-  const ratesHeadlineEmphV = def(L.ratesHeadlineEmph, 'every single day.');
-  const depositPanelTitleV = def(L.depositPanelTitle, 'Deposit Rates');
-  const lendingPanelTitleV = def(L.lendingPanelTitle, 'Lending Rates');
-
-  const depositRatesList = (Array.isArray(L.depositRates) && L.depositRates.length)
-    ? L.depositRates
-    : [
-        { name: 'Savings Account',       detail: 'Standard',         rate: '4.00%', tag: '' },
-        { name: 'Fixed Deposit · 1yr',    detail: 'Non-callable',     rate: '7.50%', tag: '' },
-        { name: 'Fixed Deposit · 2yr',    detail: 'Compounding',      rate: '7.85%', tag: 'Special Rate' },
-        { name: 'Senior Citizen FD',      detail: '+0.5% additional', rate: '8.35%', tag: 'Best Rate' },
-        { name: 'Recurring Deposit',      detail: '12–60 months',     rate: '7.25%', tag: '' }
-      ];
-
-  const lendingRatesList = (Array.isArray(L.lendingRates) && L.lendingRates.length)
-    ? L.lendingRates
-    : [
-        { name: 'Home Loan',       detail: 'Floating · RLLR linked', rate: '8.45%',  tag: '' },
-        { name: 'Personal Loan',   detail: 'Up to ₹30L',              rate: '10.50%', tag: '' },
-        { name: 'Business Loan',   detail: 'Working capital',         rate: '11.00%', tag: 'Revised' },
-        { name: 'Gold Loan',       detail: 'Instant disbursal',       rate: '9.00%',  tag: 'Popular' },
-        { name: 'LAP',             detail: 'Loan against property',   rate: '9.75%',  tag: '' }
-      ];
-
-  const ratesDisclaimerV = def(L.ratesDisclaimer, '* All rates are indicative and subject to change without prior notice. Final rates depend on credit profile, loan amount, tenure, and applicable policy at the time of sanction. Taxes applicable as per government norms.');
-
-  // Testimonials
-  const testimonialsList = (Array.isArray(L.testimonials) && L.testimonials.length)
-    ? L.testimonials
-    : [
-        { quote: `Switched my FDs here three years ago. The rates are genuinely better and the relationship manager actually calls me — not the other way around. That means everything.`, name: 'Ramesh Sharma', role: 'Retired Principal, FD Customer' },
-        { quote: `Got my business loan approved in 3 days. The documentation was straightforward, no unnecessary delays. This is what a financial institution should feel like.`, name: 'Priya Krishnamurthy', role: 'Founder, SME Owner' },
-        { quote: `The wealth management team helped me plan my daughter's education and my retirement in the same conversation. That level of holistic thinking is rare to find.`, name: 'Ashok Varma', role: 'Senior Engineer, Wealth Client' }
-      ];
-
-  function initialsOf(name) {
-    const parts = String(name || '').trim().split(/\s+/).filter(Boolean);
-    if (!parts.length) return '•';
-    return (parts[0][0] + (parts[1] ? parts[1][0] : '')).toUpperCase();
-  }
-
-  // CTA
-  const ctaHeadlineLeadV = esc(L.ctaHeadline).split('|')[0] || 'Ready to make your';
-  const ctaHeadlineEmphV = esc(L.ctaHeadline).split('|')[1] || 'money work harder?';
-  const ctaHeadlineV = def(L.ctaHeadline, 'Ready to make your money work harder?');
-  const ctaBodyV     = def(L.ctaBody, 'Open your account today or speak with a relationship manager. No commitments — just a conversation.');
-  const ctaButtonV   = def(L.ctaButton, 'Open Account →');
-
-  // Contact perks
-  const contactPerksList = (Array.isArray(L.contactPerks) && L.contactPerks.length)
-    ? L.contactPerks
-    : [
-        { icon: '◷',  text: 'Response within 4 business hours' },
-        { icon: '🔒', text: 'KYC-compliant onboarding · Full data privacy' },
-        { icon: '◉',  text: 'Dedicated RM assigned from Day 1' },
-        { icon: '⚖',  text: 'Regulated by RBI · PMLA compliant' }
-      ];
-
-  // Contact (from _base)
-  const emailV   = esc(L.email);
-  const phoneV   = esc(L.phone);
-  const addressV = esc(L.address);
-  const hoursV   = esc(L.hours);
-
-  // Helpers for names with brand highlight
-  const brandParts = bn.split(/\s+/);
-  const brandFirst = brandParts[0] || bn;
-  const brandRest  = brandParts.slice(1).join(' ');
-%>
 <!DOCTYPE html>
 <html lang="en">
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title><%= bn %> | <%= tag %></title>
+  <title>Meridian Capital | Banking · Investments · Loans</title>
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,400;0,500;0,600;0,700;1,400;1,600&family=DM+Sans:wght@300;400;500;600&display=swap" rel="stylesheet">
   <style>
@@ -191,7 +17,7 @@
       --plat:   #e8e4dc;
       --plat-s: rgba(232,228,220,.55);
       --plat-d: rgba(232,228,220,.25);
-      --gold:   <%= accent %>;
+      --gold:   #c8a957;
       --gold-lt:#cdb05a;
       --gold-glo:rgba(184,154,62,.16);
       --gold-dim:rgba(184,154,62,.08);
@@ -445,18 +271,18 @@
 
   <div class="comp-bar">
     <div class="comp-bar-left">
-      <div class="comp-reg"><span class="comp-dot"></span><%= regulatorLineV %></div>
-      <% if (insuranceLineV) { %><span>·</span><span><%= insuranceLineV %></span><% } %>
+      <div class="comp-reg"><span class="comp-dot"></span>Regulated Entity · RBI Registered NBFC · CIN: U65923MH2008PLC012345</div>
+      <span>·</span><span>All eligible deposits insured up to ₹5L by DICGC</span>
     </div>
     <div class="comp-bar-right">
-      <a href="#"><%= pmlaLinkLabelV %></a> &nbsp;·&nbsp; <a href="#"><%= grievanceLinkLabelV %></a>
+      <a href="#">PMLA Policy</a> &nbsp;·&nbsp; <a href="#">Grievance Redressal</a>
     </div>
   </div>
 
   <nav class="nav" id="nav">
     <a href="#home" class="nav-logo">
-      <div class="logo-emblem"><span class="logo-emblem-text"><%= (bn[0] || 'M').toUpperCase() %></span></div>
-      <span class="logo-name"><%= brandFirst %><% if (brandRest) { %> <span><%= brandRest %></span><% } %></span>
+      <div class="logo-emblem"><span class="logo-emblem-text">M</span></div>
+      <span class="logo-name">Meridian <span>Capital</span></span>
     </a>
     <ul class="nav-links">
       <li><a href="#services">Services</a></li>
@@ -469,53 +295,92 @@
 
   <section id="home" class="hero">
     <div class="hero-left">
-      <div class="hero-eyebrow"><%= heroEyebrowV %></div>
+      <div class="hero-eyebrow">Trusted Financial Partner Since 2008</div>
       <h1 class="hero-title">
-        <%= heroHeadlineLeadV %><br>
-        <%= heroHeadlineBodyV %><br>
-        <em><%= heroHeadlineEmphV %></em>
+        Grow Your<br>
+        Wealth with<br>
+        <em>Confidence.</em>
       </h1>
-      <p class="hero-sub"><%= heroSubV %></p>
+      <p class="hero-sub">Deposits, loans, and wealth advisory built for Indian families. RBI-regulated, transparent fees, and a relationship manager you can actually reach by phone.</p>
       <div class="hero-ctas">
-        <a href="#contact" class="btn-gold"><%= heroCtaPrimaryV %></a>
-        <a href="#services" class="btn-out"><%= heroCtaSecondaryV %></a>
+        <a href="#contact" class="btn-gold">Open Account</a>
+        <a href="#services" class="btn-out">Explore Services</a>
       </div>
-      <% if (heroTrustBadgesList.length) { %>
+      
       <div class="hero-trust">
-        <% heroTrustBadgesList.forEach(function(b){ %>
-        <div class="trust-badge"><div class="trust-badge-icon"><%= esc(b.icon) %></div><%= esc(b.label) %></div>
-        <% }); %>
+        
+        <div class="trust-badge"><div class="trust-badge-icon">🏛</div>RBI Regulated</div>
+        
+        <div class="trust-badge"><div class="trust-badge-icon">🛡</div>DICGC Insured</div>
+        
+        <div class="trust-badge"><div class="trust-badge-icon">⭐</div>CRISIL AA+</div>
+        
+        <div class="trust-badge"><div class="trust-badge-icon">🔒</div>ISO 27001</div>
+        
       </div>
-      <% } %>
+      
     </div>
     <div class="hero-right">
       <div class="hero-panel">
         <div class="panel-header">
-          <span class="panel-title"><%= ratesPanelTitleV %></span>
+          <span class="panel-title">Live Indicative Rates</span>
           <div class="panel-live"><span class="panel-live-dot"></span>Updated Today</div>
         </div>
         <div class="panel-body">
-          <% heroRatesList.forEach(function(r){ %>
+          
           <div class="rate-row">
             <div class="rate-label">
-              <span class="rate-name"><%= esc(r.name) %></span>
-              <span class="rate-sub"><%= esc(r.detail) %></span>
+              <span class="rate-name">Fixed Deposit</span>
+              <span class="rate-sub">12–24 months</span>
             </div>
             <div>
-              <div class="rate-val"><%= esc(r.rate) %></div>
-              <% if (r.tag) { %><div class="rate-badge"><%= esc(r.tag) %></div><% } %>
+              <div class="rate-val">7.85%</div>
+              <div class="rate-badge">p.a. compounding</div>
             </div>
           </div>
-          <% }); %>
+          
+          <div class="rate-row">
+            <div class="rate-label">
+              <span class="rate-name">Recurring Dep.</span>
+              <span class="rate-sub">36 months</span>
+            </div>
+            <div>
+              <div class="rate-val">7.50%</div>
+              <div class="rate-badge">p.a.</div>
+            </div>
+          </div>
+          
+          <div class="rate-row">
+            <div class="rate-label">
+              <span class="rate-name">Home Loan</span>
+              <span class="rate-sub">Up to 30 yr</span>
+            </div>
+            <div>
+              <div class="rate-val">8.45%</div>
+              <div class="rate-badge">Floating · RLLR</div>
+            </div>
+          </div>
+          
+          <div class="rate-row">
+            <div class="rate-label">
+              <span class="rate-name">Gold Loan</span>
+              <span class="rate-sub">Up to ₹50L</span>
+            </div>
+            <div>
+              <div class="rate-val">9.25%</div>
+              <div class="rate-badge">p.a.</div>
+            </div>
+          </div>
+          
         </div>
-        <div class="panel-footer"><%= ratesPanelFooterV %></div>
+        <div class="panel-footer">* Rates are indicative as of today. Subject to change without notice. T&amp;C apply.</div>
       </div>
     </div>
   </section>
 
   <div class="mq-strip">
     <div class="mq-track" id="mqtrack">
-      <% mqi.forEach(function(p){ %><span class="mq-item"><%= p %></span><% }); %>
+      <span class="mq-item">Fixed Deposits</span><span class="mq-item">Recurring Deposits</span><span class="mq-item">Home Loans</span><span class="mq-item">Business Loans</span><span class="mq-item">Gold Loans</span><span class="mq-item">Wealth Management</span><span class="mq-item">Mutual Funds</span><span class="mq-item">Insurance</span><span class="mq-item">NRI Banking</span><span class="mq-item">Fixed Deposits</span><span class="mq-item">Recurring Deposits</span><span class="mq-item">Home Loans</span><span class="mq-item">Business Loans</span><span class="mq-item">Gold Loans</span><span class="mq-item">Wealth Management</span><span class="mq-item">Mutual Funds</span><span class="mq-item">Insurance</span><span class="mq-item">NRI Banking</span><span class="mq-item">Fixed Deposits</span><span class="mq-item">Recurring Deposits</span><span class="mq-item">Home Loans</span><span class="mq-item">Business Loans</span><span class="mq-item">Gold Loans</span><span class="mq-item">Wealth Management</span><span class="mq-item">Mutual Funds</span><span class="mq-item">Insurance</span><span class="mq-item">NRI Banking</span><span class="mq-item">Fixed Deposits</span><span class="mq-item">Recurring Deposits</span><span class="mq-item">Home Loans</span><span class="mq-item">Business Loans</span><span class="mq-item">Gold Loans</span><span class="mq-item">Wealth Management</span><span class="mq-item">Mutual Funds</span><span class="mq-item">Insurance</span><span class="mq-item">NRI Banking</span>
     </div>
   </div>
 
@@ -523,21 +388,56 @@
     <div class="ctn">
       <div class="svc-head reveal">
         <div>
-          <div class="eyebrow"><%= servicesLabelV %></div>
-          <h2 class="sec-title"><%= servicesHeadlineV %></h2>
-          <p class="svc-desc"><%= servicesBodyV %></p>
+          <div class="eyebrow">Our Services</div>
+          <h2 class="sec-title">Financial solutions for every life stage.</h2>
+          <p class="svc-desc">From your first salary account to retirement planning — comprehensive financial services backed by a relationship manager who knows your name.</p>
         </div>
-        <div class="svc-count"><%= String(servicesList.length).padStart(2,'0') %></div>
+        <div class="svc-count">06</div>
       </div>
       <div class="svc-grid">
-        <% servicesList.forEach(function(s, i){ %>
-        <div class="svc-card reveal rd<%= i%3 %>">
-          <div class="svc-icon"><%= esc(s.icon) || '◆' %></div>
-          <h3 class="svc-name"><%= esc(s.name) %></h3>
-          <p class="svc-desc-t"><%= esc(s.body) %></p>
+        
+        <div class="svc-card reveal rd0">
+          <div class="svc-icon">🏦</div>
+          <h3 class="svc-name">Deposits</h3>
+          <p class="svc-desc-t">FD, RD, and savings products with competitive rates and DICGC insurance up to ₹5L.</p>
           <span class="svc-arrow">Learn More →</span>
         </div>
-        <% }); %>
+        
+        <div class="svc-card reveal rd1">
+          <div class="svc-icon">🏠</div>
+          <h3 class="svc-name">Home Loans</h3>
+          <p class="svc-desc-t">Floating-rate home loans up to ₹5 Cr with 30-year tenure and zero pre-payment penalty.</p>
+          <span class="svc-arrow">Learn More →</span>
+        </div>
+        
+        <div class="svc-card reveal rd2">
+          <div class="svc-icon">💼</div>
+          <h3 class="svc-name">Business Loans</h3>
+          <p class="svc-desc-t">Working-capital and term loans for SMEs from ₹10L to ₹10 Cr — disbursal in 7 days.</p>
+          <span class="svc-arrow">Learn More →</span>
+        </div>
+        
+        <div class="svc-card reveal rd0">
+          <div class="svc-icon">📈</div>
+          <h3 class="svc-name">Wealth Advisory</h3>
+          <p class="svc-desc-t">Goal-based portfolio construction with mutual funds, bonds, and structured products.</p>
+          <span class="svc-arrow">Learn More →</span>
+        </div>
+        
+        <div class="svc-card reveal rd1">
+          <div class="svc-icon">🪙</div>
+          <h3 class="svc-name">Gold Loans</h3>
+          <p class="svc-desc-t">Same-day disbursal up to ₹50L against gold ornaments. Lowest rates in the market.</p>
+          <span class="svc-arrow">Learn More →</span>
+        </div>
+        
+        <div class="svc-card reveal rd2">
+          <div class="svc-icon">🛡</div>
+          <h3 class="svc-name">Insurance</h3>
+          <p class="svc-desc-t">Life, health, and motor insurance from top regulated insurers — no captive products.</p>
+          <span class="svc-arrow">Learn More →</span>
+        </div>
+        
       </div>
     </div>
   </section>
@@ -545,12 +445,27 @@
   <div class="numband">
     <div class="ctn">
       <div class="num-grid">
-        <% numberStatsList.slice(0,4).forEach(function(s, i){ %>
-        <div class="num-item reveal rd<%= i %>">
-          <div class="num-val"><%= esc(s.value) %><%= esc(s.suffix) %></div>
-          <div class="num-label"><%= esc(s.label) %></div>
+        
+        <div class="num-item reveal rd0">
+          <div class="num-val">2,400Cr</div>
+          <div class="num-label">Assets Under Management</div>
         </div>
-        <% }); %>
+        
+        <div class="num-item reveal rd1">
+          <div class="num-val">4L+</div>
+          <div class="num-label">Customers Served</div>
+        </div>
+        
+        <div class="num-item reveal rd2">
+          <div class="num-val">17yr</div>
+          <div class="num-label">In Operation</div>
+        </div>
+        
+        <div class="num-item reveal rd3">
+          <div class="num-val">98%</div>
+          <div class="num-label">Renewal Rate</div>
+        </div>
+        
       </div>
     </div>
   </div>
@@ -559,114 +474,275 @@
     <div class="ctn">
       <div class="about-grid">
         <div class="reveal">
-          <div class="eyebrow"><%= aboutLabelV %></div>
-          <h2 class="sec-title"><%= aboutHeadlineLeadV %><br><em><%= aboutHeadlineEmphV %></em></h2>
-          <p class="about-body" style="margin-top:18px"><%= aboutBodyV %></p>
-          <% if (pillarsList.length) { %>
+          <div class="eyebrow">Our Heritage</div>
+          <h2 class="sec-title">Stability you can<br><em>bank on.</em></h2>
+          <p class="about-body" style="margin-top:18px">Meridian Capital was founded in 2008 in Mumbai with a simple idea: serve Indian families and small businesses the way private banks once did, with senior people on the phone and decisions taken by humans, not algorithms. Seventeen years and four lakh customers later, that idea has held up. We are RBI-regulated, CRISIL AA+ rated, and have never missed a payout. Most of our customers came by referral from someone we already serve.</p>
+          
           <div class="about-pillars">
-            <% pillarsList.forEach(function(p, i){ %>
+            
             <div class="pillar">
-              <span class="pillar-num"><%= String(i+1).padStart(2,'0') %></span>
+              <span class="pillar-num">01</span>
               <div>
-                <div class="pillar-title"><%= esc(p.title) %></div>
-                <div class="pillar-sub"><%= esc(p.body) %></div>
+                <div class="pillar-title">Regulatory Compliance</div>
+                <div class="pillar-sub">RBI-regulated NBFC since 2008. Audited annually by Big Four firms. Quarterly disclosures filed publicly.</div>
               </div>
             </div>
-            <% }); %>
+            
+            <div class="pillar">
+              <span class="pillar-num">02</span>
+              <div>
+                <div class="pillar-title">Customer First</div>
+                <div class="pillar-sub">Dedicated RM for every customer above ₹10L AUM. No call-tree maze, no off-shore support, no surprises.</div>
+              </div>
+            </div>
+            
+            <div class="pillar">
+              <span class="pillar-num">03</span>
+              <div>
+                <div class="pillar-title">Transparent Pricing</div>
+                <div class="pillar-sub">Every fee published on our site. No hidden charges, no foreclosure penalties, no commission-driven sales.</div>
+              </div>
+            </div>
+            
           </div>
-          <% } %>
+          
         </div>
         <div class="reveal rd1">
           <div class="about-right-inner">
-            <% if (heritageStatsList.length) { %>
+            
             <div class="heritage-card">
               <div class="hc-grid">
-                <% heritageStatsList.slice(0,4).forEach(function(s){ %>
+                
                 <div class="hc-item">
-                  <div class="hc-num"><%= esc(s.value) %><%= esc(s.suffix) %></div>
-                  <div class="hc-label"><%= esc(s.label) %></div>
+                  <div class="hc-num">17Yr</div>
+                  <div class="hc-label">In Operation</div>
                 </div>
-                <% }); %>
+                
+                <div class="hc-item">
+                  <div class="hc-num">AA+</div>
+                  <div class="hc-label">CRISIL Rating</div>
+                </div>
+                
+                <div class="hc-item">
+                  <div class="hc-num">24hr</div>
+                  <div class="hc-label">Loan Decision</div>
+                </div>
+                
+                <div class="hc-item">
+                  <div class="hc-num">4.8★</div>
+                  <div class="hc-label">Customer Rating</div>
+                </div>
+                
               </div>
             </div>
-            <% } %>
-            <% if (certificationsList.length) { %>
+            
+            
             <div class="heritage-card">
               <div class="hc-label" style="margin-bottom:14px">Certifications &amp; Memberships</div>
               <div class="cert-row">
-                <% certificationsList.forEach(function(c){ %>
-                <div class="cert-badge"><span class="cert-badge-icon">✓</span><%= c %></div>
-                <% }); %>
+                
+                <div class="cert-badge"><span class="cert-badge-icon">✓</span>RBI Licensed</div>
+                
+                <div class="cert-badge"><span class="cert-badge-icon">✓</span>CRISIL AA+</div>
+                
+                <div class="cert-badge"><span class="cert-badge-icon">✓</span>ISO 27001</div>
+                
+                <div class="cert-badge"><span class="cert-badge-icon">✓</span>DICGC Member</div>
+                
+                <div class="cert-badge"><span class="cert-badge-icon">✓</span>IRDAI Corporate Agent</div>
+                
+                <div class="cert-badge"><span class="cert-badge-icon">✓</span>AMFI Registered</div>
+                
               </div>
             </div>
-            <% } %>
+            
           </div>
         </div>
       </div>
     </div>
   </section>
 
-  <% if (depositRatesList.length || lendingRatesList.length) { %>
+  
   <section id="rates" class="rates spad">
     <div class="ctn">
       <div class="reveal" style="margin-bottom:52px">
-        <div class="eyebrow"><%= ratesLabelV %></div>
-        <h2 class="sec-title"><%= ratesHeadlineLeadV %><br><em><%= ratesHeadlineEmphV %></em></h2>
+        <div class="eyebrow">Indicative Rates</div>
+        <h2 class="sec-title">Competitive rates,<br><em>every single day.</em></h2>
       </div>
       <div class="rates-inner reveal rd1">
-        <% if (depositRatesList.length) { %>
+        
         <div class="rates-panel">
           <div class="rp-head">
-            <span class="rp-title"><%= depositPanelTitleV %></span>
-            <span class="rp-as-of">Effective <%= new Date().toLocaleDateString('en-IN',{day:'2-digit',month:'short',year:'numeric'}) %></span>
+            <span class="rp-title">Deposit Rates</span>
+            <span class="rp-as-of">Effective 26 Apr 2026</span>
           </div>
           <div class="rp-body">
-            <% depositRatesList.forEach(function(r){ %>
+            
             <div class="rp-row">
               <div>
-                <div class="rp-product"><%= esc(r.name) %></div>
-                <div class="rp-tenure"><%= esc(r.detail) %></div>
+                <div class="rp-product">Fixed Deposit · 1 yr</div>
+                <div class="rp-tenure">Non-callable</div>
               </div>
               <div style="text-align:right">
-                <div class="rp-rate-val"><%= esc(r.rate) %></div>
+                <div class="rp-rate-val">7.50%</div>
                 <div class="rp-rate-pa">p.a.</div>
-                <% if (r.tag) { %><div class="rp-tag-up">▲ <%= esc(r.tag) %></div><% } %>
+                
               </div>
             </div>
-            <% }); %>
+            
+            <div class="rp-row">
+              <div>
+                <div class="rp-product">Fixed Deposit · 2 yr</div>
+                <div class="rp-tenure">Non-callable</div>
+              </div>
+              <div style="text-align:right">
+                <div class="rp-rate-val">7.85%</div>
+                <div class="rp-rate-pa">p.a.</div>
+                <div class="rp-tag-up">▲ Best Rate</div>
+              </div>
+            </div>
+            
+            <div class="rp-row">
+              <div>
+                <div class="rp-product">Fixed Deposit · 3 yr</div>
+                <div class="rp-tenure">Cumulative</div>
+              </div>
+              <div style="text-align:right">
+                <div class="rp-rate-val">7.65%</div>
+                <div class="rp-rate-pa">p.a.</div>
+                
+              </div>
+            </div>
+            
+            <div class="rp-row">
+              <div>
+                <div class="rp-product">Recurring Deposit</div>
+                <div class="rp-tenure">36 months</div>
+              </div>
+              <div style="text-align:right">
+                <div class="rp-rate-val">7.50%</div>
+                <div class="rp-rate-pa">p.a.</div>
+                
+              </div>
+            </div>
+            
+            <div class="rp-row">
+              <div>
+                <div class="rp-product">Senior Citizen FD</div>
+                <div class="rp-tenure">+0.50% bonus</div>
+              </div>
+              <div style="text-align:right">
+                <div class="rp-rate-val">8.35%</div>
+                <div class="rp-rate-pa">p.a.</div>
+                <div class="rp-tag-up">▲ Senior+</div>
+              </div>
+            </div>
+            
+            <div class="rp-row">
+              <div>
+                <div class="rp-product">Tax-Saver FD</div>
+                <div class="rp-tenure">5 yr · 80C</div>
+              </div>
+              <div style="text-align:right">
+                <div class="rp-rate-val">7.40%</div>
+                <div class="rp-rate-pa">p.a.</div>
+                
+              </div>
+            </div>
+            
           </div>
         </div>
-        <% } %>
-        <% if (lendingRatesList.length) { %>
+        
+        
         <div class="rates-panel">
           <div class="rp-head">
-            <span class="rp-title"><%= lendingPanelTitleV %></span>
+            <span class="rp-title">Lending Rates</span>
             <span class="rp-as-of">Subject to Credit Assessment</span>
           </div>
           <div class="rp-body">
-            <% lendingRatesList.forEach(function(r){ %>
+            
             <div class="rp-row">
               <div>
-                <div class="rp-product"><%= esc(r.name) %></div>
-                <div class="rp-tenure"><%= esc(r.detail) %></div>
+                <div class="rp-product">Home Loan</div>
+                <div class="rp-tenure">Floating · RLLR linked</div>
               </div>
               <div style="text-align:right">
-                <div class="rp-rate-val"><%= esc(r.rate) %></div>
+                <div class="rp-rate-val">8.45%</div>
                 <div class="rp-rate-pa">p.a. onwards</div>
-                <% if (r.tag) { %><div class="rp-tag-up">▲ <%= esc(r.tag) %></div><% } %>
+                <div class="rp-tag-up">▲ Popular</div>
               </div>
             </div>
-            <% }); %>
+            
+            <div class="rp-row">
+              <div>
+                <div class="rp-product">Loan Against Prop.</div>
+                <div class="rp-tenure">Up to ₹5 Cr · 15 yr</div>
+              </div>
+              <div style="text-align:right">
+                <div class="rp-rate-val">9.10%</div>
+                <div class="rp-rate-pa">p.a. onwards</div>
+                
+              </div>
+            </div>
+            
+            <div class="rp-row">
+              <div>
+                <div class="rp-product">Business Loan</div>
+                <div class="rp-tenure">Term · up to 7 yr</div>
+              </div>
+              <div style="text-align:right">
+                <div class="rp-rate-val">11.50%</div>
+                <div class="rp-rate-pa">p.a. onwards</div>
+                
+              </div>
+            </div>
+            
+            <div class="rp-row">
+              <div>
+                <div class="rp-product">Working Capital</div>
+                <div class="rp-tenure">Cash credit · 1 yr</div>
+              </div>
+              <div style="text-align:right">
+                <div class="rp-rate-val">10.75%</div>
+                <div class="rp-rate-pa">p.a. onwards</div>
+                
+              </div>
+            </div>
+            
+            <div class="rp-row">
+              <div>
+                <div class="rp-product">Gold Loan</div>
+                <div class="rp-tenure">Up to ₹50L · 1 yr</div>
+              </div>
+              <div style="text-align:right">
+                <div class="rp-rate-val">9.25%</div>
+                <div class="rp-rate-pa">p.a. onwards</div>
+                <div class="rp-tag-up">▲ Same-day</div>
+              </div>
+            </div>
+            
+            <div class="rp-row">
+              <div>
+                <div class="rp-product">Personal Loan</div>
+                <div class="rp-tenure">Up to ₹25L · 5 yr</div>
+              </div>
+              <div style="text-align:right">
+                <div class="rp-rate-val">12.50%</div>
+                <div class="rp-rate-pa">p.a. onwards</div>
+                
+              </div>
+            </div>
+            
           </div>
         </div>
-        <% } %>
+        
       </div>
-      <p style="font-size:.7rem;color:var(--plat-d);margin-top:14px;line-height:1.6"><%= ratesDisclaimerV %></p>
+      <p style="font-size:.7rem;color:var(--plat-d);margin-top:14px;line-height:1.6">Rates are indicative and may change basis market conditions and individual customer profile. Final rate will be communicated post credit underwriting. Subject to T&amp;C and applicable RBI guidelines.</p>
     </div>
   </section>
-  <% } %>
+  
 
-  <% if (testimonialsList.length) { %>
+  
   <section id="testimonials" class="tst spad">
     <div class="ctn">
       <div class="tst-head reveal">
@@ -674,27 +750,45 @@
         <h2 class="sec-title">Trusted by families<br><em>and businesses alike.</em></h2>
       </div>
       <div class="tst-grid">
-        <% testimonialsList.slice(0,3).forEach(function(t, i){ %>
-        <div class="tst-card reveal rd<%= i %>">
+        
+        <div class="tst-card reveal rd0">
           <div class="tst-rating">★★★★★</div>
-          <p class="tst-quote">"<%= esc(t.quote) %>"</p>
+          <p class="tst-quote">"Got my home loan disbursed in 9 days flat. The RM kept me posted at every stage — no chasing, no surprises."</p>
           <div class="tst-author">
-            <div class="tst-av"><%= initialsOf(t.name) %></div>
-            <div><span class="tst-name"><%= esc(t.name) %></span><span class="tst-role"><%= esc(t.role) %></span></div>
+            <div class="tst-av">RK</div>
+            <div><span class="tst-name">Rohit Kapoor</span><span class="tst-role">Home Loan customer · 2024</span></div>
           </div>
         </div>
-        <% }); %>
+        
+        <div class="tst-card reveal rd1">
+          <div class="tst-rating">★★★★★</div>
+          <p class="tst-quote">"15 years and 3 FD renewals later, still my first call when I need anything banking. The relationship matters."</p>
+          <div class="tst-author">
+            <div class="tst-av">ML</div>
+            <div><span class="tst-name">Mrs. Lakshmi Nair</span><span class="tst-role">Retired Principal · FD Customer</span></div>
+          </div>
+        </div>
+        
+        <div class="tst-card reveal rd2">
+          <div class="tst-rating">★★★★★</div>
+          <p class="tst-quote">"Working capital line that actually scales with our seasonal business. Old bank could never figure it out."</p>
+          <div class="tst-author">
+            <div class="tst-av">AG</div>
+            <div><span class="tst-name">Anil Gupta</span><span class="tst-role">MD · Gupta Textiles</span></div>
+          </div>
+        </div>
+        
       </div>
     </div>
   </section>
-  <% } %>
+  
 
   <div class="ctaband reveal">
     <div class="cta-text">
-      <h2 class="cta-title"><%= ctaHeadlineV %></h2>
-      <p class="cta-sub"><%= ctaBodyV %></p>
+      <h2 class="cta-title">Ready to make your money work harder?</h2>
+      <p class="cta-sub">Open an account in 15 minutes. Talk to a relationship manager today — no call-tree, no waiting.</p>
     </div>
-    <a href="#contact" class="btn-gold"><%= ctaButtonV %></a>
+    <a href="#contact" class="btn-gold">Open Account</a>
   </div>
 
   <section id="contact" class="contact spad">
@@ -703,14 +797,20 @@
         <div class="contact-left reveal">
           <div class="eyebrow">Get In Touch</div>
           <h2 class="sec-title">Speak with a<br><em>Relationship Manager.</em></h2>
-          <p class="contact-desc">Our advisors are available <%= hoursV || 'Monday through Saturday' %>. Tell us what you're looking for and we'll match you with the right solution.</p>
-          <% if (contactPerksList.length) { %>
+          <p class="contact-desc">Our advisors are available Mon–Sat · 9:30am–6:30pm IST. Tell us what you're looking for and we'll match you with the right solution.</p>
+          
           <div class="contact-perks">
-            <% contactPerksList.forEach(function(p){ %>
-            <div class="cperk"><span class="cperk-icon"><%= esc(p.icon) %></span><%= esc(p.text) %></div>
-            <% }); %>
+            
+            <div class="cperk"><span class="cperk-icon">◷</span>Response within 4 business hours</div>
+            
+            <div class="cperk"><span class="cperk-icon">✓</span>KYC-compliant onboarding · 100% digital</div>
+            
+            <div class="cperk"><span class="cperk-icon">☎</span>Dedicated relationship manager from day one</div>
+            
+            <div class="cperk"><span class="cperk-icon">🛡</span>No commission-driven product pushing — ever</div>
+            
           </div>
-          <% } %>
+          
         </div>
         <div class="reveal rd1">
           <div class="contact-form">
@@ -721,13 +821,13 @@
                 <div class="fg"><label>First Name</label><input type="text" placeholder="Ramesh" required></div>
                 <div class="fg"><label>Last Name</label><input type="text" placeholder="Sharma" required></div>
               </div>
-              <div class="fg"><label>Email Address</label><input type="email" placeholder="<%= emailV || 'ramesh@email.com' %>" required></div>
-              <div class="fg"><label>Phone Number</label><input type="tel" placeholder="<%= phoneV || '+91 98765 43210' %>"></div>
+              <div class="fg"><label>Email Address</label><input type="email" placeholder="relationships@meridian.co.in" required></div>
+              <div class="fg"><label>Phone Number</label><input type="tel" placeholder="+91 22 6789 4500"></div>
               <div class="fg">
                 <label>I Am Interested In</label>
                 <select>
                   <option value="" disabled selected>Select a service</option>
-                  <% servicesList.forEach(function(s){ %><option value="<%= esc(s.name) %>"><%= esc(s.name) %></option><% }); %>
+                  <option value="Deposits">Deposits</option><option value="Home Loans">Home Loans</option><option value="Business Loans">Business Loans</option><option value="Wealth Advisory">Wealth Advisory</option><option value="Gold Loans">Gold Loans</option><option value="Insurance">Insurance</option>
                 </select>
               </div>
               <div class="fg"><label>Message (Optional)</label><textarea placeholder="Tell us about your financial goals or any specific requirements..."></textarea></div>
@@ -743,17 +843,17 @@
     <div class="ft-top">
       <div>
         <div class="ft-brand-name">
-          <%= brandFirst %><% if (brandRest) { %><span> <%= brandRest %></span><% } %>
+          Meridian<span> Capital</span>
         </div>
-        <p class="ft-tagline"><%= tag %></p>
+        <p class="ft-tagline">Banking · Investments · Loans</p>
         <p class="ft-discl">
-          <%= bn %> is a regulated financial institution. <%= insuranceLineV ? insuranceLineV + '. ' : '' %>Investments in mutual funds and securities are subject to market risk. Past returns are not indicative of future performance. Loans are subject to credit assessment. T&amp;C apply.
+          Meridian Capital is a regulated financial institution. All eligible deposits insured up to ₹5L by DICGC. Investments in mutual funds and securities are subject to market risk. Past returns are not indicative of future performance. Loans are subject to credit assessment. T&amp;C apply.
         </p>
       </div>
       <div>
         <p class="ft-col-title">Services</p>
         <ul class="ft-links">
-          <% servicesList.slice(0,6).forEach(function(s){ %><li><a href="#services"><%= esc(s.name) %></a></li><% }); %>
+          <li><a href="#services">Deposits</a></li><li><a href="#services">Home Loans</a></li><li><a href="#services">Business Loans</a></li><li><a href="#services">Wealth Advisory</a></li><li><a href="#services">Gold Loans</a></li><li><a href="#services">Insurance</a></li>
           <li><a href="#rates">Interest Rates</a></li>
         </ul>
       </div>
@@ -770,16 +870,16 @@
         <ul class="ft-links">
           <li><a href="#">Privacy Policy</a></li>
           <li><a href="#">Terms of Service</a></li>
-          <li><a href="#"><%= pmlaLinkLabelV %></a></li>
-          <li><a href="#"><%= grievanceLinkLabelV %></a></li>
+          <li><a href="#">PMLA Policy</a></li>
+          <li><a href="#">Grievance Redressal</a></li>
           <li><a href="#">Fair Practice Code</a></li>
         </ul>
       </div>
     </div>
     <div class="ft-bot">
-      <span>© <%= year %> <%= bn %>. All rights reserved.</span>
+      <span>© 2015 Meridian Capital. All rights reserved.</span>
       <div class="ft-reg-badges">
-        <% certificationsList.slice(0,3).forEach(function(c){ %><span class="ft-rb"><%= c %></span><% }); %>
+        <span class="ft-rb">RBI Licensed</span><span class="ft-rb">CRISIL AA+</span><span class="ft-rb">ISO 27001</span>
       </div>
       <div class="ft-bot-links">
         <a href="#">Privacy</a><a href="#">Terms</a><a href="#">Sitemap</a>

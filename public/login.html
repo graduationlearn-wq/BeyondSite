@@ -318,7 +318,24 @@
     /* ── Fix for white background conflict with main style.css ── */
 body.form-page {
   background: #0f0a1e !important;
+  /* Restore native cursor on login page — the custom cursor element
+     and its mousemove handler only live on index.html, so the
+     style.css `cursor: none` rule was leaving login users with
+     no visible cursor anywhere except inside text inputs. */
+  cursor: auto !important;
 }
+body.form-page * { cursor: auto; }
+body.form-page input,
+body.form-page textarea { cursor: text; }
+body.form-page button,
+body.form-page a,
+body.form-page .btn-google,
+body.form-page .btn-login,
+body.form-page .input-icon-right,
+body.form-page .remember-label,
+body.form-page .forgot-link,
+body.form-page .login-footer a,
+body.form-page .back-home { cursor: pointer; }
 
 .login-card {
   background: rgba(255, 255, 255, 0.06) !important;
