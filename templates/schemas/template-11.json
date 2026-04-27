@@ -1,0 +1,149 @@
+{
+  "id": "template-11",
+  "name": "Portfolio / Freelancer",
+  "extends": "_base",
+  "sections": [
+    {
+      "id": "hero",
+      "title": "Hero",
+      "aiable": true,
+      "hint": {
+        "label": "Your name + what you do",
+        "description": "A minimal, type-driven hero. Big serif name, one-line role, one paragraph about what you do, two buttons. Less is more here — let the type and whitespace speak."
+      },
+      "fields": [
+        { "id": "heroEyebrow",      "label": "Eyebrow (e.g. Available for select projects · 2026)", "type": "text", "max": 80, "aiable": true },
+        { "id": "heroNameLead",     "label": "Display name · first part",  "type": "text", "max": 30, "placeholder": "Aria" },
+        { "id": "heroNameTail",     "label": "Display name · last part (italic accent)", "type": "text", "max": 30, "placeholder": "Mehta" },
+        { "id": "heroRole",         "label": "Role / title", "type": "text", "max": 80, "placeholder": "Brand & Editorial Designer", "aiable": true },
+        { "id": "heroSub",          "label": "Short intro paragraph", "type": "textarea", "rows": 3, "max": 320, "aiable": true },
+        { "id": "heroCtaPrimary",   "label": "Primary CTA text",   "type": "text", "max": 30, "placeholder": "View Work" },
+        { "id": "heroCtaSecondary", "label": "Secondary CTA text", "type": "text", "max": 30, "placeholder": "Get in Touch" }
+      ]
+    },
+    {
+      "id": "marquee",
+      "title": "Skills Strip",
+      "hint": {
+        "label": "What you do — quick scan",
+        "description": "A scrolling strip of disciplines or tools you work with — Brand · Editorial · Type · Print · Web. Simple, fast, signals breadth."
+      },
+      "fields": [
+        {
+          "id": "skillsItems", "type": "repeater", "min": 3, "max": 12, "itemLabel": "Skill",
+          "item": [
+            { "id": "text", "label": "Skill / discipline", "type": "text", "max": 30 }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "about",
+      "title": "About",
+      "aiable": true,
+      "hint": {
+        "label": "Who you are, in your own words",
+        "description": "A single tight column of prose. Where you trained, what you focus on, what kinds of work suit you. Three to five paragraphs, no fluff."
+      },
+      "fields": [
+        { "id": "aboutLabel",        "label": "Section eyebrow",       "type": "text", "max": 40, "placeholder": "About" },
+        { "id": "aboutHeadlineLead", "label": "Headline · line 1",      "type": "text", "max": 40, "placeholder": "Designing things" },
+        { "id": "aboutHeadlineEmph", "label": "Headline · italic accent","type": "text", "max": 40, "placeholder": "that mean something.", "aiable": true },
+        { "id": "aboutBody",         "label": "About body (paragraphs separated by blank line)", "type": "textarea", "rows": 8, "max": 1200, "aiable": true },
+        { "id": "aboutLocationLine", "label": "Location / availability line (small, e.g. Mumbai · Available remotely)", "type": "text", "max": 80 }
+      ]
+    },
+    {
+      "id": "work",
+      "title": "Selected Work",
+      "aiable": true,
+      "hint": {
+        "label": "Your case studies",
+        "description": "A grid of selected projects. Each card shows year, client, project type, and a one-line summary. The work index on the left counts how many you have, like an editorial table of contents."
+      },
+      "fields": [
+        { "id": "workLabel",    "label": "Section eyebrow",   "type": "text", "max": 40, "placeholder": "Selected Work" },
+        { "id": "workHeadline", "label": "Section headline",  "type": "text", "max": 80, "placeholder": "A few things I'm proud of.", "aiable": true },
+        {
+          "id": "workItems", "label": "Projects (4–10 recommended)", "type": "repeater", "min": 0, "max": 12, "itemLabel": "Project",
+          "item": [
+            { "id": "year",       "label": "Year",      "type": "text", "max": 8, "placeholder": "2024" },
+            { "id": "client",     "label": "Client",    "type": "text", "max": 60, "placeholder": "Helix Coffee" },
+            { "id": "title",      "label": "Project title / type", "type": "text", "max": 80, "placeholder": "Brand identity & packaging" },
+            { "id": "body",       "label": "One-line summary",     "type": "textarea", "rows": 2, "max": 200, "aiable": true },
+            { "id": "tag",        "label": "Tag (optional, e.g. Branding, Editorial, Web)", "type": "text", "max": 30 }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "services",
+      "title": "Services",
+      "aiable": true,
+      "hint": {
+        "label": "What you can be hired for",
+        "description": "Three to five service offerings — what you actually take on as a freelancer. Each gets a short pitch. This is what clients quote against."
+      },
+      "fields": [
+        { "id": "servicesLabel",    "label": "Section eyebrow",  "type": "text", "max": 40, "placeholder": "Services" },
+        { "id": "servicesHeadline", "label": "Section headline", "type": "text", "max": 80, "placeholder": "What I can take on.", "aiable": true },
+        {
+          "id": "services", "type": "repeater", "min": 2, "max": 6, "itemLabel": "Service",
+          "item": [
+            { "id": "name", "label": "Service name", "type": "text", "required": true, "max": 60, "placeholder": "Brand Identity" },
+            { "id": "body", "label": "Short pitch",  "type": "textarea", "rows": 2, "max": 220, "aiable": true }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "clients",
+      "title": "Past Clients",
+      "hint": {
+        "label": "Logos / names of past clients",
+        "description": "A list of past clients shown as a name strip. No logos — just names in a clean serif. Adds credibility without visual noise."
+      },
+      "fields": [
+        {
+          "id": "clientList", "type": "repeater", "min": 0, "max": 16, "itemLabel": "Client",
+          "item": [
+            { "id": "name", "label": "Client name", "type": "text", "max": 40 }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "testimonials",
+      "title": "Testimonials",
+      "hint": {
+        "label": "What clients say",
+        "description": "A short stack of pull-quotes from past clients. The role line matters — 'Founder, Helix' reassures more than 'Helix CEO'."
+      },
+      "fields": [
+        {
+          "id": "testimonials", "type": "repeater", "min": 0, "max": 4, "itemLabel": "Testimonial",
+          "item": [
+            { "id": "quote", "label": "Quote",       "type": "textarea", "rows": 3, "max": 320 },
+            { "id": "name",  "label": "Client name", "type": "text", "max": 60 },
+            { "id": "role",  "label": "Role / company", "type": "text", "max": 80 }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "cta",
+      "title": "CTA Band",
+      "aiable": true,
+      "hint": {
+        "label": "The 'let's work together' nudge",
+        "description": "A simple full-width CTA — short headline, one supporting line, one button. Personal and direct."
+      },
+      "fields": [
+        { "id": "ctaHeadlineLead", "label": "Headline · line 1",     "type": "text", "max": 40, "placeholder": "Have something",  "aiable": true },
+        { "id": "ctaHeadlineEmph", "label": "Headline · italic accent","type": "text", "max": 40, "placeholder": "worth making?", "aiable": true },
+        { "id": "ctaBody",         "label": "Supporting line",       "type": "text", "max": 220, "aiable": true },
+        { "id": "ctaButton",       "label": "Button text",           "type": "text", "max": 30, "placeholder": "Start a Conversation" }
+      ]
+    }
+  ]
+}

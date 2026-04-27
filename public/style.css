@@ -1,31 +1,31 @@
 /* ═══════════════════════════════════════════════════════════════
-   WebSite Builder — style.css
-   Warm amber on near-black · Plus Jakarta Sans
+   BeyondSite — style.css
+   Forest green on near-black · Plus Jakarta Sans
    ═══════════════════════════════════════════════════════════════ */
 
 @import url('https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@300;400;500;600;700;800&display=swap');
 
 /* ── TOKENS ─────────────────────────────────────────────────────── */
 :root {
-  --bg:           #09080c;
-  --bg-card:      #100e13;
-  --bg-card-2:    #16131a;
-  --border:       rgba(255,210,140,.07);
-  --border-hi:    rgba(255,210,140,.13);
-  --text:         #f5f0e8;
-  --text-soft:    rgba(245,240,232,.55);
-  --text-muted:   rgba(245,240,232,.28);
-  --accent:       #e8a030;
-  --accent-lt:    #f5b84a;
-  --accent-dim:   rgba(232,160,48,.1);
-  --accent-glow:  rgba(232,160,48,.22);
+  --bg:           #070c09;
+  --bg-card:      #0c1310;
+  --bg-card-2:    #111a14;
+  --border:       rgba(100,220,140,.07);
+  --border-hi:    rgba(100,220,140,.13);
+  --text:         #ecf5ee;
+  --text-soft:    rgba(236,245,238,.55);
+  --text-muted:   rgba(236,245,238,.28);
+  --accent:       #2ec97b;
+  --accent-lt:    #52e09a;
+  --accent-dim:   rgba(46,201,123,.1);
+  --accent-glow:  rgba(46,201,123,.22);
   --success:      #34d399;
   --success-dim:  rgba(52,211,153,.14);
   --danger:       #f87171;
-  --primary:      #e8a030;
-  --primary-dark: #cf8e28;
-  --primary-light:#f5b84a;
-  --secondary:    #b07d3a;
+  --primary:      #2ec97b;
+  --primary-dark: #1f9955;
+  --primary-light:#52e09a;
+  --secondary:    #1a7a48;
   --font:         'Plus Jakarta Sans', system-ui, sans-serif;
   --radius:       14px;
   --radius-sm:    10px;
@@ -441,6 +441,55 @@ iframe { cursor: auto; }
   box-shadow: 0 0 0 3px rgba(232,160,48,.1);
 }
 
+/* ── SELECT (schema-form + everywhere) ──────────────────────────────
+   The schema-rendered <select> elements (Brand tone, Hours, Closed?, NBFC
+   category, etc.) need explicit styling so the input itself looks themed,
+   AND the native dropdown popup needs its <option> elements styled —
+   without an `option` rule, browsers render options with default white
+   background and our inherited light text, making them invisible. */
+select {
+  background: var(--bg-card-2);
+  border: 1px solid var(--border-hi);
+  border-radius: var(--radius-sm);
+  color: var(--text);
+  font-family: var(--font);
+  font-size: .9rem;
+  font-weight: 400;
+  padding: 12px 16px;
+  outline: none;
+  cursor: none;
+  -webkit-appearance: none;
+  -moz-appearance: none;
+  appearance: none;
+  /* Custom dropdown chevron (since native arrow is removed by appearance:none) */
+  background-image: url("data:image/svg+xml;charset=UTF-8,%3Csvg xmlns='http://www.w3.org/2000/svg' width='14' height='14' viewBox='0 0 24 24' fill='none' stroke='%23e8a030' stroke-width='2.5' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpolyline points='6 9 12 15 18 9'/%3E%3C/svg%3E");
+  background-repeat: no-repeat;
+  background-position: right 14px center;
+  padding-right: 38px;
+  transition: border-color .22s, box-shadow .22s, background-color .22s;
+}
+select:focus {
+  border-color: rgba(232,160,48,.5);
+  background-color: rgba(232,160,48,.04);
+  box-shadow: 0 0 0 3px rgba(232,160,48,.1);
+}
+select:hover { border-color: rgba(232,160,48,.35); }
+
+/* The actual dropdown popup. Browsers honour color/background on <option>
+   on Chrome, Edge, Firefox; Safari ignores most styling on options. */
+select option {
+  background: #16131a;          /* matches --bg-card-2 explicitly (vars don't propagate to the OS popup on all browsers) */
+  color: #f5f0e8;               /* matches --text */
+  padding: 10px 12px;
+  font-family: 'Inter', system-ui, sans-serif;
+  font-size: .9rem;
+}
+select option:checked,
+select option:hover {
+  background: #1f1a26;          /* slightly lighter for hover/selected */
+  color: #ffffff;
+}
+
 .input-highlight {
   position: absolute; bottom: 0; left: 0; right: 0;
   height: 2px; background: var(--accent);
@@ -620,6 +669,36 @@ iframe { cursor: auto; }
   color: #7a5418;
   line-height: 1.6;
 }
+
+/* Template 11 — Portfolio / Freelancer */
+.template-portfolio { background: #ffffff; padding: 0; display: flex; flex-direction: column; }
+.tp-port-nav { height: 16px; border-bottom: 1px solid rgba(10,10,10,.1); display: flex; align-items: center; padding: 0 7px; gap: 6px; }
+.tp-port-brand { width: 24px; height: 5px; background: rgba(10,10,10,.85); border-radius: 1px; }
+.tp-port-cta { width: 22px; height: 6px; border-radius: 100px; background: rgba(10,10,10,.85); margin-left: auto; }
+.tp-port-hero { flex: 1; padding: 10px 10px 6px; display: flex; flex-direction: column; gap: 3px; }
+.tp-port-name-1 { width: 78px; height: 9px; background: rgba(10,10,10,.9); border-radius: 1px; }
+.tp-port-name-2 { width: 56px; height: 9px; background: rgba(10,10,10,.9); border-radius: 1px; font-style: italic; }
+.tp-port-role { width: 70px; height: 4px; background: rgba(10,10,10,.45); border-radius: 1px; margin-top: 4px; }
+.tp-port-work { padding: 0 7px 6px; display: flex; flex-direction: column; gap: 2px; }
+.tp-port-row { display: flex; justify-content: space-between; align-items: center; padding: 3px 0; border-top: 1px solid rgba(10,10,10,.18); }
+.tp-port-row:first-child { border-top: 1px solid rgba(10,10,10,.18); }
+.tp-port-row span:first-child { width: 60%; height: 5px; background: rgba(10,10,10,.85); border-radius: 1px; }
+.tp-port-row span:last-child  { width: 14px; height: 4px; background: rgba(10,10,10,.45); border-radius: 1px; }
+
+/* Template 10 — Restaurant / Café */
+.template-restaurant { background: #f9f4ec; padding: 0; display: flex; flex-direction: column; }
+.tp-rest-nav { height: 16px; background: rgba(249,244,236,.95); border-bottom: 1px solid rgba(42,26,20,.1); display: flex; align-items: center; padding: 0 7px; gap: 6px; }
+.tp-rest-monogram { width: 9px; height: 9px; border-radius: 50%; background: #7a2e2e; color: #f9f4ec; font-size: 5px; display: flex; align-items: center; justify-content: center; font-weight: 700; font-family: Georgia, serif; font-style: italic; }
+.tp-rest-cta { width: 24px; height: 6px; border-radius: 100px; background: #7a2e2e; margin-left: auto; }
+.tp-rest-hero { flex: 1; padding: 7px 10px; display: flex; flex-direction: column; gap: 2px; align-items: center; text-align: center; }
+.tp-rest-rules { width: 32px; height: 1px; background: #7a2e2e; margin-bottom: 4px; }
+.tp-rest-title-line { width: 70px; height: 5px; border-radius: 2px; background: rgba(42,26,20,.85); }
+.tp-rest-title-em   { width: 50px; height: 5px; border-radius: 2px; background: #7a2e2e; }
+.tp-rest-title-line.short { width: 60px; }
+.tp-rest-sub { width: 90px; height: 2px; border-radius: 2px; background: rgba(42,26,20,.4); margin-top: 4px; }
+.tp-rest-btn { width: 28px; height: 6px; border-radius: 100px; background: #7a2e2e; margin-top: 4px; }
+.tp-rest-dishes { display: flex; gap: 3px; padding: 0 7px 6px; }
+.tp-rest-dish { flex: 1; height: 16px; background: linear-gradient(135deg, rgba(122,46,46,.16), rgba(184,137,64,.16)); border-radius: 2px; border: 1px solid rgba(122,46,46,.18); }
 
 /* Template 9 — NBFC / Lender */
 .template-nbfc { background: #fbf7f0; }

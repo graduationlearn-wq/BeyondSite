@@ -163,6 +163,19 @@ const AI_PROMPTS = {
     services:({biz,desc})       => `For Web3 / protocol brand "${biz}": "${desc}". Return ONLY JSON: { "servicesHeadline2":"<3-5 word punchy second line e.g. Nothing missing.>", "services":[{"name":"<2-4 word product>","body":"<20-30 word benefit description>"}] } with 5-6 items.`,
     cta:     ({biz,desc})       => `For Web3 / protocol brand "${biz}": "${desc}". Return ONLY JSON: { "ctaHeadlineLead":"<4-6 word line 1 e.g. Go on-chain with>", "ctaHeadlineAccent":"<usually the brand name with period>", "ctaBody":"<25-40 word supporting line about deployment speed and trusted teams>", "ctaButton":"<2-3 word action e.g. Start Building →>" }`
   },
+  'template-11': { // Portfolio / Freelancer
+    hero:    ({biz,desc,tone}) => `For freelancer portfolio "${biz}" (${tone} tone): "${desc}". Return ONLY JSON: { "heroEyebrow":"<short availability line e.g. Available for select projects · 2026, max 10 words>", "heroRole":"<concise role/title e.g. Brand & Editorial Designer, max 6 words>", "heroSub":"<35-50 word first-person intro paragraph describing what kind of work the freelancer does and for whom>" }`,
+    about:   ({biz,desc,tone}) => `For freelancer portfolio "${biz}" (${tone}): "${desc}". Return ONLY JSON: { "aboutHeadlineLead":"<3-5 word line 1 e.g. Designing things>", "aboutHeadlineEmph":"<2-4 word italic accent ending with period>", "aboutBody":"<160-220 word first-person about across 3 paragraphs separated by blank lines, covering origin/training, current focus, and how engagements work>" }`,
+    work:    ({biz,desc})       => `For freelancer portfolio "${biz}": "${desc}". Return ONLY JSON: { "workHeadline":"<6-10 word section headline e.g. A few things I'm proud of.>", "workItems":[{"year":"<4-digit year>","client":"<client name>","title":"<project title or type>","body":"<25-35 word one-line summary>","tag":"<discipline tag e.g. Branding, Editorial, Web>"}] } with 5-6 items, mixing recent and older years.`,
+    services:({biz,desc})       => `For freelancer portfolio "${biz}": "${desc}". Return ONLY JSON: { "servicesHeadline":"<6-10 word section headline>", "services":[{"name":"<2-3 word service name>","body":"<25-35 word pitch>"}] } with 4-5 services.`,
+    cta:     ({biz,desc})       => `For freelancer portfolio "${biz}": "${desc}". Return ONLY JSON: { "ctaHeadlineLead":"<3-5 word line 1 e.g. Have something>", "ctaHeadlineEmph":"<2-4 word italic line ending with question mark e.g. worth making?>", "ctaBody":"<25-40 word personal supporting line>", "ctaButton":"<2-4 word action e.g. Start a Conversation>" }`
+  },
+  'template-10': { // Restaurant / Café
+    hero:    ({biz,desc,tone}) => `For restaurant / café "${biz}" (${tone} tone): "${desc}". Return ONLY JSON: { "heroEyebrow":"<short eyebrow e.g. Modern Italian · Mumbai · Since 2014, max 12 words>", "heroHeadlineLead":"<2-3 word line 1 e.g. Crafted with>", "heroHeadlineEmph":"<1-2 word italic accent e.g. passion,>", "heroHeadlineTail":"<3-5 word line 3 e.g. served with care.>", "heroSub":"<35-50 word sub describing cuisine, atmosphere, and what makes the place special>" }`,
+    about:   ({biz,desc,tone}) => `For restaurant / café "${biz}" (${tone}): "${desc}". Return ONLY JSON: { "aboutHeadlineLead":"<3-5 word line 1 e.g. A kitchen rooted in>", "aboutHeadlineEmph":"<1-2 word italic accent e.g. tradition.>", "aboutBody":"<140-200 word origin story — how the place started, the chef's philosophy, what makes the cuisine distinctive>", "chefBio":"<35-50 word short bio of the chef — training, philosophy, signature focus>" }`,
+    signatures:({biz,desc})    => `For restaurant / café "${biz}": "${desc}". Return ONLY JSON: { "signaturesHeadline":"<6-10 word section headline e.g. What we're known for.>", "signatureDishes":[{"name":"<evocative dish name>","body":"<25-35 word description with specific ingredients and technique>","price":"<e.g. ₹680>","tag":"<optional, one of: Chef's Pick, Vegan, Classic, Spicy, or empty>"}] } with EXACTLY 6 signature dishes.`,
+    reservation:({biz,desc})   => `For restaurant / café "${biz}": "${desc}". Return ONLY JSON: { "ctaHeadline":"<8-12 word reservation nudge ending with ?>", "ctaBody":"<20-35 word supporting line about reservation policy, walk-ins, advance notice>", "ctaButton":"<2-3 word action e.g. Book a Table>" }`
+  },
   'template-9': { // NBFC / Lender
     hero:    ({biz,desc,tone}) => `For RBI-registered NBFC / lender "${biz}" (${tone} tone): "${desc}". Return ONLY JSON: { "heroEyebrow":"<trust phrase e.g. RBI Registered NBFC since 2012, max 10 words>", "heroHeadlineLead":"<2-3 word line 1 e.g. Loans built>", "heroHeadlineBody":"<1-2 word line 2 e.g. around>", "heroHeadlineEmph":"<1-2 word italic emphasis e.g. your life.>", "heroSub":"<30-45 word sub describing the lending products and customer promise>" }`,
     products:({biz,desc})       => `For RBI-registered NBFC / lender "${biz}": "${desc}". Return ONLY JSON: { "productsHeadline":"<8-12 word section headline>", "productsBody":"<25-35 word sub-copy>", "products":[{"icon":"<1 emoji from 💼 🏢 🪙 🏠 🚗 🧾 📊 ⚖>","name":"<2-3 word product name>","body":"<15-25 word one-liner pitch>","amountRange":"<e.g. ₹50K – ₹40L>","rateFrom":"<e.g. 10.99%>","tenure":"<e.g. 12-60 months>"}] } with 5-6 items.`,
@@ -180,7 +193,72 @@ function pickPrompt(templateId, sectionId, ctx) {
   return fn(ctx);
 }
 
-// ── Per-section AI ──────────────────────────────────────
+// ── Per-section AI (Gemini primary → Groq fallback) ─────
+// Lazy-load axios at module top via require below the chatbot block; if
+// callGroqAI runs before that, the require() here pulls the same cached module.
+
+// Robust JSON extractor — handles markdown fences, leading/trailing prose
+function extractJSON(text) {
+  if (!text) throw new Error('Empty response from AI');
+  let t = String(text).replace(/```json/gi, '').replace(/```/g, '').trim();
+  // If it doesn't start with { or [, find the first balanced object/array
+  if (!/^[\[{]/.test(t)) {
+    const m = t.match(/[{[][\s\S]*[}\]]/);
+    if (m) t = m[0];
+  }
+  return JSON.parse(t);
+}
+
+// Layer 1 — Gemini (primary). Retries on 503 with backoff.
+async function callGeminiAI(prompt) {
+  const model = genAI.getGenerativeModel({ model: 'gemini-2.5-flash' });
+  let retries = 3;
+  while (retries > 0) {
+    try {
+      const result = await model.generateContent(prompt);
+      const text = result.response.text();
+      return extractJSON(text);
+    } catch (err) {
+      // 503 = service overloaded; retry with backoff
+      if (err.status === 503 && retries > 1) {
+        retries--;
+        await new Promise(r => setTimeout(r, 1500));
+        continue;
+      }
+      // Any other error — bubble up so the caller can fall back to Groq
+      throw err;
+    }
+  }
+  throw new Error('Gemini exhausted retries');
+}
+
+// Layer 2 — Groq (fallback). Uses OpenAI-compatible chat-completions API.
+async function callGroqAI(prompt) {
+  const groqKey = process.env.GROQ_API_KEY;
+  if (!groqKey) throw new Error('GROQ_API_KEY not configured');
+  // axios already required at top of chatbot block; reuse it
+  const ax = require('axios');
+  const resp = await ax.post(
+    'https://api.groq.com/openai/v1/chat/completions',
+    {
+      model: 'llama-3.3-70b-versatile',
+      messages: [
+        { role: 'system', content: 'You are a professional website content writer. You always respond with VALID JSON ONLY — no markdown fences, no explanation, no prose around the JSON. The user will tell you the exact JSON structure to produce.' },
+        { role: 'user', content: prompt }
+      ],
+      temperature: 0.7,
+      max_tokens: 700,
+      response_format: { type: 'json_object' }
+    },
+    {
+      headers: { Authorization: `Bearer ${groqKey}`, 'Content-Type': 'application/json' },
+      timeout: 25000
+    }
+  );
+  const text = resp.data && resp.data.choices && resp.data.choices[0] && resp.data.choices[0].message && resp.data.choices[0].message.content;
+  return extractJSON(text);
+}
+
 app.post('/api/ai-section', aiLimiter, async (req, res) => {
   try {
     const { templateId, sectionId, businessName, description, tone = 'professional' } = req.body;
@@ -191,16 +269,26 @@ app.post('/api/ai-section', aiLimiter, async (req, res) => {
     const prompt = pickPrompt(templateId || 'default', sectionId, bld(businessName, description, tone));
     if (!prompt) return res.status(400).json({ error: `No AI prompt for section "${sectionId}"` });
 
-    const model = genAI.getGenerativeModel({ model: 'gemini-2.5-flash' });
-    let retries = 3;
-    while (retries > 0) {
+    // ── Layer 1: try Gemini (primary)
+    try {
+      const result = await callGeminiAI(prompt);
+      console.log(`[ai-section] ${templateId}/${sectionId} ✓ Gemini`);
+      return res.json(result);
+    } catch (geminiErr) {
+      const reason = geminiErr.status ? `HTTP ${geminiErr.status}` : geminiErr.message;
+      console.warn(`[ai-section] ${templateId}/${sectionId} ✗ Gemini failed (${reason}) — trying Groq`);
+
+      // ── Layer 2: fall back to Groq if configured
+      if (!process.env.GROQ_API_KEY) {
+        return res.status(503).json({ error: 'AI is temporarily unavailable. Please try again in a moment.' });
+      }
       try {
-        const result = await model.generateContent(prompt);
-        const text = result.response.text().replace(/```json/gi, '').replace(/```/g, '').trim();
-        return res.json(JSON.parse(text));
-      } catch (err) {
-        if (err.status === 503 && retries > 1) { retries--; await new Promise(r => setTimeout(r, 2000)); }
-        else throw err;
+        const result = await callGroqAI(prompt);
+        console.log(`[ai-section] ${templateId}/${sectionId} ✓ Groq (fallback)`);
+        return res.json(result);
+      } catch (groqErr) {
+        console.error(`[ai-section] ${templateId}/${sectionId} ✗ Groq also failed: ${groqErr.message}`);
+        return res.status(503).json({ error: 'AI is temporarily unavailable. Both providers failed — please try again in a moment.' });
       }
     }
   } catch (err) {
@@ -396,7 +484,17 @@ function buildTemplateData(payload = {}) {
     'eligibilityLabel','eligibilityHeadline',
     'chargesLabel','chargesHeadline','chargesBody','chargesNote',
     'grievanceLabel','grievanceHeadline','grievanceBody',
-    'groName','groRole','groEmail','groPhone','groAddress','groTimings'
+    'groName','groRole','groEmail','groPhone','groAddress','groTimings',
+    // Round E — Restaurant (template-10)
+    'heroOpenStatus',
+    'chefName','chefRole','chefBio',
+    'signaturesLabel','signaturesHeadline',
+    'menuLabel','menuHeadline','menuIntro',
+    'ctaPhone',
+    // Round E — Portfolio (template-11)
+    'heroNameLead','heroNameTail','heroRole',
+    'aboutLocationLine',
+    'workLabel','workHeadline'
   ];
   for (const k of strKeys) if (data[k] === undefined) data[k] = '';
 
@@ -413,7 +511,11 @@ function buildTemplateData(payload = {}) {
                    // Round D — NBFC (template-9)
                    'heroRateBenefits','trustBadges','products',
                    'eligibilityCriteria','documentsList','rateRows','aboutPillars',
-                   'ratings','escalationLevels'];
+                   'ratings','escalationLevels',
+                   // Round E — Restaurant (template-10)
+                   'signatureDishes','menuCategories','reviews','pressItems',
+                   // Round E — Portfolio (template-11)
+                   'skillsItems','workItems','clientList'];
   for (const k of arrKeys) if (!Array.isArray(data[k])) data[k] = [];
   return data;
 }

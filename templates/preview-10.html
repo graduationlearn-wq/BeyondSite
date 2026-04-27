@@ -1,0 +1,928 @@
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Trattoria Verde — Honest food, made with love.</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Fraunces:ital,opsz,wght@0,9..144,400;0,9..144,500;0,9..144,600;0,9..144,700;1,9..144,500;1,9..144,600&family=Inter:wght@300;400;500;600&display=swap" rel="stylesheet">
+  <style>
+    *,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
+    :root{
+      --bg:           #f9f4ec;
+      --bg-2:         #f3ecdf;
+      --paper:        #ffffff;
+      --ink:          #2a1a14;
+      --ink-soft:     rgba(42,26,20,.72);
+      --ink-mute:     rgba(42,26,20,.5);
+      --ink-line:     rgba(42,26,20,.1);
+      --ink-line-md:  rgba(42,26,20,.18);
+      --burgundy:     #7a2e2e;
+      --burgundy-soft:#9b3838;
+      --olive:        #6e7d3a;
+      --gold:         #b88940;
+      --serif:        'Fraunces', 'Cormorant Garamond', Georgia, serif;
+      --sans:         'Inter', system-ui, sans-serif;
+    }
+    html{scroll-behavior:smooth}
+    body{font-family:var(--sans);background:var(--bg);color:var(--ink);line-height:1.65;-webkit-font-smoothing:antialiased}
+    a{color:inherit;text-decoration:none}
+    button{font-family:inherit;cursor:pointer;border:none}
+    em{font-style:italic;font-family:var(--serif)}
+
+    .container{max-width:1200px;margin:0 auto;padding:0 32px}
+    .reveal{opacity:0;transform:translateY(22px);transition:opacity .7s ease,transform .7s ease}
+    .reveal.visible{opacity:1;transform:translateY(0)}
+
+    /* ── NAV */
+    .nav{position:sticky;top:0;z-index:50;background:rgba(249,244,236,.93);backdrop-filter:blur(10px);border-bottom:1px solid var(--ink-line)}
+    .nav-inner{display:flex;align-items:center;justify-content:space-between;padding:18px 0}
+    .brand{font-family:var(--serif);font-size:1.5rem;font-weight:600;color:var(--burgundy);letter-spacing:-.005em;display:flex;align-items:center;gap:10px}
+    .brand-monogram{
+      width:34px;height:34px;border-radius:50%;
+      background:var(--burgundy);color:var(--bg);
+      display:flex;align-items:center;justify-content:center;
+      font-family:var(--serif);font-style:italic;font-size:1.05rem;font-weight:700
+    }
+    .nav-links{display:flex;gap:28px;list-style:none;align-items:center}
+    .nav-links a{font-size:.9rem;color:var(--ink-soft);transition:color .2s}
+    .nav-links a:hover{color:var(--burgundy)}
+    .nav-cta{
+      background:var(--burgundy);color:var(--bg);padding:10px 22px;border-radius:100px;
+      font-weight:500;transition:background .2s
+    }
+    .nav-cta:hover{background:var(--burgundy-soft);color:var(--bg)}
+
+    /* ── HERO */
+    .hero{padding:120px 0 100px;position:relative;overflow:hidden}
+    .hero::before{
+      content:'';position:absolute;top:80px;right:-150px;
+      width:520px;height:520px;border-radius:50%;
+      background:radial-gradient(circle, rgba(184,137,64,.14) 0%, transparent 70%);
+      pointer-events:none
+    }
+    .hero::after{
+      content:'';position:absolute;bottom:40px;left:-180px;
+      width:480px;height:480px;border-radius:50%;
+      background:radial-gradient(circle, rgba(122,46,46,.12) 0%, transparent 70%);
+      pointer-events:none
+    }
+    .hero-inner{position:relative;text-align:center;max-width:920px;margin:0 auto}
+    .hero-eyebrow{
+      display:inline-flex;align-items:center;gap:10px;
+      font-size:.78rem;font-weight:500;letter-spacing:.16em;text-transform:uppercase;
+      color:var(--burgundy);margin-bottom:28px
+    }
+    .hero-eyebrow::before,.hero-eyebrow::after{content:'';width:32px;height:1px;background:var(--burgundy)}
+    .hero-title{
+      font-family:var(--serif);font-weight:500;
+      font-size:clamp(2.6rem, 5.5vw, 5.4rem);
+      line-height:1.05;letter-spacing:-.015em;color:var(--ink);
+      margin-bottom:24px
+    }
+    .hero-title em{color:var(--burgundy);font-weight:600;display:inline-block;padding:0 .15em}
+    .hero-sub{font-size:1.05rem;color:var(--ink-soft);max-width:620px;margin:0 auto 36px;line-height:1.75}
+    .hero-actions{display:flex;gap:14px;justify-content:center;flex-wrap:wrap;margin-bottom:32px}
+    .btn{
+      display:inline-flex;align-items:center;gap:8px;
+      padding:14px 30px;border-radius:100px;
+      font-size:.93rem;font-weight:500;letter-spacing:.01em;
+      transition:transform .15s,box-shadow .2s,background .2s,color .2s
+    }
+    .btn:hover{transform:translateY(-1px)}
+    .btn-primary{background:var(--burgundy);color:var(--bg);box-shadow:0 8px 22px rgba(122,46,46,.25)}
+    .btn-primary:hover{background:var(--burgundy-soft);box-shadow:0 12px 28px rgba(122,46,46,.32);color:var(--bg)}
+    .btn-ghost{background:transparent;color:var(--ink);border:1.5px solid var(--ink-line-md)}
+    .btn-ghost:hover{background:var(--ink);color:var(--bg);border-color:var(--ink)}
+    .open-status{
+      display:inline-flex;align-items:center;gap:8px;
+      font-size:.84rem;color:var(--olive);
+      background:rgba(110,125,58,.1);
+      padding:6px 14px;border-radius:100px
+    }
+    .open-status::before{content:'';width:7px;height:7px;background:#3aa84c;border-radius:50%;box-shadow:0 0 6px #3aa84c}
+
+    /* ── SECTION HEAD */
+    .section-pad{padding:96px 0}
+    .section-head{text-align:center;max-width:720px;margin:0 auto 56px}
+    .section-head.left{text-align:left;margin-left:0;margin-right:0}
+    .section-eyebrow{
+      font-size:.74rem;font-weight:600;letter-spacing:.18em;text-transform:uppercase;
+      color:var(--burgundy);margin-bottom:14px;display:inline-block
+    }
+    .section-eyebrow::before{content:'·  '}
+    .section-eyebrow::after{content:'  ·'}
+    .section-title{
+      font-family:var(--serif);font-size:clamp(2rem,3.6vw,3.2rem);font-weight:500;
+      line-height:1.15;letter-spacing:-.015em;color:var(--ink);margin-bottom:16px
+    }
+    .section-title em{color:var(--burgundy);font-weight:600}
+    .section-body{font-size:1rem;color:var(--ink-soft);line-height:1.75;max-width:620px;margin:0 auto}
+
+    /* ── ABOUT */
+    .about{background:var(--bg-2)}
+    .about-grid{display:grid;grid-template-columns:1.05fr .95fr;gap:60px;align-items:start}
+    .about-body{font-size:1rem;color:var(--ink-soft);line-height:1.85;margin-bottom:30px;font-weight:300}
+    .chef-card{
+      background:var(--paper);border:1px solid var(--ink-line);border-radius:18px;
+      padding:32px;text-align:center;
+      box-shadow:0 18px 44px -22px rgba(42,26,20,.18);
+      position:relative
+    }
+    .chef-card::before{
+      content:'';position:absolute;top:-1px;left:24px;right:24px;height:3px;
+      background:linear-gradient(90deg,var(--burgundy),var(--gold));
+      border-radius:0 0 4px 4px
+    }
+    .chef-portrait{
+      width:120px;height:120px;border-radius:50%;margin:0 auto 22px;
+      background:linear-gradient(135deg,var(--burgundy),var(--burgundy-soft));
+      color:var(--bg);
+      display:flex;align-items:center;justify-content:center;
+      font-family:var(--serif);font-size:2.4rem;font-weight:600;font-style:italic;
+      box-shadow:0 12px 30px -10px rgba(122,46,46,.4)
+    }
+    .chef-name{font-family:var(--serif);font-size:1.4rem;font-weight:600;color:var(--ink);margin-bottom:4px}
+    .chef-role{font-size:.84rem;color:var(--burgundy);text-transform:uppercase;letter-spacing:.1em;font-weight:500;margin-bottom:18px}
+    .chef-bio{font-size:.92rem;color:var(--ink-soft);line-height:1.7;font-style:italic;font-family:var(--serif)}
+
+    /* ── SIGNATURE DISHES */
+    .signatures{background:var(--bg)}
+    .signatures-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(320px,1fr));gap:24px}
+    .dish-card{
+      background:var(--paper);border:1px solid var(--ink-line);border-radius:14px;
+      overflow:hidden;
+      transition:transform .25s,box-shadow .25s,border-color .25s;
+      display:flex;flex-direction:column
+    }
+    .dish-card:hover{transform:translateY(-4px);border-color:var(--burgundy);box-shadow:0 22px 48px -22px rgba(122,46,46,.2)}
+    .dish-art{
+      height:160px;
+      background:linear-gradient(135deg,rgba(122,46,46,.18),rgba(184,137,64,.18));
+      position:relative;display:flex;align-items:center;justify-content:center;
+      border-bottom:1px solid var(--ink-line)
+    }
+    .dish-art-mark{
+      font-family:var(--serif);font-style:italic;font-size:3rem;
+      color:rgba(122,46,46,.4);font-weight:600
+    }
+    .dish-tag{
+      position:absolute;top:14px;right:14px;
+      background:var(--burgundy);color:var(--bg);
+      font-size:.7rem;font-weight:600;letter-spacing:.06em;text-transform:uppercase;
+      padding:4px 10px;border-radius:100px
+    }
+    .dish-tag.veg  {background:var(--olive)}
+    .dish-tag.gold {background:var(--gold)}
+    .dish-body{padding:22px 24px}
+    .dish-head{display:flex;justify-content:space-between;align-items:baseline;gap:14px;margin-bottom:8px}
+    .dish-name{font-family:var(--serif);font-size:1.2rem;font-weight:600;color:var(--ink)}
+    .dish-price{font-family:var(--serif);font-size:1.05rem;font-weight:600;color:var(--burgundy);font-feature-settings:'tnum';white-space:nowrap}
+    .dish-desc{font-size:.9rem;color:var(--ink-soft);line-height:1.65}
+
+    /* ── FULL MENU */
+    .menu{background:var(--bg-2)}
+    .menu-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(360px,1fr));gap:32px}
+    .menu-cat{background:var(--paper);border:1px solid var(--ink-line);border-radius:14px;padding:32px}
+    .menu-cat-name{
+      font-family:var(--serif);font-size:1.4rem;font-weight:600;color:var(--burgundy);
+      margin-bottom:6px;text-align:center;letter-spacing:.01em
+    }
+    .menu-cat-rule{
+      width:60px;height:1px;background:var(--gold);
+      margin:0 auto 24px
+    }
+    .menu-item{padding:14px 0;border-bottom:1px dotted var(--ink-line)}
+    .menu-item:last-child{border-bottom:none}
+    .menu-item-head{display:flex;justify-content:space-between;align-items:baseline;gap:10px;margin-bottom:4px}
+    .menu-item-name{font-family:var(--serif);font-weight:600;color:var(--ink);font-size:1.02rem}
+    .menu-item-price{font-family:var(--serif);font-size:.95rem;color:var(--burgundy);font-weight:600;font-feature-settings:'tnum';white-space:nowrap}
+    .menu-item-tag{
+      display:inline-block;font-size:.66rem;font-weight:600;
+      padding:2px 7px;border-radius:4px;margin-left:6px;
+      background:var(--olive);color:var(--bg);letter-spacing:.05em;text-transform:uppercase;vertical-align:middle
+    }
+    .menu-item-desc{font-size:.86rem;color:var(--ink-soft);line-height:1.55;font-style:italic;font-family:var(--serif)}
+
+    /* ── REVIEWS */
+    .reviews-wrap{background:var(--ink);color:var(--bg);position:relative;overflow:hidden}
+    .reviews-wrap::before{
+      content:'"';position:absolute;top:-40px;left:-10px;
+      font-family:var(--serif);font-size:24rem;color:rgba(184,137,64,.06);
+      pointer-events:none;line-height:1
+    }
+    .reviews-wrap .section-eyebrow{color:var(--gold)}
+    .reviews-wrap .section-title{color:var(--bg)}
+    .reviews-wrap .section-title em{color:var(--gold)}
+    .reviews-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(320px,1fr));gap:24px;position:relative}
+    .review-card{background:rgba(255,255,255,.04);border:1px solid rgba(255,255,255,.08);border-radius:14px;padding:32px;display:flex;flex-direction:column}
+    .review-stars{color:var(--gold);font-size:1.05rem;letter-spacing:3px;margin-bottom:18px}
+    .review-quote{font-family:var(--serif);font-size:1.15rem;font-weight:500;line-height:1.65;color:var(--bg);margin-bottom:24px;flex:1;font-style:italic}
+    .review-attr{display:flex;align-items:center;gap:14px;border-top:1px solid rgba(255,255,255,.1);padding-top:18px}
+    .review-avatar{
+      width:42px;height:42px;border-radius:50%;
+      background:var(--gold);color:var(--ink);
+      display:flex;align-items:center;justify-content:center;
+      font-family:var(--serif);font-weight:600;font-size:.95rem
+    }
+    .review-source{display:block;font-weight:600;color:var(--bg)}
+    .review-role{display:block;font-size:.82rem;color:rgba(255,255,255,.6);margin-top:2px}
+
+    /* ── HOURS / PRESS / RESERVATION */
+    .hours{background:var(--bg)}
+    .hours-grid{display:grid;grid-template-columns:1fr 1.1fr;gap:48px;align-items:center}
+    .hours-card{background:var(--paper);border:1px solid var(--ink-line);border-radius:14px;padding:32px}
+    .hours-title{font-family:var(--serif);font-size:1.5rem;font-weight:600;color:var(--burgundy);margin-bottom:8px}
+    .hours-sub{font-size:.86rem;color:var(--ink-mute);margin-bottom:22px}
+    .hours-row{display:flex;justify-content:space-between;align-items:center;padding:11px 0;border-bottom:1px dotted var(--ink-line);font-size:.93rem}
+    .hours-row:last-child{border-bottom:none}
+    .hours-day{font-weight:500;color:var(--ink)}
+    .hours-time{font-family:var(--serif);font-weight:500;color:var(--ink-soft);font-feature-settings:'tnum'}
+    .hours-time.closed{color:var(--burgundy);font-style:italic}
+    .visit-card{padding:0 12px}
+    .visit-eyebrow{color:var(--burgundy);font-size:.74rem;font-weight:600;letter-spacing:.18em;text-transform:uppercase;margin-bottom:14px}
+    .visit-title{font-family:var(--serif);font-size:2.2rem;font-weight:500;line-height:1.15;margin-bottom:18px}
+    .visit-title em{color:var(--burgundy);font-weight:600}
+    .visit-detail{font-size:.95rem;color:var(--ink-soft);line-height:1.7;margin-bottom:8px;display:flex;gap:10px}
+    .visit-detail b{color:var(--ink);min-width:80px;font-weight:600}
+
+    /* ── PRESS STRIP */
+    .press-strip{
+      background:var(--ink);color:var(--bg-2);
+      padding:34px 0;overflow:hidden
+    }
+    .press-track{
+      display:flex;gap:48px;align-items:center;justify-content:center;flex-wrap:wrap;
+      max-width:1240px;margin:0 auto;padding:0 32px
+    }
+    .press-item{
+      font-family:var(--serif);font-style:italic;font-size:1.05rem;
+      color:rgba(249,244,236,.7);letter-spacing:.02em;white-space:nowrap
+    }
+    .press-item + .press-item::before{
+      content:'·';margin-right:48px;color:var(--gold);
+      font-style:normal;font-size:.9rem;vertical-align:middle
+    }
+
+    /* ── RESERVATION CTA */
+    .reservation{
+      background:linear-gradient(180deg,var(--bg) 0%,var(--bg-2) 100%);
+      padding:88px 0;text-align:center
+    }
+    .reservation-card{
+      max-width:720px;margin:0 auto;
+      background:var(--paper);border:1px solid var(--ink-line);border-radius:18px;
+      padding:56px 40px;
+      box-shadow:0 22px 56px -28px rgba(42,26,20,.22);
+      position:relative
+    }
+    .reservation-card::before{
+      content:'';position:absolute;top:-1px;left:80px;right:80px;height:3px;
+      background:linear-gradient(90deg,var(--burgundy),var(--gold),var(--burgundy));
+      border-radius:0 0 4px 4px
+    }
+    .reservation-title{font-family:var(--serif);font-size:clamp(1.8rem,3.2vw,2.6rem);font-weight:500;line-height:1.2;margin-bottom:14px}
+    .reservation-title em{color:var(--burgundy);font-weight:600}
+    .reservation-body{font-size:1rem;color:var(--ink-soft);line-height:1.7;margin-bottom:32px}
+    .reservation-actions{display:flex;gap:18px;justify-content:center;flex-wrap:wrap;align-items:center}
+    .reservation-or{color:var(--ink-mute);font-size:.86rem;font-style:italic}
+    .reservation-phone{
+      font-family:var(--serif);font-size:1.15rem;font-weight:600;color:var(--burgundy);
+      letter-spacing:.01em;font-feature-settings:'tnum'
+    }
+
+    /* ── CONTACT (from base) */
+    .contact{background:var(--bg-2);border-top:1px solid var(--ink-line)}
+    .contact-grid{display:grid;grid-template-columns:1fr 1fr;gap:48px}
+    .contact-info-row{display:flex;gap:14px;font-size:.93rem;color:var(--ink-soft);margin-bottom:12px;line-height:1.6}
+    .contact-info-row b{color:var(--ink);min-width:75px;font-weight:600}
+
+    /* ── FOOTER */
+    .footer{background:var(--ink);color:rgba(249,244,236,.6);padding:60px 0 28px}
+    .footer-grid{display:grid;grid-template-columns:1.4fr 1fr 1fr;gap:48px;margin-bottom:36px}
+    .f-brand{font-family:var(--serif);color:var(--bg);font-size:1.4rem;font-weight:600;margin-bottom:6px;font-style:italic}
+    .f-tag{font-size:.86rem;color:rgba(249,244,236,.5);max-width:280px;line-height:1.65;margin-bottom:14px}
+    .f-col-title{font-size:.74rem;font-weight:600;letter-spacing:.16em;text-transform:uppercase;color:var(--gold);margin-bottom:14px}
+    .f-links{list-style:none;display:flex;flex-direction:column;gap:8px}
+    .f-links a,.f-links li{color:rgba(249,244,236,.55);font-size:.88rem;transition:color .2s}
+    .f-links a:hover{color:var(--bg)}
+    .f-bottom{border-top:1px solid rgba(249,244,236,.08);padding-top:20px;font-size:.78rem;color:rgba(249,244,236,.4);text-align:center}
+
+    /* ── RESPONSIVE */
+    @media (max-width:980px){
+      .about-grid,.hours-grid,.contact-grid{grid-template-columns:1fr;gap:40px}
+      .footer-grid{grid-template-columns:1fr 1fr;gap:32px}
+    }
+    @media (max-width:640px){
+      .container{padding:0 22px}
+      .nav-links li:not(:last-child){display:none}
+      .section-pad{padding:64px 0}
+      .reservation-card{padding:40px 24px}
+      .footer-grid{grid-template-columns:1fr;gap:28px}
+    }
+  </style>
+</head>
+<body>
+
+  <!-- NAV -->
+  <nav class="nav">
+    <div class="container nav-inner">
+      <a href="#" class="brand">
+        <span class="brand-monogram">T</span>
+        <span>Trattoria Verde</span>
+      </a>
+      <ul class="nav-links">
+        <li><a href="#signatures">Menu</a></li>
+        <li><a href="#about">Story</a></li>
+        <li><a href="#hours">Hours</a></li>
+        <li><a href="#contact">Visit</a></li>
+        <li><a href="#reservation" class="nav-cta">Reserve</a></li>
+      </ul>
+    </div>
+  </nav>
+
+  <!-- HERO -->
+  <section class="hero">
+    <div class="container hero-inner reveal">
+      <div class="hero-eyebrow">Modern Italian · Mumbai · Since 2014</div>
+      <h1 class="hero-title">
+        Crafted with<br>
+        <em>passion,</em><br>
+        served with care.
+      </h1>
+      <p class="hero-sub">A neighbourhood trattoria run by a small family team. Hand-rolled pasta, wood-fired mains, a thoughtfully short wine list — and a kitchen open till the last guest goes home happy.</p>
+      <div class="hero-actions">
+        <a href="#reservation" class="btn btn-primary">Reserve a Table →</a>
+        <a href="#signatures" class="btn btn-ghost">View Menu</a>
+      </div>
+      
+        <div class="open-status">Open now · Last seating 10:30 PM</div>
+      
+    </div>
+  </section>
+
+  <!-- ABOUT -->
+  <section id="about" class="about section-pad">
+    <div class="container about-grid">
+      <div class="reveal">
+        <div class="section-eyebrow">Our Story</div>
+        <h2 class="section-title">A kitchen rooted in <em>tradition.</em></h2>
+        <p class="about-body">Founded in 2014 by Chef Marco Russo and his wife Aria, Trattoria Verde began as a six-table room serving the food they grew up eating in Liguria. A decade on, the team is bigger and the dining room a little louder — but the rules haven&#39;t changed: pasta is rolled by hand each morning, vegetables come from a single farm forty kilometres from here, and we&#39;d rather close early than serve something we wouldn&#39;t eat ourselves. Most of the team has been with us five years or more, and so have most of our regulars.</p>
+      </div>
+      <div class="chef-card reveal">
+        <div class="chef-portrait">CM</div>
+        <div class="chef-name">Chef Marco Russo</div>
+        <div class="chef-role">Executive Chef &amp; Founder</div>
+        <p class="chef-bio">"Trained in Genoa, refined across kitchens in Milan and Tokyo, Marco believes good food is built on three things: an honest ingredient, a steady flame, and patience."</p>
+      </div>
+    </div>
+  </section>
+
+  <!-- SIGNATURE DISHES -->
+  <section id="signatures" class="signatures section-pad">
+    <div class="container">
+      <div class="section-head reveal">
+        <div class="section-eyebrow">Signature Plates</div>
+        <h2 class="section-title">What we&#39;re known for.</h2>
+      </div>
+      <div class="signatures-grid">
+        
+        <article class="dish-card reveal">
+          <div class="dish-art">
+            <span class="dish-art-mark">T</span>
+            <span class="dish-tag gold">Chef&#39;s Pick</span>
+          </div>
+          <div class="dish-body">
+            <div class="dish-head">
+              <h3 class="dish-name">Truffle Tagliatelle</h3>
+              <span class="dish-price">₹780</span>
+            </div>
+            <p class="dish-desc">Hand-rolled tagliatelle, slow butter sauce, shaved black truffle, aged parmesan.</p>
+          </div>
+        </article>
+        
+        <article class="dish-card reveal">
+          <div class="dish-art">
+            <span class="dish-art-mark">W</span>
+            
+          </div>
+          <div class="dish-body">
+            <div class="dish-head">
+              <h3 class="dish-name">Wood-Fired Branzino</h3>
+              <span class="dish-price">₹1,420</span>
+            </div>
+            <p class="dish-desc">Whole Mediterranean sea bass, salt-baked, finished over olive wood. Lemon, capers, parsley oil.</p>
+          </div>
+        </article>
+        
+        <article class="dish-card reveal">
+          <div class="dish-art">
+            <span class="dish-art-mark">S</span>
+            
+          </div>
+          <div class="dish-body">
+            <div class="dish-head">
+              <h3 class="dish-name">Slow-Braised Lamb Shank</h3>
+              <span class="dish-price">₹1,160</span>
+            </div>
+            <p class="dish-desc">Eight-hour braise in red wine and rosemary, soft polenta, gremolata.</p>
+          </div>
+        </article>
+        
+        <article class="dish-card reveal">
+          <div class="dish-art">
+            <span class="dish-art-mark">B</span>
+            <span class="dish-tag veg">V</span>
+          </div>
+          <div class="dish-body">
+            <div class="dish-head">
+              <h3 class="dish-name">Burrata di Andria</h3>
+              <span class="dish-price">₹620</span>
+            </div>
+            <p class="dish-desc">Fresh burrata flown weekly, heirloom tomato, aged balsamic, focaccia.</p>
+          </div>
+        </article>
+        
+        <article class="dish-card reveal">
+          <div class="dish-art">
+            <span class="dish-art-mark">T</span>
+            <span class="dish-tag ">Classic</span>
+          </div>
+          <div class="dish-body">
+            <div class="dish-head">
+              <h3 class="dish-name">Tiramisù della Nonna</h3>
+              <span class="dish-price">₹420</span>
+            </div>
+            <p class="dish-desc">Marco&#39;s grandmother&#39;s recipe — hand-whipped mascarpone, espresso-soaked ladyfingers, cocoa.</p>
+          </div>
+        </article>
+        
+        <article class="dish-card reveal">
+          <div class="dish-art">
+            <span class="dish-art-mark">R</span>
+            
+          </div>
+          <div class="dish-body">
+            <div class="dish-head">
+              <h3 class="dish-name">Risotto Mare Nostrum</h3>
+              <span class="dish-price">₹990</span>
+            </div>
+            <p class="dish-desc">Carnaroli rice, prawn, scallop, calamari, saffron, finished with a touch of Sambuca.</p>
+          </div>
+        </article>
+        
+      </div>
+    </div>
+  </section>
+
+  <!-- FULL MENU -->
+  <section id="menu" class="menu section-pad">
+    <div class="container">
+      <div class="section-head reveal">
+        <div class="section-eyebrow">Full Menu</div>
+        <h2 class="section-title">Today&#39;s offerings.</h2>
+        <p class="section-body">Vegan and gluten-free options marked. Please tell us about any allergies — our kitchen is happy to adapt.</p>
+      </div>
+      <div class="menu-grid">
+        
+        <div class="menu-cat reveal">
+          <h3 class="menu-cat-name">Antipasti</h3>
+          <div class="menu-cat-rule"></div>
+          
+          <div class="menu-item">
+            <div class="menu-item-head">
+              <span class="menu-item-name">
+                Bruschetta
+                <span class="menu-item-tag">V</span>
+              </span>
+              <span class="menu-item-price">₹320</span>
+            </div>
+            <div class="menu-item-desc">Toasted ciabatta, heirloom tomato, basil, olive oil</div>
+          </div>
+          
+          <div class="menu-item">
+            <div class="menu-item-head">
+              <span class="menu-item-name">
+                Carpaccio di Manzo
+                
+              </span>
+              <span class="menu-item-price">₹540</span>
+            </div>
+            <div class="menu-item-desc">Beef tenderloin, parmesan, rocket, lemon</div>
+          </div>
+          
+          <div class="menu-item">
+            <div class="menu-item-head">
+              <span class="menu-item-name">
+                Vitello Tonnato
+                
+              </span>
+              <span class="menu-item-price">₹620</span>
+            </div>
+            <div class="menu-item-desc">Cold veal, tuna-caper sauce, capers</div>
+          </div>
+          
+          <div class="menu-item">
+            <div class="menu-item-head">
+              <span class="menu-item-name">
+                Insalata Caprese
+                <span class="menu-item-tag">V</span>
+              </span>
+              <span class="menu-item-price">₹420</span>
+            </div>
+            <div class="menu-item-desc">Buffalo mozzarella, tomato, basil</div>
+          </div>
+          
+        </div>
+        
+        <div class="menu-cat reveal">
+          <h3 class="menu-cat-name">Pasta</h3>
+          <div class="menu-cat-rule"></div>
+          
+          <div class="menu-item">
+            <div class="menu-item-head">
+              <span class="menu-item-name">
+                Cacio e Pepe
+                <span class="menu-item-tag">V</span>
+              </span>
+              <span class="menu-item-price">₹560</span>
+            </div>
+            <div class="menu-item-desc">Pecorino, black pepper, hand-rolled spaghetti</div>
+          </div>
+          
+          <div class="menu-item">
+            <div class="menu-item-head">
+              <span class="menu-item-name">
+                Spaghetti Vongole
+                
+              </span>
+              <span class="menu-item-price">₹740</span>
+            </div>
+            <div class="menu-item-desc">Clams, white wine, garlic, parsley</div>
+          </div>
+          
+          <div class="menu-item">
+            <div class="menu-item-head">
+              <span class="menu-item-name">
+                Pappardelle al Cinghiale
+                
+              </span>
+              <span class="menu-item-price">₹820</span>
+            </div>
+            <div class="menu-item-desc">Wild boar ragù, juniper, red wine</div>
+          </div>
+          
+          <div class="menu-item">
+            <div class="menu-item-head">
+              <span class="menu-item-name">
+                Gnocchi Pesto Genovese
+                <span class="menu-item-tag">V</span>
+              </span>
+              <span class="menu-item-price">₹620</span>
+            </div>
+            <div class="menu-item-desc">Hand-rolled potato gnocchi, pesto, pine nuts</div>
+          </div>
+          
+        </div>
+        
+        <div class="menu-cat reveal">
+          <h3 class="menu-cat-name">Mains</h3>
+          <div class="menu-cat-rule"></div>
+          
+          <div class="menu-item">
+            <div class="menu-item-head">
+              <span class="menu-item-name">
+                Branzino al Forno
+                
+              </span>
+              <span class="menu-item-price">₹1,420</span>
+            </div>
+            <div class="menu-item-desc">Wood-fired sea bass, lemon, capers</div>
+          </div>
+          
+          <div class="menu-item">
+            <div class="menu-item-head">
+              <span class="menu-item-name">
+                Lamb Shank Brasato
+                
+              </span>
+              <span class="menu-item-price">₹1,160</span>
+            </div>
+            <div class="menu-item-desc">Eight-hour red wine braise, polenta</div>
+          </div>
+          
+          <div class="menu-item">
+            <div class="menu-item-head">
+              <span class="menu-item-name">
+                Pollo alla Milanese
+                
+              </span>
+              <span class="menu-item-price">₹880</span>
+            </div>
+            <div class="menu-item-desc">Breaded chicken, rocket, cherry tomato, lemon</div>
+          </div>
+          
+          <div class="menu-item">
+            <div class="menu-item-head">
+              <span class="menu-item-name">
+                Melanzane Parmigiana
+                <span class="menu-item-tag">V</span>
+              </span>
+              <span class="menu-item-price">₹680</span>
+            </div>
+            <div class="menu-item-desc">Eggplant, tomato, mozzarella, basil</div>
+          </div>
+          
+        </div>
+        
+        <div class="menu-cat reveal">
+          <h3 class="menu-cat-name">Dolci</h3>
+          <div class="menu-cat-rule"></div>
+          
+          <div class="menu-item">
+            <div class="menu-item-head">
+              <span class="menu-item-name">
+                Tiramisù della Nonna
+                
+              </span>
+              <span class="menu-item-price">₹420</span>
+            </div>
+            <div class="menu-item-desc">Espresso, mascarpone, ladyfingers, cocoa</div>
+          </div>
+          
+          <div class="menu-item">
+            <div class="menu-item-head">
+              <span class="menu-item-name">
+                Panna Cotta
+                
+              </span>
+              <span class="menu-item-price">₹360</span>
+            </div>
+            <div class="menu-item-desc">Vanilla cream, seasonal berries, balsamic</div>
+          </div>
+          
+          <div class="menu-item">
+            <div class="menu-item-head">
+              <span class="menu-item-name">
+                Affogato
+                <span class="menu-item-tag">V</span>
+              </span>
+              <span class="menu-item-price">₹320</span>
+            </div>
+            <div class="menu-item-desc">Vanilla gelato, hot espresso, amaretto</div>
+          </div>
+          
+          <div class="menu-item">
+            <div class="menu-item-head">
+              <span class="menu-item-name">
+                Cantucci &amp; Vin Santo
+                
+              </span>
+              <span class="menu-item-price">₹420</span>
+            </div>
+            <div class="menu-item-desc">Tuscan almond biscotti, dessert wine</div>
+          </div>
+          
+        </div>
+        
+      </div>
+    </div>
+  </section>
+
+  <!-- REVIEWS -->
+  <section class="reviews-wrap section-pad">
+    <div class="container">
+      <div class="section-head reveal">
+        <div class="section-eyebrow">What guests say</div>
+        <h2 class="section-title">Press &amp; <em>real reviews.</em></h2>
+      </div>
+      <div class="reviews-grid">
+        
+        <article class="review-card reveal">
+          <div class="review-stars">★★★★★</div>
+          <p class="review-quote">"A meal here is what you go to a restaurant for in the first place — soul, smoke, and salt."</p>
+          <div class="review-attr">
+            <div class="review-avatar">VS</div>
+            <div>
+              <span class="review-source">Vir Sanghvi</span>
+              <span class="review-role">Food Critic, HT Brunch</span>
+            </div>
+          </div>
+        </article>
+        
+        <article class="review-card reveal">
+          <div class="review-stars">★★★★★</div>
+          <p class="review-quote">"Marco&#39;s tagliatelle alone is worth the trip across the city. The lamb shank is the postscript that closes the deal."</p>
+          <div class="review-attr">
+            <div class="review-avatar">CN</div>
+            <div>
+              <span class="review-source">Conde Nast Traveller</span>
+              <span class="review-role">Best New Restaurant 2024</span>
+            </div>
+          </div>
+        </article>
+        
+        <article class="review-card reveal">
+          <div class="review-stars">★★★★★</div>
+          <p class="review-quote">"My family&#39;s anniversary spot for three years running. They remember our table, our wine, our daughter&#39;s allergies."</p>
+          <div class="review-attr">
+            <div class="review-avatar">PI</div>
+            <div>
+              <span class="review-source">Priya Iyer</span>
+              <span class="review-role">Bandra · regular guest</span>
+            </div>
+          </div>
+        </article>
+        
+      </div>
+    </div>
+  </section>
+
+  <!-- HOURS + VISIT -->
+  <section id="hours" class="hours section-pad">
+    <div class="container hours-grid">
+      <div class="hours-card reveal">
+        <div class="hours-title">Hours of Service</div>
+        <div class="hours-sub">Reservations recommended for parties of 4 or more.</div>
+        
+          <div class="hours-row">
+            <span class="hours-day">Monday</span>
+            <span class="hours-time closed">Closed</span>
+          </div>
+        
+          <div class="hours-row">
+            <span class="hours-day">Tuesday</span>
+            <span class="hours-time">12:00 PM – 11:00 PM</span>
+          </div>
+        
+          <div class="hours-row">
+            <span class="hours-day">Wednesday</span>
+            <span class="hours-time">12:00 PM – 11:00 PM</span>
+          </div>
+        
+          <div class="hours-row">
+            <span class="hours-day">Thursday</span>
+            <span class="hours-time">12:00 PM – 11:00 PM</span>
+          </div>
+        
+          <div class="hours-row">
+            <span class="hours-day">Friday</span>
+            <span class="hours-time">12:00 PM – 12:00 AM</span>
+          </div>
+        
+          <div class="hours-row">
+            <span class="hours-day">Saturday</span>
+            <span class="hours-time">11:00 AM – 12:00 AM</span>
+          </div>
+        
+          <div class="hours-row">
+            <span class="hours-day">Sunday</span>
+            <span class="hours-time">11:00 AM – 10:30 PM</span>
+          </div>
+        
+      </div>
+      <div class="visit-card reveal">
+        <div class="visit-eyebrow">Come visit</div>
+        <h3 class="visit-title">Find us in <em>the neighbourhood.</em></h3>
+        
+        <div class="visit-detail"><b>Address</b><span>14 Hill Road, Bandra West<br>Mumbai, Maharashtra 400050</span></div>
+        
+        
+        <div class="visit-detail"><b>Phone</b><span>+91 22 6789 4500</span></div>
+        
+        
+        <div class="visit-detail"><b>Email</b><span>reservations@trattoriaverde.in</span></div>
+        
+      </div>
+    </div>
+  </section>
+
+  <!-- PRESS STRIP -->
+  
+  <div class="press-strip">
+    <div class="press-track">
+      
+        <span class="press-item">Featured in Vogue Living</span>
+      
+        <span class="press-item">TimeOut Best New Restaurant 2024</span>
+      
+        <span class="press-item">HT Brunch · 4.5★</span>
+      
+        <span class="press-item">Conde Nast Traveller</span>
+      
+        <span class="press-item">BBC Travel · &#34;Mumbai&#39;s soul on a plate&#34;</span>
+      
+    </div>
+  </div>
+  
+
+  <!-- RESERVATION CTA -->
+  <section id="reservation" class="reservation">
+    <div class="container">
+      <div class="reservation-card reveal">
+        <h2 class="reservation-title">
+          
+          
+            Hungry? <em> Reserve your table.</em>
+          
+        </h2>
+        <p class="reservation-body">A 24-hour notice helps us prep your favourites. Walk-ins welcome — first-come, first-served on weekends.</p>
+        <div class="reservation-actions">
+          <a href="#contact" class="btn btn-primary">Book a Table →</a>
+          
+            <span class="reservation-or">or call</span>
+            <a href="tel:+912267894500" class="reservation-phone">+91 22 6789 4500</a>
+          
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- CONTACT -->
+  <section id="contact" class="contact section-pad">
+    <div class="container contact-grid">
+      <div class="reveal">
+        <div class="section-eyebrow">Reach us</div>
+        <h2 class="section-title">We'd love to <em>hear from you.</em></h2>
+        <p class="section-body" style="margin:18px 0 28px">For private events, large groups, or media enquiries, drop us a note — we usually respond within a few hours during service.</p>
+        <div class="contact-info-row"><b>Email</b><span>reservations@trattoriaverde.in</span></div>
+        <div class="contact-info-row"><b>Phone</b><span>+91 22 6789 4500</span></div>
+        <div class="contact-info-row"><b>Address</b><span>14 Hill Road, Bandra West<br>Mumbai, Maharashtra 400050</span></div>
+        <div class="contact-info-row"><b>Hours</b><span>Tue–Sun · 12:00 PM – 11:00 PM (Mon closed)</span></div>
+      </div>
+      <form data-contact style="background:var(--paper);border:1px solid var(--ink-line);border-radius:14px;padding:32px;display:flex;flex-direction:column;gap:14px">
+        <input type="text" placeholder="Your name" required style="padding:12px 14px;border:1.5px solid var(--ink-line-md);border-radius:8px;background:var(--bg);font-family:inherit;font-size:.95rem;color:var(--ink);outline:none">
+        <input type="email" placeholder="Email address" required style="padding:12px 14px;border:1.5px solid var(--ink-line-md);border-radius:8px;background:var(--bg);font-family:inherit;font-size:.95rem;color:var(--ink);outline:none">
+        <input type="tel" placeholder="Phone (for reservations)" style="padding:12px 14px;border:1.5px solid var(--ink-line-md);border-radius:8px;background:var(--bg);font-family:inherit;font-size:.95rem;color:var(--ink);outline:none">
+        <textarea rows="4" placeholder="Date, time, party size, special requests…" required style="padding:12px 14px;border:1.5px solid var(--ink-line-md);border-radius:8px;background:var(--bg);font-family:inherit;font-size:.95rem;color:var(--ink);outline:none;resize:vertical"></textarea>
+        <button type="submit" class="btn btn-primary" style="width:100%;justify-content:center">Book a Table →</button>
+      </form>
+    </div>
+  </section>
+
+  <!-- FOOTER -->
+  <footer class="footer">
+    <div class="container">
+      <div class="footer-grid">
+        <div>
+          <div class="f-brand">Trattoria Verde</div>
+          <p class="f-tag">Honest food, made with love. · Serving since 2014.</p>
+        </div>
+        <div>
+          <p class="f-col-title">Visit</p>
+          <ul class="f-links">
+            <li>14 Hill Road, Bandra West<br>Mumbai, Maharashtra 400050</li>
+            <li>+91 22 6789 4500</li>
+            <li>reservations@trattoriaverde.in</li>
+          </ul>
+        </div>
+        <div>
+          <p class="f-col-title">Explore</p>
+          <ul class="f-links">
+            <li><a href="#signatures">Signature dishes</a></li>
+            <li><a href="#menu">Full menu</a></li>
+            <li><a href="#about">Our story</a></li>
+            <li><a href="#hours">Hours</a></li>
+            <li><a href="#reservation">Reserve</a></li>
+          </ul>
+        </div>
+      </div>
+      <div class="f-bottom">© 2026 Trattoria Verde. All rights reserved.</div>
+    </div>
+  </footer>
+
+  <script>
+    var ro = new IntersectionObserver(function(es){
+      es.forEach(function(e){ if (e.isIntersecting){ e.target.classList.add('visible'); ro.unobserve(e.target); } });
+    }, { threshold:.06, rootMargin:'0px 0px -40px 0px' });
+    document.querySelectorAll('.reveal').forEach(function(el){ ro.observe(el); });
+
+    document.querySelectorAll('a[href^="#"]').forEach(function(a){
+      a.addEventListener('click', function(e){
+        var t = document.querySelector(a.getAttribute('href'));
+        if (t){ e.preventDefault(); t.scrollIntoView({ behavior:'smooth', block:'start' }); }
+      });
+    });
+
+    var f = document.querySelector('[data-contact]');
+    if (f){
+      f.addEventListener('submit', function(e){
+        e.preventDefault();
+        var b = f.querySelector('button[type="submit"]');
+        var t = b.textContent;
+        b.textContent = 'Sending…'; b.disabled = true;
+        setTimeout(function(){
+          var ok = document.createElement('div');
+          ok.style.cssText = 'background:rgba(110,125,58,.1);border:1px solid rgba(110,125,58,.3);color:#3a4a1f;padding:14px 16px;border-radius:8px;font-size:.92rem;margin-bottom:14px;font-weight:500';
+          ok.textContent = '✓ Message received — we will be in touch shortly.';
+          f.insertAdjacentElement('beforebegin', ok);
+          f.reset(); b.textContent = t; b.disabled = false;
+          setTimeout(function(){ ok.remove(); }, 6000);
+        }, 900);
+      });
+    }
+  </script>
+</body>
+</html>

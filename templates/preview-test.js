@@ -74,7 +74,12 @@ function buildTemplateData(payload = {}) {
     'eligibilityLabel','eligibilityHeadline',
     'chargesLabel','chargesHeadline','chargesBody','chargesNote',
     'grievanceLabel','grievanceHeadline','grievanceBody',
-    'groName','groRole','groEmail','groPhone','groAddress','groTimings'
+    'groName','groRole','groEmail','groPhone','groAddress','groTimings',
+    // Round E — Restaurant (template-10)
+    'heroOpenStatus','chefName','chefRole','chefBio',
+    'signaturesLabel','signaturesHeadline','menuLabel','menuHeadline','menuIntro','ctaPhone',
+    // Round E — Portfolio (template-11)
+    'heroNameLead','heroNameTail','heroRole','aboutLocationLine','workLabel','workHeadline'
   ];
   for (const k of strKeys) if (data[k] === undefined) data[k] = '';
 
@@ -91,7 +96,11 @@ function buildTemplateData(payload = {}) {
                    // Round D — NBFC
                    'heroRateBenefits','trustBadges','products',
                    'eligibilityCriteria','documentsList','rateRows','aboutPillars',
-                   'ratings','escalationLevels'];
+                   'ratings','escalationLevels',
+                   // Round E — Restaurant
+                   'signatureDishes','menuCategories','reviews','pressItems',
+                   // Round E — Portfolio
+                   'skillsItems','workItems','clientList'];
   for (const k of arrKeys) if (!Array.isArray(data[k])) data[k] = [];
   return data;
 }
@@ -834,16 +843,158 @@ function nbfcSample() {
   };
 }
 
+function restaurantSample() {
+  return {
+    ...commonSample,
+    businessName: 'Trattoria Verde',
+    tagline: 'Honest food, made with love.',
+    _description: 'Trattoria Verde is a family-run modern Italian restaurant in Bandra, Mumbai. Founded 2014 by Chef Marco Russo. Hand-rolled pasta, wood-fired mains, thoughtful wine list. Featured in Vogue Living and TimeOut Best New Restaurant 2024.',
+    primaryColor: '#7a2e2e',
+    foundedYear: '2014',
+    tone: 'friendly',
+    heroEyebrow: 'Modern Italian · Mumbai · Since 2014',
+    heroHeadlineLead: 'Crafted with',
+    heroHeadlineEmph: 'passion,',
+    heroHeadlineTail: 'served with care.',
+    heroSub: 'A neighbourhood trattoria run by a small family team. Hand-rolled pasta, wood-fired mains, a thoughtfully short wine list — and a kitchen open till the last guest goes home happy.',
+    heroCtaPrimary: 'Reserve a Table',
+    heroCtaSecondary: 'View Menu',
+    heroOpenStatus: '● Open now · Last seating 10:30 PM',
+    aboutLabel: 'Our Story',
+    aboutHeadlineLead: 'A kitchen rooted in',
+    aboutHeadlineEmph: 'tradition.',
+    aboutBody: "Founded in 2014 by Chef Marco Russo and his wife Aria, Trattoria Verde began as a six-table room serving the food they grew up eating in Liguria. A decade on, the team is bigger and the dining room a little louder — but the rules haven't changed: pasta is rolled by hand each morning, vegetables come from a single farm forty kilometres from here, and we'd rather close early than serve something we wouldn't eat ourselves. Most of the team has been with us five years or more, and so have most of our regulars.",
+    chefName: 'Chef Marco Russo',
+    chefRole: 'Executive Chef & Founder',
+    chefBio: 'Trained in Genoa, refined across kitchens in Milan and Tokyo, Marco believes good food is built on three things: an honest ingredient, a steady flame, and patience.',
+    signaturesLabel: 'Signature Plates',
+    signaturesHeadline: "What we're known for.",
+    signatureDishes: [
+      { name: 'Truffle Tagliatelle',     body: 'Hand-rolled tagliatelle, slow butter sauce, shaved black truffle, aged parmesan.',                price: '₹780',   tag: "Chef's Pick" },
+      { name: 'Wood-Fired Branzino',      body: 'Whole Mediterranean sea bass, salt-baked, finished over olive wood. Lemon, capers, parsley oil.', price: '₹1,420', tag: '' },
+      { name: 'Slow-Braised Lamb Shank',  body: 'Eight-hour braise in red wine and rosemary, soft polenta, gremolata.',                            price: '₹1,160', tag: '' },
+      { name: 'Burrata di Andria',        body: 'Fresh burrata flown weekly, heirloom tomato, aged balsamic, focaccia.',                            price: '₹620',   tag: 'V' },
+      { name: 'Tiramisù della Nonna',     body: "Marco's grandmother's recipe — hand-whipped mascarpone, espresso-soaked ladyfingers, cocoa.",       price: '₹420',   tag: 'Classic' },
+      { name: 'Risotto Mare Nostrum',     body: 'Carnaroli rice, prawn, scallop, calamari, saffron, finished with a touch of Sambuca.',              price: '₹990',   tag: '' }
+    ],
+    menuLabel: 'Full Menu',
+    menuHeadline: "Today's offerings.",
+    menuIntro: 'Vegan and gluten-free options marked. Please tell us about any allergies — our kitchen is happy to adapt.',
+    menuCategories: [
+      { name: 'Antipasti', items: 'Bruschetta | ₹320 | Toasted ciabatta, heirloom tomato, basil, olive oil | V\nCarpaccio di Manzo | ₹540 | Beef tenderloin, parmesan, rocket, lemon |\nVitello Tonnato | ₹620 | Cold veal, tuna-caper sauce, capers |\nInsalata Caprese | ₹420 | Buffalo mozzarella, tomato, basil | V' },
+      { name: 'Pasta',     items: 'Cacio e Pepe | ₹560 | Pecorino, black pepper, hand-rolled spaghetti | V\nSpaghetti Vongole | ₹740 | Clams, white wine, garlic, parsley |\nPappardelle al Cinghiale | ₹820 | Wild boar ragù, juniper, red wine |\nGnocchi Pesto Genovese | ₹620 | Hand-rolled potato gnocchi, pesto, pine nuts | V' },
+      { name: 'Mains',     items: 'Branzino al Forno | ₹1,420 | Wood-fired sea bass, lemon, capers |\nLamb Shank Brasato | ₹1,160 | Eight-hour red wine braise, polenta |\nPollo alla Milanese | ₹880 | Breaded chicken, rocket, cherry tomato, lemon |\nMelanzane Parmigiana | ₹680 | Eggplant, tomato, mozzarella, basil | V' },
+      { name: 'Dolci',     items: 'Tiramisù della Nonna | ₹420 | Espresso, mascarpone, ladyfingers, cocoa |\nPanna Cotta | ₹360 | Vanilla cream, seasonal berries, balsamic |\nAffogato | ₹320 | Vanilla gelato, hot espresso, amaretto | V\nCantucci & Vin Santo | ₹420 | Tuscan almond biscotti, dessert wine |' }
+    ],
+    reviews: [
+      { quote: 'A meal here is what you go to a restaurant for in the first place — soul, smoke, and salt.',                                              source: 'Vir Sanghvi',         role: 'Food Critic, HT Brunch',   stars: '5' },
+      { quote: "Marco's tagliatelle alone is worth the trip across the city. The lamb shank is the postscript that closes the deal.",                    source: 'Conde Nast Traveller', role: 'Best New Restaurant 2024', stars: '5' },
+      { quote: "My family's anniversary spot for three years running. They remember our table, our wine, our daughter's allergies.",                     source: 'Priya Iyer',           role: 'Bandra · regular guest',    stars: '5' }
+    ],
+    hoursList: [
+      { day: 'Monday',    closed: 'Yes', open: '',         close: '' },
+      { day: 'Tuesday',   closed: 'No',  open: '12:00 PM', close: '11:00 PM' },
+      { day: 'Wednesday', closed: 'No',  open: '12:00 PM', close: '11:00 PM' },
+      { day: 'Thursday',  closed: 'No',  open: '12:00 PM', close: '11:00 PM' },
+      { day: 'Friday',    closed: 'No',  open: '12:00 PM', close: '12:00 AM' },
+      { day: 'Saturday',  closed: 'No',  open: '11:00 AM', close: '12:00 AM' },
+      { day: 'Sunday',    closed: 'No',  open: '11:00 AM', close: '10:30 PM' }
+    ],
+    pressItems: [
+      { label: 'Featured in Vogue Living' },
+      { label: 'TimeOut Best New Restaurant 2024' },
+      { label: 'HT Brunch · 4.5★' },
+      { label: 'Conde Nast Traveller' },
+      { label: "BBC Travel · \"Mumbai's soul on a plate\"" }
+    ],
+    ctaHeadline: 'Hungry? Reserve your table.',
+    ctaBody: 'A 24-hour notice helps us prep your favourites. Walk-ins welcome — first-come, first-served on weekends.',
+    ctaButton: 'Book a Table',
+    ctaPhone: '+91 22 6789 4500',
+    email: 'reservations@trattoriaverde.in',
+    phone: '+91 22 6789 4500',
+    address: '14 Hill Road, Bandra West\nMumbai, Maharashtra 400050',
+    hours: 'Tue–Sun · 12:00 PM – 11:00 PM (Mon closed)'
+  };
+}
+
+function portfolioSample() {
+  return {
+    ...commonSample,
+    businessName: 'Aria Mehta',
+    tagline: 'Brand & editorial designer.',
+    _description: 'Aria Mehta is an independent brand and editorial designer based in Mumbai with 10 years of experience. Past work includes Helix Coffee, Northbeam Magazine, Studio Halve, and Orbit Skincare. Available for select projects in 2026.',
+    primaryColor: '#0a0a0a',
+    foundedYear: '2016',
+    tone: 'professional',
+    heroEyebrow: 'Available for select projects · 2026',
+    heroNameLead: 'Aria',
+    heroNameTail: 'Mehta',
+    heroRole: 'Brand & Editorial Designer',
+    heroSub: 'I help small studios and ambitious founders build brands that have a point of view. Most of my work sits at the intersection of editorial typography, considered visual systems, and clear writing.',
+    heroCtaPrimary: 'View Work',
+    heroCtaSecondary: 'Get in Touch',
+    skillsItems: [
+      { text:'Brand Identity' }, { text:'Editorial Design' }, { text:'Typography' },
+      { text:'Print' }, { text:'Web' }, { text:'Packaging' }, { text:'Art Direction' }, { text:'Strategy' }
+    ],
+    aboutLabel: 'About',
+    aboutHeadlineLead: 'Designing things',
+    aboutHeadlineEmph: 'that mean something.',
+    aboutBody: "Hi, I'm Aria. I've spent the last decade making things — first at a small studio in Bombay, then briefly in-house at a magazine, and for the past six years on my own.\n\nI work in close partnership with founders and editors who care deeply about how their work looks and reads. Most engagements run six to twelve weeks. I take on roughly eight clients a year, with at least one personal or pro-bono project mixed in.\n\nIf you're building something with a strong point of view and you want a collaborator rather than a vendor, I'd love to hear from you.",
+    aboutLocationLine: 'Mumbai · Available remotely worldwide',
+    workLabel: 'Selected Work',
+    workHeadline: "A few things I'm proud of.",
+    workItems: [
+      { year:'2024', client:'Helix Coffee',       title:'Brand identity & packaging',       body:'Logo, typography, packaging system, and editorial photography direction for a third-wave roaster expanding to four cities.', tag:'Branding' },
+      { year:'2024', client:'Northbeam Magazine', title:'Quarterly editorial redesign',     body:'Full editorial redesign across grid, typography, and section structure for an architecture quarterly.',                  tag:'Editorial' },
+      { year:'2023', client:'Studio Halve',       title:'Website & writing system',         body:'Design and copywriting for a 12-page studio site, including a custom CMS structure for project case studies.',          tag:'Web' },
+      { year:'2023', client:'Orbit Skincare',     title:'Packaging redesign · 14 SKUs',     body:'A complete packaging refresh across the line, plus the launch campaign visual system.',                                  tag:'Packaging' },
+      { year:'2022', client:'Maya Editions',      title:'Custom typeface · "Maya Display"', body:"A serif display family in three weights, drawn for a small literary publisher's book covers and interiors.",            tag:'Type' },
+      { year:'2022', client:'Helix Coffee',       title:'In-store editorial program',       body:'Quarterly seasonal menus, postcards, and shelf-talkers for thirty-two retail locations.',                              tag:'Editorial' }
+    ],
+    servicesLabel: 'Services',
+    servicesHeadline: 'What I can take on.',
+    services: [
+      { name:'Brand Identity',     body:'Logo, typography, voice, and a system that scales from a business card to a 200-page lookbook.' },
+      { name:'Editorial Design',   body:'Magazines, books, reports, and editorial systems for publishers who care about how the work feels in hand.' },
+      { name:'Typography',         body:'Custom typefaces and lettering for brands and publications. From a logo wordmark to a complete display family.' },
+      { name:'Web & Digital',      body:'Marketing sites and editorial-led product UI, designed in close collaboration with a small developer network.' },
+      { name:'Strategy & Writing', body:'Naming, positioning, and editorial copy for projects where the words matter as much as the visuals.' }
+    ],
+    clientList: [
+      { name:'Helix Coffee' }, { name:'Northbeam Magazine' }, { name:'Studio Halve' },
+      { name:'Orbit Skincare' }, { name:'Maya Editions' }, { name:'Atelier Co.' },
+      { name:'Forge Architects' }, { name:'Marigold Press' }, { name:'Quiet Records' },
+      { name:'Paper Lantern Books' }
+    ],
+    testimonials: [
+      { quote: "Aria doesn't decorate, she reasons. Every choice on our brand had a clear answer behind it. I'd hire again in a heartbeat.",       name:'Sarah Lin',    role:'Founder · Helix Coffee' },
+      { quote: 'The redesign moved the magazine from "competent" to "essential" in our readers\' minds. A genuinely transformative engagement.',   name:'Marcus Webb',  role:'Editor-in-Chief · Northbeam' },
+      { quote: 'A real collaborator. Thoughtful, fast, and the writing was as sharp as the visuals — rare combination.',                          name:'Priya Raman',  role:'Founder · Orbit' }
+    ],
+    ctaHeadlineLead: 'Have something',
+    ctaHeadlineEmph: 'worth making?',
+    ctaBody: "I take on around eight projects a year. If you have something you care about, I'd love to hear about it — even if you're not sure of the scope yet.",
+    ctaButton: 'Start a Conversation',
+    email: 'hello@ariamehta.in',
+    address: 'Mumbai, India',
+    hours: 'Mon–Fri · 10:00 AM – 7:00 PM IST'
+  };
+}
+
 // ── Per-template data picker ──────────────────────────────────
 function sampleFor(templateId) {
-  if (templateId === 'template-2') return agencySample();
-  if (templateId === 'template-3') return terminalSample();
-  if (templateId === 'template-4') return web3Sample();
-  if (templateId === 'template-5') return localSample();
-  if (templateId === 'template-6') return bfsiSample();
-  if (templateId === 'template-7') return startupSample();
-  if (templateId === 'template-8') return insuranceSample();
-  if (templateId === 'template-9') return nbfcSample();
+  if (templateId === 'template-2')  return agencySample();
+  if (templateId === 'template-3')  return terminalSample();
+  if (templateId === 'template-4')  return web3Sample();
+  if (templateId === 'template-5')  return localSample();
+  if (templateId === 'template-6')  return bfsiSample();
+  if (templateId === 'template-7')  return startupSample();
+  if (templateId === 'template-8')  return insuranceSample();
+  if (templateId === 'template-9')  return nbfcSample();
+  if (templateId === 'template-10') return restaurantSample();
+  if (templateId === 'template-11') return portfolioSample();
   return commonSample;
 }
 
@@ -880,11 +1031,11 @@ function errorPage(n, message) {
 
 // ── Write previews + side-by-side index ───────────────────────
 const OUTDIR = __dirname;
-const TEMPLATES = [1, 2, 3, 4, 5, 6, 7, 8, 9];
+const TEMPLATES = [1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11];
 const NAMES = {
   1: 'Editorial',   2: 'Agency',     3: 'Terminal',  4: 'Web3',
   5: 'Local',       6: 'BFSI',       7: 'Startup',   8: 'Insurance',
-  9: 'NBFC'
+  9: 'NBFC',       10: 'Restaurant', 11: 'Portfolio'
 };
 
 const results = TEMPLATES.map(n => {
@@ -1014,7 +1165,7 @@ const indexHtml = `<!doctype html>
   </div>
 
   <div class="grid cols-2" id="grid">
-${results.map(r => `    <article class="card" data-template="${r.n}" data-schema="${[2,3,4,5,6,7,8,9].includes(r.n) ? 'yes' : 'no'}">
+${results.map(r => `    <article class="card" data-template="${r.n}" data-schema="${[2,3,4,5,6,7,8,9,10,11].includes(r.n) ? 'yes' : 'no'}">
       <div class="card-head">
         <div class="card-title">${NAMES[r.n]}<small>template-${r.n}</small></div>
         <div class="card-actions">
