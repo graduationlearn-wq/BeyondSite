@@ -1,9 +1,9 @@
 <!doctype html>
-<html lang="en">
+<html lang="en" data-theme="dark">
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>Beyond Site — AI-Powered Website Generator</title>
+    <title>BeyondSite — AI-Powered Website Generator</title>
     <link rel="preconnect" href="https://fonts.googleapis.com" />
     <link
       href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@300;400;500;600;700;800&display=swap"
@@ -74,6 +74,24 @@
               <span class="nav-badge-dot"></span>
               AI Powered
             </span>
+            <button class="theme-toggle" id="themeToggle" aria-label="Toggle theme" title="Toggle light/dark mode">
+              <!-- Moon icon (shown in dark mode) -->
+              <svg class="icon-moon" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                <path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"/>
+              </svg>
+              <!-- Sun icon (shown in light mode) -->
+              <svg class="icon-sun" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                <circle cx="12" cy="12" r="5"/>
+                <line x1="12" y1="1" x2="12" y2="3"/>
+                <line x1="12" y1="21" x2="12" y2="23"/>
+                <line x1="4.22" y1="4.22" x2="5.64" y2="5.64"/>
+                <line x1="18.36" y1="18.36" x2="19.78" y2="19.78"/>
+                <line x1="1" y1="12" x2="3" y2="12"/>
+                <line x1="21" y1="12" x2="23" y2="12"/>
+                <line x1="4.22" y1="19.78" x2="5.64" y2="18.36"/>
+                <line x1="18.36" y1="5.64" x2="19.78" y2="4.22"/>
+              </svg>
+            </button>
             <a href="/login" class="btn-nav-login">Login</a>
           </div>
         </div>
@@ -90,7 +108,7 @@
         <div class="hero-content">
           <div class="hero-badge">
             <span class="hero-badge-dot"></span>
-            8 Premium Templates · AI Content · Instant Download
+            13 Premium Templates · AI Content · Instant Download
           </div>
           <h1 class="hero-title">
             Build <em>Extraordinary</em><br />
@@ -452,6 +470,64 @@
                       <span class="checkmark">✓</span>
                     </div>
                   </label>
+                  <label class="template-box">
+  <input type="radio" name="template" value="template-heph" hidden>
+  <div class="template-content">
+    <div class="template-preview template-heph-prev">
+      <div class="tp-nav tp-nav-dark" style="border-bottom:1px solid rgba(0,220,180,.15)">
+        <div style="width:22px;height:22px;border-radius:6px;background:linear-gradient(135deg,#00dcb4,#00a8ff);flex-shrink:0"></div>
+      </div>
+      <div style="padding:8px 8px 4px;display:flex;flex-direction:column;gap:3px">
+        <div class="tp-line" style="width:55%;background:rgba(0,220,180,.6);height:3px"></div>
+        <div class="tp-line tp-line-lg" style="background:rgba(238,240,244,.7);height:6px"></div>
+        <div class="tp-line tp-line-md" style="background:rgba(238,240,244,.3)"></div>
+      </div>
+      <div style="margin:4px 6px;background:#131720;border:1px solid rgba(0,220,180,.2);border-radius:5px;padding:6px 8px">
+        <div style="height:2px;width:70%;background:rgba(0,220,180,.4);border-radius:1px;margin-bottom:3px"></div>
+        <div style="height:2px;width:50%;background:rgba(251,191,36,.3);border-radius:1px;margin-bottom:3px"></div>
+        <div style="height:2px;width:80%;background:rgba(196,132,252,.3);border-radius:1px"></div>
+      </div>
+      <div style="display:flex;gap:3px;padding:3px 6px">
+        <div style="flex:1;height:14px;background:rgba(0,220,180,.08);border:1px solid rgba(0,220,180,.15);border-radius:3px"></div>
+        <div style="flex:1;height:14px;background:rgba(0,220,180,.08);border:1px solid rgba(0,220,180,.15);border-radius:3px"></div>
+        <div style="flex:1;height:14px;background:rgba(0,220,180,.08);border:1px solid rgba(0,220,180,.15);border-radius:3px"></div>
+      </div>
+    </div>
+    <div class="template-label">
+      <h4>InsurTech SaaS</h4>
+      <p>B2B API Platform</p>
+    </div>
+    <span class="checkmark">✓</span>
+  </div>
+</label>
+
+<label class="template-box">
+  <input type="radio" name="template" value="template-turtlemint" hidden>
+  <div class="template-content">
+    <div class="template-preview template-turtlemint-prev">
+      <div class="tp-nav tp-nav-light" style="background:rgba(255,255,255,.95);border-bottom:1px solid rgba(13,17,23,.08)">
+        <div style="width:22px;height:22px;border-radius:7px;background:#00856f;flex-shrink:0"></div>
+      </div>
+      <div style="padding:8px 8px 4px;display:flex;flex-direction:column;gap:3px">
+        <div class="tp-line" style="width:60%;background:rgba(0,133,111,.5);height:3px"></div>
+        <div class="tp-line tp-line-lg" style="background:rgba(13,17,23,.7);height:6px"></div>
+        <div class="tp-line tp-line-md" style="background:rgba(13,17,23,.3)"></div>
+        <div class="tp-btn" style="background:#00856f;width:28px;height:6px;border-radius:3px;margin-top:2px"></div>
+      </div>
+      <div style="display:grid;grid-template-columns:repeat(4,1fr);gap:3px;padding:3px 6px">
+        <div style="height:18px;background:#fff;border:1px solid rgba(13,17,23,.1);border-radius:4px;display:flex;align-items:center;justify-content:center;font-size:8px">❤️</div>
+        <div style="height:18px;background:#fff;border:1px solid rgba(13,17,23,.1);border-radius:4px;display:flex;align-items:center;justify-content:center;font-size:8px">🚗</div>
+        <div style="height:18px;background:#fff;border:1px solid rgba(13,17,23,.1);border-radius:4px;display:flex;align-items:center;justify-content:center;font-size:8px">🛵</div>
+        <div style="height:18px;background:#fff;border:1px solid rgba(13,17,23,.1);border-radius:4px;display:flex;align-items:center;justify-content:center;font-size:8px">🛡</div>
+      </div>
+    </div>
+    <div class="template-label">
+      <h4>Insurance Market</h4>
+      <p>Aggregator & POSP</p>
+    </div>
+    <span class="checkmark">✓</span>
+  </div>
+</label>
 
                 </div>
               </div>
@@ -669,9 +745,9 @@
       <footer class="footer">
         <div class="footer-inner">
           <span class="footer-logo"
-            >WebSite<span style="color: var(--accent)">Builder</span></span
+            >Beyond<span style="color: var(--accent)">Site</span></span
           >
-          <p>Crafted for creators who move fast · AI-powered · © 2025</p>
+          <p>Crafted for creators who move fast · AI-powered · © 2025 BeyondSite</p>
         </div>
       </footer>
     </div>
@@ -874,6 +950,23 @@
           },
           100 + i * 65,
         );
+      });
+    </script>
+
+    <script>
+      /* ── THEME TOGGLE ──────────────────────────────────────────── */
+      const html = document.documentElement;
+      const toggleBtn = document.getElementById('themeToggle');
+
+      // Load saved preference or default to dark
+      const saved = localStorage.getItem('beyondsite-theme') || 'dark';
+      html.setAttribute('data-theme', saved);
+
+      toggleBtn.addEventListener('click', () => {
+        const current = html.getAttribute('data-theme');
+        const next = current === 'dark' ? 'light' : 'dark';
+        html.setAttribute('data-theme', next);
+        localStorage.setItem('beyondsite-theme', next);
       });
     </script>
   </body>

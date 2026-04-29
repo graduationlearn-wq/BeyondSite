@@ -1,0 +1,142 @@
+{
+  "id": "template-turtlemint",
+  "name": "Insurance Marketplace (Turtlemint style)",
+  "extends": "_base",
+  "sections": [
+    {
+      "id": "hero",
+      "title": "Hero",
+      "aiable": true,
+      "hint": {
+        "label": "Clean white hero with 3 action cards",
+        "description": "Light mode hero with a headline, trust stats row, and three big action cards — Compare Plans, Become an Advisor, Embedded Solutions. Mobile app download badge optional.",
+        "mockupTarget": "hero"
+      },
+      "fields": [
+        { "id": "heroTagline",       "label": "Tagline above headline (e.g. Technology trusted by advisors)", "type": "text",     "max": 80,  "aiable": true },
+        { "id": "heroHeadline",      "label": "Main headline",             "type": "text",     "max": 60,  "aiable": true, "placeholder": "Insurance. Simplified." },
+        { "id": "heroSub",           "label": "Sub-headline",              "type": "textarea", "rows": 2,  "max": 200, "aiable": true },
+        {
+          "id": "heroStats", "label": "Hero stat strip (3 stats)", "type": "repeater", "min": 2, "max": 4, "itemLabel": "Stat",
+          "item": [
+            { "id": "value", "label": "Value (e.g. 1.6Cr+)", "type": "text", "max": 14 },
+            { "id": "label", "label": "Label (e.g. Policies Sold)", "type": "text", "max": 40 }
+          ]
+        },
+        {
+          "id": "heroCards", "label": "Action cards (2-3)", "type": "repeater", "min": 2, "max": 3, "itemLabel": "Action card",
+          "item": [
+            { "id": "icon",  "label": "Icon (emoji)",     "type": "text",     "max": 4,  "placeholder": "🔍" },
+            { "id": "title", "label": "Card title",       "type": "text",     "max": 50, "aiable": true },
+            { "id": "body",  "label": "Card description", "type": "textarea", "rows": 1, "max": 120, "aiable": true },
+            { "id": "cta",   "label": "Card CTA text",   "type": "text",     "max": 30, "placeholder": "Get Quote" }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "insuranceTypes",
+      "title": "Insurance Product Categories",
+      "hint": {
+        "label": "Tappable product category cards",
+        "description": "Icon grid of insurance product types — Health, Car, Bike, Life, etc. Each links to a quote flow. Keep names short, use standard insurance category names."
+      },
+      "fields": [
+        { "id": "insuranceTypesLabel",    "label": "Section eyebrow",   "type": "text", "max": 60, "placeholder": "Explore our insurance products. Get instant quotes." },
+        { "id": "insuranceTypesHeadline", "label": "Section headline",  "type": "text", "max": 80, "aiable": true },
+        {
+          "id": "insuranceTypes", "type": "repeater", "min": 3, "max": 8, "itemLabel": "Product type",
+          "item": [
+            { "id": "icon",  "label": "Icon (emoji)",          "type": "text", "max": 4,  "placeholder": "❤️" },
+            { "id": "name",  "label": "Product name",          "type": "text", "max": 30, "placeholder": "Health Insurance" }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "advisorApp",
+      "title": "Advisor Platform Section",
+      "aiable": true,
+      "hint": {
+        "label": "The TurtlemintPro / advisor app block",
+        "description": "A dark or accent-colored two-column block pitching your advisor platform. Left side has headline + 4 feature bullets, right side shows an app mockup illustration. This is your POSP / advisor acquisition funnel."
+      },
+      "fields": [
+        { "id": "advisorLabel",    "label": "Section eyebrow",  "type": "text", "max": 40, "placeholder": "For Advisors" },
+        { "id": "advisorHeadline", "label": "Section headline", "type": "text", "max": 80, "aiable": true, "placeholder": "Trusted partner for your insurance business" },
+        { "id": "advisorSub",      "label": "Sub-copy",         "type": "text", "max": 160, "aiable": true },
+        { "id": "advisorCtaText",  "label": "CTA text",         "type": "text", "max": 30,  "placeholder": "Become an Advisor" },
+        {
+          "id": "advisorFeatures", "type": "repeater", "min": 3, "max": 6, "itemLabel": "Feature",
+          "item": [
+            { "id": "title", "label": "Feature title",       "type": "text",     "max": 50, "aiable": true },
+            { "id": "body",  "label": "Feature description", "type": "textarea", "rows": 1, "max": 120, "aiable": true }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "b2bSolutions",
+      "title": "B2B / Embedded Solutions",
+      "aiable": true,
+      "hint": {
+        "label": "Enterprise insurance API solutions",
+        "description": "Three column cards for B2B customers — Banks, Insurers, E-commerce, etc. Each has a label, short pitch, and a visual. Ends with a 'bespoke solution' CTA for edge cases."
+      },
+      "fields": [
+        { "id": "b2bLabel",    "label": "Section eyebrow",   "type": "text", "max": 60, "placeholder": "Embedded Insurance & SaaS Solutions" },
+        { "id": "b2bHeadline", "label": "Section headline",  "type": "text", "max": 80, "aiable": true },
+        { "id": "b2bSub",      "label": "Section sub-copy",  "type": "text", "max": 160, "aiable": true },
+        {
+          "id": "b2bCards", "type": "repeater", "min": 2, "max": 5, "itemLabel": "B2B card",
+          "item": [
+            { "id": "name",  "label": "Segment name (e.g. Banks & NBFCs)", "type": "text",     "max": 40, "aiable": true },
+            { "id": "body",  "label": "Pitch",                              "type": "textarea", "rows": 2, "max": 180, "aiable": true }
+          ]
+        },
+        { "id": "b2bBespokeCtaText", "label": "Bespoke CTA text (e.g. Explore)", "type": "text", "max": 30, "placeholder": "Explore" }
+      ]
+    },
+    {
+      "id": "trustNumbers",
+      "title": "Trust / Numbers Band",
+      "hint": {
+        "label": "The big credibility stats",
+        "description": "3-4 headline numbers — Policies Sold, Advisors, Insurers, Years active. These go into a clean strip that separates sections."
+      },
+      "fields": [
+        {
+          "id": "numberStats", "type": "repeater", "min": 2, "max": 4, "itemLabel": "Stat",
+          "item": [
+            { "id": "value",  "label": "Value (e.g. 1.6Cr+)",    "type": "text", "max": 14 },
+            { "id": "label",  "label": "Label (e.g. Policies Sold)", "type": "text", "max": 50 }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "testimonials",
+      "title": "Testimonials",
+      "fields": [
+        {
+          "id": "testimonials", "type": "repeater", "min": 0, "max": 6, "itemLabel": "Testimonial",
+          "item": [
+            { "id": "quote", "label": "Quote",       "type": "textarea", "rows": 3, "max": 300 },
+            { "id": "name",  "label": "Name",        "type": "text",     "max": 60 },
+            { "id": "role",  "label": "Role",        "type": "text",     "max": 80 }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "cta",
+      "title": "CTA Band",
+      "aiable": true,
+      "fields": [
+        { "id": "ctaHeadline", "label": "CTA headline",        "type": "text", "max": 80,  "aiable": true },
+        { "id": "ctaBody",     "label": "CTA supporting line", "type": "text", "max": 180, "aiable": true },
+        { "id": "ctaButton",   "label": "CTA button text",     "type": "text", "max": 30,  "placeholder": "Get Started" }
+      ]
+    }
+  ]
+}

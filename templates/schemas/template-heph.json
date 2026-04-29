@@ -1,0 +1,127 @@
+{
+  "id": "template-heph",
+  "name": "InsurTech SaaS (Heph style)",
+  "extends": "_base",
+  "sections": [
+    {
+      "id": "hero",
+      "title": "Hero",
+      "aiable": true,
+      "hint": {
+        "label": "The big B2B promise + demo CTA",
+        "description": "Dark navy hero with a headline on the left, a floating product-distribution mockup on the right. The badge above the headline names your network size or a credibility signal. Keep the headline short and outcome-first.",
+        "mockupTarget": "hero"
+      },
+      "fields": [
+        { "id": "heroBadge",       "label": "Badge (e.g. 49 Insurer APIs · Live)",       "type": "text",     "max": 60,  "aiable": true },
+        { "id": "heroHeadlinePart1","label": "Headline — line 1",                         "type": "text",     "max": 40,  "placeholder": "Any Insurance,",      "aiable": true },
+        { "id": "heroHeadlineAccent","label": "Headline — accent line (blue gradient)",   "type": "text",     "max": 40,  "placeholder": "Any Channel.",         "aiable": true },
+        { "id": "heroSub",          "label": "Sub-headline",                              "type": "textarea", "rows": 3,  "max": 260, "aiable": true },
+        { "id": "heroCtaPrimary",   "label": "Primary CTA text",                          "type": "text",     "max": 30,  "placeholder": "Get a Demo" },
+        { "id": "heroCtaSecondary", "label": "Secondary CTA text",                        "type": "text",     "max": 30,  "placeholder": "See How It Works" }
+      ]
+    },
+    {
+      "id": "modules",
+      "title": "Distribution Modules",
+      "aiable": true,
+      "hint": {
+        "label": "The 4 core product modules",
+        "description": "Image-card grid for each distribution module — POSP, D2C, Lending, Embedded. Each card has a bold name, a one-bullet summary, and a subtle image background. These are your flagship product story."
+      },
+      "fields": [
+        { "id": "modulesLabel",    "label": "Section eyebrow",   "type": "text", "max": 40, "placeholder": "Distribution Modules" },
+        { "id": "modulesHeadline", "label": "Section headline",  "type": "text", "max": 80, "aiable": true },
+        {
+          "id": "modules", "type": "repeater", "min": 2, "max": 6, "itemLabel": "Module",
+          "item": [
+            { "id": "icon",  "label": "Icon (emoji)",         "type": "text",     "max": 4,   "placeholder": "🔗" },
+            { "id": "name",  "label": "Module name",          "type": "text",     "required": true, "max": 40 },
+            { "id": "body",  "label": "One-line description",  "type": "textarea", "rows": 2,  "max": 200, "aiable": true }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "insurers",
+      "title": "Insurer Network",
+      "hint": {
+        "label": "Scrolling logo wall of insurance partners",
+        "description": "A two-row auto-scrolling strip of insurer names. Since most logos won't load, we show company name pills. Add every insurer you're live with — the volume is the signal."
+      },
+      "fields": [
+        { "id": "insurersLabel",    "label": "Section eyebrow",   "type": "text", "max": 60, "placeholder": "One stop API to power products across 49 insurers" },
+        {
+          "id": "insurerNames", "type": "repeater", "min": 4, "max": 40, "itemLabel": "Insurer",
+          "item": [
+            { "id": "name", "label": "Insurer name", "type": "text", "max": 40 }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "verticals",
+      "title": "Industry Verticals",
+      "aiable": true,
+      "hint": {
+        "label": "Tab-switching vertical use cases",
+        "description": "Tabs for each industry you serve — Banks, Fintech, Travel, EV, Brokers. Each tab reveals a challenge + solution pair and a visual. This is where you close enterprise deals."
+      },
+      "fields": [
+        { "id": "verticalsLabel",    "label": "Section eyebrow",   "type": "text", "max": 40, "placeholder": "Industry Specific Workflows" },
+        { "id": "verticalsHeadline", "label": "Section headline",  "type": "text", "max": 80, "aiable": true },
+        {
+          "id": "verticals", "type": "repeater", "min": 2, "max": 7, "itemLabel": "Vertical",
+          "item": [
+            { "id": "icon",      "label": "Icon (emoji)",       "type": "text",     "max": 4,   "placeholder": "🏦" },
+            { "id": "name",      "label": "Vertical name",      "type": "text",     "required": true, "max": 40 },
+            { "id": "challenge", "label": "Challenge",           "type": "textarea", "rows": 2,  "max": 200, "aiable": true },
+            { "id": "solution",  "label": "Solution",            "type": "textarea", "rows": 2,  "max": 200, "aiable": true }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "numbers",
+      "title": "Numbers Band",
+      "hint": {
+        "label": "The big credibility stats",
+        "description": "Six headline numbers — Founded year, Clientele, Sectors, Insurers, Products, Premium. Specific numbers beat vague claims for B2B trust."
+      },
+      "fields": [
+        {
+          "id": "numberStats", "type": "repeater", "min": 3, "max": 6, "itemLabel": "Stat",
+          "item": [
+            { "id": "value",  "label": "Number (e.g. 100, 2022, 49)", "type": "text", "max": 10 },
+            { "id": "suffix", "label": "Suffix (e.g. +, cr, empty)",  "type": "text", "max": 8 },
+            { "id": "label",  "label": "Label",                        "type": "text", "max": 60 }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "testimonials",
+      "title": "Client Testimonials",
+      "fields": [
+        {
+          "id": "testimonials", "type": "repeater", "min": 0, "max": 6, "itemLabel": "Testimonial",
+          "item": [
+            { "id": "quote", "label": "Quote",       "type": "textarea", "rows": 3, "max": 320 },
+            { "id": "name",  "label": "Client name", "type": "text",     "max": 60 },
+            { "id": "role",  "label": "Title & company", "type": "text", "max": 80 }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "cta",
+      "title": "CTA Band",
+      "aiable": true,
+      "fields": [
+        { "id": "ctaHeadline", "label": "CTA headline",        "type": "text", "max": 80,  "aiable": true, "placeholder": "Ready to plug in?" },
+        { "id": "ctaBody",     "label": "CTA supporting line", "type": "text", "max": 180, "aiable": true },
+        { "id": "ctaButton",   "label": "CTA button text",     "type": "text", "max": 30,  "placeholder": "Book a Demo" }
+      ]
+    }
+  ]
+}

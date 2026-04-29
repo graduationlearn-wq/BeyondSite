@@ -183,6 +183,19 @@ const AI_PROMPTS = {
     process: ({biz,desc,tone}) => `For RBI-registered NBFC / lender "${biz}" (${tone}): "${desc}". Return ONLY JSON: { "processHeadline":"<8-12 word section headline e.g. From apply to disbursal in days.>", "processSteps":[{"icon":"<1 emoji>","title":"<2-3 word step e.g. Apply Online>","body":"<15-25 word body>","duration":"<short duration e.g. 5 minutes>"}] } with EXACTLY 4 steps covering apply → soft credit check → sanction & agreement → disbursal.`,
     about:   ({biz,desc,tone}) => `For RBI-registered NBFC / lender "${biz}" (${tone}): "${desc}". Return ONLY JSON: { "aboutHeadlineLead":"<3-5 word line 1 e.g. Lending built on>", "aboutHeadlineEmph":"<1-2 word italic line e.g. trust.>", "aboutBody":"<120-160 word origin story emphasising RBI registration, lending philosophy, who you serve, and what makes your underwriting different>", "aboutPillars":[{"title":"<2-3 word pillar>","body":"<20-30 word body>"}] } with EXACTLY 3 pillars covering pricing transparency, fair practice, customer service.`,
     cta:     ({biz,desc})       => `For RBI-registered NBFC / lender "${biz}": "${desc}". Return ONLY JSON: { "ctaHeadline":"<8-12 word headline about pre-approval / fast eligibility>", "ctaBody":"<20-30 word supporting line about soft credit check and no commitment>", "ctaButton":"<2-3 word action e.g. Check Eligibility>", "ctaNote":"<short reassurance e.g. Soft credit check · Will not affect your CIBIL score>" }`
+  },
+  'template-heph': {
+    hero:     ({biz,desc,tone}) => `For InsurTech B2B SaaS brand "${biz}" (${tone} tone): "${desc}". Return ONLY JSON: { "heroBadge":"<short live signal e.g. 49 Insurer APIs · Live — max 8 words>", "heroHeadlinePart1":"<3-5 word line 1 e.g. Any Insurance,>", "heroHeadlineAccent":"<3-5 word accent line e.g. Any Channel.>", "heroSub":"<30-45 word sub about API-first distribution, single integration, insurer breadth>" }`,
+    modules:  ({biz,desc})      => `For InsurTech B2B SaaS "${biz}": "${desc}". Return ONLY JSON: { "modulesHeadline":"<8-12 word section headline>", "modules":[{"icon":"<1 emoji>","name":"<module name>","body":"<20-30 word one-liner about what this distribution module does>"}] } with 4 items covering POSP, D2C, Embedded, and Lending.`,
+    verticals:({biz,desc,tone}) => `For InsurTech B2B SaaS "${biz}" (${tone}): "${desc}". Return ONLY JSON: { "verticalsHeadline":"<8-12 word section headline>", "verticals":[{"icon":"<1 emoji>","name":"<industry name>","challenge":"<30-45 word pain point>","solution":"<30-45 word how your API solves it>"}] } with 4 verticals covering Banks, Fintech, EV/OEM, and Travel.`,
+    cta:      ({biz,desc})      => `For InsurTech B2B SaaS "${biz}": "${desc}". Return ONLY JSON: { "ctaHeadline":"<8-12 word headline about scaling distribution>", "ctaBody":"<15-25 word support line about demo / fast onboarding>", "ctaButton":"<2-3 word action e.g. Book a Demo>" }`
+  },
+  'template-turtlemint': {
+    hero:     ({biz,desc,tone}) => `For insurance marketplace / aggregator "${biz}" (${tone} tone): "${desc}". Return ONLY JSON: { "heroTagline":"<short trust signal e.g. Technology trusted by 2 lakh+ advisors — max 10 words>", "heroHeadline":"<5-8 word punchy headline e.g. Insurance. Simplified.>", "heroSub":"<25-40 word sub about comparing plans, buying fast, and claim support>", "heroStats":[{"value":"<number with unit e.g. 1.6Cr+>","label":"<2-3 word label>"}], "heroCards":[{"icon":"<1 emoji>","title":"<4-6 word card title>","body":"<20-30 word pitch>","cta":"<2-3 word button>"}] } with 3 stats and 3 hero cards.`,
+    insuranceTypes: ({biz,desc}) => `For insurance marketplace "${biz}": "${desc}". Return ONLY JSON: { "insuranceTypesHeadline":"<6-10 word section headline>", "insuranceTypes":[{"icon":"<1 emoji>","name":"<insurance category name>"}] } with 6-8 standard insurance categories.`,
+    advisorApp: ({biz,desc,tone}) => `For insurance marketplace "${biz}" (${tone}): "${desc}". Return ONLY JSON: { "advisorHeadline":"<8-12 word headline about advisor platform>", "advisorSub":"<20-30 word sub about earnings, tools, and support>", "advisorFeatures":[{"title":"<3-5 word feature name>","body":"<20-30 word benefit>"}] } with 4 features covering issuance speed, training, earnings tracking, and claim support.`,
+    b2bSolutions: ({biz,desc})  => `For insurance marketplace "${biz}": "${desc}". Return ONLY JSON: { "b2bHeadline":"<8-12 word section headline about embedded insurance>", "b2bSub":"<20-30 word sub>", "b2bCards":[{"name":"<segment name e.g. Banks & NBFCs>","body":"<30-45 word pitch>"}] } with 3 B2B segments.`,
+    cta:      ({biz,desc})      => `For insurance marketplace "${biz}": "${desc}". Return ONLY JSON: { "ctaHeadline":"<8-12 word headline about starting protection>", "ctaBody":"<15-25 word support line>", "ctaButton":"<2-3 word action e.g. Get Started Free>" }`
   }
 };
 
@@ -310,7 +323,9 @@ const TEMPLATE_NAMES = {
   'template-6': 'BFSI / Banking',
   'template-7': 'Startup / SaaS',
   'template-8': 'Insurance Advisor',
-  'template-9': 'NBFC / Lender'
+  'template-9': 'NBFC / Lender',
+  'template-heph': 'InsurTech SaaS',
+  'template-turtlemint': 'Insurance Marketplace',
 };
 
 function buildChatSystemPrompt(context = {}) {
