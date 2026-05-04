@@ -151,5 +151,25 @@
         { "id": "regulator",     "label": "Regulator name",         "type": "text", "max": 60, "placeholder": "IRDAI" }
       ]
     }
+    ,{
+  "id": "footer",
+  "title": "Footer & Legal Links",
+  "hint": {
+    "label": "Regulatory links — mandatory for IRDAI-registered advisors",
+    "description": "Add your IRDAI advisor license number and every required legal page link. These are regulatory requirements for insurance advisor websites."
+  },
+  "fields": [
+    { "id": "footerIrdaiNo",   "label": "IRDAI License No.",         "type": "text", "max": 60, "placeholder": "IRDAI-HLA-00000000-00" },
+    { "id": "footerCin",       "label": "CIN / Company Reg. (optional)", "type": "text", "max": 60 },
+    { "id": "footerDisclaimer","label": "Footer disclaimer",          "type": "textarea", "rows": 3, "max": 400, "placeholder": "Licensed insurance advisor. Please read policy documents carefully before purchasing." },
+    {
+      "id": "footerLinks", "label": "Legal / Navigation links", "type": "repeater", "min": 0, "max": 12, "itemLabel": "Link",
+      "item": [
+        { "id": "label", "label": "Link label", "type": "text", "max": 50 },
+        { "id": "url",   "label": "Full URL",   "type": "text", "max": 300 }
+      ]
+    }
+  ]
+}
   ]
 }

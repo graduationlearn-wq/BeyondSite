@@ -452,6 +452,10 @@ function buildTemplateData(payload = {}) {
   data.phone   = data.phone   || data.primaryPhone || '';
   data.address = data.address || data.addressBlock || '';
   data.hours   = data.hours   || data.hoursText    || '';
+  data.footerIrdaiNo    = data.footerIrdaiNo    || '';
+  data.footerCin        = data.footerCin        || '';
+  data.footerDisclaimer = data.footerDisclaimer || '';
+  if (!Array.isArray(data.footerLinks)) data.footerLinks = [];
   // Repeater defaults (never undefined inside EJS)
   // Optional string content fields — default to '' so EJS never throws ReferenceError
   const strKeys = [

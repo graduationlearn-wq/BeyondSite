@@ -542,24 +542,78 @@
 
   <!-- FOOTER -->
   <footer>
-    <div class="ft-top">
-      <div>
-        <div class="ft-logo">
-          <div class="ft-lm"><svg width="14" height="14" viewBox="0 0 20 20" fill="none"><path d="M10 2L18 7V13L10 18L2 13V7L10 2Z" fill="white" opacity=".9"/><circle cx="10" cy="10" r="3" fill="white"/></svg></div>
-          <span class="ft-lt"><%= businessName.split(' ')[0] %><span><%= businessName.includes(' ') ? businessName.split(' ').slice(1).join('') : '' %></span></span>
+  <div class="ft-top">
+    <div>
+      <div class="ft-logo">
+        <div class="ft-lm">
+          <svg width="14" height="14" viewBox="0 0 20 20" fill="none">
+            <path d="M10 2L18 7V13L10 18L2 13V7L10 2Z" fill="white" opacity=".9"/>
+            <circle cx="10" cy="10" r="3" fill="white"/>
+          </svg>
         </div>
-        <p class="ft-tagline"><%= tagline %></p>
-        <p class="ft-discl"><%= businessName %> is an IRDAI licensed insurance intermediary. Registration No. CB/001/2016. Investments in insurance are subject to terms and conditions. Please read policy documents carefully.</p>
+        <span class="ft-lt">
+          <%= businessName.split(' ')[0] %><span><%= businessName.includes(' ') ? businessName.split(' ').slice(1).join(' ') : '' %></span>
+        </span>
       </div>
-      <div><p class="ft-col-title">Products</p><ul class="ft-links"><% products.forEach(function(p){ %><li><a href="#products"><%= p %></a></li><% }); %></ul></div>
-      <div><p class="ft-col-title">Company</p><ul class="ft-links"><li><a href="#audience">For Advisors</a></li><li><a href="#b2b">B2B Solutions</a></li><li><a href="#testimonials">Reviews</a></li><li><a href="#">Careers</a></li><li><a href="#">About Us</a></li></ul></div>
-      <div><p class="ft-col-title">Legal</p><ul class="ft-links"><li><a href="#">Terms of Service</a></li><li><a href="#">Privacy Policy</a></li><li><a href="#">IRDAI Registration</a></li><li><a href="#">Grievance Redressal</a></li><li><a href="#">Disclaimer</a></li></ul></div>
+      <p class="ft-tagline"><%= tagline %></p>
+      <p class="ft-discl">
+        <% if(typeof footerDisclaimer !== 'undefined' && footerDisclaimer) { %>
+          <%= footerDisclaimer %>
+        <% } else { %>
+          <%= businessName %> is an IRDAI licensed insurance intermediary. Investments in insurance are subject to terms and conditions. Please read policy documents carefully.
+        <% } %>
+        <% if(typeof footerIrdaiNo !== 'undefined' && footerIrdaiNo) { %> Registration No. <%= footerIrdaiNo %>.<% } %>
+        <% if(typeof footerCin !== 'undefined' && footerCin) { %> CIN: <%= footerCin %>.<% } %>
+      </p>
     </div>
-    <div class="ft-bot">
-      <span>© <%= year %> <%= businessName %>. IRDAI Licensed · CIN: U74999MH2015PLC000000 · All rights reserved.</span>
-      <div class="ft-bot-links"><a href="#">Privacy</a><a href="#">Terms</a><a href="#">IRDAI</a></div>
+    <div>
+      <p class="ft-col-title">Products</p>
+      <ul class="ft-links">
+        <% products.forEach(function(p){ %><li><a href="#products"><%= p %></a></li><% }); %>
+      </ul>
     </div>
-  </footer>
+    <div>
+      <p class="ft-col-title">Company</p>
+      <ul class="ft-links">
+        <li><a href="#audience">For Advisors</a></li>
+        <li><a href="#b2b">B2B Solutions</a></li>
+        <li><a href="#testimonials">Reviews</a></li>
+        <li><a href="#">Careers</a></li>
+      </ul>
+    </div>
+    <div>
+      <p class="ft-col-title">Legal & Compliance</p>
+      <ul class="ft-links">
+        <% if(typeof footerLinks !== 'undefined' && footerLinks && footerLinks.length) { %>
+          <% footerLinks.forEach(function(lk){ %>
+            <li><a href="<%= lk.url || '#' %>" target="_blank" rel="noopener"><%= lk.label %></a></li>
+          <% }); %>
+        <% } else { %>
+          <li><a href="#">About Us</a></li>
+          <li><a href="#">Terms of Service</a></li>
+          <li><a href="#">Privacy Policy</a></li>
+          <li><a href="#">IRDAI Registration</a></li>
+          <li><a href="#">Grievance Redressal</a></li>
+          <li><a href="#">Disclaimer</a></li>
+        <% } %>
+      </ul>
+    </div>
+  </div>
+  <div class="ft-bot">
+    <span>
+      © <%= year %> <%= businessName %>.
+      <% if(typeof footerIrdaiNo !== 'undefined' && footerIrdaiNo) { %>IRDAI Licensed · Reg. No. <%= footerIrdaiNo %>.<% } else { %>IRDAI Licensed.<% } %>
+      All rights reserved.
+    </span>
+    <div class="ft-bot-links">
+      <% if(typeof footerLinks !== 'undefined' && footerLinks && footerLinks.length) { %>
+        <% footerLinks.slice(0,4).forEach(function(lk){ %><a href="<%= lk.url || '#' %>" target="_blank" rel="noopener"><%= lk.label %></a><% }); %>
+      <% } else { %>
+        <a href="#">Privacy</a><a href="#">Terms</a><a href="#">IRDAI</a><a href="#">Grievance</a>
+      <% } %>
+    </div>
+  </div>
+</footer>
 
   <script>
     const nav=document.getElementById('nav');

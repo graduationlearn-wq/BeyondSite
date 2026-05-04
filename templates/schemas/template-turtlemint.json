@@ -138,5 +138,25 @@
         { "id": "ctaButton",   "label": "CTA button text",     "type": "text", "max": 30,  "placeholder": "Get Started" }
       ]
     }
+    ,{
+  "id": "footer",
+  "title": "Footer & Legal Links",
+  "hint": {
+    "label": "Regulatory links and compliance footer",
+    "description": "Add your IRDAI license number, CIN, and all legal page links. Mandatory for insurance aggregators and POSP platforms."
+  },
+  "fields": [
+    { "id": "footerIrdaiNo",   "label": "IRDAI Registration / License No.", "type": "text", "max": 60, "placeholder": "CB/001/2016" },
+    { "id": "footerCin",       "label": "CIN Number (optional)",            "type": "text", "max": 60, "placeholder": "U74999MH2015PLC000000" },
+    { "id": "footerDisclaimer","label": "Footer disclaimer text",           "type": "textarea", "rows": 3, "max": 400, "placeholder": "IRDAI registered insurance intermediary. Investments in insurance are subject to terms and conditions." },
+    {
+      "id": "footerLinks", "label": "Legal / Navigation links", "type": "repeater", "min": 0, "max": 12, "itemLabel": "Link",
+      "item": [
+        { "id": "label", "label": "Link label (e.g. About Us)", "type": "text", "max": 50 },
+        { "id": "url",   "label": "Full URL",                   "type": "text", "max": 300, "placeholder": "https://yourdomain.com/about-us" }
+      ]
+    }
+  ]
+}
   ]
 }
