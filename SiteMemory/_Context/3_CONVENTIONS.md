@@ -19,8 +19,12 @@ StaticWebsiteGenerator/
 ├── templates/
 │   ├── schemas/
 │   │   ├── _base.json           — shared brand / contact / theme sections
-│   │   └── template-N.json      — per-template schemas (1–11)
+│   │   ├── template-N.json      — per-template schemas (1–11)
+│   │   ├── template-heph.json   — InsurTech SaaS / B2B distribution platform
+│   │   └── template-turtlemint.json — Insurance Marketplace / POSP + consumer
 │   ├── website-template-N.ejs   — per-template renderers (1–11)
+│   ├── website-template-heph.ejs
+│   ├── website-template-turtlemint.ejs
 │   ├── preview-test.js          — local rendering harness with sample data
 │   └── preview-N.html           — generated previews (run preview-test.js to refresh)
 └── generated/                   — runtime output from /api/generate
@@ -37,7 +41,7 @@ Every new template requires changes in six places. Skipping any one breaks rende
 5. `public/index.html` — `<label class="template-box">` block with radio input value `template-N` and a thumbnail markup using `.tp-{name}-*` classes.
 6. `public/style.css` — corresponding `.template-{name}` and `.tp-{name}-*` rules for the picker thumbnail.
 
-When in doubt, copy a recent template (template-9 NBFC or template-11 Portfolio) end-to-end as a starting point.
+When in doubt, copy a recent template (template-9 NBFC or template-turtlemint) end-to-end as a starting point.
 
 ## Schema conventions (JSON)
 
@@ -77,6 +81,8 @@ When in doubt, copy a recent template (template-9 NBFC or template-11 Portfolio)
 ```
 
 **Field types:** `text`, `textarea`, `select` (uses `options: [...]`), `color`, `image`, `repeater`.
+
+**InsurTech footer pattern** (used by `template-heph` and `template-turtlemint`): these templates include an inline `footer` section in their schema with fields `footerIrdaiNo`, `footerCin`, `footerDisclaimer`, and a `footerLinks` repeater (`label` + `url`). This is distinct from the `_base` contact/theme sections and handles IRDAI regulatory compliance inline. New insurance-related templates should follow this pattern.
 
 **Naming:** field IDs are camelCase. Labels are sentence case. Placeholders use the literal example, not generic "enter text here".
 
@@ -234,9 +240,9 @@ Matching CSS in `public/style.css`:
 
 | Thing                    | Convention                           | Example                          |
 |---                       |---                                   |---                               |
-| Template ID              | `template-N` (sequential)            | `template-10`                    |
-| Schema file              | `template-N.json`                    | `template-10.json`               |
-| EJS file                 | `website-template-N.ejs`             | `website-template-10.ejs`        |
+| Template ID              | `template-N` (sequential) or `template-{slug}` for branded | `template-10`, `template-heph` |
+| Schema file              | `template-N.json` / `template-{slug}.json`  | `template-10.json`, `template-heph.json` |
+| EJS file                 | `website-template-N.ejs` / `website-template-{slug}.ejs` | `website-template-heph.ejs` |
 | Sample function          | `{topic}Sample()`                     | `restaurantSample()`             |
 | Picker thumbnail class   | `.template-{slug}` + `.tp-{slug}-*`  | `.template-nbfc` `.tp-nbfc-rate` |
 | Field IDs                | camelCase                            | `heroHeadlineLead`               |
@@ -254,7 +260,7 @@ node -c server.js                      # syntax-check the server
 cd templates && node preview-test.js   # render all templates with sample data
 ```
 
-The preview-test must report **N/N templates rendered cleanly**. If any template fails, fix it before continuing.
+The preview-test must report **13/13 templates rendered cleanly**. If any template fails, fix it before continuing.
 
 For new templates, run a content sanity grep:
 

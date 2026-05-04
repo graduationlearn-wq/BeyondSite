@@ -1,8 +1,8 @@
-# Current Status (As of April 27, 2026)
+# Current Status (As of May 4, 2026)
 
 ## What is working:
 
-* **11 schema-driven templates render end-to-end clean.** Editorial (1), Agency-Noir (2), Terminal/Dev Studio (3), Web3/Protocol (4), Local Service (5), BFSI/Banking (6), Startup/SaaS (7), Insurance Advisor (8), NBFC/Lender (9), Restaurant/Café (10), Portfolio/Freelancer (11). `node preview-test.js` reports 11/11 ✓ with realistic sample data per template.
+* **13 schema-driven templates render end-to-end clean.** Editorial (1), Agency-Noir (2), Terminal/Dev Studio (3), Web3/Protocol (4), Local Service (5), BFSI/Banking (6), Startup/SaaS (7), Insurance Advisor (8), NBFC/Lender (9), Restaurant/Café (10), Portfolio/Freelancer (11), InsurTech SaaS / Heph (template-heph), Insurance Marketplace / Turtlemint (template-turtlemint). `node preview-test.js` reports 13/13 ✓ with realistic sample data per template. Note: the two newest templates use slug-based IDs (`template-heph`, `template-turtlemint`) rather than sequential numbers.
 * **Schema-driven form** with hint gutters (label + arrow + description on left/right of each section), section mockup thumbnails, and ⓘ tap-to-expand on mobile.
 * **Per-section AI button (✨) with Gemini → Groq failover.** Gemini 2.5 Flash is primary with a 3-retry backoff on 503s; Groq Llama-3.3-70b kicks in if Gemini returns any other error. Server logs show provider per call (`[ai-section] template-9/hero ✓ Gemini` or `✓ Groq (fallback)`). Robust `extractJSON()` helper handles markdown fences and stray prose.
 * **Help chatbot** — floating gold bubble bottom-right with pulse ring. Session memory only (cleared on refresh). **Two-layer architecture**: client-side intent matcher answers ~9 categories of social messages locally (greetings, thanks, bye, identity, capabilities, how-are-you, pleasantries, compliments, tiny inputs) at zero API cost; substantive questions go to Groq via `/api/chat`. Form-context-aware: passes current `templateId`, active `sectionId`, business name, and description (capped at 240 chars) into every Groq system prompt. Strict scope-lock with friendly redirect for off-topic questions.
@@ -34,7 +34,7 @@
 ## Immediate Next Steps:
 
 - [ ] Refactor `templates/website-template-1.ejs` (Editorial) to the safe-locals pattern used by templates 2–11.
-- [ ] Build the next batch of templates per the agreed roadmap: **Healthcare/Clinic**, **Education/Coaching Institute**, **Fitness/Gym**, **Real Estate Agency** — each ~9–18 hours of solo work. Reach 15 templates total to feel "complete enough".
+- [ ] Build the next batch of templates per the agreed roadmap: **Healthcare/Clinic**, **Education/Coaching Institute**, **Fitness/Gym**, **Real Estate Agency** — each ~9–18 hours of solo work. Reach 15 templates total to feel "complete enough". (Currently at 13 — 2 more needed.)
 - [ ] Extract the custom-cursor logic from inline `<script>` in `index.html` into a reusable `public/cursor.js` so future pages opt in via one script tag without re-introducing the cursor-disappears bug.
 - [ ] Add a deterministic fourth-layer canned-response fallback in `/api/ai-section` so users never see a raw AI failure when both Gemini and Groq are down.
 - [ ] When the catalogue reaches ~15 templates, design and ship a **category filter** in the picker (Food, Health, Finance, Tech, Service, Creative, etc.).
