@@ -84,6 +84,35 @@ app.get('/api/schema/:templateId', (req, res) => {
   res.json(composeSchema(tpl));
 });
 
+// ── Template preview HTML (used by the hover/long-press preview modal)
+// Only serves preview-{slug}.html files (won't leak EJS source, schemas, etc.).
+// Slugs allowed: numeric (1-11) or alphanumeric ('heph', 'turtlemint', etc.).
+// To refresh: cd templates && node preview-test.js
+app.get(/^\/template-previews\/preview-([a-z0-9-]+)\.html$/, (req, res) => {
+  const slug = String(req.params[0] || '').replace(/[^a-z0-9-]/g, '');
+  if (!slug) return res.status(404).send('Not found');
+  const file = path.join(__dirname, 'templates', `preview-${slug}.html`);
+  if (!fs.existsSync(file)) {
+    return res.status(404).type('html').send(
+      '<!doctype html><html><head><meta charset="utf-8"><title>Preview not yet generated</title>' +
+      '<style>body{font-family:system-ui,-apple-system,sans-serif;background:linear-gradient(135deg,#0e0a14,#16131a);' +
+      'color:#f5f0e8;display:flex;align-items:center;justify-content:center;min-height:100vh;margin:0;padding:48px;text-align:center}' +
+      '.card{max-width:480px;background:rgba(255,255,255,.04);border:1px solid rgba(232,160,48,.15);border-radius:16px;padding:48px 36px}' +
+      '.icon{font-size:2.4rem;margin-bottom:18px;opacity:.7}' +
+      'h1{font-size:1.2rem;font-weight:600;margin-bottom:12px;color:#e8a030}' +
+      'p{font-size:.93rem;line-height:1.65;color:rgba(245,240,232,.7);margin:0 0 10px}' +
+      'code{background:rgba(232,160,48,.12);color:#f5b84a;padding:2px 8px;border-radius:4px;font-family:ui-monospace,monospace;font-size:.85em}' +
+      '</style></head><body><div class="card">' +
+      '<div class="icon">📐</div>' +
+      '<h1>Preview not yet generated</h1>' +
+      '<p>This template hasn\'t been built yet. The picker card exists but the schema, EJS, and sample data are still pending.</p>' +
+      '<p>To regenerate previews after building: <code>cd templates &amp;&amp; node preview-test.js</code></p>' +
+      '</div></body></html>'
+    );
+  }
+  res.sendFile(file);
+});
+
 // ── Generalized image upload ────────────────────────────
 app.post('/api/upload-image', imageUpload.single('file'), (req, res) => {
   if (!req.file) return res.status(400).json({ error: 'No file uploaded' });

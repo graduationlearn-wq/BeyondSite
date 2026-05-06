@@ -1709,6 +1709,253 @@ body:has(#step1[style*="display: none"]) .section-mockup { display: none; }
   .schema-section { padding: 22px 18px; }
 }
 
+/* ═══════════════════════════════════════════════════════════════
+   TEMPLATE PREVIEW MODAL  (hover 1.5s on desktop / long-press on touch)
+   ═══════════════════════════════════════════════════════════════ */
+
+/* Hint text under "Choose Your Template" */
+.template-hint {
+  font-size: .78rem;
+  color: var(--text-soft);
+  margin: -4px 0 14px;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  font-weight: 400;
+}
+.template-hint::before {
+  content: '';
+  width: 16px; height: 16px;
+  background: rgba(232,160,48,.14);
+  border: 1px solid rgba(232,160,48,.28);
+  border-radius: 50%;
+  display: inline-block;
+  position: relative;
+  flex-shrink: 0;
+}
+.template-hint kbd {
+  font-family: 'JetBrains Mono', ui-monospace, monospace;
+  font-size: .72rem;
+  background: var(--bg-card-2);
+  border: 1px solid var(--border-hi);
+  border-radius: 4px;
+  padding: 2px 7px;
+  color: var(--accent-lt);
+  font-weight: 500;
+}
+
+/* Soft glow ring while the hover timer is counting down — gives the user
+   visual feedback that "something is about to happen" before the modal opens */
+.template-box.tpv-pending .template-content {
+  box-shadow: 0 0 0 2px rgba(232,160,48,.32),
+              0 16px 36px -16px rgba(232,160,48,.34),
+              0 0 0 6px rgba(232,160,48,.06);
+  transition: box-shadow .3s ease;
+}
+.template-box.tpv-pending .template-preview {
+  transition: filter .3s ease;
+  filter: brightness(1.05);
+}
+
+/* Backdrop — fades in over a beat, then the modal lifts up after it */
+.tpv-backdrop {
+  position: fixed; inset: 0;
+  background: rgba(8,6,12,0);
+  backdrop-filter: blur(0px);
+  -webkit-backdrop-filter: blur(0px);
+  z-index: 9990;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 36px 24px;
+  opacity: 0;
+  pointer-events: none;
+  transition: background-color .32s cubic-bezier(.16,1,.3,1),
+              backdrop-filter   .32s cubic-bezier(.16,1,.3,1),
+              -webkit-backdrop-filter .32s cubic-bezier(.16,1,.3,1),
+              opacity           .24s ease;
+}
+.tpv-backdrop.open {
+  background: rgba(8,6,12,.78);
+  backdrop-filter: blur(12px);
+  -webkit-backdrop-filter: blur(12px);
+  opacity: 1;
+  pointer-events: auto;
+}
+body.tpv-open { overflow: hidden; }
+
+/* Modal card — combines opacity + scale + slide-up for a soft, premium entrance.
+   On exit it reverses with a slightly faster timing so dismissal feels crisp. */
+.tpv-modal {
+  position: relative;
+  width: min(1180px, 100%);
+  max-height: calc(100vh - 72px);
+  background: var(--bg-card);
+  border: 1px solid var(--border-hi);
+  border-radius: 18px;
+  box-shadow: 0 40px 100px -24px rgba(0,0,0,.7),
+              0 0 0 1px rgba(232,160,48,.08),
+              0 0 80px -20px rgba(232,160,48,.18);
+  display: flex;
+  flex-direction: column;
+  overflow: hidden;
+  /* initial (closed) state */
+  opacity: 0;
+  transform: translateY(28px) scale(.94);
+  transform-origin: center bottom;
+  transition: opacity .2s ease,
+              transform .2s cubic-bezier(.4,0,1,1);
+  will-change: transform, opacity;
+}
+.tpv-backdrop.open .tpv-modal {
+  opacity: 1;
+  transform: translateY(0) scale(1);
+  /* longer, smoother easing on entry — the 60ms delay lets the backdrop
+     start fading in first so the modal feels like it's "lifting from" the page */
+  transition: opacity .42s cubic-bezier(.16,1,.3,1) 60ms,
+              transform .52s cubic-bezier(.16,1,.3,1) 60ms;
+}
+
+/* Header */
+.tpv-header {
+  display: flex;
+  align-items: center;
+  gap: 18px;
+  padding: 16px 22px;
+  border-bottom: 1px solid var(--border);
+  background: linear-gradient(180deg, rgba(232,160,48,.06), transparent);
+  flex-wrap: wrap;
+}
+.tpv-title {
+  font-size: 1.1rem;
+  font-weight: 700;
+  color: var(--text);
+  letter-spacing: -.005em;
+  margin: 0;
+  flex-shrink: 0;
+}
+
+/* Device toolbar */
+.tpv-toolbar {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  margin-left: auto;
+}
+.tpv-toolbar-label {
+  font-size: .72rem;
+  color: var(--text-soft);
+  font-weight: 500;
+  letter-spacing: .04em;
+  text-transform: uppercase;
+  margin-right: 6px;
+}
+.tpv-device {
+  background: transparent;
+  border: 1px solid var(--border-hi);
+  color: var(--text-soft);
+  font-family: var(--font);
+  font-size: .8rem;
+  font-weight: 500;
+  padding: 7px 14px;
+  border-radius: 100px;
+  cursor: none;
+  transition: all .18s ease;
+}
+.tpv-device:hover {
+  color: var(--text);
+  border-color: rgba(232,160,48,.4);
+}
+.tpv-device.active {
+  background: rgba(232,160,48,.14);
+  color: var(--accent);
+  border-color: var(--accent);
+}
+
+.tpv-close {
+  width: 34px; height: 34px;
+  background: transparent;
+  border: 1px solid var(--border);
+  color: var(--text-soft);
+  font-size: 1.5rem;
+  line-height: 1;
+  border-radius: 8px;
+  cursor: none;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: all .15s ease;
+  flex-shrink: 0;
+}
+.tpv-close:hover {
+  background: rgba(255,255,255,.04);
+  color: var(--text);
+  border-color: var(--border-hi);
+}
+
+/* Iframe wrap */
+.tpv-frame-wrap {
+  flex: 1;
+  background: #fff;
+  overflow: hidden;
+  position: relative;
+  min-height: 360px;
+}
+.tpv-frame {
+  border: none;
+  display: block;
+  background: #fff;
+}
+
+/* Footer */
+.tpv-footer {
+  padding: 16px 22px;
+  border-top: 1px solid var(--border);
+  display: flex;
+  justify-content: center;
+  background: rgba(0,0,0,.18);
+}
+.tpv-confirm {
+  background: linear-gradient(135deg, var(--accent), var(--accent-lt));
+  color: var(--bg);
+  border: none;
+  font-family: var(--font);
+  font-size: .92rem;
+  font-weight: 700;
+  letter-spacing: .01em;
+  padding: 13px 32px;
+  border-radius: 100px;
+  cursor: none;
+  display: inline-flex;
+  align-items: center;
+  gap: 4px;
+  box-shadow: 0 10px 28px rgba(232,160,48,.32);
+  transition: transform .15s ease, box-shadow .2s ease;
+}
+.tpv-confirm:hover {
+  transform: translateY(-1px);
+  box-shadow: 0 14px 36px rgba(232,160,48,.45);
+}
+.tpv-confirm-arrow {
+  display: inline-block;
+  transition: transform .2s ease;
+}
+.tpv-confirm:hover .tpv-confirm-arrow {
+  transform: translateX(3px);
+}
+
+@media (max-width: 720px) {
+  .tpv-backdrop { padding: 14px; }
+  .tpv-modal { max-height: calc(100vh - 28px); border-radius: 14px; }
+  .tpv-header { padding: 14px 16px; gap: 12px; }
+  .tpv-title { font-size: 1rem; flex-basis: 100%; order: -1; }
+  .tpv-toolbar { margin-left: 0; flex-wrap: wrap; }
+  .tpv-toolbar-label { display: none; }
+  .tpv-device { padding: 6px 11px; font-size: .74rem; }
+  .tpv-close { position: absolute; top: 10px; right: 10px; }
+  .tpv-frame-wrap { min-height: 280px; }
+}
+
 /* ── CHATBOT WIDGET (floating help bot) ───────────────────────────── */
 .cb-bubble {
   position: fixed;
