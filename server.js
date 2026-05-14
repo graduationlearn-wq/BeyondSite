@@ -10,33 +10,34 @@ const crypto = require('crypto');
 
 dotenv.config({ path: path.resolve(__dirname, '.env'), override: true });
 
+let logger;
+try {
+  logger = require('./src/lib/logger');
+} catch (e) {
+  logger = console;
+}
+
+const { connectDatabase, disconnectDatabase, prisma } = require('./src/lib/database');
+const { authenticate, requireRole, optionalAuth } = require('./src/lib/auth');
+
 const app = express();
 app.use(express.json({ limit: '1mb' }));
 app.use(express.urlencoded({ extended: true, limit: '1mb' }));
 app.use(express.static('public'));
-app.use('/uploads', express.static(path.join(__dirname, 'public', 'uploads')));
 
 const { GoogleGenerativeAI } = require('@google/generative-ai');
 const genAI = new GoogleGenerativeAI(process.env.GEMINI_API_KEY);
 
-// ── Uploads (generalized) ───────────────────────────────
-const uploadDir = path.join(__dirname, 'public', 'uploads', 'images');
-fs.mkdirSync(uploadDir, { recursive: true });
-const storage = multer.diskStorage({
-  destination: (_, __, cb) => cb(null, uploadDir),
-  filename: (_, file, cb) => {
-    const safe = file.originalname.replace(/[^a-z0-9.\-_]/gi, '_');
-    cb(null, `${Date.now()}-${Math.random().toString(36).slice(2, 8)}-${safe}`);
-  }
-});
+// ── Uploads (local default, S3 swappable via UPLOAD_STORAGE env) ─
+const { getUploadDir, isS3, getFileBaseUrl, getMulterStorage, fileFilter } = require('./src/lib/storage');
 const imageUpload = multer({
-  storage,
-  limits: { fileSize: 3 * 1024 * 1024 }, // 3MB; per-field limits enforced client-side
-  fileFilter: (_, file, cb) => {
-    const ok = ['image/png','image/jpeg','image/svg+xml','image/webp'].includes(file.mimetype);
-    cb(ok ? null : new Error('Only PNG, JPG, SVG, or WebP allowed'), ok);
-  }
+  storage: getMulterStorage(),
+  fileFilter,
+  limits: { fileSize: 3 * 1024 * 1024 }
 });
+if (!isS3()) {
+  app.use('/uploads', express.static(getUploadDir()));
+}
 
 // ── Rate limits ─────────────────────────────────────────
 const aiLimiter  = rateLimit({ windowMs: 60*60*1000, max: 15, message: { error: 'Too many AI requests.' } });
@@ -46,10 +47,47 @@ const chatLimiter = rateLimit({ windowMs: 10*60*1000, max: 30, message: { error:
 
 // ── Login (still hardcoded — auth milestone later) ──────
 app.get('/login', (req, res) => res.sendFile(path.join(__dirname, 'public', 'login.html')));
+app.get('/register', (req, res) => res.sendFile(path.join(__dirname, 'public', 'register.html')));
 app.post('/api/login', (req, res) => {
   const { email, password } = req.body;
-  if (email === 'admin@example.com' && password === 'password123') return res.json({ success: true, redirect: '/' });
+  // Hardcoded admin credentials
+  if (email === 'admin@beyondsite.com' && password === 'admin123') {
+    return res.json({ success: true, redirect: '/', isAdmin: true });
+  }
+  // Regular user login (in production, check database)
+  if (email && password) {
+    return res.json({ success: true, redirect: '/', isAdmin: false });
+  }
   res.status(401).json({ error: 'Invalid email or password.' });
+});
+app.post('/api/register', (req, res) => {
+  const { firstName, lastName, email, password } = req.body;
+  if (!firstName || !lastName || !email || !password) {
+    return res.status(400).json({ error: 'All fields are required.' });
+  }
+  if (password.length < 8) {
+    return res.status(400).json({ error: 'Password must be at least 8 characters.' });
+  }
+  // TODO: save to database with hashed password (Auth0 / MySQL integration)
+  logger.info({ email }, 'User registered');
+  res.json({ success: true, redirect: '/login?registered=true' });
+});
+
+app.get('/health', async (req, res) => {
+  const health = { status: 'ok', timestamp: new Date().toISOString(), checks: {} };
+  try {
+    const { prisma: db } = require('./src/lib/database');
+    if (db) {
+      await db.$queryRaw`SELECT 1`;
+      health.checks.database = 'ok';
+    } else {
+      health.checks.database = 'not configured';
+    }
+  } catch (e) {
+    health.checks.database = 'unavailable';
+    health.status = 'degraded';
+  }
+  res.status(health.status === 'ok' ? 200 : 503).json(health);
 });
 
 app.get('/', (req, res) => res.sendFile(path.join(__dirname, 'public', 'index.html')));
@@ -86,7 +124,7 @@ app.get('/api/schema/:templateId', (req, res) => {
 
 // ── Template preview HTML (used by the hover/long-press preview modal)
 // Only serves preview-{slug}.html files (won't leak EJS source, schemas, etc.).
-// Slugs allowed: numeric (1-11) or alphanumeric ('heph', 'turtlemint', etc.).
+// Slugs allowed: numeric (1-13).
 // To refresh: cd templates && node preview-test.js
 app.get(/^\/template-previews\/preview-([a-z0-9-]+)\.html$/, (req, res) => {
   const slug = String(req.params[0] || '').replace(/[^a-z0-9-]/g, '');
@@ -116,13 +154,17 @@ app.get(/^\/template-previews\/preview-([a-z0-9-]+)\.html$/, (req, res) => {
 // ── Generalized image upload ────────────────────────────
 app.post('/api/upload-image', imageUpload.single('file'), (req, res) => {
   if (!req.file) return res.status(400).json({ error: 'No file uploaded' });
-  res.json({ url: `/uploads/images/${req.file.filename}`, filename: req.file.filename, size: req.file.size });
+  const filename = isS3() ? req.file.key : req.file.filename;
+  const base = isS3() ? getFileBaseUrl() : '/uploads/images';
+  res.json({ url: `${base}/${filename}`, filename, size: req.file.size });
 });
 
 // Back-compat alias — old client builds still use this route / field name.
 app.post('/api/upload-logo', imageUpload.single('logo'), (req, res) => {
   if (!req.file) return res.status(400).json({ error: 'No file uploaded' });
-  res.json({ url: `/uploads/images/${req.file.filename}`, filename: req.file.filename, size: req.file.size });
+  const filename = isS3() ? req.file.key : req.file.filename;
+  const base = isS3() ? getFileBaseUrl() : '/uploads/images';
+  res.json({ url: `${base}/${filename}`, filename, size: req.file.size });
 });
 
 // ── Guards ──────────────────────────────────────────────
@@ -192,6 +234,19 @@ const AI_PROMPTS = {
     services:({biz,desc})       => `For Web3 / protocol brand "${biz}": "${desc}". Return ONLY JSON: { "servicesHeadline2":"<3-5 word punchy second line e.g. Nothing missing.>", "services":[{"name":"<2-4 word product>","body":"<20-30 word benefit description>"}] } with 5-6 items.`,
     cta:     ({biz,desc})       => `For Web3 / protocol brand "${biz}": "${desc}". Return ONLY JSON: { "ctaHeadlineLead":"<4-6 word line 1 e.g. Go on-chain with>", "ctaHeadlineAccent":"<usually the brand name with period>", "ctaBody":"<25-40 word supporting line about deployment speed and trusted teams>", "ctaButton":"<2-3 word action e.g. Start Building →>" }`
   },
+  'template-12': { // InsurTech SaaS / B2B API Platform
+    hero:    ({biz,desc,tone}) => `For B2B InsurTech API platform "${biz}" (${tone} tone): "${desc}". Return ONLY JSON: { "heroBadge":"<short trust badge e.g. SOC 2 Type II · IRDAI-aligned, max 8 words>", "heroHeadlineLead":"<headline minus the accent phrase, e.g. Insurance APIs for the>", "heroHeadlineAccent":"<final 1-3 word accent ending with period, e.g. modern stack.>", "heroSub":"<35-50 word sub-headline describing what the platform does and who uses it (insurers, brokers, embedded-insurance teams)>" }`,
+    products:({biz,desc})       => `For B2B InsurTech API platform "${biz}": "${desc}". Return ONLY JSON: { "productsHeadline":"<8-12 word section headline>", "productsBody":"<25-35 word sub-copy>", "products":[{"icon":"<1 emoji from ⚡ 🛡 📋 🔐 📊 🔔 💳 🧠>","name":"<2-3 word API name>","body":"<25-35 word benefit description>","endpoint":"<HTTP method + path e.g. POST /v1/quotes>"}] } with 5-6 items.`,
+    howItWorks:({biz,desc})    => `For B2B InsurTech API platform "${biz}": "${desc}". Return ONLY JSON: { "howHeadline":"<6-10 word section headline e.g. Live in days, not quarters.>", "howSteps":[{"title":"<2-3 word step e.g. Sign up>","body":"<20-30 word body>","duration":"<short duration e.g. 5 minutes / 1-3 days / Same day>"}] } with EXACTLY 4 steps from sign-up through production deploy.`,
+    compliance:({biz,desc,tone}) => `For B2B InsurTech API platform "${biz}" (${tone}): "${desc}". Return ONLY JSON: { "complianceHeadline":"<6-10 word section headline e.g. Built for regulated workloads.>", "complianceBody":"<60-90 word paragraph about regulatory and security commitments — IRDAI, RBI, IT-Act, DPDP, customer security audits>" }`,
+    cta:     ({biz,desc})       => `For B2B InsurTech API platform "${biz}": "${desc}". Return ONLY JSON: { "ctaHeadlineLead":"<3-5 word line 1 e.g. Ready to integrate>", "ctaHeadlineAccent":"<3-5 word accent in cyan e.g. in 24 hours?>", "ctaBody":"<25-40 word supporting line>", "ctaButton":"<2-4 word action e.g. Get API Keys>", "ctaNote":"<short fine print e.g. Sandbox keys are free · No credit card required>" }`
+  },
+  'template-13': { // Insurance Market / Aggregator
+    hero:    ({biz,desc,tone}) => `For consumer insurance aggregator / marketplace "${biz}" (${tone} tone): "${desc}". Return ONLY JSON: { "heroEyebrow":"<short trust phrase max 10 words e.g. IRDAI-licensed broker · serving since 2014>", "heroHeadlineLead":"<3-5 word line 1 e.g. Compare insurance,>", "heroHeadlineEmph":"<2-4 word italic accent line e.g. find your fit.>", "heroSub":"<35-50 word sub-headline describing the aggregator value prop — comparing quotes from licensed insurers, lowest prices, claim assistance>" }`,
+    categories:({biz,desc})    => `For consumer insurance aggregator "${biz}": "${desc}". Return ONLY JSON: { "categoriesHeadline":"<6-10 word section headline e.g. Find the right cover for every life moment.>", "categories":[{"icon":"<1 emoji from ❤️ 🚗 🏍 🛡 🏠 ✈️ 👨‍👩‍👧 🦷>","name":"<short product name e.g. Health Insurance>","tagline":"<5-8 word benefit phrase e.g. Cashless at 8000+ hospitals>","body":"<25-35 word description>"}] } with 6 categories covering health, motor, term life, two-wheeler, home, travel.`,
+    whyChoose:({biz,desc})     => `For consumer insurance aggregator "${biz}": "${desc}". Return ONLY JSON: { "whyHeadline":"<6-10 word section headline e.g. Why thousands trust us.>", "whyPoints":[{"icon":"<1 emoji>","title":"<2-4 word benefit e.g. Compare 50+ Insurers>","body":"<20-30 word body>"}] } with 4 points covering breadth of comparison, lowest premiums, claim assistance, IRDAI-licensed expertise.`,
+    cta:     ({biz,desc})       => `For consumer insurance aggregator "${biz}": "${desc}". Return ONLY JSON: { "ctaHeadline":"<8-12 word headline encouraging quote comparison>", "ctaBody":"<25-40 word supporting line about comparison process>", "ctaButton":"<2-4 word action e.g. Compare Now>", "ctaNote":"<short fine print e.g. Free comparison · No obligation>" }`
+  },
   'template-11': { // Portfolio / Freelancer
     hero:    ({biz,desc,tone}) => `For freelancer portfolio "${biz}" (${tone} tone): "${desc}". Return ONLY JSON: { "heroEyebrow":"<short availability line e.g. Available for select projects · 2026, max 10 words>", "heroRole":"<concise role/title e.g. Brand & Editorial Designer, max 6 words>", "heroSub":"<35-50 word first-person intro paragraph describing what kind of work the freelancer does and for whom>" }`,
     about:   ({biz,desc,tone}) => `For freelancer portfolio "${biz}" (${tone}): "${desc}". Return ONLY JSON: { "aboutHeadlineLead":"<3-5 word line 1 e.g. Designing things>", "aboutHeadlineEmph":"<2-4 word italic accent ending with period>", "aboutBody":"<160-220 word first-person about across 3 paragraphs separated by blank lines, covering origin/training, current focus, and how engagements work>" }`,
@@ -213,19 +268,6 @@ const AI_PROMPTS = {
     about:   ({biz,desc,tone}) => `For RBI-registered NBFC / lender "${biz}" (${tone}): "${desc}". Return ONLY JSON: { "aboutHeadlineLead":"<3-5 word line 1 e.g. Lending built on>", "aboutHeadlineEmph":"<1-2 word italic line e.g. trust.>", "aboutBody":"<120-160 word origin story emphasising RBI registration, lending philosophy, who you serve, and what makes your underwriting different>", "aboutPillars":[{"title":"<2-3 word pillar>","body":"<20-30 word body>"}] } with EXACTLY 3 pillars covering pricing transparency, fair practice, customer service.`,
     cta:     ({biz,desc})       => `For RBI-registered NBFC / lender "${biz}": "${desc}". Return ONLY JSON: { "ctaHeadline":"<8-12 word headline about pre-approval / fast eligibility>", "ctaBody":"<20-30 word supporting line about soft credit check and no commitment>", "ctaButton":"<2-3 word action e.g. Check Eligibility>", "ctaNote":"<short reassurance e.g. Soft credit check · Will not affect your CIBIL score>" }`
   },
-  'template-heph': {
-    hero:     ({biz,desc,tone}) => `For InsurTech B2B SaaS brand "${biz}" (${tone} tone): "${desc}". Return ONLY JSON: { "heroBadge":"<short live signal e.g. 49 Insurer APIs · Live — max 8 words>", "heroHeadlinePart1":"<3-5 word line 1 e.g. Any Insurance,>", "heroHeadlineAccent":"<3-5 word accent line e.g. Any Channel.>", "heroSub":"<30-45 word sub about API-first distribution, single integration, insurer breadth>" }`,
-    modules:  ({biz,desc})      => `For InsurTech B2B SaaS "${biz}": "${desc}". Return ONLY JSON: { "modulesHeadline":"<8-12 word section headline>", "modules":[{"icon":"<1 emoji>","name":"<module name>","body":"<20-30 word one-liner about what this distribution module does>"}] } with 4 items covering POSP, D2C, Embedded, and Lending.`,
-    verticals:({biz,desc,tone}) => `For InsurTech B2B SaaS "${biz}" (${tone}): "${desc}". Return ONLY JSON: { "verticalsHeadline":"<8-12 word section headline>", "verticals":[{"icon":"<1 emoji>","name":"<industry name>","challenge":"<30-45 word pain point>","solution":"<30-45 word how your API solves it>"}] } with 4 verticals covering Banks, Fintech, EV/OEM, and Travel.`,
-    cta:      ({biz,desc})      => `For InsurTech B2B SaaS "${biz}": "${desc}". Return ONLY JSON: { "ctaHeadline":"<8-12 word headline about scaling distribution>", "ctaBody":"<15-25 word support line about demo / fast onboarding>", "ctaButton":"<2-3 word action e.g. Book a Demo>" }`
-  },
-  'template-turtlemint': {
-    hero:     ({biz,desc,tone}) => `For insurance marketplace / aggregator "${biz}" (${tone} tone): "${desc}". Return ONLY JSON: { "heroTagline":"<short trust signal e.g. Technology trusted by 2 lakh+ advisors — max 10 words>", "heroHeadline":"<5-8 word punchy headline e.g. Insurance. Simplified.>", "heroSub":"<25-40 word sub about comparing plans, buying fast, and claim support>", "heroStats":[{"value":"<number with unit e.g. 1.6Cr+>","label":"<2-3 word label>"}], "heroCards":[{"icon":"<1 emoji>","title":"<4-6 word card title>","body":"<20-30 word pitch>","cta":"<2-3 word button>"}] } with 3 stats and 3 hero cards.`,
-    insuranceTypes: ({biz,desc}) => `For insurance marketplace "${biz}": "${desc}". Return ONLY JSON: { "insuranceTypesHeadline":"<6-10 word section headline>", "insuranceTypes":[{"icon":"<1 emoji>","name":"<insurance category name>"}] } with 6-8 standard insurance categories.`,
-    advisorApp: ({biz,desc,tone}) => `For insurance marketplace "${biz}" (${tone}): "${desc}". Return ONLY JSON: { "advisorHeadline":"<8-12 word headline about advisor platform>", "advisorSub":"<20-30 word sub about earnings, tools, and support>", "advisorFeatures":[{"title":"<3-5 word feature name>","body":"<20-30 word benefit>"}] } with 4 features covering issuance speed, training, earnings tracking, and claim support.`,
-    b2bSolutions: ({biz,desc})  => `For insurance marketplace "${biz}": "${desc}". Return ONLY JSON: { "b2bHeadline":"<8-12 word section headline about embedded insurance>", "b2bSub":"<20-30 word sub>", "b2bCards":[{"name":"<segment name e.g. Banks & NBFCs>","body":"<30-45 word pitch>"}] } with 3 B2B segments.`,
-    cta:      ({biz,desc})      => `For insurance marketplace "${biz}": "${desc}". Return ONLY JSON: { "ctaHeadline":"<8-12 word headline about starting protection>", "ctaBody":"<15-25 word support line>", "ctaButton":"<2-3 word action e.g. Get Started Free>" }`
-  }
 };
 
 function pickPrompt(templateId, sectionId, ctx) {
@@ -239,17 +281,8 @@ function pickPrompt(templateId, sectionId, ctx) {
 // Lazy-load axios at module top via require below the chatbot block; if
 // callGroqAI runs before that, the require() here pulls the same cached module.
 
-// Robust JSON extractor — handles markdown fences, leading/trailing prose
-function extractJSON(text) {
-  if (!text) throw new Error('Empty response from AI');
-  let t = String(text).replace(/```json/gi, '').replace(/```/g, '').trim();
-  // If it doesn't start with { or [, find the first balanced object/array
-  if (!/^[\[{]/.test(t)) {
-    const m = t.match(/[{[][\s\S]*[}\]]/);
-    if (m) t = m[0];
-  }
-  return JSON.parse(t);
-}
+const { extractJSON, templatePath, buildTemplateData } = require('./src/lib/utils');
+const { payments, PAYMENT_TTL_MS, consumePayment }    = require('./src/lib/payments');
 
 // Layer 1 — Gemini (primary). Retries on 503 with backoff.
 async function callGeminiAI(prompt) {
@@ -314,7 +347,7 @@ app.post('/api/ai-section', aiLimiter, async (req, res) => {
     // ── Layer 1: try Gemini (primary)
     try {
       const result = await callGeminiAI(prompt);
-      console.log(`[ai-section] ${templateId}/${sectionId} ✓ Gemini`);
+      logger.info({ templateId, sectionId, provider: 'gemini' }, 'AI section success');
       return res.json(result);
     } catch (geminiErr) {
       const reason = geminiErr.status ? `HTTP ${geminiErr.status}` : geminiErr.message;
@@ -326,15 +359,15 @@ app.post('/api/ai-section', aiLimiter, async (req, res) => {
       }
       try {
         const result = await callGroqAI(prompt);
-        console.log(`[ai-section] ${templateId}/${sectionId} ✓ Groq (fallback)`);
+        logger.info({ templateId, sectionId, provider: 'groq' }, 'AI section success (fallback)');
         return res.json(result);
       } catch (groqErr) {
-        console.error(`[ai-section] ${templateId}/${sectionId} ✗ Groq also failed: ${groqErr.message}`);
+        logger.error({ templateId, sectionId, error: groqErr.message }, 'AI section Groq failed');
         return res.status(503).json({ error: 'AI is temporarily unavailable. Both providers failed — please try again in a moment.' });
       }
     }
   } catch (err) {
-    console.error('AI Error:', err);
+    logger.error({ error: err.message, stack: err.stack }, 'AI section error');
     res.status(500).json({ error: err.message });
   }
 });
@@ -344,17 +377,19 @@ const axios = require('axios');
 
 const APP_NAME = 'WebSite Builder';
 const TEMPLATE_NAMES = {
-  'template-1': 'Editorial',
-  'template-2': 'Agency',
-  'template-3': 'Terminal / Dev Studio',
-  'template-4': 'Web3 / Protocol',
-  'template-5': 'Local Service',
-  'template-6': 'BFSI / Banking',
-  'template-7': 'Startup / SaaS',
-  'template-8': 'Insurance Advisor',
-  'template-9': 'NBFC / Lender',
-  'template-heph': 'InsurTech SaaS',
-  'template-turtlemint': 'Insurance Marketplace',
+  'template-1':  'Editorial',
+  'template-2':  'Agency',
+  'template-3':  'Terminal / Dev Studio',
+  'template-4':  'Web3 / Protocol',
+  'template-5':  'Local Service',
+  'template-6':  'BFSI / Banking',
+  'template-7':  'Startup / SaaS',
+  'template-8':  'Insurance Advisor',
+  'template-9':  'NBFC / Lender',
+  'template-10': 'FinTech SaaS',
+  'template-11': 'Portfolio',
+  'template-12': 'InsurTech SaaS',
+  'template-13': 'Insurance Market',
 };
 
 function buildChatSystemPrompt(context = {}) {
@@ -421,7 +456,7 @@ app.post('/api/chat', chatLimiter, async (req, res) => {
   } catch (err) {
     const status = err.response?.status;
     const detail = err.response?.data?.error?.message || err.message;
-    console.error('Chat error:', status, detail);
+    logger.error({ status, detail }, 'Chat error');
     if (status === 429) return res.status(429).json({ error: 'Too many chat requests upstream. Please try again in a moment.' });
     res.status(500).json({ error: 'Chat is temporarily unavailable. Please try again.' });
   }
@@ -429,144 +464,15 @@ app.post('/api/chat', chatLimiter, async (req, res) => {
 
 // ── DUMMY PAYMENTS ──────────────────────────────────────
 // Stored in memory — replace with Stripe/Razorpay webhook store later.
-const payments = new Map(); // paymentId -> { amount, usedAt, createdAt }
-const PAYMENT_TTL_MS = 30 * 60 * 1000;
+// payments Map and consumePayment live in src/lib/payments.js.
 
 app.post('/api/pay', payLimiter, (req, res) => {
   const { amount = 9, currency = 'USD' } = req.body || {};
   const paymentId = 'pay_' + crypto.randomBytes(8).toString('hex');
   payments.set(paymentId, { amount, currency, createdAt: Date.now(), usedAt: null });
-  console.log(`💰 (dummy) payment ${paymentId} for ${currency} ${amount}`);
+  logger.info({ paymentId, amount, currency }, 'Payment created');
   res.json({ paymentId, amount, currency, status: 'succeeded' });
 });
-
-function consumePayment(paymentId) {
-  const p = payments.get(paymentId);
-  if (!p) return { ok: false, reason: 'Invalid payment' };
-  if (p.usedAt)  return { ok: false, reason: 'Payment already used' };
-  if (Date.now() - p.createdAt > PAYMENT_TTL_MS) return { ok: false, reason: 'Payment expired' };
-  p.usedAt = Date.now();
-  return { ok: true };
-}
-
-// ── Render helpers ──────────────────────────────────────
-function templatePath(templateId) {
-  const safe = (templateId || 'template-1').replace(/[^a-z0-9\-]/gi, '');
-  const file = path.join(__dirname, 'templates', `website-${safe}.ejs`);
-  return fs.existsSync(file) ? file : path.join(__dirname, 'templates', 'website-template-1.ejs');
-}
-
-// Normalize form payload into the shape EJS templates expect. Safe defaults everywhere
-// so templates can render even when fields are empty.
-function buildTemplateData(payload = {}) {
-  const data = { ...payload };
-  // Top-form meta
-  data.businessName = (data.businessName || '').trim();
-  data.tagline      = (data.tagline || '').trim();
-  data._description = (data._description || '').trim();
-  // Brand/theme defaults
-  data.primaryColor = data.primaryColor || '#c0392b';
-  data.tone         = data.tone || 'professional';
-  data.foundedYear  = data.foundedYear || '';
-  data.logo         = data.logo || '';
-  // Year (used in all template footers)
-  data.year = new Date().getFullYear();
-  // Legacy fields used by templates 2/3/4/6 which still read these directly
-  data.about    = data.about    || data.aboutBody    || '';
-  data.products = Array.isArray(data.products)
-    ? data.products
-    : (data.products || '').split(',').map(s => s.trim()).filter(Boolean);
-  // Contact defaults
-  data.email   = data.email   || data.primaryEmail || '';
-  data.phone   = data.phone   || data.primaryPhone || '';
-  data.address = data.address || data.addressBlock || '';
-  data.hours   = data.hours   || data.hoursText    || '';
-  data.footerIrdaiNo    = data.footerIrdaiNo    || '';
-  data.footerCin        = data.footerCin        || '';
-  data.footerDisclaimer = data.footerDisclaimer || '';
-  if (!Array.isArray(data.footerLinks)) data.footerLinks = [];
-  // Repeater defaults (never undefined inside EJS)
-  // Optional string content fields — default to '' so EJS never throws ReferenceError
-  const strKeys = [
-    'heroEyebrow','heroDeck','heroPullQuote','aboutHeadline','aboutBody',
-    'ctaHeadline','ctaBody','ctaButton','accent','currency',
-    // V-suffix fields used by templates 5/7/8
-    'heroEyebrowV','heroHeadlineV','heroSubV','heroCtaPrimaryV','heroCtaSecondaryV',
-    'heroQuoteCardTitleV','heroQuoteCardBodyV','heroTagV','heroBadgeV','heroShotV',
-    'aboutHeadlineV','aboutBodyV','emergencyLineV','ctaHeadlineV','ctaBodyV','ctaButtonV',
-    'advisorNameV','advisorBioV','advisorPhotoV','whyHeadlineV','licenseNumberV','regulatorV',
-    'logoV','primaryEmail','primaryPhone','addressBlock','hoursText',
-    'bn','tag','accent',
-    // Round B — Agency (template-2)
-    'heroHeadlineLead','heroHeadlineAccent','heroHeadlineTail','heroSub',
-    'heroCtaPrimary','heroCtaSecondary',
-    'aboutHeadlineLead','aboutHeadlineTail',
-    'servicesLabel','servicesHeadline','servicesMeta',
-    'processLabel','processHeadline',
-    // Round B — BFSI (template-6)
-    'regulatorLine','insuranceLine','pmlaLinkLabel','grievanceLinkLabel',
-    'heroHeadlineBody','heroHeadlineEmph',
-    'ratesPanelTitle','ratesPanelFooter',
-    'servicesBody',
-    'aboutLabel','aboutHeadlineEmph',
-    'ratesLabel','ratesHeadlineLead','ratesHeadlineEmph',
-    'depositPanelTitle','lendingPanelTitle','ratesDisclaimer',
-    // Round C — Terminal (template-3)
-    'heroPromptCmd','heroMetaStatus','heroMetaModules','heroMetaBuild',
-    'aboutFileName','aboutMeta',
-    'servicesHeadlineLead','servicesHeadlineTail',
-    'processHeadlineLead','processHeadlineTail',
-    'ctaHeadlineLead','ctaHeadlineTail',
-    // Round C — Web3 (template-4)
-    'heroBadge','heroPanelTitle',
-    'servicesHeadline1','servicesHeadline2',
-    'aboutQuoteLine1','aboutQuoteAccent1','aboutQuoteLine2','aboutQuoteLine3','aboutQuoteAccent2','aboutQuoteTail','aboutCtaText',
-    'chainsLabel',
-    'testimonialsLabel','testimonialsRating',
-    'ctaEyebrow','ctaHeadlineAccent','ctaNote',
-    // Round D — NBFC (template-9)
-    'rbiRegNumber','cin','nbfcCategory',
-    'mitcLinkLabel','fairPracticeLinkLabel','sachetLinkLabel',
-    'heroRatePanelTitle','heroRatePanelProduct','heroRateValue','heroRateUnit',
-    'productsLabel','productsHeadline','productsBody',
-    'eligibilityLabel','eligibilityHeadline',
-    'chargesLabel','chargesHeadline','chargesBody','chargesNote',
-    'grievanceLabel','grievanceHeadline','grievanceBody',
-    'groName','groRole','groEmail','groPhone','groAddress','groTimings',
-    // Round E — Restaurant (template-10)
-    'heroOpenStatus',
-    'chefName','chefRole','chefBio',
-    'signaturesLabel','signaturesHeadline',
-    'menuLabel','menuHeadline','menuIntro',
-    'ctaPhone',
-    // Round E — Portfolio (template-11)
-    'heroNameLead','heroNameTail','heroRole',
-    'aboutLocationLine',
-    'workLabel','workHeadline'
-  ];
-  for (const k of strKeys) if (data[k] === undefined) data[k] = '';
-
-  const arrKeys = ['services','processSteps','values','testimonials','trustItems','stats','hoursList',
-                   'faqs','areasServed','logos','features','howItWorks','plans','policies','whyPoints',
-                   'statBoxes','credentials','claimSteps',
-                   // Round B — Agency (template-2) + BFSI (template-6)
-                   'tickerItems','aboutTags','aboutStats','numberStats',
-                   'heroTrustBadges','heroRates','marqueeItems','pillars',
-                   'heritageStats','certifications','depositRates','lendingRates','contactPerks',
-                   // Round C — Terminal (template-3) + Web3 (template-4)
-                   'heroTypingLines','statusItems','stackItems',
-                   'heroPortfolioChips','tickerTokens','dataRows','chains',
-                   // Round D — NBFC (template-9)
-                   'heroRateBenefits','trustBadges','products',
-                   'eligibilityCriteria','documentsList','rateRows','aboutPillars',
-                   'ratings','escalationLevels',
-                   // Round E — Restaurant (template-10)
-                   'signatureDishes','menuCategories','reviews','pressItems',
-                   // Round E — Portfolio (template-11)
-                   'skillsItems','workItems','clientList'];
-  for (const k of arrKeys) if (!Array.isArray(data[k])) data[k] = [];
-  return data;
-}
 
 // Preview (no payment, renders HTML only)
 app.post('/api/preview', async (req, res) => {
@@ -576,7 +482,7 @@ app.post('/api/preview', async (req, res) => {
     const html = await ejsLib.renderFile(tplFile, buildTemplateData(data), { async: true });
     res.type('html').send(html);
   } catch (err) {
-    console.error('Preview error:', err);
+    logger.error({ error: err.message, stack: err.stack }, 'Preview error');
     res.status(500).json({ error: err.message });
   }
 });
@@ -586,8 +492,14 @@ app.post('/api/generate', genLimiter, async (req, res) => {
   try {
     const { template, data = {}, paymentId } = req.body || {};
     if (!paymentId) return res.status(402).json({ error: 'Payment required' });
-    const gate = consumePayment(paymentId);
-    if (!gate.ok) return res.status(402).json({ error: gate.reason });
+
+    // Admin bypass — skip payment validation entirely
+    if (String(paymentId).startsWith('admin_bypass_')) {
+      logger.info({ paymentId }, 'Admin ZIP download (payment bypassed)');
+    } else {
+      const gate = consumePayment(paymentId);
+      if (!gate.ok) return res.status(402).json({ error: gate.reason });
+    }
 
     const tplFile = templatePath(template);
     const normalized = buildTemplateData(data);
@@ -626,11 +538,40 @@ app.post('/api/generate', genLimiter, async (req, res) => {
 
     await archive.finalize();
   } catch (err) {
-    console.error('Generate error:', err);
+    logger.error({ error: err.message, stack: err.stack }, 'Generate error');
     if (!res.headersSent) res.status(500).json({ error: err.message });
   }
 });
 
 // ── Boot ────────────────────────────────────────────────
-const PORT = process.env.PORT || 3000;
-app.listen(PORT, () => console.log(`▶ Server running on http://localhost:${PORT}`));
+async function start() {
+  const PORT = process.env.PORT || 3000;
+
+  try {
+    if (process.env.DB_HOST) {
+      await connectDatabase();
+    } else {
+      logger.warn('DB_HOST not set, running without database');
+    }
+  } catch (err) {
+    logger.error('Failed to connect to database:', err);
+    if (process.env.NODE_ENV === 'production') {
+      process.exit(1);
+    }
+  }
+
+  app.listen(PORT, () => {
+    logger.info({ port: PORT }, 'Server started');
+    if (process.env.NODE_ENV !== 'production') {
+      console.log(`▶ Server running on http://localhost:${PORT}`);
+    }
+  });
+}
+
+start();
+
+process.on('SIGTERM', async () => {
+  logger.info('SIGTERM received, shutting down gracefully');
+  await disconnectDatabase();
+  process.exit(0);
+});

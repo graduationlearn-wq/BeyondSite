@@ -1,0 +1,40 @@
+database:
+  host: "${DB_HOST:localhost}"
+  port: "${DB_PORT:3306}"
+  name: "${DB_NAME:website_generator}"
+  user: "${DB_USER:app_user}"
+  password: "${DB_PASSWORD:}"
+  pool:
+    min: 2
+    max: 10
+
+auth0:
+  domain: "${AUTH0_DOMAIN:}"
+  clientId: "${AUTH0_CLIENT_ID:}"
+  clientSecret: "${AUTH0_CLIENT_SECRET:}"
+  audience: "${AUTH0_AUDIENCE:}"
+  roles:
+    admin: "admin"
+    customer: "customer"
+
+ai:
+  gemini:
+    apiKey: "${GEMINI_API_KEY:}"
+  groq:
+    apiKey: "${GROQ_API_KEY:}"
+
+payment:
+  provider: "dummy"  # or "razorpay", "stripe"
+  dummy:
+    ttlMinutes: 30
+
+logging:
+  level: "${LOG_LEVEL:info}"
+  format: json
+  fields:
+    service: "static-website-generator"
+    environment: "${NODE_ENV:development}"
+
+server:
+  port: "${PORT:3000}"
+  trustProxy: true

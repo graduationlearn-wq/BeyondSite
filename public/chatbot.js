@@ -9,7 +9,8 @@
   const STATE = {
     open: false,
     sending: false,
-    history: []   // [{role, content}]
+    history: [],   // [{role, content}]
+    welcomeShown: false
   };
 
   // ── LOCAL INTENT MATCHERS ───────────────────────────────────────
@@ -190,12 +191,19 @@
     panel.setAttribute('aria-hidden', STATE.open ? 'false' : 'true');
     bubble.classList.toggle('open', STATE.open);
     if (STATE.open) {
-      if (STATE.history.length === 0) addBotMessage(welcomeMessage(), { silent: true });
+      if (!STATE.welcomeShown) {
+        addBotMessage(welcomeMessage(), { silent: true });
+        STATE.welcomeShown = true;
+      }
       setTimeout(() => inputEl && inputEl.focus(), 220);
     }
   }
 
   function welcomeMessage() {
+    const loginState = checkLogin();
+    if (!loginState) {
+      return `🔒 Please log in to use the chatbot. Go to the top right to log in. Once logged in, I can help you with WebSite Builder — ask about templates, fields, the ✨ AI button, or the preview/payment flow.`;
+    }
     const ctx = gatherContext();
     if (ctx.templateId) {
       return `Hi! I'm here to help you with WebSite Builder. I can see you're on the **${humanTemplateName(ctx.templateId)}** template — feel free to ask about any field, what good copy looks like, or how the ✨ AI button works.`;
@@ -259,11 +267,34 @@
     return bubbleEl;
   }
 
+  // ── Check if user is logged in ───────────────────────────────────
+  function checkLogin() {
+    const stored = localStorage.getItem('beyondsite_login');
+    if (stored) {
+      try {
+        return JSON.parse(stored);
+      } catch (e) {
+        return null;
+      }
+    }
+    return null;
+  }
+
   // ── Send (local-intent fast path → API fallback) ────────────────
   async function send() {
     if (STATE.sending) return;
     const text = (inputEl.value || '').trim();
     if (!text) return;
+
+    // Check login - if not logged in, show hardcoded message
+    const loginState = checkLogin();
+    if (!loginState) {
+      addUserMessage(text);
+      inputEl.value = '';
+      autoGrow();
+      addBotMessage('🔒 Please log in to use the chatbot. Go to the top right to log in.');
+      return;
+    }
 
     addUserMessage(text);
     inputEl.value = '';

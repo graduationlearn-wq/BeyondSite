@@ -1,0 +1,112 @@
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "mysql"
+  url      = env("DATABASE_URL")
+}
+
+model User {
+  id            String   @id @default(cuid())
+  auth0Id       String   @unique
+  email         String   @unique
+  role          Role     @default(CUSTOMER)
+  name          String?
+  createdAt     DateTime @default(now())
+  updatedAt     DateTime @updatedAt
+
+  websites      Website[]
+  drafts        Draft[]
+  payments      Payment[]
+  downloads     Download[]
+
+  @@map("users")
+}
+
+enum Role {
+  ADMIN
+  CUSTOMER
+}
+
+model Website {
+  id          String   @id @default(cuid())
+  userId      String
+  user        User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  name        String
+  templateId  String
+  data        Json
+  status      WebsiteStatus @default(DRAFT)
+
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
+
+  @@index([userId])
+  @@map("websites")
+}
+
+enum WebsiteStatus {
+  DRAFT
+  PUBLISHED
+  ARCHIVED
+}
+
+model Draft {
+  id          String   @id @default(cuid())
+  userId      String
+  user        User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+  templateId  String   @db.VarChar(32)
+  formData    Json
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
+
+  @@unique([userId, templateId])
+  @@map("drafts")
+}
+
+model Download {
+  id           String   @id @default(cuid())
+  userId       String
+  user         User     @relation(fields: [userId], references: [id], onDelete: Restrict)
+  paymentId    String
+  payment      Payment  @relation(fields: [paymentId], references: [id], onDelete: Restrict)
+  templateId   String
+  downloadedAt DateTime @default(now())
+
+  @@map("downloads")
+}
+
+model Template {
+  templateId   String   @id @db.VarChar(32)
+  displayName  String
+  isPublished  Boolean  @default(false)
+  createdAt    DateTime @default(now())
+
+  @@map("templates")
+}
+
+model Payment {
+  id          String   @id @default(cuid())
+  userId      String?
+  user        User?    @relation(fields: [userId], references: [id], onDelete: Restrict)
+
+  paymentId   String   @unique
+  amount      Int
+  currency    String   @default("INR")
+  status      PaymentStatus @default(CREATED)
+  templateId  String
+  usedAt      DateTime?
+  createdAt   DateTime @default(now())
+
+  downloads   Download[]
+
+  @@map("payments")
+}
+
+enum PaymentStatus {
+  CREATED
+  PAID
+  FAILED
+  REFUNDED
+}

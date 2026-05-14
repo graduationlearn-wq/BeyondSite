@@ -79,7 +79,15 @@ function buildTemplateData(payload = {}) {
     'heroOpenStatus','chefName','chefRole','chefBio',
     'signaturesLabel','signaturesHeadline','menuLabel','menuHeadline','menuIntro','ctaPhone',
     // Round E — Portfolio (template-11)
-    'heroNameLead','heroNameTail','heroRole','aboutLocationLine','workLabel','workHeadline'
+    'heroNameLead','heroNameTail','heroRole','aboutLocationLine','workLabel','workHeadline',
+    // Round F — InsurTech SaaS (template-12)
+    'codeLanguage','codeSnippet','howLabel','howHeadline',
+    'complianceLabel','complianceHeadline','complianceBody',
+    'pricingLabel','pricingHeadline',
+    // Round F — Insurance Market (template-13)
+    'quoteCardTitle','quoteCardNote',
+    'categoriesLabel','categoriesHeadline','categoriesBody',
+    'whyLabel','partnersLabel'
   ];
   for (const k of strKeys) if (data[k] === undefined) data[k] = '';
 
@@ -100,7 +108,10 @@ function buildTemplateData(payload = {}) {
                    // Round E — Restaurant
                    'signatureDishes','menuCategories','reviews','pressItems',
                    // Round E — Portfolio
-                   'skillsItems','workItems','clientList'];
+                   'skillsItems','workItems','clientList',
+                   // Round F — InsurTech SaaS + Insurance Market
+                   'customerLogos','howSteps','platformStats','complianceBadges','pricingPlans',
+                   'categories','whyPoints','marketStats','insurerPartners','marketReviews'];
   for (const k of arrKeys) if (!Array.isArray(data[k])) data[k] = [];
   return data;
 }
@@ -983,6 +994,160 @@ function portfolioSample() {
   };
 }
 
+function insurtechSample() {
+  return {
+    ...commonSample,
+    businessName: 'Heph',
+    tagline: 'Insurance APIs for the modern stack.',
+    _description: 'Heph is a B2B InsurTech API platform powering insurers, brokers, and embedded-insurance teams. Quote, underwrite, claim — one developer-first stack. SOC 2 Type II, IRDAI-aligned. Founded 2020 in Bangalore.',
+    primaryColor: '#00dcb4',
+    foundedYear: '2020',
+    tone: 'professional',
+    heroBadge: 'SOC 2 Type II · IRDAI-aligned',
+    heroHeadlineLead: 'Insurance APIs for the',
+    heroHeadlineAccent: 'modern stack.',
+    heroSub: 'Quote, underwrite, and settle claims through one developer-first platform. Used by 80+ insurers and brokers across India to ship products in days, not quarters.',
+    heroCtaPrimary: 'Get API Keys',
+    heroCtaSecondary: 'Read Docs',
+    codeLanguage: 'node.js',
+    codeSnippet: `const heph = new Heph(process.env.HEPH_KEY);
+
+const quote = await heph.quotes.create({
+  product: 'health',
+  age: 32,
+  city: 'mumbai',
+  cover: 1000000
+});
+
+console.log(quote.premium);
+// → 8420 (₹/year, GST inclusive)`,
+    customerLogos: [
+      { name:'Acko' }, { name:'Digit' }, { name:'Bajaj Allianz' }, { name:'Star Health' },
+      { name:'HDFC Ergo' }, { name:'Tata AIG' }, { name:'Care Health' }, { name:'PolicyBazaar' }
+    ],
+    productsLabel: 'API Suite',
+    productsHeadline: 'One stack. Every insurance primitive.',
+    productsBody: 'A coherent set of APIs designed by engineers who shipped insurance infrastructure at scale. Pick what you need, ignore the rest.',
+    products: [
+      { icon:'⚡', name:'Quotes API',        body:'Sub-100ms quotes across 30+ insurers. Smart caching, fallback handling, and full normalisation across products.', endpoint:'POST /v1/quotes' },
+      { icon:'🛡', name:'Underwriting API',  body:'Risk scoring with explainable signals. Returns approve / refer / decline plus the precise reasons regulators ask for.', endpoint:'POST /v1/underwrite' },
+      { icon:'📋', name:'Claims API',         body:'File, track, and settle claims through one endpoint. Document OCR, auto-fraud scoring, and SLA dashboards built in.',   endpoint:'POST /v1/claims' },
+      { icon:'🔐', name:'KYC & AML',           body:'Aadhaar, PAN, video KYC, sanctions screening — all bundled with audit trails ready for IRDAI inspections.',         endpoint:'POST /v1/kyc' },
+      { icon:'📊', name:'Analytics API',       body:'Customer cohort, claims-ratio, and product-mix dashboards delivered as JSON. Plug straight into your BI stack.',     endpoint:'GET  /v1/analytics' },
+      { icon:'🔔', name:'Webhooks',           body:'Reliable, signed, idempotent event delivery. Every quote, policy, and claim triggers events with retries and DLQs.',   endpoint:'POST /v1/webhooks' }
+    ],
+    howLabel: 'Integration',
+    howHeadline: 'Live in days, not quarters.',
+    howSteps: [
+      { title:'Sign up',        body:'Create a sandbox account. No credit card required, no sales call to start.',                              duration:'5 minutes' },
+      { title:'Get API keys',   body:'Generate sandbox + production keys in the dashboard. Rotate, scope, and revoke any time.',                duration:'Instant' },
+      { title:'Build & test',   body:'Code against the sandbox with realistic mock data. Full request logs, replay, and time-travel debugging.', duration:'1–3 days' },
+      { title:'Ship to prod',   body:'Flip the keys, deploy. We monitor with you for the first 30 days through a shared Slack channel.',         duration:'Same day' }
+    ],
+    platformStats: [
+      { value:'99.99', suffix:'%',   label:'Uptime SLA · 12 months' },
+      { value:'80',    suffix:'+',   label:'Insurers integrated' },
+      { value:'2.4',   suffix:'B+',  label:'Annual API calls' },
+      { value:'<80',   suffix:'ms',  label:'Median quote latency' }
+    ],
+    complianceLabel: 'Compliance & Security',
+    complianceHeadline: 'Built for regulated workloads.',
+    complianceBody: 'Every layer of the platform is built to satisfy regulatory and security audits — IRDAI inspections, RBI scrutiny, IT-Act and DPDP compliance, and the security reviews your customers will run on you. We publish a SOC 2 Type II report and an IRDAI compliance addendum to every customer on request.',
+    complianceBadges: [
+      { label:'SOC 2 Type II' }, { label:'ISO 27001' }, { label:'IRDAI Aligned' }, { label:'DPDP Compliant' },
+      { label:'IT-Act Compliant' }, { label:'PCI-DSS Level 1' }, { label:'CKYCR Linked' }, { label:'AES-256 at rest' }
+    ],
+    pricingLabel: 'Pricing',
+    pricingHeadline: 'Transparent, scaling pricing.',
+    pricingPlans: [
+      { name:'Starter',    price:'Free',          tagline:'For exploring the API',          popular:'No',  cta:'Start building',   features:'1,000 sandbox calls / month\nCommunity support\n3 webhook endpoints\nBasic dashboards' },
+      { name:'Growth',     price:'₹49,000 / mo',  tagline:'For shipping products',           popular:'Yes', cta:'Talk to sales',    features:'500K production calls / month\n24-hour priority support\nUnlimited webhooks\nAdvanced analytics\n99.9% SLA' },
+      { name:'Enterprise', price:'Custom',        tagline:'For regulated incumbents',        popular:'No',  cta:'Contact sales',    features:'Custom volume & rate limits\nDedicated CSM + Slack channel\nVPC peering & private link\nCustom SLAs up to 99.99%\nOn-prem deployment available' }
+    ],
+    ctaHeadlineLead: 'Ready to integrate',
+    ctaHeadlineAccent: 'in 24 hours?',
+    ctaBody: 'Sandbox keys, full docs, and a Slack channel with our engineers — that\'s how integrations move from "let me explore" to "shipped" in a week.',
+    ctaButton: 'Get API Keys',
+    ctaNote: 'Sandbox keys are free · No credit card required',
+    email: 'partners@heph.dev',
+    phone: '+91 80 4567 8900',
+    address: 'Indiranagar, Bangalore 560038',
+    hours: 'Mon–Fri · 09:00–18:00 IST'
+  };
+}
+
+function insuranceMarketSample() {
+  return {
+    ...commonSample,
+    businessName: 'Turtlemint',
+    tagline: 'Compare. Buy. Claim. All under one roof.',
+    _description: 'Turtlemint is an IRDAI-licensed insurance broker that helps Indian families compare and buy insurance from 50+ licensed carriers. 12 lakh+ customers served. 97% claim assistance success rate. Founded in 2014 in Mumbai.',
+    primaryColor: '#00856f',
+    foundedYear: '2014',
+    tone: 'friendly',
+    heroEyebrow: 'IRDAI-licensed broker · serving since 2014',
+    heroHeadlineLead: 'Compare insurance,',
+    heroHeadlineEmph: 'find your fit.',
+    heroSub: 'Quotes from 50+ IRDAI-licensed insurers in 30 seconds. Independent advice from licensed advisors. Real claim assistance when you need it most.',
+    heroCtaPrimary: 'Compare Now',
+    heroCtaSecondary: 'Talk to Advisor',
+    quoteCardTitle: 'Get a free quote in 30 seconds',
+    quoteCardNote: 'No obligation · No spam · IRDAI Lic. CB-XXX/2014',
+    categoriesLabel: 'What we cover',
+    categoriesHeadline: 'Find the right cover for every life moment.',
+    categoriesBody: 'Health, motor, life, home, travel — every category, every major insurer in India. Compare apples-to-apples and pick what actually fits.',
+    categories: [
+      { icon:'❤️', name:'Health Insurance',  tagline:'Cashless at 8000+ hospitals', body:'Family floater and individual covers from ₹3 lakh to ₹2 crore. Pre-existing diseases, OPD, mental health — all options compared.' },
+      { icon:'🚗', name:'Car Insurance',     tagline:'Renew in 60 seconds',         body:'Comprehensive, third-party, and zero-depreciation covers from every major motor insurer. Instant policy delivery.' },
+      { icon:'🏍', name:'Two-Wheeler',       tagline:'From ₹600/year',               body:'Bike and scooter insurance with optional accident cover. Compare premiums across 25+ insurers in one tap.' },
+      { icon:'🛡', name:'Term Life',          tagline:'High cover, low premium',     body:'Pure protection covers up to ₹2 crore at premiums that won\'t hurt. Compare claim-settlement ratios honestly.' },
+      { icon:'🏠', name:'Home Insurance',     tagline:'Structure + contents covered', body:'Fire, burglary, natural-disaster cover for your house and what\'s inside. Even renters can buy.' },
+      { icon:'✈️', name:'Travel Insurance',   tagline:'For domestic & international', body:'Medical emergencies, trip cancellation, lost baggage. Schengen and student-travel plans included.' }
+    ],
+    whyLabel: 'Why us',
+    whyHeadline: 'Why thousands trust us.',
+    whyPoints: [
+      { icon:'⚖', title:'Compare 50+ Insurers',    body:'Every IRDAI-licensed major carrier in India, side-by-side. We don\'t hide options that don\'t pay us.' },
+      { icon:'💸', title:'Lowest Premiums',         body:'Direct insurer rates with our broker discount built in — usually 15–25% cheaper than buying retail.' },
+      { icon:'☎', title:'Real Claim Assistance',    body:'A dedicated case manager handles your paperwork, follow-ups, and escalations until your claim is settled.' },
+      { icon:'🛡', title:'IRDAI-Licensed Advisors',  body:'Our advisors are licensed by IRDAI and bound by Fair Practice Code. No commission-driven product pushing.' }
+    ],
+    processLabel: 'How it works',
+    processHeadline: 'From quote to claim — we handle it all.',
+    processSteps: [
+      { icon:'📝', title:'Get free quotes',        body:'Tell us about you in 30 seconds. We pull live quotes from every major insurer.' },
+      { icon:'🔍', title:'Compare side-by-side',   body:'Premium, claim ratio, hospital network, exclusions — see them all in one clear table.' },
+      { icon:'✓',  title:'Buy with one tap',        body:'Pay online, get the policy on email and WhatsApp instantly. No paperwork, no agent visits.' },
+      { icon:'🤝', title:'We handle your claim',    body:'When you need to claim, your case manager fills the forms, follows up, and stays with you till payout.' }
+    ],
+    marketStats: [
+      { value:'12',     suffix:'L+',  label:'Customers covered' },
+      { value:'50',     suffix:'+',   label:'Insurer partners' },
+      { value:'97',     suffix:'%',   label:'Claim assistance success rate' },
+      { value:'₹2,400', suffix:'Cr',  label:'Premium serviced annually' }
+    ],
+    partnersLabel: 'We compare across IRDAI-licensed insurers',
+    insurerPartners: [
+      { name:'HDFC ERGO' }, { name:'Star Health' }, { name:'ICICI Lombard' }, { name:'Bajaj Allianz' },
+      { name:'Tata AIG' }, { name:'Care Health' }, { name:'Niva Bupa' }, { name:'Reliance General' },
+      { name:'New India Assurance' }, { name:'Aditya Birla Health' }, { name:'SBI General' }, { name:'Acko' }
+    ],
+    marketReviews: [
+      { quote:'My health insurance claim was settled in 11 days flat. The case manager kept me posted at every step — no chasing, no hidden charges. Saved my family during a tough time.',           name:'Rohit Kapoor',  role:'Mumbai',    productUsed:'Health · ₹8L cashless claim · 2024' },
+      { quote:'Compared 14 motor policies in 2 minutes. Saved ₹4,200 on annual premium vs renewing direct with my old insurer. The whole thing took 5 minutes including the payment.',                name:'Priya Iyer',    role:'Bangalore', productUsed:'Car · zero-dep · 2024' },
+      { quote:'Got a term cover of ₹1.5 crore at half the premium I was paying earlier. The advisor explained every clause — no jargon, no upselling, no commission spiel.',                          name:'Anil Gupta',    role:'Pune',      productUsed:'Term Life · ₹1.5 Cr · 2024' }
+    ],
+    ctaHeadline: 'Get the right cover. In 30 seconds.',
+    ctaBody: 'Quotes from every major insurer, side-by-side. No commission added, no obligation, no spam — just a fair comparison.',
+    ctaButton: 'Compare Now',
+    ctaNote: 'Free comparison · No obligation · IRDAI Lic. CB-XXX/2014',
+    email: 'help@turtlemint.in',
+    phone: '1800 200 5000',
+    address: 'Lower Parel, Mumbai 400013',
+    hours: 'Mon–Sat · 9:00 AM – 9:00 PM IST'
+  };
+}
+
 // ── Per-template data picker ──────────────────────────────────
 function sampleFor(templateId) {
   if (templateId === 'template-2')  return agencySample();
@@ -995,6 +1160,8 @@ function sampleFor(templateId) {
   if (templateId === 'template-9')  return nbfcSample();
   if (templateId === 'template-10') return restaurantSample();
   if (templateId === 'template-11') return portfolioSample();
+  if (templateId === 'template-12') return insurtechSample();
+  if (templateId === 'template-13') return insuranceMarketSample();
   return commonSample;
 }
 
@@ -1031,11 +1198,12 @@ function errorPage(n, message) {
 
 // ── Write previews + side-by-side index ───────────────────────
 const OUTDIR = __dirname;
-const TEMPLATES = [1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11];
+const TEMPLATES = [1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13];
 const NAMES = {
   1: 'Editorial',   2: 'Agency',     3: 'Terminal',  4: 'Web3',
   5: 'Local',       6: 'BFSI',       7: 'Startup',   8: 'Insurance',
-  9: 'NBFC',       10: 'Restaurant', 11: 'Portfolio'
+  9: 'NBFC',       10: 'Restaurant', 11: 'Portfolio',
+  12: 'InsurTech SaaS', 13: 'Insurance Market'
 };
 
 const results = TEMPLATES.map(n => {
@@ -1165,7 +1333,7 @@ const indexHtml = `<!doctype html>
   </div>
 
   <div class="grid cols-2" id="grid">
-${results.map(r => `    <article class="card" data-template="${r.n}" data-schema="${[2,3,4,5,6,7,8,9,10,11].includes(r.n) ? 'yes' : 'no'}">
+${results.map(r => `    <article class="card" data-template="${r.n}" data-schema="${[2,3,4,5,6,7,8,9,10,11,12,13].includes(r.n) ? 'yes' : 'no'}">
       <div class="card-head">
         <div class="card-title">${NAMES[r.n]}<small>template-${r.n}</small></div>
         <div class="card-actions">

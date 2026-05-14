@@ -1,0 +1,163 @@
+{
+  "id": "template-13",
+  "name": "Insurance Market",
+  "extends": "_base",
+  "complianceReview": {
+    "title": "Regulatory content — please have your compliance team review before publishing.",
+    "body": "This template displays IRDAI broker/agent licence details, insurer comparisons, and claim-process descriptions. AI-generated copy in these sections is a starting draft only — the final wording must reflect your actual IRDAI registration, your actual partner insurers, and current IRDAI advertising guidelines for insurance intermediaries."
+  },
+  "sections": [
+    {
+      "id": "hero",
+      "title": "Hero",
+      "aiable": true,
+      "hint": {
+        "label": "Compare-and-buy promise",
+        "description": "Big friendly headline + a 'Get free quote' search widget on the right. The widget visually anchors the page — it's what visitors picture themselves using. Include your IRDAI licence in the eyebrow for trust."
+      },
+      "fields": [
+        { "id": "heroEyebrow",      "label": "Eyebrow (IRDAI licence + tenure, e.g. IRDAI-licensed broker · serving since 2014)", "type": "text", "max": 90, "aiable": true },
+        { "id": "heroHeadlineLead", "label": "Headline · line 1",            "type": "text", "max": 50, "placeholder": "Compare insurance,", "aiable": true },
+        { "id": "heroHeadlineEmph", "label": "Headline · italic accent",     "type": "text", "max": 40, "placeholder": "find your fit.", "aiable": true },
+        { "id": "heroSub",          "label": "Sub-headline",                  "type": "textarea", "rows": 3, "max": 280, "aiable": true },
+        { "id": "heroCtaPrimary",   "label": "Primary CTA text",              "type": "text", "max": 30, "placeholder": "Compare Now" },
+        { "id": "heroCtaSecondary", "label": "Secondary CTA text",            "type": "text", "max": 30, "placeholder": "Talk to Advisor" },
+        { "id": "quoteCardTitle",   "label": "Quote search card title",      "type": "text", "max": 50, "placeholder": "Get a free quote in 30 seconds" },
+        { "id": "quoteCardNote",    "label": "Quote card fine-print",        "type": "text", "max": 100, "placeholder": "No obligation · No spam · No commission added" }
+      ]
+    },
+    {
+      "id": "categories",
+      "title": "Insurance Categories",
+      "aiable": true,
+      "hint": {
+        "label": "Product grid",
+        "description": "Six insurance categories shown as friendly cards — Health, Motor, Term Life, Two-Wheeler, Home, Travel. Each card has a one-line tagline customers care about (e.g. 'Cashless at 8000+ hospitals')."
+      },
+      "fields": [
+        { "id": "categoriesLabel",    "label": "Section eyebrow",   "type": "text", "max": 40, "placeholder": "What we cover" },
+        { "id": "categoriesHeadline", "label": "Section headline",  "type": "text", "max": 80, "placeholder": "Find the right cover for every life moment.", "aiable": true },
+        { "id": "categoriesBody",     "label": "Section sub-copy",  "type": "textarea", "rows": 2, "max": 240, "aiable": true },
+        {
+          "id": "categories", "type": "repeater", "min": 3, "max": 9, "itemLabel": "Category",
+          "item": [
+            { "id": "icon",    "label": "Icon (single emoji)",      "type": "text", "max": 4, "placeholder": "❤️" },
+            { "id": "name",    "label": "Category name",            "type": "text", "required": true, "max": 50, "placeholder": "Health Insurance" },
+            { "id": "tagline", "label": "Short tagline",             "type": "text", "max": 60, "placeholder": "Cashless at 8000+ hospitals" },
+            { "id": "body",    "label": "Description",              "type": "textarea", "rows": 2, "max": 200, "aiable": true }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "whyChoose",
+      "title": "Why Choose Us",
+      "aiable": true,
+      "hint": {
+        "label": "Trust differentiators",
+        "description": "Four reasons customers should pick you over going direct to insurers — breadth of comparison, lowest prices, claim assistance, IRDAI-licensed. These reduce the 'why use a broker?' objection."
+      },
+      "fields": [
+        { "id": "whyLabel",    "label": "Section eyebrow",   "type": "text", "max": 40, "placeholder": "Why us" },
+        { "id": "whyHeadline", "label": "Section headline",  "type": "text", "max": 80, "placeholder": "Why thousands trust us.", "aiable": true },
+        {
+          "id": "whyPoints", "type": "repeater", "min": 3, "max": 6, "itemLabel": "Reason",
+          "item": [
+            { "id": "icon",  "label": "Icon (single emoji)", "type": "text", "max": 4, "placeholder": "⚖" },
+            { "id": "title", "label": "Short title",         "type": "text", "required": true, "max": 50, "placeholder": "Compare 50+ Insurers" },
+            { "id": "body",  "label": "Body",                "type": "textarea", "rows": 2, "max": 220, "aiable": true }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "process",
+      "title": "How It Works (4 steps)",
+      "hint": {
+        "label": "Buy + claim journey",
+        "description": "Four steps from comparison to claim — Get quotes → Compare → Buy → Claim assistance. The final 'we help with claims' step is the differentiator vs. going to an insurer directly."
+      },
+      "fields": [
+        { "id": "processLabel",    "label": "Section eyebrow",  "type": "text", "max": 40, "placeholder": "How it works" },
+        { "id": "processHeadline", "label": "Section headline", "type": "text", "max": 80, "placeholder": "From quote to claim — we handle it all." },
+        {
+          "id": "processSteps", "type": "repeater", "min": 4, "max": 4, "itemLabel": "Step",
+          "item": [
+            { "id": "icon",  "label": "Icon (single emoji)",          "type": "text", "max": 4, "placeholder": "📝" },
+            { "id": "title", "label": "Step title",                    "type": "text", "required": true, "max": 40, "placeholder": "Get free quotes" },
+            { "id": "body",  "label": "Step body",                     "type": "textarea", "rows": 2, "max": 200 }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "stats",
+      "title": "Stats Band",
+      "hint": {
+        "label": "The trust numbers",
+        "description": "Four big numbers — customers served, insurers on the platform, claim ratio, premium saved. Use specific, verifiable figures."
+      },
+      "fields": [
+        {
+          "id": "marketStats", "type": "repeater", "min": 2, "max": 4, "itemLabel": "Stat",
+          "item": [
+            { "id": "value",  "label": "Number",                      "type": "text", "max": 12, "placeholder": "12" },
+            { "id": "suffix", "label": "Suffix (e.g. L+, %, Cr)",     "type": "text", "max": 8,  "placeholder": "L+" },
+            { "id": "label",  "label": "Label",                        "type": "text", "max": 60, "placeholder": "Customers covered" }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "partners",
+      "title": "Insurer Partners Strip",
+      "hint": {
+        "label": "List of IRDAI-licensed partners",
+        "description": "A scrolling strip of insurer names you compare across. All partners must be actual IRDAI-licensed insurers — listing carriers you don't work with is a regulatory issue."
+      },
+      "fields": [
+        { "id": "partnersLabel", "label": "Section caption", "type": "text", "max": 60, "placeholder": "We compare across IRDAI-licensed insurers" },
+        {
+          "id": "insurerPartners", "type": "repeater", "min": 0, "max": 16, "itemLabel": "Insurer",
+          "item": [
+            { "id": "name", "label": "Insurer name", "type": "text", "max": 40 }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "testimonials",
+      "title": "Customer Stories",
+      "hint": {
+        "label": "Real claim outcomes",
+        "description": "Quotes from real customers — especially those whose claims were processed. The 'product used' line shows specifics that sell credibility (e.g. 'Health · ₹8L cashless claim · 2024')."
+      },
+      "fields": [
+        {
+          "id": "marketReviews", "type": "repeater", "min": 0, "max": 6, "itemLabel": "Review",
+          "item": [
+            { "id": "quote",       "label": "Quote",                "type": "textarea", "rows": 3, "max": 320 },
+            { "id": "name",        "label": "Customer name",        "type": "text", "max": 60 },
+            { "id": "role",        "label": "Location",             "type": "text", "max": 60 },
+            { "id": "productUsed", "label": "Product / outcome (e.g. Health · ₹8L cashless claim · 2024)", "type": "text", "max": 80 }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "cta",
+      "title": "CTA Band",
+      "aiable": true,
+      "hint": {
+        "label": "The 'compare now' nudge",
+        "description": "Big friendly invitation to start the comparison flow. Action verbs ('Compare', 'Get Quote'), low-friction reassurance ('No obligation · 30 seconds')."
+      },
+      "fields": [
+        { "id": "ctaHeadline", "label": "CTA headline",           "type": "text", "max": 80, "aiable": true, "placeholder": "Get the right cover. In 30 seconds." },
+        { "id": "ctaBody",     "label": "Supporting line",        "type": "text", "max": 220, "aiable": true },
+        { "id": "ctaButton",   "label": "Button text",            "type": "text", "max": 30, "placeholder": "Compare Now" },
+        { "id": "ctaNote",     "label": "Fine print under button","type": "text", "max": 100, "placeholder": "Free comparison · No obligation · IRDAI Lic. CB-XXX/2014" }
+      ]
+    }
+  ]
+}

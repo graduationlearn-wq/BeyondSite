@@ -13,23 +13,29 @@
   const HOVER_DELAY_MS     = 1500;   // desktop hover before preview opens
   const LONGPRESS_DELAY_MS = 600;    // touch hold before preview opens
   const AUTOCLOSE_DELAY_MS = 280;    // grace period after cursor leaves modal
-  const VP_WIDTHS = { desktop: 1280, tablet: 820, mobile: 420 };
+  // Device dimensions — width is the "natural" CSS viewport the iframe renders at.
+  // Ratio is height/width: 16:9 desktop, 4:3 tablet portrait, 19:9 modern phone.
+  const VP_DIMS = {
+    desktop: { w: 1280, h:  720 },   // 16:9
+    tablet:  { w:  820, h: 1100 },   // ~3:4 portrait
+    mobile:  { w:  420, h:  900 }    // ~9:19 portrait phone
+  };
   const VP_LABELS = { desktop: 'Desktop', tablet: 'Tablet', mobile: 'Mobile' };
 
   const TEMPLATE_NAMES = {
-    'template-1':           'Editorial',
-    'template-2':           'Agency',
-    'template-3':           'Terminal / Dev Studio',
-    'template-4':           'Web3 / Protocol',
-    'template-5':           'Local Service',
-    'template-6':           'BFSI / Banking',
-    'template-7':           'Startup / SaaS',
-    'template-8':           'Insurance Advisor',
-    'template-9':           'NBFC / Lender',
-    'template-10':          'Restaurant / Café',
-    'template-11':          'Portfolio / Freelancer',
-    'template-heph':        'InsurTech SaaS',
-    'template-turtlemint':  'Insurance Market'
+    'template-1':  'Editorial',
+    'template-2':  'Agency',
+    'template-3':  'Terminal / Dev Studio',
+    'template-4':  'Web3 / Protocol',
+    'template-5':  'Local Service',
+    'template-6':  'BFSI / Banking',
+    'template-7':  'Startup / SaaS',
+    'template-8':  'Insurance Advisor',
+    'template-9':  'NBFC / Lender',
+    'template-10': 'Restaurant / Café',
+    'template-11': 'Portfolio / Freelancer',
+    'template-12': 'InsurTech SaaS',
+    'template-13': 'Insurance Market'
   };
 
   let hoverTimer     = null;
@@ -84,7 +90,10 @@
       loading: 'lazy'
     });
 
-    const frameWrap = el('div', { class: 'tpv-frame-wrap' }, frameEl);
+    // Stage takes the actual scaled-down layout space (so flex centering works);
+    // the iframe inside renders at natural viewport width and is scaled to fit.
+    const frameStage = el('div', { class: 'tpv-frame-stage' }, frameEl);
+    const frameWrap  = el('div', { class: 'tpv-frame-wrap' }, frameStage);
 
     const confirmBtn = el('button', {
       class: 'tpv-confirm',
@@ -127,7 +136,7 @@
 
     document.body.appendChild(backdrop);
 
-    modalEls = { backdrop, modal, titleEl, frameEl, frameWrap, deviceBtns, confirmBtn };
+    modalEls = { backdrop, modal, titleEl, frameEl, frameStage, frameWrap, deviceBtns, confirmBtn };
     return modalEls;
   }
 
@@ -190,17 +199,34 @@
   function layoutFrame() {
     if (!modalEls) return;
     const wrap  = modalEls.frameWrap;
+    const stage = modalEls.frameStage;
     const frame = modalEls.frameEl;
-    const vpW   = VP_WIDTHS[activeDevice];
-    const cardW = wrap.clientWidth;
-    const cardH = wrap.clientHeight;
-    if (!cardW || !cardH) return;
+    const dims  = VP_DIMS[activeDevice];
+    if (!dims) return;
 
-    const scale = Math.min(1, cardW / vpW);
-    frame.style.width  = vpW + 'px';
-    frame.style.height = (cardH / scale) + 'px';
+    // Available area inside the wrap (minus its padding)
+    const cs = window.getComputedStyle(wrap);
+    const padX = parseFloat(cs.paddingLeft) + parseFloat(cs.paddingRight);
+    const padY = parseFloat(cs.paddingTop)  + parseFloat(cs.paddingBottom);
+    const availW = wrap.clientWidth  - padX;
+    const availH = wrap.clientHeight - padY;
+    if (availW <= 0 || availH <= 0) return;
+
+    // Uniform scale — fits the chosen device's WxH inside the available area
+    const scale = Math.min(availW / dims.w, availH / dims.h, 1);
+
+    // Stage takes the actual visible (scaled-down) dimensions so the wrap's
+    // flex centering works correctly. The iframe inside renders at natural
+    // viewport size and is scaled via CSS transform.
+    stage.style.width  = (dims.w * scale) + 'px';
+    stage.style.height = (dims.h * scale) + 'px';
+
+    frame.style.width  = dims.w + 'px';
+    frame.style.height = dims.h + 'px';
     frame.style.transform = `scale(${scale})`;
     frame.style.transformOrigin = 'top left';
+    // Mark device on stage for CSS styling (rounded corners on tablet/mobile, etc.)
+    stage.dataset.device = activeDevice;
   }
 
   function confirmSelection() {

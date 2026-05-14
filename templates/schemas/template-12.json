@@ -1,0 +1,164 @@
+{
+  "id": "template-12",
+  "name": "InsurTech SaaS",
+  "extends": "_base",
+  "sections": [
+    {
+      "id": "hero",
+      "title": "Hero",
+      "aiable": true,
+      "hint": {
+        "label": "Pitch + code sample",
+        "description": "A B2B API platform headline on the left, a small live-looking code snippet on the right. The badge at the top sells trust ('SOC 2 Type II', 'IRDAI-aligned'). Keep the headline ruthlessly specific about what the API does."
+      },
+      "fields": [
+        { "id": "heroBadge",         "label": "Top badge (e.g. SOC 2 Type II · IRDAI-aligned)", "type": "text", "max": 60, "aiable": true },
+        { "id": "heroHeadlineLead",  "label": "Headline · everything except accent",            "type": "text", "max": 60, "placeholder": "Insurance APIs for the", "aiable": true },
+        { "id": "heroHeadlineAccent","label": "Headline · accent word(s) (cyan)",               "type": "text", "max": 30, "placeholder": "modern stack.", "aiable": true },
+        { "id": "heroSub",           "label": "Sub-headline",                                    "type": "textarea", "rows": 3, "max": 280, "aiable": true },
+        { "id": "heroCtaPrimary",    "label": "Primary CTA text",                                "type": "text", "max": 30, "placeholder": "Get API Keys" },
+        { "id": "heroCtaSecondary",  "label": "Secondary CTA text",                              "type": "text", "max": 30, "placeholder": "Read Docs" },
+        { "id": "codeLanguage",      "label": "Code panel language label",                       "type": "text", "max": 20, "placeholder": "node.js" },
+        { "id": "codeSnippet",       "label": "Code snippet (multi-line, displayed verbatim)",   "type": "textarea", "rows": 8, "max": 800,
+          "placeholder": "const acme = new Acme(process.env.ACME_KEY);\n\nconst quote = await acme.quotes.create({\n  product: 'health',\n  age: 32,\n  city: 'mumbai'\n});\n\nconsole.log(quote.premium);" }
+      ]
+    },
+    {
+      "id": "logos",
+      "title": "Customer Logos Strip",
+      "hint": {
+        "label": "Quick credibility — who builds on you",
+        "description": "A single line of customer or partner names. Plain text in a clean serif works better than fake logos. Six to eight names is the sweet spot."
+      },
+      "fields": [
+        {
+          "id": "customerLogos", "type": "repeater", "min": 0, "max": 10, "itemLabel": "Customer",
+          "item": [
+            { "id": "name", "label": "Customer / partner name", "type": "text", "max": 40 }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "products",
+      "title": "API Products",
+      "aiable": true,
+      "hint": {
+        "label": "What APIs you offer",
+        "description": "Each card is one API product (Quotes, Underwriting, Claims, Compliance, etc.). Endpoint stub on the card adds technical credibility — keep it short and realistic."
+      },
+      "fields": [
+        { "id": "productsLabel",    "label": "Section eyebrow",  "type": "text", "max": 40, "placeholder": "API Suite" },
+        { "id": "productsHeadline", "label": "Section headline", "type": "text", "max": 80, "placeholder": "One stack. Every insurance primitive.", "aiable": true },
+        { "id": "productsBody",     "label": "Section sub-copy", "type": "textarea", "rows": 2, "max": 240, "aiable": true },
+        {
+          "id": "products", "type": "repeater", "min": 3, "max": 8, "itemLabel": "Product",
+          "item": [
+            { "id": "icon",      "label": "Icon (single emoji or symbol)", "type": "text", "max": 4, "placeholder": "⚡" },
+            { "id": "name",      "label": "Product name",                  "type": "text", "required": true, "max": 60, "placeholder": "Quotes API" },
+            { "id": "body",      "label": "Short pitch",                   "type": "textarea", "rows": 2, "max": 220, "aiable": true },
+            { "id": "endpoint",  "label": "Endpoint stub (e.g. POST /v1/quotes)", "type": "text", "max": 60, "placeholder": "POST /v1/quotes" }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "howItWorks",
+      "title": "How It Works (4 steps)",
+      "aiable": true,
+      "hint": {
+        "label": "Integration journey",
+        "description": "Four-step flow showing how a customer integrates — Sign up → API key → Build → Ship. Each step has a duration tag ('5 minutes', 'within a day') that sets expectations."
+      },
+      "fields": [
+        { "id": "howLabel",    "label": "Section eyebrow",  "type": "text", "max": 40, "placeholder": "Integration" },
+        { "id": "howHeadline", "label": "Section headline", "type": "text", "max": 80, "placeholder": "Live in days, not quarters.", "aiable": true },
+        {
+          "id": "howSteps", "type": "repeater", "min": 4, "max": 4, "itemLabel": "Step",
+          "item": [
+            { "id": "title",    "label": "Step title", "type": "text", "required": true, "max": 40, "placeholder": "Sign up" },
+            { "id": "body",     "label": "Step body",  "type": "textarea", "rows": 2, "max": 200, "aiable": true },
+            { "id": "duration", "label": "Duration tag (e.g. 5 minutes)", "type": "text", "max": 30, "placeholder": "5 minutes" }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "stats",
+      "title": "Stats Band",
+      "hint": {
+        "label": "The platform-scale numbers",
+        "description": "Four big numbers that make a CTO trust the platform — uptime, transactions processed, latency, integrations. Specific numbers beat vague ones."
+      },
+      "fields": [
+        {
+          "id": "platformStats", "type": "repeater", "min": 2, "max": 4, "itemLabel": "Stat",
+          "item": [
+            { "id": "value",  "label": "Number (e.g. 99.99, 2.4)", "type": "text", "max": 12 },
+            { "id": "suffix", "label": "Suffix (e.g. %, B+, ms, M)", "type": "text", "max": 8 },
+            { "id": "label",  "label": "Label",                       "type": "text", "max": 60 }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "compliance",
+      "title": "Compliance & Security",
+      "aiable": true,
+      "hint": {
+        "label": "Trust badges + disclosures",
+        "description": "Lists certifications and regulatory alignment — SOC 2, ISO 27001, IRDAI guidelines, DPDP compliance. Critical for B2B B2C insurance customers."
+      },
+      "fields": [
+        { "id": "complianceLabel",    "label": "Section eyebrow",  "type": "text", "max": 40, "placeholder": "Compliance & Security" },
+        { "id": "complianceHeadline", "label": "Section headline", "type": "text", "max": 80, "placeholder": "Built for regulated workloads.", "aiable": true },
+        { "id": "complianceBody",     "label": "Section sub-copy", "type": "textarea", "rows": 3, "max": 320, "aiable": true },
+        {
+          "id": "complianceBadges", "label": "Badge list", "type": "repeater", "min": 0, "max": 8, "itemLabel": "Badge",
+          "item": [
+            { "id": "label", "label": "Badge label (e.g. SOC 2 Type II)", "type": "text", "max": 40 }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "pricing",
+      "title": "Pricing Tiers",
+      "hint": {
+        "label": "Three plan cards",
+        "description": "Three pricing tiers — Starter (self-serve), Growth (popular), Enterprise (contact sales). Mark one as 'Popular' to nudge the choice. Pricing should be honest — vague pricing erodes trust."
+      },
+      "fields": [
+        { "id": "pricingLabel",    "label": "Section eyebrow",   "type": "text", "max": 40, "placeholder": "Pricing" },
+        { "id": "pricingHeadline", "label": "Section headline",  "type": "text", "max": 80, "placeholder": "Transparent, scaling pricing." },
+        {
+          "id": "pricingPlans", "type": "repeater", "min": 0, "max": 4, "itemLabel": "Plan",
+          "item": [
+            { "id": "name",     "label": "Plan name",   "type": "text", "max": 30, "placeholder": "Starter" },
+            { "id": "price",    "label": "Price line",  "type": "text", "max": 30, "placeholder": "₹0 / month" },
+            { "id": "tagline",  "label": "Tagline",     "type": "text", "max": 60, "placeholder": "For exploring the API" },
+            { "id": "popular",  "label": "Mark as popular?", "type": "select", "options": ["No","Yes"] },
+            { "id": "cta",      "label": "Button text", "type": "text", "max": 30, "placeholder": "Start building" },
+            { "id": "features", "label": "Features (one per line)", "type": "textarea", "rows": 5, "max": 400, "placeholder": "1,000 API calls / month\nCommunity support\nBasic webhooks" }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "cta",
+      "title": "CTA Band",
+      "aiable": true,
+      "hint": {
+        "label": "The 'start building' nudge",
+        "description": "A wide CTA before the contact form. For developers it should sound like 'get the keys and ship' — direct, technical, low-friction."
+      },
+      "fields": [
+        { "id": "ctaHeadlineLead",   "label": "Headline · line 1",     "type": "text", "max": 40, "placeholder": "Ready to integrate", "aiable": true },
+        { "id": "ctaHeadlineAccent", "label": "Headline · accent word(s) (cyan)", "type": "text", "max": 30, "placeholder": "in 24 hours?",   "aiable": true },
+        { "id": "ctaBody",           "label": "Supporting line",       "type": "text", "max": 240, "aiable": true },
+        { "id": "ctaButton",         "label": "Button text",           "type": "text", "max": 30, "placeholder": "Get API Keys" },
+        { "id": "ctaNote",           "label": "Fine print under button", "type": "text", "max": 100, "placeholder": "Sandbox keys are free · No credit card required" }
+      ]
+    }
+  ]
+}

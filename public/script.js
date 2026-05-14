@@ -2,6 +2,37 @@
 //  WebSiteBuilder — public/script.js
 // ==========================================================
 
+// Check login status from localStorage
+function getLoginState() {
+  const stored = localStorage.getItem('beyondsite_login');
+  if (stored) {
+    try {
+      return JSON.parse(stored);
+    } catch (e) {
+      return null;
+    }
+  }
+  return null;
+}
+
+function isLoggedIn() {
+  return getLoginState() !== null;
+}
+
+function isAdmin() {
+  const state = getLoginState();
+  return state && state.isAdmin === true;
+}
+
+// Require login - redirect to login if not logged in
+function requireLogin() {
+  if (!isLoggedIn()) {
+    window.location.href = '/login';
+    return false;
+  }
+  return true;
+}
+
 const isFormPage = document.getElementById('inputForm') !== null;
 
 if (isFormPage) {
@@ -119,12 +150,23 @@ if (isFormPage) {
 
   // ── Step 1 → Step 2 (Preview) ──
   window.showPreview = async function () {
+    // Require login (admin bypasses form requirement)
+    if (!requireLogin()) return;
+    
     const data = collectAll();
-    if (!data.businessName || !data.tagline || !data._description) {
-      return showNotification('Please fill in business name, tagline, and description', 'error');
-    }
-    if (data._description.length < 20) {
-      return showNotification('Description too short (min 20 chars)', 'error');
+    // Admin can skip form validation
+    if (!isAdmin()) {
+      if (!data.businessName || !data.tagline || !data._description) {
+        return showNotification('Please fill in business name, tagline, and description', 'error');
+      }
+      if (data._description.length < 20) {
+        return showNotification('Description too short (min 20 chars)', 'error');
+      }
+    } else {
+      // For admin with empty form, use defaults
+      if (!data.businessName) data.businessName = 'Your Business Name';
+      if (!data.tagline) data.tagline = 'Your Tagline Here';
+      if (!data._description) data._description = 'Professional services tailored to your needs. We help businesses grow with quality solutions.';
     }
 
     showLoadingOverlay(true);
@@ -206,9 +248,14 @@ if (isFormPage) {
     }
   };
 
-  // ── Download (requires paymentId) ──
+  // ── Download (requires paymentId, admin bypasses) ──
   window.downloadWebsite = async function () {
-    if (!paymentId) return showNotification('Please complete payment first', 'error');
+    // Admin bypasses payment
+    if (isAdmin()) {
+      paymentId = 'admin_bypass_' + Date.now();
+    } else if (!paymentId) {
+      return showNotification('Please complete payment first', 'error');
+    }
 
     const data = collectAll();
     showLoadingOverlay(true);

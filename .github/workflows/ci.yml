@@ -1,0 +1,42 @@
+name: CI
+
+on:
+  push:
+    branches: [main]
+  pull_request:
+    branches: [main]
+
+jobs:
+  ci:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: '20'
+          cache: 'npm'
+
+      - name: Install dependencies
+        run: npm ci
+
+      - name: Generate Prisma client
+        run: npx prisma generate
+        env:
+          DATABASE_URL: "mysql://dummy:dummy@localhost:3306/dummy"
+
+      - name: Run tests
+        run: npm test
+
+      - name: Security audit
+        run: npm audit --audit-level=high
+
+# ──────────────────────────────────────────────────────────
+# Deployment team: configure in GitHub → Settings → Branches
+#   1. Require pull request reviews before merging (1–2 reviewers)
+#   2. Require status checks to pass before merging (add "ci" as required)
+#   3. Do not allow bypassing the above rules
+# ──────────────────────────────────────────────────────────

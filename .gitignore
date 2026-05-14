@@ -3,6 +3,8 @@ node_modules/
 
 # Environment variables (NEVER commit your Gemini API key)
 .env
+.env.local
+.env.*.local
 
 # Generated website output files
 generated/
@@ -21,3 +23,14 @@ npm-debug.log*
 
 .obsidian/
 SiteMemory/
+
+# Prisma
+prisma/*.db
+prisma/migrations/
+
+# Coverage
+coverage/
+
+# Build
+dist/
+build/
