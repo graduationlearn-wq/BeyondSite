@@ -44,6 +44,7 @@ const aiLimiter  = rateLimit({ windowMs: 60*60*1000, max: 15, message: { error: 
 const genLimiter = rateLimit({ windowMs: 60*60*1000, max: 10, message: { error: 'Too many downloads.' } });
 const payLimiter = rateLimit({ windowMs: 60*60*1000, max: 20, message: { error: 'Too many payment attempts.' } });
 const chatLimiter = rateLimit({ windowMs: 10*60*1000, max: 30, message: { error: 'Too many chat messages. Please wait a moment.' } });
+const previewLimiter = rateLimit({ windowMs: 60*60*1000, max: 60, message: { error: 'Too many preview requests.' } });
 
 // ── Login (still hardcoded — auth milestone later) ──────
 app.get('/login', (req, res) => res.sendFile(path.join(__dirname, 'public', 'login.html')));
@@ -100,7 +101,11 @@ app.post('/api/login', (req, res) => {
   });
 });
 app.post('/api/register', (req, res) => {
-  const { firstName, lastName, email, password } = req.body;
+  const sanitize = (str) => String(str || '').trim().replace(/<[^>]*>/g, '');
+  const firstName = sanitize(req.body.firstName);
+  const lastName = sanitize(req.body.lastName);
+  const email = sanitize(req.body.email);
+  const { password } = req.body;
   if (!firstName || !lastName || !email || !password) {
     return res.status(400).json({ error: 'All fields are required.' });
   }
@@ -514,7 +519,7 @@ app.post('/api/pay', payLimiter, (req, res) => {
 });
 
 // Preview (no payment, renders HTML only)
-app.post('/api/preview', async (req, res) => {
+app.post('/api/preview', previewLimiter, async (req, res) => {
   try {
     const { template, data = {} } = req.body || {};
     const tplFile = templatePath(template);
