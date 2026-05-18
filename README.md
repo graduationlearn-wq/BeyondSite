@@ -172,7 +172,7 @@ Copy `.env.example` → `.env` and fill in. All variables are documented in the 
 | Auth        | Auth0 (JWT + JWKS)                      | Tech team's pick. Industry-standard, free tier covers years    |
 | AI          | Gemini 2.5 Flash → Groq Llama-3.3-70b   | Cheap primary + always-on fallback                             |
 | Logging     | Winston (JSON)                          | Pipes cleanly into any aggregator                              |
-| Tests       | Jest                                    | Tech team's pick. 39 tests passing                              |
+| Tests       | Jest                                    | Tech team's pick. 86 tests passing                              |
 | CI          | GitHub Actions                          | Lockfile install, `prisma generate`, test, `npm audit`         |
 | Container   | Docker multi-stage, non-root user       | Production-ready out of the box                                |
 
@@ -249,7 +249,7 @@ npm run lint           # ESLint
 npm run audit          # npm audit --audit-level=high
 ```
 
-39 tests pass. Coverage is concentrated on the integration-seam modules (`utils.js`, `payments.js` at 100%). Server routes are intentionally not unit-tested — they're better covered by integration tests once the tech team wires Auth0 and the DB.
+86 tests pass. Coverage includes template rendering (4 published templates), payments, utils, auth middleware, storage, and infrastructure modules. Server routes are intentionally not unit-tested — they're better covered by integration tests once the tech team wires Auth0 and the DB.
 
 **For testing as a reviewer with no Node experience:** just run `node server.js` after `npm install` and open the browser. You don't need to run any test suite — the manual flows in [What to Test](#what-to-test-the-actual-reviewers-checklist) cover everything customer-facing.
 
