@@ -34,6 +34,16 @@ jobs:
       - name: Security audit
         run: npm audit --audit-level=high
 
+      - name: Build Docker image
+        run: docker build -t test-build .
+
+      - name: Verify Docker health check
+        run: |
+          docker run -d --name test-app -p 3001:3000 test-build
+          sleep 10
+          docker exec test-app node -e "require('./src/lib/logger')"
+          docker rm -f test-app
+
 # ──────────────────────────────────────────────────────────
 # Deployment team: configure in GitHub → Settings → Branches
 #   1. Require pull request reviews before merging (1–2 reviewers)

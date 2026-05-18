@@ -23,6 +23,7 @@ npm-debug.log*
 
 .obsidian/
 SiteMemory/
+.claude/
 
 # Prisma
 prisma/*.db

@@ -197,6 +197,74 @@ If any step fails, the README's "Troubleshooting" table covers the common issues
 
 ---
 
+## Manual Test Checklist
+
+Run these tests after deployment to verify everything works:
+
+### 1. Template Rendering (Critical)
+```bash
+# Verify all 4 published templates render correctly
+cd templates && node preview-test.js
+# Expected: "13/13 templates rendered cleanly" (or at least 4 published ones)
+
+# Verify preview HTML files exist for published templates
+ls -la preview-5.html preview-8.html preview-12.html preview-13.html
+```
+
+### 2. Configuration
+```bash
+# Verify config.yaml is valid YAML
+node -e "require('js-yaml').load(require('fs').readFileSync('config.yaml'))"
+
+# Verify required environment variables are set
+echo $DATABASE_URL
+echo $AUTH0_DOMAIN
+echo $AUTH0_AUDIENCE
+```
+
+### 3. Docker Build
+```bash
+# Build the container
+docker build -t beyondsite .
+
+# Run and test health endpoint
+docker run -d -p 3001:3000 --name test beyondsite
+curl http://localhost:3001/health
+# Expected: {"status":"ok","checks":{"database":"ok"}}
+docker rm -f test
+```
+
+### 4. Payment Flow (Test Mode)
+```bash
+# Create a payment
+curl -X POST http://localhost:3000/api/pay
+# Expected: {"success":true,"paymentId":"pay_...","amount":9}
+
+# Verify payment works for generation
+curl -X POST http://localhost:3000/api/generate -H "Content-Type: application/json" -d '{"templateId":"template-5","data":{...}}'
+```
+
+### 5. Authentication
+```bash
+# Test dummy login
+curl -X POST http://localhost:3000/api/login -H "Content-Type: application/json" -d '{"email":"admin@beyondsite.com","password":"admin123"}'
+# Expected: {"success":true,"role":"admin",...}
+
+# Test protected route without auth
+curl http://localhost:3000/profile
+# Expected: 401 Unauthorized
+```
+
+### 6. End-to-End Flow
+1. Open browser to http://localhost:3000
+2. Select template (template-5, 8, 12, or 13)
+3. Fill required fields: businessName, tagline, _description
+4. Click preview - verify website renders
+5. Click pay (dummy) - verify success
+6. Click download - verify ZIP contains index.html + assets/
+
+---
+
 ## Rollback
 
 ```bash
