@@ -655,7 +655,15 @@ async function start() {
   });
 }
 
-start();
+// Only auto-start when this file is run directly (`node server.js`).
+// When it's `require()`d by a test, the test owns the lifecycle and we
+// must NOT call app.listen() — otherwise Jest reports "Cannot log
+// after tests are done" and leaks a worker handle.
+if (require.main === module) {
+  start();
+}
+
+module.exports = { app, start };
 
 process.on('SIGTERM', async () => {
   logger.info('SIGTERM received, shutting down gracefully');

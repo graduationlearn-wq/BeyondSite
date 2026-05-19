@@ -79,7 +79,33 @@ describe('Auth', () => {
   });
 
   describe('authenticate middleware', () => {
-    test('authenticate returns 401 when no token provided', async () => {
+    test('authenticate returns 401 when no token provided AND Auth0 is configured', async () => {
+      jest.resetModules();
+      // Auth0 IS configured here — so missing token must 401
+      process.env.AUTH0_DOMAIN = 'example.auth0.com';
+      process.env.AUTH0_AUDIENCE = 'https://api.example.com';
+      const { authenticate } = require('../src/lib/auth');
+      const middleware = authenticate();
+
+      const req = { headers: {} };
+      const res = {
+        status: jest.fn().mockReturnThis(),
+        json: jest.fn()
+      };
+      const next = jest.fn();
+
+      await middleware(req, res, next);
+
+      expect(res.status).toHaveBeenCalledWith(401);
+      expect(res.json).toHaveBeenCalledWith({ error: 'Authorization required' });
+      expect(next).not.toHaveBeenCalled();
+
+      // Reset for downstream tests
+      process.env.AUTH0_DOMAIN = '';
+      process.env.AUTH0_AUDIENCE = '';
+    });
+
+    test('authenticate calls next without token in dev bypass mode', async () => {
       jest.resetModules();
       process.env.AUTH0_DOMAIN = '';
       process.env.AUTH0_AUDIENCE = '';
@@ -95,8 +121,15 @@ describe('Auth', () => {
 
       await middleware(req, res, next);
 
-      expect(res.status).toHaveBeenCalledWith(401);
-      expect(res.json).toHaveBeenCalledWith({ error: 'Authorization required' });
+      // No 401 — middleware should short-circuit and attach a stub admin user
+      expect(res.status).not.toHaveBeenCalled();
+      expect(next).toHaveBeenCalled();
+      expect(req.user).toEqual({
+        id: 'dev-user',
+        email: 'dev@example.com',
+        role: 'ADMIN',
+        auth0Id: 'dev|dev'
+      });
     });
 
     test('authenticate sets req.user on successful dev bypass', async () => {
