@@ -87,6 +87,22 @@ async function getOrCreateUser(decoded) {
 function authenticate() {
   return async (req, res, next) => {
     try {
+      // ── Dev bypass ──────────────────────────────────────────────
+      // When AUTH0_DOMAIN isn't configured we're running in the demo
+      // mode that the dummy /api/login uses. Skip JWT entirely and
+      // attach a stub admin user so payment-gated / upload routes
+      // remain reachable. Matches the bypass already present in
+      // verifyToken() and getOrCreateUser() below.
+      if (!AUTH0_DOMAIN) {
+        req.user = {
+          id: 'dev-user',
+          email: 'dev@example.com',
+          role: 'ADMIN',
+          auth0Id: 'dev|dev'
+        };
+        return next();
+      }
+
       const token = extractToken(req.headers.authorization);
       if (!token) {
         return res.status(401).json({ error: 'Authorization required' });
