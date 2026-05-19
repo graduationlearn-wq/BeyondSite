@@ -1,0 +1,93 @@
+# ─────────────────────────────────────────────────────────────────────────────
+# CodeRabbit config — automated PR review on every push to a PR
+#
+# To activate this, install the CodeRabbit GitHub App once:
+#   https://github.com/marketplace/coderabbitai
+#   (free for public repos and small private repos)
+#
+# Once installed, every PR opened against `main` gets:
+#   • A high-level summary of what the PR does
+#   • Inline review comments on suspicious diffs
+#   • A walkthrough of file-level changes
+#   • Follow-up replies when you push fixes
+#
+# This file customises CodeRabbit's behaviour for BeyondSite. The path
+# instructions below teach it the project's conventions so its review
+# comments are actually useful, not generic.
+# ─────────────────────────────────────────────────────────────────────────────
+
+language: en
+early_access: false
+tone_instructions: |
+  Be direct and concise. This is a small intern project being prepared for
+  handoff to a tech team — feedback should be actionable, not academic.
+  Skip the praise sandwich. If something is fine, don't comment on it.
+
+reviews:
+  profile: chill
+  request_changes_workflow: false
+  high_level_summary: true
+  poem: false
+  review_status: true
+  collapse_walkthrough: false
+  auto_review:
+    enabled: true
+    drafts: false
+    base_branches:
+      - main
+
+  # Don't waste review tokens on generated / vendored files
+  path_filters:
+    - "!node_modules/**"
+    - "!coverage/**"
+    - "!generated/**"
+    - "!public/uploads/**"
+    - "!templates/preview-*.html"
+    - "!package-lock.json"
+    - "!prisma/migrations/**"
+
+  # Project-specific review focus per area
+  path_instructions:
+    - path: "src/lib/**"
+      instructions: |
+        Backend integration seams. Flag any new I/O call without error
+        handling. Flag any new Prisma usage without a try/catch. Check
+        that new env-var reads have a sensible default. Pay attention to
+        anything that touches `payments.js` or `auth.js` — these are the
+        production-bound surfaces.
+
+    - path: "templates/**"
+      instructions: |
+        EJS templates and schemas. Confirm the safe-locals pattern is used
+        (const L = locals || {}; const esc = ...; const def = ...). Flag
+        if a new field is read from locals without a default fallback.
+        Template-1 (Editorial) is on a legacy pattern — don't flag that.
+
+    - path: "public/*.js"
+      instructions: |
+        Vanilla frontend JS. Flag any use of innerHTML with user-provided
+        input. Flag fetch() calls without try/catch. Flag any new
+        localStorage write that could conflict with existing keys like
+        beyondsite_theme, beyondsite_role.
+
+    - path: "server.js"
+      instructions: |
+        Express 5 app, single-file. Flag any new route without input
+        validation. Flag any route handler that doesn't return on error
+        paths (Express 5 unhandled promises). Flag any new env-var read
+        without a default.
+
+    - path: "__tests__/**"
+      instructions: |
+        Jest unit tests. Flag tests that rely on global state without
+        beforeEach/afterEach reset. Don't flag the Prisma binary mismatch
+        warnings — those are a known sandbox issue.
+
+    - path: "SiteMemory/**"
+      instructions: |
+        Project documentation vault. Skip code-quality checks here.
+        Only flag if a wikilink target doesn't exist or if a date looks
+        wrong.
+
+chat:
+  auto_reply: true

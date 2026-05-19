@@ -1,0 +1,57 @@
+# ─────────────────────────────────────────────────────────────────────────────
+# Dependabot — auto-PRs for dependency updates
+#
+# What it does:
+#   • Every Monday at 06:00 IST, scans package.json for npm updates
+#   • Opens grouped PRs (one for prod deps, one for dev deps) so we don't
+#     drown in 30 separate single-bump PRs
+#   • Bumps GitHub Actions versions monthly
+#   • Always opens a PR within 24h for any security advisory
+#
+# What you do:
+#   • Review the PR (the CI workflow runs against the bumped deps)
+#   • Merge if green, close if the changelog flags a breaking change
+# ─────────────────────────────────────────────────────────────────────────────
+
+version: 2
+updates:
+  # ── npm (production + dev) ────────────────────────────────────────────────
+  - package-ecosystem: "npm"
+    directory: "/"
+    schedule:
+      interval: "weekly"
+      day: "monday"
+      time: "06:00"
+      timezone: "Asia/Kolkata"
+    open-pull-requests-limit: 5
+    labels:
+      - "dependencies"
+    commit-message:
+      prefix: "deps"
+      include: "scope"
+    groups:
+      prod-deps:
+        dependency-type: "production"
+        update-types:
+          - "minor"
+          - "patch"
+      dev-deps:
+        dependency-type: "development"
+        update-types:
+          - "minor"
+          - "patch"
+    # Ignore the noisier majors — review those manually when convenient
+    ignore:
+      - dependency-name: "*"
+        update-types:
+          - "version-update:semver-major"
+
+  # ── GitHub Actions versions used in .github/workflows/ ──────────────────
+  - package-ecosystem: "github-actions"
+    directory: "/"
+    schedule:
+      interval: "monthly"
+    labels:
+      - "ci"
+    commit-message:
+      prefix: "ci"
