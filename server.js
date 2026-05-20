@@ -82,22 +82,43 @@ const DUMMY_USERS = {
   'customer@beyondsite.com': { password: 'customer123', isAdmin: false, name: 'Customer' }
 };
 
-app.post('/api/login', (req, res) => {
+app.post('/api/login', async (req, res) => {
   const { email, password } = req.body || {};
   if (!email || !password) {
     return res.status(400).json({ error: 'Email and password are required.' });
   }
-  const account = DUMMY_USERS[String(email).toLowerCase().trim()];
+  const normalEmail = String(email).toLowerCase().trim();
+  const account = DUMMY_USERS[normalEmail];
   if (!account || account.password !== password) {
     return res.status(401).json({ error: 'Invalid email or password.' });
   }
-  logger.info({ email, isAdmin: account.isAdmin }, 'User logged in (dummy auth)');
+
+  // Persist user to DB when available — creates a real User row that draft /
+  // download foreign keys can reference. No-op (logged warning) when no DB.
+  if (prisma) {
+    try {
+      await prisma.user.upsert({
+        where:  { email: normalEmail },
+        update: { role: account.isAdmin ? 'ADMIN' : 'CUSTOMER' },
+        create: {
+          auth0Id: `dummy|${normalEmail}`,
+          email:   normalEmail,
+          name:    account.name,
+          role:    account.isAdmin ? 'ADMIN' : 'CUSTOMER'
+        }
+      });
+    } catch (err) {
+      logger.error({ error: err.message, email: normalEmail }, 'User upsert on login failed');
+    }
+  }
+
+  logger.info({ email: normalEmail, isAdmin: account.isAdmin }, 'User logged in (dummy auth)');
   return res.json({
     success: true,
     redirect: '/',
     isAdmin: account.isAdmin,
-    email,
-    name: account.name
+    email:   normalEmail,
+    name:    account.name
   });
 });
 app.post('/api/register', (req, res) => {
@@ -533,7 +554,7 @@ app.post('/api/pay', payLimiter, async (req, res) => {
 });
 
 // Verify Razorpay client-side signature (called after checkout widget succeeds)
-app.post('/api/payments/verify', payLimiter, (req, res) => {
+app.post('/api/payments/verify', payLimiter, async (req, res) => {
   const { razorpay_order_id, razorpay_payment_id, razorpay_signature } = req.body || {};
   if (!razorpay_order_id || !razorpay_payment_id || !razorpay_signature) {
     return res.status(400).json({ error: 'Missing payment verification fields.' });
@@ -541,7 +562,8 @@ app.post('/api/payments/verify', payLimiter, (req, res) => {
   try {
     const valid = verifyRazorpaySignature({ razorpay_order_id, razorpay_payment_id, razorpay_signature });
     if (!valid) return res.status(400).json({ error: 'Payment signature invalid.' });
-    markPaymentPaid(razorpay_order_id, razorpay_payment_id);
+    const marked = await markPaymentPaid(razorpay_order_id, razorpay_payment_id);
+    if (!marked) logger.warn({ orderId: razorpay_order_id }, 'markPaymentPaid: no row updated');
     logger.info({ orderId: razorpay_order_id, razorpayPaymentId: razorpay_payment_id }, 'Payment verified');
     res.json({ ok: true, paymentId: razorpay_order_id });
   } catch (err) {
@@ -553,14 +575,17 @@ app.post('/api/payments/verify', payLimiter, (req, res) => {
 // Razorpay server-to-server webhook — must receive raw body for signature check
 app.post('/api/payments/webhook',
   express.raw({ type: 'application/json' }),
-  (req, res) => {
+  async (req, res) => {
     if (!process.env.RAZORPAY_WEBHOOK_SECRET) {
       logger.warn('RAZORPAY_WEBHOOK_SECRET not set — webhook skipped');
       return res.json({ ok: true });
     }
     try {
-      const { paymentId, status } = verifyWebhook({ headers: req.headers, rawBody: req.body });
-      if (status === 'PAID') markPaymentPaid(paymentId, '');
+      const { paymentId, razorpayPaymentId, status } = verifyWebhook({ headers: req.headers, rawBody: req.body });
+      if (status === 'PAID') {
+        const marked = await markPaymentPaid(paymentId, razorpayPaymentId);
+        if (!marked) logger.warn({ paymentId }, 'Webhook markPaymentPaid: no row updated');
+      }
       logger.info({ paymentId, status }, 'Razorpay webhook processed');
       res.json({ ok: true });
     } catch (err) {
@@ -569,6 +594,54 @@ app.post('/api/payments/webhook',
     }
   }
 );
+
+// ── Draft persistence ────────────────────────────────────────────────────────
+// Key: { userId, templateId } — @@unique in schema, so upsert is idempotent.
+// Falls back silently when DB is not configured so the form keeps working.
+
+app.post('/api/draft', authenticate(), async (req, res) => {
+  const { templateId, formData } = req.body || {};
+  if (!templateId || !formData) {
+    return res.status(400).json({ error: 'templateId and formData are required.' });
+  }
+  if (typeof templateId !== 'string' || templateId.length > 32 || !/^[\w-]+$/.test(templateId)) {
+    return res.status(400).json({ error: 'Invalid templateId.' });
+  }
+  if (typeof formData !== 'object' || Array.isArray(formData)) {
+    return res.status(400).json({ error: 'formData must be an object.' });
+  }
+  if (!prisma) {
+    // No DB — acknowledge but don't persist (demo mode)
+    return res.json({ ok: true, persisted: false });
+  }
+  try {
+    const userId = req.user.id;
+    await prisma.draft.upsert({
+      where:  { userId_templateId: { userId, templateId } },
+      update: { formData },
+      create: { userId, templateId, formData }
+    });
+    res.json({ ok: true, persisted: true });
+  } catch (err) {
+    logger.error({ error: err.message, userId: req.user.id, templateId }, 'Draft save failed');
+    res.status(500).json({ error: 'Draft could not be saved.' });
+  }
+});
+
+app.get('/api/draft/:templateId', authenticate(), async (req, res) => {
+  if (!prisma) return res.json({ draft: null });
+  try {
+    const userId    = req.user.id;
+    const templateId = req.params.templateId;
+    const draft = await prisma.draft.findUnique({
+      where: { userId_templateId: { userId, templateId } }
+    });
+    res.json({ draft: draft ? draft.formData : null });
+  } catch (err) {
+    logger.error({ error: err.message, userId: req.user.id }, 'Draft load failed');
+    res.status(500).json({ error: 'Draft could not be loaded.' });
+  }
+});
 
 // Preview (no payment, renders HTML only)
 app.post('/api/preview', previewLimiter, async (req, res) => {
@@ -593,8 +666,23 @@ app.post('/api/generate', authenticate(), genLimiter, async (req, res) => {
     if (String(paymentId).startsWith('admin_bypass_')) {
       logger.info({ paymentId }, 'Admin ZIP download (payment bypassed)');
     } else {
-      const gate = consumePayment(paymentId);
+      const gate = await consumePayment(paymentId);
       if (!gate.ok) return res.status(402).json({ error: gate.reason });
+
+      // Record download history — best-effort, never blocks the ZIP stream
+      if (prisma) {
+        try {
+          const userId = req.user && req.user.id;
+          const pmtRow = await prisma.payment.findUnique({ where: { paymentId } });
+          if (pmtRow && userId) {
+            await prisma.download.create({
+              data: { userId, paymentId: pmtRow.id, templateId: template || pmtRow.templateId }
+            });
+          }
+        } catch (err) {
+          logger.error({ error: err.message, paymentId }, 'Download record failed — ZIP still sent');
+        }
+      }
     }
 
     const tplFile = templatePath(template);
