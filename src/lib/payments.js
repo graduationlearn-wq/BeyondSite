@@ -134,9 +134,10 @@ function verifyRazorpayWebhook({ headers, rawBody }) {
   if (signature !== expected) throw new Error('Invalid webhook signature');
   const event = JSON.parse(rawBody);
   return {
-    ok:        true,
-    paymentId: event.payload.payment.entity.order_id,
-    status:    event.event === 'payment.captured' ? 'PAID' : 'FAILED'
+    ok:                true,
+    paymentId:         event.payload.payment.entity.order_id,
+    razorpayPaymentId: event.payload.payment.entity.id,
+    status:            event.event === 'payment.captured' ? 'PAID' : 'FAILED'
   };
 }
 
@@ -151,6 +152,7 @@ async function consumePayment(paymentId) {
 
   if (prisma) {
     try {
+      // Validate state before attempting the atomic write
       const p = await prisma.payment.findUnique({ where: { paymentId } });
       if (!p)       return { ok: false, reason: 'Invalid payment' };
       if (p.usedAt) return { ok: false, reason: 'Payment already used' };
@@ -160,10 +162,14 @@ async function consumePayment(paymentId) {
       if (PROVIDER === 'razorpay' && p.status !== 'PAID') {
         return { ok: false, reason: 'Payment not verified' };
       }
-      await prisma.payment.update({
-        where: { paymentId },
+      // Atomic write: guard on usedAt: null eliminates the TOCTOU race window.
+      // If two concurrent requests pass the checks above, only one will match
+      // the where clause — the other gets count 0 and returns "already used".
+      const result = await prisma.payment.updateMany({
+        where: { paymentId, usedAt: null },
         data:  { usedAt: new Date(), status: 'PAID' }
       });
+      if (result.count === 0) return { ok: false, reason: 'Payment already used' };
       return { ok: true };
     } catch (err) {
       logger.error({ error: err.message, paymentId }, 'DB consumePayment failed — falling back to in-memory');

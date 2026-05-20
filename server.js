@@ -562,7 +562,8 @@ app.post('/api/payments/verify', payLimiter, async (req, res) => {
   try {
     const valid = verifyRazorpaySignature({ razorpay_order_id, razorpay_payment_id, razorpay_signature });
     if (!valid) return res.status(400).json({ error: 'Payment signature invalid.' });
-    await markPaymentPaid(razorpay_order_id, razorpay_payment_id);
+    const marked = await markPaymentPaid(razorpay_order_id, razorpay_payment_id);
+    if (!marked) logger.warn({ orderId: razorpay_order_id }, 'markPaymentPaid: no row updated');
     logger.info({ orderId: razorpay_order_id, razorpayPaymentId: razorpay_payment_id }, 'Payment verified');
     res.json({ ok: true, paymentId: razorpay_order_id });
   } catch (err) {
@@ -580,8 +581,11 @@ app.post('/api/payments/webhook',
       return res.json({ ok: true });
     }
     try {
-      const { paymentId, status } = verifyWebhook({ headers: req.headers, rawBody: req.body });
-      if (status === 'PAID') await markPaymentPaid(paymentId, '');
+      const { paymentId, razorpayPaymentId, status } = verifyWebhook({ headers: req.headers, rawBody: req.body });
+      if (status === 'PAID') {
+        const marked = await markPaymentPaid(paymentId, razorpayPaymentId);
+        if (!marked) logger.warn({ paymentId }, 'Webhook markPaymentPaid: no row updated');
+      }
       logger.info({ paymentId, status }, 'Razorpay webhook processed');
       res.json({ ok: true });
     } catch (err) {
@@ -599,6 +603,12 @@ app.post('/api/draft', authenticate(), async (req, res) => {
   const { templateId, formData } = req.body || {};
   if (!templateId || !formData) {
     return res.status(400).json({ error: 'templateId and formData are required.' });
+  }
+  if (typeof templateId !== 'string' || templateId.length > 32 || !/^[\w-]+$/.test(templateId)) {
+    return res.status(400).json({ error: 'Invalid templateId.' });
+  }
+  if (typeof formData !== 'object' || Array.isArray(formData)) {
+    return res.status(400).json({ error: 'formData must be an object.' });
   }
   if (!prisma) {
     // No DB — acknowledge but don't persist (demo mode)
