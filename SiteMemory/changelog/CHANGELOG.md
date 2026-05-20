@@ -6,6 +6,27 @@ Round-by-round history of every meaningful change. **Append-only** — new round
 
 ---
 
+## Round L — 2026-05-20
+
+**Removed preview-all.html. Updated SiteMemory docs. Created CLAUDE.md.**
+
+**Touched:** [[01_CURRENT_STATE]] · [[_registry|Templates registry]]
+
+### Shipped
+
+- **`preview-all.html` removed** — generation code stripped from `templates/preview-test.js`. No role in production; the hover-modal only needs individual `preview-N.html` files served by `/template-previews/`. Leftover file deleted from disk.
+- **`CLAUDE.md` created** at repo root — orients Claude Code sessions with commands, architecture, critical conventions, and known stubs so future sessions don't re-read all of SiteMemory cold.
+- **SiteMemory docs updated** — `01_CURRENT_STATE.md` and `templates/_registry.md` now reflect 14 templates and the template-14 regulatory spec.
+
+### Verification
+
+- `node -c server.js` → clean ✓
+- `cd templates && node preview-test.js` → 14/14 rendered cleanly, no preview-all.html written ✓
+
+---
+
+---
+
 ## Round J — 2026-05-18
 
 **Razorpay integration activated, price set to ₹4,999, step-wise registration form, Prisma migration for Razorpay fields.**

@@ -287,8 +287,8 @@ describe('Template Rendering - Version 1 Published Templates', () => {
     expect(fs.existsSync(templateFile)).toBe(true);
   });
 
-  test('all 13 template files exist (including unpublished)', () => {
-    [1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13].forEach(id => {
+  test('all 14 template files exist (including unpublished)', () => {
+    [1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14].forEach(id => {
       const templateFile = path.join(TEMPLATES_DIR, `website-template-${id}.ejs`);
       expect(fs.existsSync(templateFile)).toBe(true);
     });

@@ -304,6 +304,14 @@ const AI_PROMPTS = {
     signatures:({biz,desc})    => `For restaurant / café "${biz}": "${desc}". Return ONLY JSON: { "signaturesHeadline":"<6-10 word section headline e.g. What we're known for.>", "signatureDishes":[{"name":"<evocative dish name>","body":"<25-35 word description with specific ingredients and technique>","price":"<e.g. ₹680>","tag":"<optional, one of: Chef's Pick, Vegan, Classic, Spicy, or empty>"}] } with EXACTLY 6 signature dishes.`,
     reservation:({biz,desc})   => `For restaurant / café "${biz}": "${desc}". Return ONLY JSON: { "ctaHeadline":"<8-12 word reservation nudge ending with ?>", "ctaBody":"<20-35 word supporting line about reservation policy, walk-ins, advance notice>", "ctaButton":"<2-3 word action e.g. Book a Table>" }`
   },
+  'template-14': { // Mutual Fund Distributor (AMFI ARN holder)
+    hero:     ({biz,desc,tone}) => `For AMFI-registered Mutual Fund Distributor "${biz}" (${tone} tone): "${desc}". Return ONLY JSON: { "heroEyebrow":"<trust phrase max 12 words e.g. AMFI Registered ARN holder · Serving investors since 2012>", "heroHeadlineLead":"<2-3 word line 1 e.g. Build wealth>", "heroHeadlineEmph":"<2-4 word italic accent ending with period e.g. systematically.>", "heroSub":"<35-50 word sub about goal-based investing, SEBI compliance, and transparent advice>" }`,
+    services: ({biz,desc})      => `For AMFI-registered MF Distributor "${biz}": "${desc}". Return ONLY JSON: { "servicesHeadline":"<8-12 word section headline>", "servicesBody":"<25-35 word sub-copy>", "services":[{"icon":"<1 emoji from 🔄 💰 🎯 🧾 📊 🏦>","name":"<2-4 word service>","body":"<20-30 word benefit description>"}] } with 5-6 services covering SIP, lumpsum, goal planning, ELSS, portfolio review, debt funds.`,
+    schemes:  ({biz,desc})      => `For AMFI-registered MF Distributor "${biz}": "${desc}". Return ONLY JSON: { "schemesHeadline":"<8-12 word section headline>", "schemesBody":"<25-35 word sub-copy>", "schemes":[{"icon":"<1 emoji>","name":"<fund category e.g. Equity Funds>","tagline":"<5-8 word benefit phrase>","body":"<20-30 word description>","riskLevel":"<one of: Low, Low to Moderate, Moderate, Moderately High, High>","horizon":"<e.g. 5+ years>"}] } with 5 categories: Equity, Debt, Hybrid, Liquid, ELSS. Do NOT quote specific returns.`,
+    process:  ({biz,desc,tone}) => `For AMFI-registered MF Distributor "${biz}" (${tone}): "${desc}". Return ONLY JSON: { "processHeadline":"<8-12 word headline e.g. From first conversation to first SIP — in days.>", "processSteps":[{"icon":"<1 emoji>","title":"<2-3 word step>","body":"<15-25 word body>","duration":"<short time e.g. 30 minutes>"}] } with EXACTLY 4 steps: goal conversation → KYC onboarding → scheme selection → start SIP & review.`,
+    about:    ({biz,desc,tone}) => `For AMFI-registered MF Distributor "${biz}" (${tone}): "${desc}". Return ONLY JSON: { "aboutHeadlineLead":"<3-5 word line 1 e.g. Investing guided by>", "aboutHeadlineEmph":"<2-4 word italic accent ending with period e.g. honest advice.>", "aboutBody":"<120-160 word origin story — ARN registration year, families served, commission-transparent model, long-term relationship philosophy>", "aboutPillars":[{"title":"<2-4 word pillar>","body":"<20-30 word body>"}] } with EXACTLY 3 pillars covering commission transparency, goal-first advice, long-term relationship.`,
+    cta:      ({biz,desc})      => `For AMFI-registered MF Distributor "${biz}": "${desc}". Return ONLY JSON: { "ctaHeadline":"<8-12 word headline about starting a SIP or booking a consultation>", "ctaBody":"<20-30 word supporting line about free consultation and no commitment>", "ctaButton":"<2-4 word action e.g. Book a Free Call>", "ctaNote":"<short reassurance e.g. No charges for consultation · AMFI Registered>" }`
+  },
   'template-9': { // NBFC / Lender
     hero:    ({biz,desc,tone}) => `For RBI-registered NBFC / lender "${biz}" (${tone} tone): "${desc}". Return ONLY JSON: { "heroEyebrow":"<trust phrase e.g. RBI Registered NBFC since 2012, max 10 words>", "heroHeadlineLead":"<2-3 word line 1 e.g. Loans built>", "heroHeadlineBody":"<1-2 word line 2 e.g. around>", "heroHeadlineEmph":"<1-2 word italic emphasis e.g. your life.>", "heroSub":"<30-45 word sub describing the lending products and customer promise>" }`,
     products:({biz,desc})       => `For RBI-registered NBFC / lender "${biz}": "${desc}". Return ONLY JSON: { "productsHeadline":"<8-12 word section headline>", "productsBody":"<25-35 word sub-copy>", "products":[{"icon":"<1 emoji from 💼 🏢 🪙 🏠 🚗 🧾 📊 ⚖>","name":"<2-3 word product name>","body":"<15-25 word one-liner pitch>","amountRange":"<e.g. ₹50K – ₹40L>","rateFrom":"<e.g. 10.99%>","tenure":"<e.g. 12-60 months>"}] } with 5-6 items.`,
@@ -430,10 +438,11 @@ const TEMPLATE_NAMES = {
   'template-7':  'Startup / SaaS',
   'template-8':  'Insurance Advisor',
   'template-9':  'NBFC / Lender',
-  'template-10': 'FinTech SaaS',
+  'template-10': 'Restaurant / Café',
   'template-11': 'Portfolio',
   'template-12': 'InsurTech SaaS',
   'template-13': 'Insurance Market',
+  'template-14': 'Mutual Fund Distributor',
 };
 
 function buildChatSystemPrompt(context = {}) {
@@ -635,10 +644,10 @@ async function start() {
   const PORT = process.env.PORT || 3000;
 
   try {
-    if (process.env.DB_HOST) {
+    if (process.env.DATABASE_URL) {
       await connectDatabase();
     } else {
-      logger.warn('DB_HOST not set, running without database');
+      logger.warn('DATABASE_URL not set, running without database');
     }
   } catch (err) {
     logger.error('Failed to connect to database:', err);

@@ -1,0 +1,253 @@
+{
+  "id": "template-14",
+  "name": "Mutual Fund Distributor",
+  "extends": "_base",
+  "complianceReview": {
+    "title": "AMFI / SEBI regulatory content — have your compliance officer review before publishing.",
+    "body": "This template includes your ARN number, EUIN, mandatory risk disclaimers, and a SEBI SCORES grievance escalation matrix. The risk disclaimer ('Mutual Fund investments are subject to market risks. Read all scheme-related documents carefully.') and past-performance disclaimer are mandatory under AMFI guidelines and must not be removed or modified."
+  },
+  "sections": [
+    {
+      "id": "regulatoryDetails",
+      "title": "Regulatory Details",
+      "hint": {
+        "label": "ARN & EUIN",
+        "description": "Your AMFI Registration Number (ARN-XXXXXX) and Employee Unique Identification Number (EUIN) are mandatory per AMFI circular requirements. These appear prominently in the compliance topbar and footer regulatory band."
+      },
+      "fields": [
+        { "id": "arnNumber",      "label": "ARN Number",                                    "type": "text", "max": 20,  "placeholder": "ARN-123456" },
+        { "id": "euinNumber",     "label": "EUIN (Employee Unique Identification Number)",   "type": "text", "max": 20,  "placeholder": "E-123456" },
+        { "id": "amfiDisclosure", "label": "AMFI registration statement (shown in footer)", "type": "text", "max": 200, "placeholder": "AMFI registered Mutual Fund Distributor · ARN-123456" }
+      ]
+    },
+    {
+      "id": "hero",
+      "title": "Hero",
+      "aiable": true,
+      "hint": {
+        "label": "Opening impression",
+        "description": "Lead with the investor's goal — retirement, education, home — not your product. The SIP panel anchors the entry with a low starting amount.",
+        "mockupTarget": "header"
+      },
+      "fields": [
+        { "id": "heroEyebrow",       "label": "Eyebrow / trust phrase",           "type": "text",     "max": 80,  "placeholder": "AMFI Registered Distributor · Serving investors since 2010", "aiable": true },
+        { "id": "heroHeadlineLead",  "label": "Headline — first part",            "type": "text",     "max": 60,  "placeholder": "Build wealth", "aiable": true },
+        { "id": "heroHeadlineEmph",  "label": "Headline — italic accent",         "type": "text",     "max": 40,  "placeholder": "systematically.", "aiable": true },
+        { "id": "heroSub",           "label": "Sub-headline (25–40 words)",       "type": "textarea", "rows": 3,  "max": 240, "aiable": true },
+        { "id": "heroCtaPrimary",    "label": "Primary button",                   "type": "text",     "max": 30,  "placeholder": "Start SIP Today" },
+        { "id": "heroCtaSecondary",  "label": "Secondary button",                 "type": "text",     "max": 30,  "placeholder": "Calculate Returns" },
+        { "id": "sipStartingAmount", "label": "SIP starting amount (hero panel)", "type": "text",     "max": 20,  "placeholder": "₹500/month" },
+        {
+          "id": "sipBenefits", "label": "SIP panel bullet points",
+          "type": "repeater", "min": 3, "max": 5, "itemLabel": "Benefit",
+          "item": [
+            { "id": "icon", "label": "Icon (emoji)", "type": "text", "max": 4 },
+            { "id": "text", "label": "Benefit text", "type": "text", "max": 70 }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "services",
+      "title": "Services",
+      "aiable": true,
+      "hint": {
+        "label": "Investment services",
+        "description": "List the services you offer — SIP, lumpsum, goal-based planning, ELSS tax saving, portfolio review. Frame each as an investor outcome.",
+        "mockupTarget": "services"
+      },
+      "fields": [
+        { "id": "servicesLabel",    "label": "Section eyebrow",  "type": "text",     "max": 40,  "placeholder": "What We Offer" },
+        { "id": "servicesHeadline", "label": "Section headline", "type": "text",     "max": 80,  "aiable": true },
+        { "id": "servicesBody",     "label": "Section sub-copy", "type": "textarea", "rows": 2,  "max": 200, "aiable": true },
+        {
+          "id": "services", "label": "Service cards",
+          "type": "repeater", "min": 3, "max": 6, "itemLabel": "Service",
+          "item": [
+            { "id": "icon", "label": "Icon (emoji)",              "type": "text",     "max": 4 },
+            { "id": "name", "label": "Service name",              "type": "text",     "max": 50 },
+            { "id": "body", "label": "Description (20–30 words)", "type": "textarea", "rows": 2, "max": 160 }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "schemes",
+      "title": "Fund Categories",
+      "aiable": true,
+      "hint": {
+        "label": "Scheme categories",
+        "description": "Show the mutual fund categories you distribute — Equity, Debt, Hybrid, ELSS, Liquid. Always show risk level. Do not quote specific scheme NAVs or historical returns without the past-performance disclaimer.",
+        "mockupTarget": "services"
+      },
+      "fields": [
+        { "id": "schemesLabel",    "label": "Section eyebrow",  "type": "text",     "max": 40,  "placeholder": "Fund Categories" },
+        { "id": "schemesHeadline", "label": "Section headline", "type": "text",     "max": 80,  "aiable": true },
+        { "id": "schemesBody",     "label": "Section sub-copy", "type": "textarea", "rows": 2,  "max": 200, "aiable": true },
+        {
+          "id": "schemes", "label": "Scheme category cards",
+          "type": "repeater", "min": 3, "max": 6, "itemLabel": "Category",
+          "item": [
+            { "id": "icon",      "label": "Icon (emoji)",              "type": "text",     "max": 4 },
+            { "id": "name",      "label": "Category name",             "type": "text",     "max": 50,  "placeholder": "Equity Funds" },
+            { "id": "tagline",   "label": "One-line tagline",          "type": "text",     "max": 80,  "placeholder": "Long-term wealth creation" },
+            { "id": "body",      "label": "Description (20–30 words)", "type": "textarea", "rows": 2,  "max": 160 },
+            { "id": "riskLevel", "label": "Risk level",                "type": "select",   "options": ["Low","Low to Moderate","Moderate","Moderately High","High","Very High"] },
+            { "id": "horizon",   "label": "Investment horizon",        "type": "text",     "max": 40,  "placeholder": "5+ years" }
+          ]
+        },
+        {
+          "id": "amcPartners", "label": "AMC partners (name strip below section)",
+          "type": "repeater", "min": 0, "max": 12, "itemLabel": "AMC",
+          "item": [
+            { "id": "name", "label": "AMC name", "type": "text", "max": 50 }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "process",
+      "title": "How It Works",
+      "aiable": true,
+      "hint": {
+        "label": "Onboarding steps",
+        "description": "4 steps: Understand goals → KYC onboarding → Choose scheme → Start SIP + periodic review.",
+        "mockupTarget": "process"
+      },
+      "fields": [
+        { "id": "processLabel",    "label": "Section eyebrow",  "type": "text", "max": 40, "placeholder": "How It Works" },
+        { "id": "processHeadline", "label": "Section headline", "type": "text", "max": 80, "aiable": true },
+        {
+          "id": "processSteps", "label": "Steps",
+          "type": "repeater", "min": 3, "max": 5, "itemLabel": "Step",
+          "item": [
+            { "id": "icon",     "label": "Icon (emoji)",                   "type": "text",     "max": 4 },
+            { "id": "title",    "label": "Step title",                     "type": "text",     "max": 50 },
+            { "id": "body",     "label": "Step description (15–25 words)", "type": "textarea", "rows": 2, "max": 160 },
+            { "id": "duration", "label": "Duration / time note",           "type": "text",     "max": 40, "placeholder": "30 minutes" }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "kyc",
+      "title": "KYC Compliance",
+      "hint": {
+        "label": "KYC requirements",
+        "description": "KYC is mandatory for all mutual fund investments per SEBI regulations. Mention CKYC (Central KYC Registry — CERSAI). This section builds trust and sets expectations before an investor begins."
+      },
+      "fields": [
+        { "id": "kycLabel",    "label": "Section eyebrow",               "type": "text",     "max": 40,  "placeholder": "KYC Compliance" },
+        { "id": "kycHeadline", "label": "Section headline",              "type": "text",     "max": 80 },
+        { "id": "kycBody",     "label": "KYC explanation (80–120 words)","type": "textarea", "rows": 5,  "max": 700 },
+        { "id": "kycNote",     "label": "CKYC callout note",             "type": "text",     "max": 200 },
+        {
+          "id": "kycSteps", "label": "KYC steps",
+          "type": "repeater", "min": 3, "max": 5, "itemLabel": "Step",
+          "item": [
+            { "id": "icon",  "label": "Icon (emoji)",              "type": "text",     "max": 4 },
+            { "id": "title", "label": "Step title",                "type": "text",     "max": 60 },
+            { "id": "body",  "label": "Description (15–25 words)", "type": "textarea", "rows": 2, "max": 160 }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "about",
+      "title": "About / Distributor Profile",
+      "aiable": true,
+      "hint": {
+        "label": "Your story",
+        "description": "Investors trust people, not products. Tell your story — how long you've been distributing, your AMFI certification, CFP credentials, and families served.",
+        "mockupTarget": "about"
+      },
+      "fields": [
+        { "id": "aboutLabel",        "label": "Section eyebrow",            "type": "text",     "max": 40 },
+        { "id": "aboutHeadlineLead", "label": "Headline — first part",      "type": "text",     "max": 60, "aiable": true },
+        { "id": "aboutHeadlineEmph", "label": "Headline — italic accent",   "type": "text",     "max": 40, "aiable": true },
+        { "id": "aboutBody",         "label": "About text (100–160 words)", "type": "textarea", "rows": 6, "max": 900, "aiable": true },
+        {
+          "id": "aboutPillars", "label": "Credentials / approach pillars",
+          "type": "repeater", "min": 2, "max": 4, "itemLabel": "Pillar",
+          "item": [
+            { "id": "title", "label": "Pillar title",              "type": "text",     "max": 60 },
+            { "id": "body",  "label": "Description (20–30 words)", "type": "textarea", "rows": 2, "max": 180 }
+          ]
+        },
+        {
+          "id": "ratings", "label": "Certifications / badges",
+          "type": "repeater", "min": 2, "max": 8, "itemLabel": "Badge",
+          "item": [
+            { "id": "label", "label": "Badge text", "type": "text", "max": 50 }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "testimonials",
+      "title": "Investor Stories",
+      "hint": {
+        "label": "Social proof",
+        "description": "Real investor stories — anonymized or with permission. Mention the goal achieved. Do not cite specific NAV or scheme returns without the past-performance disclaimer."
+      },
+      "fields": [
+        {
+          "id": "testimonials", "label": "Investor testimonials",
+          "type": "repeater", "min": 2, "max": 5, "itemLabel": "Testimonial",
+          "item": [
+            { "id": "quote",       "label": "Quote (30–60 words)",    "type": "textarea", "rows": 3, "max": 300 },
+            { "id": "name",        "label": "Name",                   "type": "text",     "max": 60 },
+            { "id": "role",        "label": "City / context",         "type": "text",     "max": 60 },
+            { "id": "productUsed", "label": "Investment type / goal", "type": "text",     "max": 80 }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "grievance",
+      "title": "Grievance Redressal",
+      "hint": {
+        "label": "Escalation matrix",
+        "description": "AMFI requires MF distributors to maintain a visible grievance mechanism. Escalation: Distributor → AMC Investor Relations → AMFI Investor Services → SEBI SCORES (scores.gov.in). All complaints must be addressed within 30 days per SEBI norms.",
+        "mockupTarget": "contact"
+      },
+      "fields": [
+        { "id": "grievanceLabel",    "label": "Section eyebrow",            "type": "text",     "max": 40 },
+        { "id": "grievanceHeadline", "label": "Section headline",           "type": "text",     "max": 80 },
+        { "id": "grievanceBody",     "label": "Section body (40–80 words)", "type": "textarea", "rows": 3, "max": 500 },
+        { "id": "groName",    "label": "Grievance officer name",  "type": "text",     "max": 80 },
+        { "id": "groRole",    "label": "Grievance officer role",  "type": "text",     "max": 80 },
+        { "id": "groEmail",   "label": "Grievance email",         "type": "text",     "max": 100 },
+        { "id": "groPhone",   "label": "Grievance phone",         "type": "text",     "max": 40 },
+        { "id": "groAddress", "label": "Office address",          "type": "textarea", "rows": 2, "max": 200 },
+        { "id": "groTimings", "label": "Office hours",            "type": "text",     "max": 80 },
+        {
+          "id": "escalationLevels", "label": "Escalation matrix",
+          "type": "repeater", "min": 3, "max": 5, "itemLabel": "Level",
+          "item": [
+            { "id": "level",   "label": "Level label",    "type": "text",     "max": 80 },
+            { "id": "body",    "label": "Description",    "type": "textarea", "rows": 2, "max": 200 },
+            { "id": "contact", "label": "Contact / URL",  "type": "text",     "max": 120 },
+            { "id": "tat",     "label": "TAT / timeline", "type": "text",     "max": 40 }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "cta",
+      "title": "Call to Action",
+      "aiable": true,
+      "hint": {
+        "label": "Closing CTA",
+        "description": "Frame around the investor's outcome — 'Start your ₹500 SIP today'. The fine-print line should echo the mandatory risk disclaimer.",
+        "mockupTarget": "cta"
+      },
+      "fields": [
+        { "id": "ctaHeadline", "label": "CTA headline",               "type": "text",     "max": 100, "aiable": true },
+        { "id": "ctaBody",     "label": "CTA sub-copy (15–25 words)", "type": "textarea", "rows": 2,  "max": 200, "aiable": true },
+        { "id": "ctaButton",   "label": "Button text",                "type": "text",     "max": 40 },
+        { "id": "ctaNote",     "label": "Fine print",                 "type": "text",     "max": 120 }
+      ]
+    }
+  ]
+}

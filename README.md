@@ -1,8 +1,8 @@
 # BeyondSite
 
-> **A no-code generator for professional business websites.** Pick a template → fill a form (with AI help) → preview → pay $9 → download a self-contained ZIP. Built by [BeyondSure](https://www.beyondsure.in/) (Shrigoda TechLabs Pvt Ltd) as an intern handoff. The website-output is plain HTML/CSS/JS the customer hosts anywhere.
+> **A no-code generator for professional business websites.** Pick a template → fill a form (with AI help) → preview → pay ₹4,999 → download a self-contained ZIP. Built by [BeyondSure](https://www.beyondsure.in/) (Shrigoda TechLabs Pvt Ltd) as an intern handoff. The website-output is plain HTML/CSS/JS the customer hosts anywhere.
 
-**Status:** Prototype handoff · 13 production-quality templates · Auth0 / MySQL / payment-gateway seams ready for the tech team to wire · Docker + Jest + GitHub Actions all set up · Prisma migration + seed scripts committed · Full architectural docs in [`SiteMemory/`](./SiteMemory/README.md).
+**Status:** Prototype handoff · 14 production-quality templates · Auth0 / MySQL / payment-gateway seams ready for the tech team to wire · Docker + Jest + GitHub Actions all set up · Prisma migration + seed scripts committed · Full architectural docs in [`SiteMemory/`](./SiteMemory/README.md).
 
 **Deploying this?** Follow [`DEPLOYMENT.md`](./DEPLOYMENT.md) for the step-by-step. The guide below is for reviewers running the demo locally.
 
@@ -44,8 +44,8 @@ These are hard-coded in `server.js` for the demo. **All other email/password com
 2. **Fill Business Name, Tagline, Description** (≥20 chars) → hover any template card for ~1.5 seconds → a premium modal previews the template with Desktop / Tablet / Mobile toggles.
 3. **Pick a template → click ✨ AI on any section** → form fields auto-populate from Gemini (or Groq if Gemini's quota is hit).
 4. **Click Preview Website** → see your site rendered in an iframe, with device toggles above the preview chrome.
-5. **Click Pay** → dummy $9 charge → **Download ZIP** → unzip → open `index.html` in a browser. That's the deliverable.
-6. **Visit `/profile`** → real-feeling profile page with the 6 sample templates you "own", $126 total paid, recent-activity timeline. **The "View Plans →" button is hidden.**
+5. **Click Pay** → dummy ₹4,999 charge → **Download ZIP** → unzip → open `index.html` in a browser. That's the deliverable.
+6. **Visit `/profile`** → real-feeling profile page with the 6 sample templates you "own", ₹29,994 total paid, recent-activity timeline. **The "View Plans →" button is hidden.**
 7. **Visit `/plans` directly in the URL bar** → blocked by a Coming-Soon overlay. Only "Back to Profile" button is available.
 8. **Try the chatbot** (gold bubble bottom-right) → say *"hi"* (handled locally, zero API cost) → ask *"what's the NBFC template for?"* (goes to Groq with scope-locked prompt) → ask *"write me a python script"* → it should politely redirect you to a general assistant.
 
@@ -133,7 +133,7 @@ docker run -d -p 3000:3000 \
 
 **Logging:** Winston with JSON output in production (`NODE_ENV=production`), colorized human-readable in development. Centralized — no local file logging. Pipes straight to whatever log aggregator the team prefers (Datadog / ELK / CloudWatch).
 
-**Database migration:** `npm run db:migrate:deploy` applies the committed migration in `prisma/migrations/20260515000000_init/`. Tables created: `users`, `websites`, `drafts`, `payments`, `downloads`, `templates` with proper FKs and enums (`Role`, `WebsiteStatus`, `PaymentStatus`). Then `npm run db:seed` populates the 13 templates and upserts the bootstrap admin defined by `AUTH0_BOOTSTRAP_ADMIN_EMAIL`. Idempotent — safe to re-run.
+**Database migration:** `npm run db:migrate:deploy` applies the committed migration in `prisma/migrations/20260515000000_init/`. Tables created: `users`, `websites`, `drafts`, `payments`, `downloads`, `templates` with proper FKs and enums (`Role`, `WebsiteStatus`, `PaymentStatus`). Then `npm run db:seed` populates the 14 templates and upserts the bootstrap admin defined by `AUTH0_BOOTSTRAP_ADMIN_EMAIL`. Idempotent — safe to re-run.
 
 ---
 
@@ -211,8 +211,8 @@ StaticWebsiteGenerator/
 ├── templates/
 │   ├── schemas/
 │   │   ├── _base.json                   Shared brand / contact / theme
-│   │   └── template-N.json              13 template schemas
-│   ├── website-template-N.ejs           13 template renderers
+│   │   └── template-N.json              14 template schemas
+│   ├── website-template-N.ejs           14 template renderers
 │   ├── preview-test.js                  Renders all templates with sample data
 │   └── preview-N.html                   Generated previews (regenerate with above)
 ├── __tests__/                          Jest unit tests
@@ -294,7 +294,7 @@ This project will hand off to the BeyondSure tech team for production wiring. Co
 - **Six wired artifacts rule** for new templates (see [`02_CONVENTIONS.md`](./SiteMemory/02_CONVENTIONS.md))
 - **Append to** `SiteMemory/changelog/CHANGELOG.md` after every meaningful session — never edit past rounds
 - **Add an ADR** to `SiteMemory/decisions/ADR.md` for non-trivial architectural changes
-- **Run `node templates/preview-test.js`** before committing template changes — all 13 must render clean
+- **Run `node templates/preview-test.js`** before committing template changes — all 14 must render clean
 
 For questions about specific decisions, the ADR file has the *why*. For specific code, check the relevant `architecture/0N_*.md` doc.
 

@@ -907,6 +907,11 @@ select option:hover {
 
 .template-12-prev { background: linear-gradient(135deg, #0a0c10 0%, #131720 100%); }
 .template-13-prev { background: linear-gradient(135deg, #f7f9fc 0%, #e8f5f2 100%); }
+
+/* Template 14 — MF Distributor (sandstone + maroon + brass) */
+.template-mf-prev { background: #f2ede4; display: flex; flex-direction: column; }
+.tp-mf-topbar { height: 6px; background: #6b1e2c; flex-shrink: 0; }
+
 /* ── BUTTONS ─────────────────────────────────────────────────────── */
 .btn {
   display: inline-flex; align-items: center; justify-content: center; gap: 8px;

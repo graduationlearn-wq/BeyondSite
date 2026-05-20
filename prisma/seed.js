@@ -27,7 +27,8 @@ const TEMPLATES = [
   { templateId: 'template-10', displayName: 'Restaurant / Café',      isPublished: false },
   { templateId: 'template-11', displayName: 'Portfolio / Freelancer', isPublished: false },
   { templateId: 'template-12', displayName: 'InsurTech SaaS',         isPublished: true  },
-  { templateId: 'template-13', displayName: 'Insurance Market',       isPublished: true  }
+  { templateId: 'template-13', displayName: 'Insurance Market',       isPublished: true  },
+  { templateId: 'template-14', displayName: 'Mutual Fund Distributor', isPublished: false }
 ];
 
 async function seedTemplates() {

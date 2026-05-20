@@ -1,0 +1,794 @@
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Vrddhi Wealth — Grow wealth. Build futures.</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,500;0,600;0,700;1,500;1,600&family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+  <style>
+    *,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
+    :root{
+      --bg:          #f2ede4;
+      --bg-card:     #faf7f2;
+      --ink:         #1a1209;
+      --ink-soft:    rgba(26,18,9,.68);
+      --ink-mute:    rgba(26,18,9,.44);
+      --ink-line:    rgba(26,18,9,.08);
+      --ink-line-md: rgba(26,18,9,.14);
+      --maroon:      #6b1e2c;
+      --maroon-soft: #8a2538;
+      --maroon-tint: rgba(107,30,44,.09);
+      --brass:       #b8882e;
+      --brass-tint:  rgba(184,136,46,.12);
+      --green:       #1c6b3a;
+      --green-tint:  rgba(28,107,58,.1);
+      --serif:       'Playfair Display', Georgia, serif;
+      --sans:        'Inter', system-ui, -apple-system, sans-serif;
+    }
+    html{scroll-behavior:smooth}
+    body{font-family:var(--sans);background:var(--bg);color:var(--ink);line-height:1.6;-webkit-font-smoothing:antialiased}
+    a{color:inherit;text-decoration:none}
+    button{font-family:inherit;cursor:pointer;border:none}
+    em{font-style:italic;font-family:var(--serif);font-weight:500}
+    .container{max-width:1240px;margin:0 auto;padding:0 32px}
+    .reveal{opacity:0;transform:translateY(22px);transition:opacity .65s ease,transform .65s ease}
+    .reveal.visible{opacity:1;transform:translateY(0)}
+
+    .topbar{background:var(--maroon);color:rgba(255,245,230,.9);font-size:.73rem;padding:9px 0}
+    .topbar-inner{display:flex;align-items:center;justify-content:space-between;gap:18px;flex-wrap:wrap;max-width:1240px;margin:0 auto;padding:0 32px}
+    .topbar-info{display:flex;gap:20px;flex-wrap:wrap;align-items:center}
+    .topbar-info b{font-weight:600;color:#fff}
+    .topbar-links{display:flex;gap:16px;flex-wrap:wrap}
+    .topbar-links a{color:rgba(255,245,230,.75);transition:color .2s}
+    .topbar-links a:hover{color:#fff;text-decoration:underline}
+
+    .nav{position:sticky;top:0;z-index:50;background:rgba(242,237,228,.94);backdrop-filter:blur(14px);border-bottom:1px solid var(--ink-line)}
+    .nav-inner{display:flex;align-items:center;justify-content:space-between;padding:16px 0}
+    .brand{display:flex;align-items:center;gap:12px;font-family:var(--serif);font-size:1.35rem;font-weight:600;color:var(--maroon)}
+    .brand-mark{width:38px;height:38px;border-radius:8px;background:linear-gradient(135deg,var(--maroon),var(--maroon-soft));color:#fff;display:flex;align-items:center;justify-content:center;font-family:var(--serif);font-weight:700;font-size:1.1rem}
+    .nav-links{display:flex;gap:28px;align-items:center;list-style:none}
+    .nav-links a{color:var(--ink-soft);font-size:.92rem;font-weight:500;transition:color .2s}
+    .nav-links a:hover{color:var(--maroon)}
+    .nav-links .nav-cta{background:var(--maroon);color:#fff;padding:10px 20px;border-radius:6px}
+    .nav-links .nav-cta:hover{background:var(--maroon-soft)}
+
+    .btn{display:inline-flex;align-items:center;gap:8px;padding:14px 28px;border-radius:8px;font-size:.93rem;font-weight:600;transition:transform .15s,background .2s}
+    .btn:hover{transform:translateY(-1px)}
+    .btn-primary{background:var(--maroon);color:#fff;box-shadow:0 8px 22px rgba(107,30,44,.3)}
+    .btn-primary:hover{background:var(--maroon-soft)}
+    .btn-ghost{background:transparent;color:var(--maroon);border:1.5px solid var(--ink-line-md)}
+    .btn-ghost:hover{background:var(--maroon);color:#fff;border-color:var(--maroon)}
+
+    .hero{padding:80px 0 96px;position:relative;overflow:hidden}
+    .hero::before{content:'';position:absolute;top:-160px;right:-200px;width:480px;height:480px;border-radius:50%;background:radial-gradient(circle,var(--brass-tint) 0%,transparent 70%);pointer-events:none}
+    .hero-grid{display:grid;grid-template-columns:1.1fr .9fr;gap:60px;align-items:center;position:relative}
+    .hero-eyebrow{display:inline-flex;align-items:center;gap:8px;font-size:.77rem;font-weight:600;letter-spacing:.07em;text-transform:uppercase;color:var(--maroon);background:var(--maroon-tint);padding:8px 14px;border-radius:100px;margin-bottom:26px}
+    .hero-eyebrow::before{content:'◆';color:var(--brass);font-size:.6rem}
+    .hero-title{font-family:var(--serif);font-weight:600;font-size:clamp(2.4rem,5vw,4.4rem);line-height:1.08;letter-spacing:-.02em;color:var(--ink);margin-bottom:20px}
+    .hero-title em{color:var(--maroon)}
+    .hero-sub{font-size:1.02rem;color:var(--ink-soft);max-width:540px;margin-bottom:36px;line-height:1.75}
+    .hero-actions{display:flex;gap:14px;flex-wrap:wrap}
+
+    .sip-panel{background:var(--bg-card);border:1px solid var(--ink-line);border-radius:18px;padding:32px;box-shadow:0 20px 50px -20px rgba(107,30,44,.18);position:relative}
+    .sip-panel::before{content:'';position:absolute;top:-1px;left:24px;right:24px;height:3px;background:linear-gradient(90deg,var(--maroon),var(--brass));border-radius:0 0 4px 4px}
+    .sip-label{font-size:.76rem;font-weight:600;letter-spacing:.1em;text-transform:uppercase;color:var(--ink-mute);margin-bottom:6px}
+    .sip-amount{font-family:var(--serif);font-size:3.8rem;font-weight:600;line-height:1;color:var(--maroon);letter-spacing:-.02em;margin-bottom:6px}
+    .sip-tagline{font-size:.9rem;color:var(--ink-soft);margin-bottom:24px}
+    .sip-benefits{display:flex;flex-direction:column;gap:10px;border-top:1px solid var(--ink-line);padding-top:20px}
+    .sip-benefit{display:flex;align-items:center;gap:10px;font-size:.9rem}
+    .sip-ico{width:22px;height:22px;border-radius:50%;background:var(--maroon-tint);color:var(--maroon);display:flex;align-items:center;justify-content:center;font-size:.8rem;font-weight:700;flex-shrink:0}
+    .sip-disclaim{font-size:.71rem;color:var(--ink-mute);margin-top:18px;padding-top:14px;border-top:1px dashed var(--ink-line);line-height:1.55;font-style:italic}
+
+    .section-pad{padding:96px 0}
+    .section-head{text-align:left;max-width:760px;margin-bottom:54px}
+    .section-head.center{margin-left:auto;margin-right:auto;text-align:center}
+    .section-eyebrow{font-size:.77rem;font-weight:600;letter-spacing:.12em;text-transform:uppercase;color:var(--brass);margin-bottom:14px}
+    .section-title{font-family:var(--serif);font-size:clamp(1.9rem,3.5vw,3rem);font-weight:600;line-height:1.15;letter-spacing:-.015em;color:var(--ink);margin-bottom:14px}
+    .section-title em{color:var(--maroon)}
+    .section-body{font-size:.98rem;color:var(--ink-soft);line-height:1.75;max-width:660px}
+
+    .services{background:var(--bg-card);border-top:1px solid var(--ink-line);border-bottom:1px solid var(--ink-line)}
+    .services-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(280px,1fr));gap:20px}
+    .service-card{background:var(--bg);border:1px solid var(--ink-line);border-radius:14px;padding:28px 26px;transition:transform .25s,border-color .25s,box-shadow .25s}
+    .service-card:hover{transform:translateY(-4px);border-color:var(--maroon);box-shadow:0 20px 44px -22px rgba(107,30,44,.24)}
+    .service-icon{width:44px;height:44px;border-radius:10px;background:var(--maroon-tint);color:var(--maroon);display:flex;align-items:center;justify-content:center;font-size:1.35rem;margin-bottom:16px}
+    .service-name{font-family:var(--serif);font-size:1.22rem;font-weight:600;color:var(--ink);margin-bottom:8px}
+    .service-body{font-size:.88rem;color:var(--ink-soft);line-height:1.65}
+
+    .schemes{background:var(--bg)}
+    .schemes-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(300px,1fr));gap:22px;margin-bottom:32px}
+    .scheme-card{background:var(--bg-card);border:1px solid var(--ink-line);border-radius:14px;padding:28px;display:flex;flex-direction:column;transition:transform .25s,box-shadow .25s,border-color .25s}
+    .scheme-card:hover{transform:translateY(-4px);box-shadow:0 20px 44px -20px rgba(107,30,44,.2);border-color:var(--brass)}
+    .scheme-head{display:flex;align-items:flex-start;gap:14px;margin-bottom:14px}
+    .scheme-ico{width:44px;height:44px;border-radius:10px;background:var(--brass-tint);color:var(--brass);display:flex;align-items:center;justify-content:center;font-size:1.35rem;flex-shrink:0}
+    .scheme-name{font-family:var(--serif);font-size:1.18rem;font-weight:600;color:var(--ink);margin-bottom:3px}
+    .scheme-tagline{font-size:.82rem;color:var(--ink-mute)}
+    .scheme-body{font-size:.88rem;color:var(--ink-soft);line-height:1.65;margin-bottom:18px;flex:1}
+    .scheme-meta{display:flex;gap:10px;flex-wrap:wrap;margin-top:auto}
+    .scheme-risk{font-size:.73rem;font-weight:700;letter-spacing:.04em;padding:5px 10px;border-radius:100px;border:1px solid currentColor}
+    .scheme-horizon{font-size:.78rem;color:var(--ink-mute);display:flex;align-items:center;gap:5px;padding-top:3px}
+    .scheme-horizon::before{content:'⏱';font-size:.7rem}
+    .past-perf-note{font-size:.76rem;color:var(--ink-mute);font-style:italic;text-align:center;margin-bottom:32px}
+    .amc-head{font-size:.77rem;font-weight:600;letter-spacing:.08em;text-transform:uppercase;color:var(--ink-mute);margin-bottom:14px;text-align:center}
+    .amc-strip{display:flex;flex-wrap:wrap;gap:10px;justify-content:center}
+    .amc-pill{background:var(--bg-card);border:1px solid var(--ink-line);border-radius:6px;padding:8px 14px;font-size:.82rem;font-weight:500;color:var(--ink-soft)}
+
+    .process{background:var(--bg-card);border-top:1px solid var(--ink-line)}
+    .process-grid{display:grid;grid-template-columns:repeat(4,1fr);gap:22px;position:relative}
+    .process-grid::before{content:'';position:absolute;top:46px;left:8%;right:8%;height:2px;background:repeating-linear-gradient(90deg,var(--ink-line-md) 0 6px,transparent 6px 12px);z-index:0}
+    .process-step{position:relative;z-index:1;text-align:center;padding:0 8px}
+    .process-icon{width:96px;height:96px;border-radius:50%;background:var(--bg);border:2px solid var(--maroon);color:var(--maroon);font-size:2rem;display:flex;align-items:center;justify-content:center;margin:0 auto 22px;position:relative}
+    .process-num{position:absolute;top:-6px;right:-6px;width:28px;height:28px;border-radius:50%;background:var(--brass);color:#fff;font-family:var(--serif);font-weight:600;font-size:.85rem;display:flex;align-items:center;justify-content:center}
+    .process-title{font-family:var(--serif);font-size:1.12rem;font-weight:600;color:var(--ink);margin-bottom:8px}
+    .process-body{font-size:.87rem;color:var(--ink-soft);line-height:1.65;max-width:230px;margin:0 auto 12px}
+    .process-duration{display:inline-block;font-size:.73rem;font-weight:600;letter-spacing:.05em;color:var(--green);background:var(--green-tint);padding:5px 12px;border-radius:100px;text-transform:uppercase}
+
+    .kyc{background:var(--bg)}
+    .kyc-grid{display:grid;grid-template-columns:1.1fr .9fr;gap:64px;align-items:start}
+    .kyc-body{font-size:.98rem;color:var(--ink-soft);line-height:1.85;margin-bottom:24px}
+    .kyc-note{background:var(--brass-tint);border:1px solid rgba(184,136,46,.25);border-radius:10px;padding:16px 20px;font-size:.88rem;color:var(--ink);line-height:1.6}
+    .kyc-note::before{content:'🏛 ';font-size:.88rem}
+    .kyc-steps{display:flex;flex-direction:column;gap:14px}
+    .kyc-step{display:flex;gap:16px;padding:18px;border:1px solid var(--ink-line);border-radius:12px;background:var(--bg-card)}
+    .kyc-step-ico{width:42px;height:42px;border-radius:8px;background:var(--maroon-tint);color:var(--maroon);display:flex;align-items:center;justify-content:center;font-size:1.2rem;flex-shrink:0}
+    .kyc-step-title{font-family:var(--serif);font-size:1.02rem;font-weight:600;color:var(--ink);margin-bottom:4px}
+    .kyc-step-body{font-size:.87rem;color:var(--ink-soft);line-height:1.6}
+
+    .about{background:var(--bg-card);border-top:1px solid var(--ink-line)}
+    .about-grid{display:grid;grid-template-columns:1.05fr .95fr;gap:64px;align-items:start}
+    .about-body{font-size:.98rem;color:var(--ink-soft);line-height:1.85;margin-bottom:30px}
+    .about-pillars{display:grid;gap:16px}
+    .pillar{display:flex;gap:16px;padding:18px;border-radius:12px;background:var(--bg);border:1px solid var(--ink-line)}
+    .pillar-num{width:32px;height:32px;border-radius:6px;flex-shrink:0;background:var(--maroon);color:#fff;display:flex;align-items:center;justify-content:center;font-family:var(--serif);font-weight:700;font-size:.92rem}
+    .pillar-title{font-family:var(--serif);font-weight:600;font-size:1.03rem;margin-bottom:5px;color:var(--ink)}
+    .pillar-body{font-size:.87rem;color:var(--ink-soft);line-height:1.65}
+    .creds-card{background:var(--bg);border:1px solid var(--ink-line);border-radius:14px;padding:30px;box-shadow:0 10px 28px -16px rgba(26,18,9,.12)}
+    .creds-title{font-family:var(--serif);font-size:1.35rem;font-weight:600;color:var(--ink);margin-bottom:6px}
+    .creds-sub{font-size:.85rem;color:var(--ink-mute);margin-bottom:20px}
+    .creds-list{display:flex;flex-wrap:wrap;gap:10px}
+    .cred-pill{background:var(--maroon-tint);color:var(--maroon);font-size:.81rem;font-weight:600;padding:8px 14px;border-radius:8px;display:inline-flex;align-items:center;gap:6px}
+    .cred-pill::before{content:'◆';color:var(--brass);font-size:.55rem}
+
+    .testi{background:var(--bg);border-top:1px solid var(--ink-line)}
+    .testi-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(300px,1fr));gap:20px}
+    .testi-card{background:var(--bg-card);border:1px solid var(--ink-line);border-radius:14px;padding:28px;display:flex;flex-direction:column}
+    .testi-product{font-size:.73rem;font-weight:600;letter-spacing:.08em;text-transform:uppercase;color:var(--brass);margin-bottom:16px}
+    .testi-quote{font-family:var(--serif);font-size:1rem;color:var(--ink);line-height:1.7;margin-bottom:22px;flex:1}
+    .testi-author{display:flex;align-items:center;gap:12px;border-top:1px solid var(--ink-line);padding-top:18px}
+    .testi-avatar{width:44px;height:44px;border-radius:50%;background:linear-gradient(135deg,var(--maroon),var(--maroon-soft));color:#fff;display:flex;align-items:center;justify-content:center;font-family:var(--serif);font-weight:600;font-size:.95rem;flex-shrink:0}
+    .testi-name{display:block;font-weight:600;color:var(--ink);font-size:.93rem}
+    .testi-role{display:block;font-size:.82rem;color:var(--ink-mute);margin-top:2px}
+
+    .grievance{background:var(--bg-card);border-top:1px solid var(--ink-line)}
+    .gv-card{background:var(--bg);border:1px solid var(--ink-line-md);border-radius:18px;padding:48px;box-shadow:0 16px 44px -22px rgba(26,18,9,.14)}
+    .gv-grid{display:grid;grid-template-columns:1fr 1fr;gap:48px;align-items:start}
+    .gv-officer{background:var(--maroon);color:#fff;border-radius:14px;padding:30px;position:sticky;top:100px}
+    .gv-officer-eyebrow{font-size:.73rem;font-weight:600;letter-spacing:.12em;text-transform:uppercase;color:var(--brass);margin-bottom:14px}
+    .gv-officer-name{font-family:var(--serif);font-size:1.5rem;font-weight:600;margin-bottom:4px}
+    .gv-officer-role{color:rgba(255,255,255,.75);font-size:.92rem;margin-bottom:24px}
+    .gv-info{display:grid;gap:14px;padding-top:20px;border-top:1px solid rgba(255,255,255,.14)}
+    .gv-info-row{display:grid;grid-template-columns:74px 1fr;gap:12px;font-size:.87rem}
+    .gv-info-key{color:rgba(255,255,255,.55);font-weight:500;text-transform:uppercase;letter-spacing:.05em;font-size:.73rem;padding-top:2px}
+    .gv-info-val{color:#fff;line-height:1.55;word-break:break-word}
+    .gv-escalation{display:flex;flex-direction:column;gap:12px}
+    .gv-step{background:var(--bg-card);border:1px solid var(--ink-line);border-left:4px solid var(--brass);border-radius:10px;padding:18px 20px}
+    .gv-step-head{display:flex;align-items:baseline;justify-content:space-between;gap:10px;flex-wrap:wrap;margin-bottom:8px}
+    .gv-level{font-family:var(--serif);font-size:.98rem;font-weight:600;color:var(--maroon)}
+    .gv-tat{font-size:.73rem;font-weight:600;letter-spacing:.05em;text-transform:uppercase;color:var(--green);background:var(--green-tint);padding:4px 10px;border-radius:100px}
+    .gv-step-body{font-size:.87rem;color:var(--ink-soft);line-height:1.65;margin-bottom:8px}
+    .gv-step-contact{font-size:.84rem;font-weight:500;font-family:ui-monospace,monospace;background:var(--maroon-tint);padding:7px 11px;border-radius:6px;display:inline-block;color:var(--maroon)}
+
+    .cta-band{background:var(--ink);color:#fff;padding:80px 0;position:relative;overflow:hidden}
+    .cta-band::before{content:'';position:absolute;right:-180px;top:-180px;width:500px;height:500px;border-radius:50%;background:radial-gradient(circle,rgba(184,136,46,.14) 0%,transparent 70%)}
+    .cta-inner{display:grid;grid-template-columns:1.4fr 1fr;gap:32px;align-items:center;position:relative}
+    .cta-title{font-family:var(--serif);font-size:clamp(1.7rem,3vw,2.5rem);font-weight:600;line-height:1.22;color:#fff;margin-bottom:14px;letter-spacing:-.015em}
+    .cta-sub{color:rgba(255,255,255,.75);font-size:.98rem;line-height:1.7}
+    .cta-actions{text-align:right;display:flex;flex-direction:column;align-items:flex-end;gap:10px}
+    .cta-note{font-size:.77rem;color:rgba(255,255,255,.46)}
+    .cta-disclaim{font-size:.71rem;color:rgba(255,255,255,.36);margin-top:22px;font-style:italic;line-height:1.65;border-top:1px solid rgba(255,255,255,.08);padding-top:18px}
+
+    .contact{background:var(--bg);border-top:1px solid var(--ink-line)}
+    .contact-grid{display:grid;grid-template-columns:1fr 1.2fr;gap:64px;align-items:start}
+    .contact-info{margin-top:28px;padding-top:22px;border-top:1px dashed var(--ink-line-md);display:grid;gap:10px;font-size:.9rem;color:var(--ink-soft)}
+    .contact-info b{color:var(--ink);font-weight:600}
+    .form-card{background:var(--bg-card);border:1px solid var(--ink-line);border-radius:14px;padding:34px;box-shadow:0 14px 38px -20px rgba(26,18,9,.12)}
+    .fg{display:flex;flex-direction:column;gap:6px;margin-bottom:16px}
+    .fg label{font-size:.81rem;font-weight:600;color:var(--ink)}
+    .fg input,.fg select,.fg textarea{padding:12px 14px;border:1.5px solid var(--ink-line-md);border-radius:8px;background:var(--bg);font-family:inherit;font-size:.94rem;color:var(--ink);outline:none;transition:border-color .2s,background .2s}
+    .fg input:focus,.fg select:focus,.fg textarea:focus{border-color:var(--maroon);background:var(--bg-card)}
+    .fg select option{background:#fff;color:var(--ink)}
+    .fg-row{display:grid;grid-template-columns:1fr 1fr;gap:12px}
+    .form-submit{width:100%;background:var(--maroon);color:#fff;padding:14px;border-radius:8px;font-size:.94rem;font-weight:600;transition:background .2s,transform .15s}
+    .form-submit:hover{background:var(--maroon-soft);transform:translateY(-1px)}
+    .form-disclaim{font-size:.72rem;color:var(--ink-mute);margin-top:12px;line-height:1.55}
+
+    .footer{background:var(--ink);color:rgba(255,245,230,.62);padding:64px 0 0}
+    .footer-grid{display:grid;grid-template-columns:1.4fr 1fr 1fr 1fr;gap:44px;margin-bottom:44px}
+    .f-brand{font-family:var(--serif);color:#fff;font-size:1.25rem;font-weight:600;margin-bottom:8px}
+    .f-tag{font-size:.85rem;color:rgba(255,245,230,.48);max-width:280px;line-height:1.6;margin-bottom:14px}
+    .f-arn{font-size:.77rem;font-weight:600;color:var(--brass);letter-spacing:.04em;margin-bottom:14px}
+    .f-cert-row{display:flex;flex-wrap:wrap;gap:8px}
+    .f-cert{font-size:.71rem;font-weight:600;color:#fff;background:rgba(255,255,255,.06);border:1px solid rgba(255,255,255,.12);padding:5px 10px;border-radius:5px}
+    .f-col-title{font-size:.73rem;font-weight:600;letter-spacing:.12em;text-transform:uppercase;color:#fff;margin-bottom:16px}
+    .f-links{list-style:none;display:flex;flex-direction:column;gap:10px}
+    .f-links a{color:rgba(255,245,230,.52);font-size:.87rem;transition:color .2s}
+    .f-links a:hover{color:#fff}
+    .footer-disclaim{padding:20px 0;border-top:1px solid rgba(255,255,255,.08);font-size:.72rem;color:rgba(255,245,230,.36);line-height:1.75;font-style:italic}
+    .footer-bottom{border-top:1px solid rgba(255,255,255,.08);padding:20px 0;display:flex;justify-content:space-between;align-items:center;flex-wrap:wrap;gap:16px;font-size:.77rem;color:rgba(255,245,230,.42)}
+
+    @media(max-width:980px){
+      .hero-grid,.kyc-grid,.about-grid,.gv-grid,.cta-inner,.contact-grid{grid-template-columns:1fr;gap:40px}
+      .gv-officer{position:static}
+      .process-grid{grid-template-columns:repeat(2,1fr)}
+      .process-grid::before{display:none}
+      .footer-grid{grid-template-columns:1fr 1fr;gap:32px}
+      .cta-actions{text-align:left;align-items:flex-start}
+    }
+    @media(max-width:640px){
+      .container{padding:0 20px}
+      .nav-links li:not(:last-child){display:none}
+      .section-pad{padding:64px 0}
+      .process-grid{grid-template-columns:1fr}
+      .footer-grid{grid-template-columns:1fr}
+      .fg-row{grid-template-columns:1fr}
+      .gv-card{padding:28px 20px}
+    }
+  </style>
+</head>
+<body>
+
+<div class="topbar">
+  <div class="topbar-inner">
+    <div class="topbar-info">
+      <span>ARN: <b>ARN-112358</b></span>
+      <span>EUIN: <b>E-112358</b></span>
+      <span>AMFI Registered Mutual Fund Distributor</span>
+    </div>
+    <div class="topbar-links">
+      <a href="#schemes">Fund Categories</a>
+      <a href="#kyc">KYC Process</a>
+      <a href="#grievance">Grievance</a>
+      <a href="https://scores.gov.in" target="_blank" rel="noopener">SEBI SCORES ↗</a>
+    </div>
+  </div>
+</div>
+
+<nav class="nav">
+  <div class="container nav-inner">
+    <a href="#" class="brand">
+      <span class="brand-mark">V</span>
+      <span>Vrddhi Wealth</span>
+    </a>
+    <ul class="nav-links">
+      <li><a href="#services">Services</a></li>
+      <li><a href="#schemes">Funds</a></li>
+      <li><a href="#process">How It Works</a></li>
+      <li><a href="#about">About</a></li>
+      <li><a href="#grievance">Investor Care</a></li>
+      <li><a href="#contact" class="nav-cta">Start SIP Today</a></li>
+    </ul>
+  </div>
+</nav>
+
+<section class="hero">
+  <div class="container hero-grid">
+    <div class="reveal">
+      <div class="hero-eyebrow">AMFI Registered ARN-112358 Â· Trusted by families since 2012</div>
+      <h1 class="hero-title">Build wealth<br><em>systematically.</em></h1>
+      <p class="hero-sub">A Jodhpur-based AMFI-registered distributor helping families invest in goal-mapped mutual funds â€” retirement, education, liquidity â€” with transparent advice and zero hidden commissions.</p>
+      <div class="hero-actions">
+        <a href="#contact" class="btn btn-primary">Start SIP Today →</a>
+        <a href="#schemes" class="btn btn-ghost">Calculate Returns</a>
+      </div>
+    </div>
+    <div class="sip-panel reveal">
+      <div class="sip-label">Start SIP from</div>
+      <div class="sip-amount">â‚¹500/month</div>
+      <div class="sip-tagline">Invest regularly. Let compounding do the rest.</div>
+      <div class="sip-benefits">
+        
+          <div class="sip-benefit"><span class="sip-ico">ðŸ“ˆ</span>Start with as little as â‚¹500/month</div>
+        
+          <div class="sip-benefit"><span class="sip-ico">ðŸ”„</span>Power of compounding over decades</div>
+        
+          <div class="sip-benefit"><span class="sip-ico">ðŸ›¡</span>SEBI-regulated, AMFI-compliant ARN holder</div>
+        
+          <div class="sip-benefit"><span class="sip-ico">âœ“</span>Goal-mapped portfolio â€” not one-size-fits-all</div>
+        
+      </div>
+      <div class="sip-disclaim">Mutual Fund investments are subject to market risks. Read all scheme-related documents carefully before investing.</div>
+    </div>
+  </div>
+</section>
+
+<section id="services" class="services section-pad">
+  <div class="container">
+    <div class="section-head reveal">
+      <div class="section-eyebrow">What We Offer</div>
+      <h2 class="section-title">Investment services for every life stage.</h2>
+      <p class="section-body">From your first â‚¹500 SIP to structuring a retirement corpus â€” personalised advice, disclosed commissions, and annual reviews that keep your portfolio aligned with your life.</p>
+    </div>
+    <div class="services-grid">
+      
+      <article class="service-card reveal">
+        <div class="service-icon">ðŸ”„</div>
+        <h3 class="service-name">SIP Investment</h3>
+        <p class="service-body">Systematic plans from â‚¹500/month. Auto-debit, goal-linked, reviewed every 12 months.</p>
+      </article>
+      
+      <article class="service-card reveal">
+        <div class="service-icon">ðŸ’°</div>
+        <h3 class="service-name">Lumpsum Investment</h3>
+        <p class="service-body">One-time deployment of surplus â€” timed with market analysis, not gut feel.</p>
+      </article>
+      
+      <article class="service-card reveal">
+        <div class="service-icon">ðŸŽ¯</div>
+        <h3 class="service-name">Goal-Based Planning</h3>
+        <p class="service-body">Retirement corpus, children&#39;s education, home down payment â€” each goal gets its own fund bucket.</p>
+      </article>
+      
+      <article class="service-card reveal">
+        <div class="service-icon">ðŸ§¾</div>
+        <h3 class="service-name">ELSS Tax Saving</h3>
+        <p class="service-body">Save up to â‚¹46,800 in tax under Section 80C while building an equity portfolio.</p>
+      </article>
+      
+      <article class="service-card reveal">
+        <div class="service-icon">ðŸ“Š</div>
+        <h3 class="service-name">Portfolio Review</h3>
+        <p class="service-body">Annual health-check â€” performance vs benchmark, scheme switches, and rebalancing.</p>
+      </article>
+      
+      <article class="service-card reveal">
+        <div class="service-icon">ðŸ¦</div>
+        <h3 class="service-name">Debt &amp; Liquid Funds</h3>
+        <p class="service-body">Emergency corpus, stable income post-retirement â€” Liquid and Short Duration categories.</p>
+      </article>
+      
+    </div>
+  </div>
+</section>
+
+<section id="schemes" class="schemes section-pad">
+  <div class="container">
+    <div class="section-head reveal">
+      <div class="section-eyebrow">Fund Categories</div>
+      <h2 class="section-title">One goal, the right category.</h2>
+      <p class="section-body">We distribute across all major categories from SEBI-registered AMCs. Every recommendation is mapped to your goal horizon and risk capacity.</p>
+    </div>
+    <div class="schemes-grid">
+      
+      <article class="scheme-card reveal">
+        <div class="scheme-head">
+          <div class="scheme-ico">ðŸ“ˆ</div>
+          <div>
+            <div class="scheme-name">Equity Funds</div>
+            <div class="scheme-tagline">Long-term wealth creation</div>
+          </div>
+        </div>
+        <p class="scheme-body">Invests in stocks across market caps. Best for goals 5+ years away. Higher risk, higher potential reward.</p>
+        <div class="scheme-meta">
+          <span class="scheme-risk" style="color:#b91c1c;border-color:#b91c1c">Risk: High</span>
+          <span class="scheme-horizon">5+ years</span>
+        </div>
+      </article>
+      
+      <article class="scheme-card reveal">
+        <div class="scheme-head">
+          <div class="scheme-ico">ðŸ›¡</div>
+          <div>
+            <div class="scheme-name">Debt Funds</div>
+            <div class="scheme-tagline">Stability and steady income</div>
+          </div>
+        </div>
+        <p class="scheme-body">Bonds and corporate paper. Lower volatility â€” tax-efficient for 1â€“3 year goals.</p>
+        <div class="scheme-meta">
+          <span class="scheme-risk" style="color:#b8882e;border-color:#b8882e">Risk: Low to Moderate</span>
+          <span class="scheme-horizon">1â€“3 years</span>
+        </div>
+      </article>
+      
+      <article class="scheme-card reveal">
+        <div class="scheme-head">
+          <div class="scheme-ico">âš–</div>
+          <div>
+            <div class="scheme-name">Hybrid Funds</div>
+            <div class="scheme-tagline">Balanced growth and stability</div>
+          </div>
+        </div>
+        <p class="scheme-body">Pre-set mix of equity and debt. Suitable for moderate-risk investors and first-timers.</p>
+        <div class="scheme-meta">
+          <span class="scheme-risk" style="color:#b8882e;border-color:#b8882e">Risk: Moderate</span>
+          <span class="scheme-horizon">3â€“5 years</span>
+        </div>
+      </article>
+      
+      <article class="scheme-card reveal">
+        <div class="scheme-head">
+          <div class="scheme-ico">ðŸŒŠ</div>
+          <div>
+            <div class="scheme-name">Liquid Funds</div>
+            <div class="scheme-tagline">Park your surplus safely</div>
+          </div>
+        </div>
+        <p class="scheme-body">Ultra-short duration. Easy redemption, better than savings account for idle funds above â‚¹1L.</p>
+        <div class="scheme-meta">
+          <span class="scheme-risk" style="color:#1c6b3a;border-color:#1c6b3a">Risk: Low</span>
+          <span class="scheme-horizon">1 day â€“ 3 months</span>
+        </div>
+      </article>
+      
+      <article class="scheme-card reveal">
+        <div class="scheme-head">
+          <div class="scheme-ico">ðŸ§¾</div>
+          <div>
+            <div class="scheme-name">ELSS</div>
+            <div class="scheme-tagline">Tax saving with equity upside</div>
+          </div>
+        </div>
+        <p class="scheme-body">Section 80C deduction up to â‚¹1.5L. Lowest lock-in (3 years) among 80C instruments.</p>
+        <div class="scheme-meta">
+          <span class="scheme-risk" style="color:#b91c1c;border-color:#b91c1c">Risk: High</span>
+          <span class="scheme-horizon">3+ years</span>
+        </div>
+      </article>
+      
+    </div>
+    <p class="past-perf-note">Past performance does not guarantee future returns. · Mutual Fund investments are subject to market risks. Read all scheme-related documents carefully before investing.</p>
+    
+    <div class="amc-head">We distribute funds from</div>
+    <div class="amc-strip"><span class="amc-pill">Mirae Asset MF</span><span class="amc-pill">Axis MF</span><span class="amc-pill">Kotak MF</span><span class="amc-pill">HDFC MF</span><span class="amc-pill">ICICI Prudential MF</span><span class="amc-pill">SBI MF</span><span class="amc-pill">Nippon India MF</span><span class="amc-pill">UTI MF</span></div>
+    
+  </div>
+</section>
+
+<section id="process" class="process section-pad">
+  <div class="container">
+    <div class="section-head center reveal">
+      <div class="section-eyebrow">How It Works</div>
+      <h2 class="section-title">From first conversation to first SIP â€” in days.</h2>
+    </div>
+    <div class="process-grid">
+      
+      <div class="process-step reveal">
+        <div class="process-icon">ðŸ’¬<span class="process-num">01</span></div>
+        <h3 class="process-title">Goal conversation</h3>
+        <p class="process-body">30-minute call to map your income, goals, and risk tolerance. No paperwork.</p>
+        <span class="process-duration">⏱ 30 minutes</span>
+      </div>
+      
+      <div class="process-step reveal">
+        <div class="process-icon">ðŸ“‹<span class="process-num">02</span></div>
+        <h3 class="process-title">KYC onboarding</h3>
+        <p class="process-body">PAN + Aadhaar eKYC in 2 minutes. Already KYC-verified? We skip straight to selection.</p>
+        <span class="process-duration">⏱ Same day</span>
+      </div>
+      
+      <div class="process-step reveal">
+        <div class="process-icon">ðŸŽ¯<span class="process-num">03</span></div>
+        <h3 class="process-title">Scheme selection</h3>
+        <p class="process-body">Portfolio matched to your goals â€” with full reasoning and disclosed commissions.</p>
+        <span class="process-duration">⏱ Within 24 hours</span>
+      </div>
+      
+      <div class="process-step reveal">
+        <div class="process-icon">ðŸ”„<span class="process-num">04</span></div>
+        <h3 class="process-title">Start &amp; review</h3>
+        <p class="process-body">SIP auto-debit activated. Annual review every December to catch drift.</p>
+        <span class="process-duration">⏱ Ongoing</span>
+      </div>
+      
+    </div>
+  </div>
+</section>
+
+<section id="kyc" class="kyc section-pad">
+  <div class="container">
+    <div class="section-head reveal">
+      <div class="section-eyebrow">KYC Compliance</div>
+      <h2 class="section-title">KYC-verified investors only. Here&#39;s why â€” and how.</h2>
+    </div>
+    <div class="kyc-grid">
+      <div class="reveal">
+        <p class="kyc-body">SEBI and AMFI require every mutual fund investor to complete KYC before the first investment. The process is digital, quick, and one-time â€” once KYC-verified, your record is maintained centrally by the CKYC Registry (CERSAI) and shared across all fund houses. You never repeat KYC for a new fund house.</p>
+        <div class="kyc-note">Already KYC-compliant via a bank, broker, or SEBI-registered entity? Your CKYC record transfers automatically.</div>
+      </div>
+      <div class="kyc-steps reveal">
+        
+        <div class="kyc-step">
+          <div class="kyc-step-ico">ðŸªª</div>
+          <div><div class="kyc-step-title">PAN verification</div><div class="kyc-step-body">Your PAN is the primary identifier linked to your income-tax record.</div></div>
+        </div>
+        
+        <div class="kyc-step">
+          <div class="kyc-step-ico">ðŸ“±</div>
+          <div><div class="kyc-step-title">Aadhaar eKYC</div><div class="kyc-step-body">OTP-based Aadhaar verification on your phone in 2 minutes. No branch visit.</div></div>
+        </div>
+        
+        <div class="kyc-step">
+          <div class="kyc-step-ico">ðŸ“¸</div>
+          <div><div class="kyc-step-title">Video KYC (if needed)</div><div class="kyc-step-body">Short 2-minute video call for certain investment amounts.</div></div>
+        </div>
+        
+        <div class="kyc-step">
+          <div class="kyc-step-ico">âœ“</div>
+          <div><div class="kyc-step-title">CKYC registration</div><div class="kyc-step-body">KYC lodged on the Central KYC Registry â€” valid for life across all SEBI-registered entities.</div></div>
+        </div>
+        
+      </div>
+    </div>
+  </div>
+</section>
+
+<section id="about" class="about section-pad">
+  <div class="container about-grid">
+    <div class="reveal">
+      <div class="section-eyebrow">Our Story</div>
+      <h2 class="section-title">Investing guided by <em>honest advice.</em></h2>
+      <p class="about-body">Founded in 2012 in Jodhpur, Vrddhi Wealth holds ARN-112358 and operates on a commission-transparent model â€” every scheme recommendation comes with a clear disclosure of the trail commission we earn. In thirteen years through two bull markets and one pandemic, our clients&#39; average SIP tenure is 7.4 years. That number, more than any return figure, reflects the trust built by never prioritising our commission over a client&#39;s goal.</p>
+      <div class="about-pillars">
+        
+        <div class="pillar">
+          <div class="pillar-num">01</div>
+          <div><div class="pillar-title">Commission Transparency</div><div class="pillar-body">We disclose the trail commission on every scheme. You see exactly what we earn â€” no conflicts, no agenda.</div></div>
+        </div>
+        
+        <div class="pillar">
+          <div class="pillar-num">02</div>
+          <div><div class="pillar-title">Goal-First Selection</div><div class="pillar-body">Every scheme is mapped to a specific goal and horizon before recommendation. We do not chase AUM targets.</div></div>
+        </div>
+        
+        <div class="pillar">
+          <div class="pillar-num">03</div>
+          <div><div class="pillar-title">Long-Term Partnership</div><div class="pillar-body">Annual reviews, rebalancing calls, and a phone that is answered. Most clients&#39; children are now investors too.</div></div>
+        </div>
+        
+      </div>
+    </div>
+    <div class="creds-card reveal">
+      <div class="creds-title">Regulated. Certified. Compliant.</div>
+      <div class="creds-sub">Every credential verifiable with AMFI and SEBI.</div>
+      <div class="creds-list"><span class="cred-pill">AMFI Registered Â· ARN-112358</span><span class="cred-pill">EUIN: E-112358</span><span class="cred-pill">SEBI Compliant</span><span class="cred-pill">CKYC Registered</span><span class="cred-pill">CFP Certified (FPSB India)</span></div>
+    </div>
+  </div>
+</section>
+
+<section class="testi section-pad">
+  <div class="container">
+    <div class="section-head center reveal">
+      <div class="section-eyebrow">Investor Stories</div>
+      <h2 class="section-title">Families who stayed the <em>course.</em></h2>
+    </div>
+    <div class="testi-grid">
+      
+      <article class="testi-card reveal">
+        <div class="testi-product">Equity SIP Â· 8-year goal</div>
+        <p class="testi-quote">"Started a â‚¹5,000 SIP in 2016 for my daughter&#39;s wedding. Annual reviews kept me from stopping during COVID. The corpus exceeded every FD I could have built."</p>
+        <div class="testi-author">
+          <div class="testi-avatar">RA</div>
+          <div><span class="testi-name">Rajesh Agarwal</span><span class="testi-role">Jodhpur</span></div>
+        </div>
+      </article>
+      
+      <article class="testi-card reveal">
+        <div class="testi-product">Multi-fund portfolio</div>
+        <p class="testi-quote">"Vrddhi showed me the trail commission on each fund before recommending anything. That transparency is rare. I increased my SIP three times in four years."</p>
+        <div class="testi-author">
+          <div class="testi-avatar">PS</div>
+          <div><span class="testi-name">Priya Singhania</span><span class="testi-role">Jaipur</span></div>
+        </div>
+      </article>
+      
+      <article class="testi-card reveal">
+        <div class="testi-product">Debt Fund Â· 18-month corpus</div>
+        <p class="testi-quote">"I came asking for an FD alternative. After one call I understood why a debt fund made more sense for my 18-month goal. The decision was mine â€” I was just better informed."</p>
+        <div class="testi-author">
+          <div class="testi-avatar">VM</div>
+          <div><span class="testi-name">Vikram Mehta</span><span class="testi-role">Pune</span></div>
+        </div>
+      </article>
+      
+    </div>
+  </div>
+</section>
+
+<section id="grievance" class="grievance section-pad">
+  <div class="container">
+    <div class="section-head reveal">
+      <div class="section-eyebrow">Investor Care Â· Grievance Redressal</div>
+      <h2 class="section-title">Your complaint gets a real response. Always.</h2>
+      <p class="section-body">As an AMFI-registered distributor, Vrddhi Wealth maintains a four-tier grievance mechanism. Most concerns are resolved at our level within 3 working days. If unresolved, the path escalates to the AMC, then AMFI Investor Services, and finally SEBI SCORES.</p>
+    </div>
+    <div class="gv-card reveal">
+      <div class="gv-grid">
+        <aside class="gv-officer">
+          <div class="gv-officer-eyebrow">Principal Grievance Officer</div>
+          <div class="gv-officer-name">Mr. Sanjay Gupta</div>
+          <div class="gv-officer-role">Principal Grievance Officer</div>
+          <div class="gv-info">
+            <div class="gv-info-row"><span class="gv-info-key">Email</span><span class="gv-info-val">grievance@vrddhiwealth.in</span></div>
+            <div class="gv-info-row"><span class="gv-info-key">Phone</span><span class="gv-info-val">+91 94140 XXXXX</span></div>
+            <div class="gv-info-row"><span class="gv-info-key">Address</span><span class="gv-info-val">Vrddhi Wealth<br>Old Grain Market, Sarafa Bazaar<br>Jodhpur, Rajasthan 342001</span></div>
+            <div class="gv-info-row"><span class="gv-info-key">Hours</span><span class="gv-info-val">Monâ€“Sat Â· 10:00 AM â€“ 6:00 PM IST</span></div>
+          </div>
+        </aside>
+        <div class="gv-escalation">
+          
+          <div class="gv-step">
+            <div class="gv-step-head">
+              <span class="gv-level">Level 1 Â· Distributor</span>
+              <span class="gv-tat">⏱ Within 3 days</span>
+            </div>
+            <p class="gv-step-body">Contact us directly. Most issues resolved within 3 working days.</p>
+            <span class="gv-step-contact">+91 94140 XXXXX Â· grievance@vrddhiwealth.in</span>
+          </div>
+          
+          <div class="gv-step">
+            <div class="gv-step-head">
+              <span class="gv-level">Level 2 Â· AMC Investor Relations</span>
+              <span class="gv-tat">⏱ Within 15 days</span>
+            </div>
+            <p class="gv-step-body">If unresolved in 7 days, contact the AMC whose scheme the complaint relates to.</p>
+            <span class="gv-step-contact">AMC Investor Relations â€” refer AMC website</span>
+          </div>
+          
+          <div class="gv-step">
+            <div class="gv-step-head">
+              <span class="gv-level">Level 3 Â· AMFI Investor Services</span>
+              <span class="gv-tat">⏱ Within 21 days</span>
+            </div>
+            <p class="gv-step-body">For distributor complaints not resolved at AMC level, escalate to AMFI via amfiindia.com.</p>
+            <span class="gv-step-contact">amfiindia.com/investor-complaint</span>
+          </div>
+          
+          <div class="gv-step">
+            <div class="gv-step-head">
+              <span class="gv-level">Level 4 Â· SEBI SCORES</span>
+              <span class="gv-tat">⏱ As per SEBI norms</span>
+            </div>
+            <p class="gv-step-body">If unresolved after 30 days, register on SEBI&#39;s official investor grievance portal â€” SCORES.</p>
+            <span class="gv-step-contact">scores.gov.in Â· 1800-266-7575</span>
+          </div>
+          
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section class="cta-band">
+  <div class="container cta-inner">
+    <div class="reveal">
+      <h2 class="cta-title">Start your â‚¹500 SIP today. Your retirement starts now.</h2>
+      <p class="cta-sub">A 30-minute conversation, a goal agreed on, and your first SIP running â€” all within the week. No commitment until you are sure.</p>
+      <p class="cta-disclaim">Mutual Fund investments are subject to market risks. Read all scheme-related documents carefully before investing. · Past performance does not guarantee future returns.</p>
+    </div>
+    <div class="cta-actions reveal">
+      <a href="#contact" class="btn btn-primary">Book a Free Call →</a>
+      <span class="cta-note">No charges for consultation Â· AMFI Registered Â· ARN-112358</span>
+    </div>
+  </div>
+</section>
+
+<section id="contact" class="contact section-pad">
+  <div class="container contact-grid">
+    <div class="reveal">
+      <div class="section-eyebrow">Get in Touch</div>
+      <h2 class="section-title">Start your <em>investment journey.</em></h2>
+      <p class="section-body">Book a free 30-minute call. We understand your goals and recommend a portfolio — no paperwork until you're ready.</p>
+      <div class="contact-info">
+        <div><b>Email:</b> hello@vrddhiwealth.in</div>
+        <div><b>Phone:</b> +91 94140 XXXXX</div>
+        <div><b>Office:</b> Old Grain Market, Sarafa Bazaar<br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Jodhpur, Rajasthan 342001</div>
+        <div><b>Hours:</b> Monâ€“Sat Â· 10:00 AM â€“ 6:00 PM IST</div>
+      </div>
+    </div>
+    <div class="form-card reveal">
+      <form data-contact>
+        <div class="fg-row">
+          <div class="fg"><label>Full name</label><input type="text" placeholder="Ramesh Agarwal" required></div>
+          <div class="fg"><label>Mobile</label><input type="tel" placeholder="+91 98XXXXXXXX" required></div>
+        </div>
+        <div class="fg"><label>Email</label><input type="email" placeholder="you@example.com" required></div>
+        <div class="fg">
+          <label>Investment goal</label>
+          <select required>
+            <option value="" disabled selected>Select your goal</option>
+            <option>Retirement Planning</option><option>Child's Education</option>
+            <option>Home Purchase</option><option>Wealth Creation</option>
+            <option>Tax Saving (ELSS)</option><option>Emergency Fund</option><option>Other</option>
+          </select>
+        </div>
+        <div class="fg-row">
+          <div class="fg"><label>Monthly SIP (₹)</label><input type="text" placeholder="e.g. 5,000"></div>
+          <div class="fg">
+            <label>Investment horizon</label>
+            <select>
+              <option>Less than 1 year</option><option>1–3 years</option>
+              <option>3–5 years</option><option selected>5–10 years</option><option>10+ years</option>
+            </select>
+          </div>
+        </div>
+        <button type="submit" class="form-submit">Book Free Consultation →</button>
+        <p class="form-disclaim">By submitting, you agree to be contacted by Vrddhi Wealth (ARN-112358). We never share your details. Mutual Fund investments are subject to market risks. Read all scheme-related documents carefully before investing.</p>
+      </form>
+    </div>
+  </div>
+</section>
+
+<footer class="footer">
+  <div class="container">
+    <div class="footer-grid">
+      <div>
+        <div class="f-brand">Vrddhi Wealth</div>
+        <p class="f-tag">Grow wealth. Build futures.</p>
+        <div class="f-arn">AMFI registered Mutual Fund Distributor Â· ARN-112358</div>
+        <div class="f-cert-row"><span class="f-cert">AMFI Registered Â· ARN-112358</span><span class="f-cert">EUIN: E-112358</span><span class="f-cert">SEBI Compliant</span><span class="f-cert">CKYC Registered</span></div>
+      </div>
+      <div>
+        <p class="f-col-title">Services</p>
+        <ul class="f-links">
+          <li><a href="#services">SIP Investment</a></li><li><a href="#services">Lumpsum Investment</a></li>
+          <li><a href="#services">Goal Planning</a></li><li><a href="#services">ELSS Tax Saving</a></li>
+          <li><a href="#services">Portfolio Review</a></li>
+        </ul>
+      </div>
+      <div>
+        <p class="f-col-title">Fund Categories</p>
+        <ul class="f-links"><li><a href="#schemes">Equity Funds</a></li><li><a href="#schemes">Debt Funds</a></li><li><a href="#schemes">Hybrid Funds</a></li><li><a href="#schemes">Liquid Funds</a></li><li><a href="#schemes">ELSS</a></li></ul>
+      </div>
+      <div>
+        <p class="f-col-title">Regulatory</p>
+        <ul class="f-links">
+          <li>ARN: ARN-112358</li><li>EUIN: E-112358</li>
+          <li>AMFI Registered</li><li><a href="#kyc">KYC Process</a></li>
+          <li><a href="#grievance">Grievance Redressal</a></li>
+          <li><a href="https://scores.gov.in" target="_blank" rel="noopener">SEBI SCORES ↗</a></li>
+          <li><a href="https://amfiindia.com" target="_blank" rel="noopener">AMFI India ↗</a></li>
+        </ul>
+      </div>
+    </div>
+    <div class="footer-disclaim">
+      AMFI registered Mutual Fund Distributor Â· ARN-112358. Mutual Fund investments are subject to market risks. Read all scheme-related documents carefully before investing. Past performance does not guarantee future returns.
+      Information on this website is for educational purposes only and does not constitute investment advice.
+      Investor grievances may be lodged at SEBI SCORES: scores.gov.in · AMFI: amfiindia.com.
+    </div>
+    <div class="footer-bottom">
+      <span>© 2026 Vrddhi Wealth. All rights reserved.</span>
+      <span>Privacy Policy · Terms of Use · Disclaimer</span>
+    </div>
+  </div>
+</footer>
+
+<script>
+  var ro=new IntersectionObserver(function(es){
+    es.forEach(function(e){if(e.isIntersecting){e.target.classList.add('visible');ro.unobserve(e.target);}});
+  },{threshold:.06,rootMargin:'0px 0px -40px 0px'});
+  document.querySelectorAll('.reveal').forEach(function(el){ro.observe(el);});
+  document.querySelectorAll('a[href^="#"]').forEach(function(a){
+    a.addEventListener('click',function(e){
+      var t=document.querySelector(a.getAttribute('href'));
+      if(t){e.preventDefault();t.scrollIntoView({behavior:'smooth',block:'start'});}
+    });
+  });
+  var f=document.querySelector('[data-contact]');
+  if(f){f.addEventListener('submit',function(e){
+    e.preventDefault();
+    var b=f.querySelector('.form-submit');
+    b.textContent='Booking…';b.disabled=true;
+    setTimeout(function(){
+      var ok=document.createElement('div');
+      ok.style.cssText='background:rgba(28,107,58,.08);border:1px solid rgba(28,107,58,.25);color:#1c6b3a;padding:14px 16px;border-radius:8px;font-size:.91rem;margin-bottom:14px;font-weight:500';
+      ok.textContent='✓ Request received — we will call you within one business day.';
+      f.insertAdjacentElement('beforebegin',ok);
+      f.reset();b.textContent='Book Free Consultation →';b.disabled=false;
+      setTimeout(function(){ok.remove();},7000);
+    },900);
+  });}
+</script>
+</body>
+</html>

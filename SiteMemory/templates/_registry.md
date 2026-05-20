@@ -1,6 +1,6 @@
 # Template Registry
 
-Master index of all 13 templates. One row per template — quick scan to know what we have. For implementation details, read the schema (`templates/schemas/template-N.json`) and EJS (`templates/website-template-N.ejs`) directly.
+Master index of all 14 templates. One row per template — quick scan to know what we have. For implementation details, read the schema (`templates/schemas/template-N.json`) and EJS (`templates/website-template-N.ejs`) directly.
 
 | #  | Display Name              | Aesthetic / Palette                       | Sample brand            | Industry / Use case                                    | Schema-driven? | Compliance |
 |----|---                        |---                                         |---                      |---                                                       |---             |---         |
@@ -17,6 +17,7 @@ Master index of all 13 templates. One row per template — quick scan to know wh
 | 11 | **Portfolio / Freelancer** | Pure black/white, big serif                | Aria Mehta              | Solo designers, writers, photographers, freelancers      | ✓              | —          |
 | 12 | **InsurTech SaaS**         | Light · Stripe-pattern · dark code panel  | Stratus                 | B2B InsurTech APIs, embedded-insurance platforms         | ✓              | SOC 2 · IRDAI-aligned |
 | 13 | **Insurance Market**       | Bright green + gold, consumer aggregator   | Coverwise               | IRDAI-licensed insurance brokers, comparison platforms   | ✓              | IRDAI      |
+| 14 | **Mutual Fund Distributor** | Sandstone + maroon + brass, Playfair serif | Vrddhi Wealth           | AMFI-registered ARN holders, MF distributors/advisors    | ✓              | AMFI · SEBI SCORES |
 
 \* Template-1 (Editorial) still on legacy non-safe-locals pattern. Refactor on roadmap.
 
@@ -32,6 +33,7 @@ Four templates carry the `complianceReview` block at the top of their schema. Th
 - **Template 8** (Insurance Advisor) — IRDAI licence, claim-process descriptions
 - **Template 9** (NBFC / Lender) — RBI registration, NBFC category, Fair Practice Code, Grievance Redressal escalation
 - **Template 13** (Insurance Market) — IRDAI broker licence, partner insurer disclosures
+- **Template 14** (Mutual Fund Distributor) — AMFI ARN + EUIN, mandatory MF risk disclaimer, past-performance disclaimer, KYC/CKYC section, SEBI SCORES 4-tier grievance escalation
 
 ## Aesthetic differentiation matrix
 

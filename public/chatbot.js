@@ -213,9 +213,13 @@
 
   function humanTemplateName(id) {
     return ({
-      'template-1': 'Editorial', 'template-2': 'Agency', 'template-3': 'Terminal / Dev Studio',
-      'template-4': 'Web3 / Protocol', 'template-5': 'Local Service', 'template-6': 'BFSI / Banking',
-      'template-7': 'Startup / SaaS', 'template-8': 'Insurance Advisor', 'template-9': 'NBFC / Lender'
+      'template-1':  'Editorial',              'template-2':  'Agency',
+      'template-3':  'Terminal / Dev Studio',  'template-4':  'Web3 / Protocol',
+      'template-5':  'Local Service',          'template-6':  'BFSI / Banking',
+      'template-7':  'Startup / SaaS',         'template-8':  'Insurance Advisor',
+      'template-9':  'NBFC / Lender',          'template-10': 'Restaurant / Café',
+      'template-11': 'Portfolio / Freelancer', 'template-12': 'InsurTech SaaS',
+      'template-13': 'Insurance Market',       'template-14': 'Mutual Fund Distributor'
     })[id] || id;
   }
 

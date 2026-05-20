@@ -113,7 +113,11 @@ function buildTemplateData(payload = {}) {
     'complianceLabel','complianceHeadline','complianceBody',
     'pricingLabel','pricingHeadline',
     'categoriesLabel','categoriesHeadline','categoriesBody',
-    'whyLabel'
+    'whyLabel',
+    // Round K — MF Distributor (template-14)
+    'arnNumber','euinNumber','amfiDisclosure','sipStartingAmount',
+    'schemesLabel','schemesHeadline','schemesBody',
+    'kycLabel','kycHeadline','kycBody','kycNote'
   ];
   for (const k of strKeys) if (data[k] === undefined) data[k] = '';
 
@@ -132,7 +136,9 @@ function buildTemplateData(payload = {}) {
     'signatureDishes','menuCategories','reviews','pressItems',
     'skillsItems','workItems','clientList',
     'customerLogos','howSteps','platformStats','complianceBadges','pricingPlans',
-    'categories','whyPoints','insurerPartners','marketReviews'
+    'categories','whyPoints','insurerPartners','marketReviews',
+    // Round K — MF Distributor (template-14)
+    'schemes','kycSteps','amcPartners','sipBenefits'
   ];
   for (const k of arrKeys) if (!Array.isArray(data[k])) data[k] = [];
 

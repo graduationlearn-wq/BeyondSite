@@ -1,13 +1,13 @@
-# Current State — 2026-05-18
+# Current State — 2026-05-20
 
 **Refresh this file at the end of every meaningful work session.** Don't preserve old state — that's what `changelog/CHANGELOG.md` is for. This file is always "right now."
 
 ## Catalogue
 
-**13 templates · all rendering clean** (`node preview-test.js` reports 13/13 ✓):
+**14 templates · all rendering clean** (`node preview-test.js` reports 14/14 ✓):
 
-| #  | Slug                       | Display name           | Aesthetic                                  |
-|----|---                         |---                     |---                                         |
+| #  | Slug                       | Display name              | Aesthetic                                        |
+|----|---                         |---                        |---                                               |
 | 1  | Editorial                   | Editorial               | newspaper / magazine, serif                |
 | 2  | Agency                      | Agency                  | noir + gold, premium creative studio       |
 | 3  | Terminal                    | Terminal / Dev Studio   | CRT green monospace, IDE feel              |
@@ -20,14 +20,15 @@
 | 10 | Restaurant                  | Restaurant / Café       | cream + burgundy + Fraunces serif          |
 | 11 | Portfolio                   | Portfolio / Freelancer  | pure black/white minimalism, big serif     |
 | 12 | InsurTech                   | InsurTech SaaS          | **light · Stripe-pattern · dark code panel** |
-| 13 | Insurance Market            | Insurance Market        | bright green + gold, consumer aggregator   |
+| 13 | Insurance Market            | Insurance Market          | bright green + gold, consumer aggregator         |
+| 14 | mf-distributor              | Mutual Fund Distributor   | sandstone + maroon + brass, Marwari wealth-house |
 
 See [[_registry|Templates registry]] for one-line descriptions per template.
 
 ## What works
 
 ### Core product
-- **All 13 templates render clean** end-to-end via `node preview-test.js` with realistic sample data. → [[04_template-system]] · [[_registry|Templates registry]]
+- **All 14 templates render clean** end-to-end via `node preview-test.js` with realistic sample data. → [[04_template-system]] · [[_registry|Templates registry]]
 - **Schema-driven form** with side-gutter hints (label + arrow + description on left/right of each section), mockup thumbnails per section, ⓘ tap-to-expand on mobile. → [[04_template-system]]
 - **Per-section AI button (✨)** with **Gemini → Groq → friendly error** failover chain. → [[02_ai-fallback]] · [[ADR#ADR-005|ADR-005]]
 - **Help chatbot** — floating gold bubble bottom-right. Two-layer: client-side intent matcher catches ~9 social categories locally (zero API cost); substantive questions go to Groq via `/api/chat`. → [[03_chatbot]] · [[ADR#ADR-007|ADR-007]]
