@@ -106,11 +106,11 @@ async function markPaymentPaid(orderId, razorpayPaymentId) {
   const prisma = getPrisma();
   if (prisma) {
     try {
-      await prisma.payment.updateMany({
+      const result = await prisma.payment.updateMany({
         where: { paymentId: orderId },
         data:  { status: 'PAID', razorpayPaymentId: razorpayPaymentId || null }
       });
-      return true;
+      return result.count > 0;
     } catch (err) {
       logger.error({ error: err.message, orderId }, 'DB markPaymentPaid failed — falling back to in-memory');
     }
