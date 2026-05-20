@@ -71,6 +71,7 @@ See [[_registry|Templates registry]] for one-line descriptions per template.
 ### Generation & payment
 - **Generate endpoint** zips rendered HTML as `index.html` plus referenced `/uploads/*` images into `assets/`. Streams as a downloadable ZIP with a slugified business name.
 - **Razorpay payment wired** — `PAYMENT_PROVIDER=razorpay` (test credentials in `.env`). `/api/pay` creates a real Razorpay order (₹4,999); `/api/payments/verify` validates HMAC signature and marks PAID; `/api/generate` gates on PAID status. Admin bypass (`admin_bypass_*`) skips payment entirely — no DB required. Fallback: set `PAYMENT_PROVIDER=dummy` for local dev without credentials.
+- **Prisma persistence wired (Round M)** — when `DATABASE_URL` is set: login upserts a `User` row; `POST /api/draft` + `GET /api/draft/:templateId` upsert/load `Draft` rows keyed on `{userId, templateId}`; `consumePayment` stamps `usedAt` on the `Payment` row; `/api/generate` creates a `Download` record after each successful ZIP. All paths fall back to in-memory when no DB configured — demo still boots without MySQL.
 - **Step-wise registration form** — `/register` now uses a 3-step wizard: Step 1 (Email + Password), Step 2 (Name), Step 3 (Summary + Terms). Same `/api/register` POST on submit.
 
 ### Polish
@@ -85,7 +86,7 @@ See [[_registry|Templates registry]] for one-line descriptions per template.
 - **Template 1 (Editorial) is still on the legacy non-safe-locals pattern.** It works because `buildTemplateData` injects defaults for the legacy fields, but it's not as defensive as templates 2–13. Refactor is on the roadmap.
 - **Razorpay running on test credentials** — real charges won't happen until test keys are swapped for live keys. `RAZORPAY_WEBHOOK_SECRET` is blank until a webhook is configured in the Razorpay dashboard. `npm install razorpay` must be run once after pulling this branch.
 - **Auth is dummy** — Auth0 middleware is wired, but production routes still defer to the `DUMMY_USERS` whitelist for the review demo. Flip the env vars + `DEV_AUTH_BYPASS=false` to switch over.
-- **No persistent user data in the running app.** Prisma is scaffolded but the live demo still uses in-memory state — drafts and form state are lost on refresh until we wire the Draft + Website models to the routes.
+- **Persistence requires `DATABASE_URL`** — demo mode (no DB) still loses drafts/payments on restart. Wire up `DATABASE_URL` + `npm run db:migrate:deploy` + `npm run db:seed` for durability. Draft list endpoint (`GET /api/drafts`) not yet added.
 - **Custom cursor logic is still inline in `index.html`.** Not yet extracted to `public/cursor.js`.
 - **No deterministic canned-response fallback below AI.** If both Gemini and Groq fail, the form gets a 503 error rather than a sensible default.
 - **No deployment.** Localhost / docker-compose only. No public URL.

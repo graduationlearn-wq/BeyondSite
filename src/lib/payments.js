@@ -2,39 +2,55 @@
 
 const crypto = require('crypto');
 
+// Declare these before any require() that might trigger dotenv.config() via
+// src/lib/config.js, so the test-env value isn't overwritten by .env.
 const PAYMENT_TTL_MS = 30 * 60 * 1000;
 const PROVIDER = (process.env.PAYMENT_PROVIDER || 'dummy').toLowerCase();
 
-// In-memory store — replaced by prisma.payment rows once DB is connected
+let logger = console;
+let db = null;
+try { logger = require('./logger'); } catch (_) {}
+try { db = require('./database'); } catch (_) {}
+
+// In-memory fallback — used when DATABASE_URL is not configured, and by tests.
+// Exported as `payments` so existing test helpers (payments.set / payments.clear)
+// keep working unchanged.
 const payments = new Map();
 
-// ─── Dummy ──────────────────────────────────────────────────────────────────
-
-function createDummyPayment({ userId = null, templateId, amount = 499900, currency = 'INR' } = {}) {
-  const paymentId = 'dummy_' + crypto.randomBytes(12).toString('hex');
-  payments.set(paymentId, {
-    paymentId, userId, templateId, amount, currency,
-    status: 'PAID',       // dummy skips checkout so goes straight to PAID
-    createdAt: Date.now(),
-    usedAt: null
-  });
-  return {
-    paymentId,
-    orderId: paymentId,
-    providerData: { provider: 'dummy', amount, currency }
-  };
+/** Returns the Prisma singleton, or null when the DB is not configured. */
+function getPrisma() {
+  return db ? db.prisma : null;
 }
 
-// ─── Razorpay ────────────────────────────────────────────────────────────────
+// ─── Dummy provider ──────────────────────────────────────────────────────────
+
+async function createDummyPayment({ userId = null, templateId, amount = 499900, currency = 'INR' } = {}) {
+  const paymentId = 'dummy_' + crypto.randomBytes(12).toString('hex');
+
+  const prisma = getPrisma();
+  if (prisma) {
+    try {
+      await prisma.payment.create({
+        data: { paymentId, userId: userId || null, templateId, amount, currency, status: 'PAID' }
+      });
+    } catch (err) {
+      logger.error({ error: err.message }, 'DB createDummyPayment failed — falling back to in-memory');
+      payments.set(paymentId, { paymentId, userId, templateId, amount, currency, status: 'PAID', createdAt: Date.now(), usedAt: null });
+    }
+  } else {
+    payments.set(paymentId, { paymentId, userId, templateId, amount, currency, status: 'PAID', createdAt: Date.now(), usedAt: null });
+  }
+
+  return { paymentId, orderId: paymentId, providerData: { provider: 'dummy', amount, currency } };
+}
+
+// ─── Razorpay provider ───────────────────────────────────────────────────────
 
 let _rzp = null;
 function getRzp() {
   if (!_rzp) {
     const Razorpay = require('razorpay');
-    _rzp = new Razorpay({
-      key_id:     process.env.RAZORPAY_KEY_ID,
-      key_secret: process.env.RAZORPAY_KEY_SECRET
-    });
+    _rzp = new Razorpay({ key_id: process.env.RAZORPAY_KEY_ID, key_secret: process.env.RAZORPAY_KEY_SECRET });
   }
   return _rzp;
 }
@@ -42,22 +58,33 @@ function getRzp() {
 async function createRazorpayPayment({ userId = null, templateId, amount = 499900, currency = 'INR' } = {}) {
   const rzp = getRzp();
   const order = await rzp.orders.create({
-    amount,
-    currency,
+    amount, currency,
     receipt: `tpl_${templateId}_${Date.now()}`,
     notes: { userId: userId || 'guest', templateId }
   });
-  payments.set(order.id, {
-    paymentId:  order.id,
-    userId,
-    templateId,
-    amount,
-    currency,
-    status:     'CREATED',   // becomes PAID after verifyRazorpaySignature succeeds
-    createdAt:  Date.now(),
-    usedAt:     null,
-    razorpayPaymentId: null
-  });
+
+  const prisma = getPrisma();
+  if (prisma) {
+    try {
+      await prisma.payment.create({
+        data: {
+          paymentId:       order.id,
+          userId:          userId || null,
+          templateId,
+          amount,
+          currency,
+          status:          'CREATED',
+          razorpayOrderId: order.id
+        }
+      });
+    } catch (err) {
+      logger.error({ error: err.message }, 'DB createRazorpayPayment failed — falling back to in-memory');
+      payments.set(order.id, { paymentId: order.id, userId, templateId, amount, currency, status: 'CREATED', createdAt: Date.now(), usedAt: null, razorpayPaymentId: null });
+    }
+  } else {
+    payments.set(order.id, { paymentId: order.id, userId, templateId, amount, currency, status: 'CREATED', createdAt: Date.now(), usedAt: null, razorpayPaymentId: null });
+  }
+
   return {
     paymentId:    order.id,
     orderId:      order.id,
@@ -65,7 +92,7 @@ async function createRazorpayPayment({ userId = null, templateId, amount = 49990
   };
 }
 
-// Called from /api/payments/verify after the Razorpay checkout succeeds client-side
+// Called from /api/payments/verify after the Razorpay checkout widget succeeds.
 function verifyRazorpaySignature({ razorpay_order_id, razorpay_payment_id, razorpay_signature }) {
   const expected = crypto
     .createHmac('sha256', process.env.RAZORPAY_KEY_SECRET)
@@ -74,8 +101,21 @@ function verifyRazorpaySignature({ razorpay_order_id, razorpay_payment_id, razor
   return expected === razorpay_signature;
 }
 
-// Mark payment PAID after client-side signature is verified
-function markPaymentPaid(orderId, razorpayPaymentId) {
+// Mark a payment PAID after client-side signature verification.
+async function markPaymentPaid(orderId, razorpayPaymentId) {
+  const prisma = getPrisma();
+  if (prisma) {
+    try {
+      await prisma.payment.updateMany({
+        where: { paymentId: orderId },
+        data:  { status: 'PAID', razorpayPaymentId: razorpayPaymentId || null }
+      });
+      return true;
+    } catch (err) {
+      logger.error({ error: err.message, orderId }, 'DB markPaymentPaid failed — falling back to in-memory');
+    }
+  }
+  // In-memory fallback
   const p = payments.get(orderId);
   if (!p) return false;
   p.status = 'PAID';
@@ -83,7 +123,7 @@ function markPaymentPaid(orderId, razorpayPaymentId) {
   return true;
 }
 
-// ─── Webhook (server-to-server Razorpay events) ───────────────────────────────
+// ─── Webhook (server-to-server Razorpay events) ──────────────────────────────
 
 function verifyRazorpayWebhook({ headers, rawBody }) {
   const signature = headers['x-razorpay-signature'];
@@ -101,16 +141,44 @@ function verifyRazorpayWebhook({ headers, rawBody }) {
 }
 
 // ─── consumePayment — called by /api/generate before zipping ─────────────────
+//
+// Now async so DB reads/writes can be awaited. The route already lives inside
+// an async handler so `await consumePayment(paymentId)` is a drop-in swap.
+// When prisma is null the function resolves immediately via the in-memory Map.
 
-function consumePayment(paymentId) {
+async function consumePayment(paymentId) {
+  const prisma = getPrisma();
+
+  if (prisma) {
+    try {
+      const p = await prisma.payment.findUnique({ where: { paymentId } });
+      if (!p)       return { ok: false, reason: 'Invalid payment' };
+      if (p.usedAt) return { ok: false, reason: 'Payment already used' };
+      if (Date.now() - new Date(p.createdAt).getTime() > PAYMENT_TTL_MS) {
+        return { ok: false, reason: 'Payment expired' };
+      }
+      if (PROVIDER === 'razorpay' && p.status !== 'PAID') {
+        return { ok: false, reason: 'Payment not verified' };
+      }
+      await prisma.payment.update({
+        where: { paymentId },
+        data:  { usedAt: new Date(), status: 'PAID' }
+      });
+      return { ok: true };
+    } catch (err) {
+      logger.error({ error: err.message, paymentId }, 'DB consumePayment failed — falling back to in-memory');
+      // Fall through to in-memory path below
+    }
+  }
+
+  // In-memory fallback (also the path used in tests since DATABASE_URL is unset there)
   const p = payments.get(paymentId);
   if (!p)       return { ok: false, reason: 'Invalid payment' };
   if (p.usedAt) return { ok: false, reason: 'Payment already used' };
   if (Date.now() - p.createdAt > PAYMENT_TTL_MS) return { ok: false, reason: 'Payment expired' };
-  // Razorpay orders must pass /api/payments/verify before they can gate a download
   if (PROVIDER === 'razorpay' && p.status !== 'PAID') return { ok: false, reason: 'Payment not verified' };
   p.usedAt = Date.now();
-  p.status = 'PAID';
+  p.status  = 'PAID';
   return { ok: true };
 }
 
@@ -127,7 +195,7 @@ function verifyWebhook(opts) {
 }
 
 module.exports = {
-  payments,
+  payments,       // Map reference — tests use payments.set() / payments.clear()
   PAYMENT_TTL_MS,
   PROVIDER,
   consumePayment,

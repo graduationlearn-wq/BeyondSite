@@ -6,6 +6,39 @@ Round-by-round history of every meaningful change. **Append-only** — new round
 
 ---
 
+## Round M — 2026-05-20
+
+**Wired Prisma persistence into the runtime — payments, drafts, downloads, and user rows now survive server restarts.**
+
+**Touched:** `src/lib/payments.js` · `server.js` · `__tests__/payments.test.js`
+
+### Shipped
+
+- **`src/lib/payments.js` — Prisma-backed with in-memory fallback**
+  - All five public functions kept at the same call-site API.
+  - `createDummyPayment` / `createRazorpayPayment` — `prisma.payment.create` first; falls back to the in-memory Map on error or when `prisma` is null (no `DATABASE_URL`).
+  - `consumePayment` — now `async`; uses `prisma.payment.findUnique` + `.update` to stamp `usedAt`; falls back to Map when DB unavailable.
+  - `markPaymentPaid` — now `async`; uses `prisma.payment.updateMany`; falls back to Map.
+  - `PAYMENT_TTL_MS` / `PROVIDER` declared **before** `require('./logger')` so `dotenv.config()` (triggered transitively via `config.js`) cannot overwrite the test-env `PAYMENT_PROVIDER` value.
+  - Exported `payments` Map unchanged — tests still call `payments.set()` / `payments.clear()`.
+
+- **`server.js` — four wire-up points**
+  - `/api/login` — made `async`; calls `prisma.user.upsert` after auth check so the user has a real DB row for FK constraints. No-op when prisma is null.
+  - `POST /api/draft` (new) + `GET /api/draft/:templateId` (new) — both behind `authenticate()`; upsert/load keyed on `{ userId, templateId }` (`@@unique`). Gracefully returns `{ persisted: false }` when no DB.
+  - `/api/payments/verify` — made `async`, `await markPaymentPaid(...)`.
+  - `/api/payments/webhook` — handler made `async`, `await markPaymentPaid(...)`.
+  - `/api/generate` — `await consumePayment(paymentId)`; after successful consume, attempts `prisma.download.create` (best-effort, try/catch — ZIP still streams on DB failure). Admin-bypass path unchanged.
+
+- **`__tests__/payments.test.js`** — all seven tests made `async`; `consumePayment` calls wrapped in `await`. Currency/amount updated to `INR`/`499900`. 260/260 green.
+
+### Technical debt incurred
+
+- Draft routes have no rate-limiter — add before production.
+- No `GET /api/drafts` list endpoint — only per-template load.
+- `prisma.download.create` silently skips when `userId = 'dev-user'` (FK miss in dev DB) — seed the dev-user row to fix.
+
+---
+
 ## Round L — 2026-05-20
 
 **Removed preview-all.html. Updated SiteMemory docs. Created CLAUDE.md.**
