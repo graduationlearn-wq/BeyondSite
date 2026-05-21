@@ -2,6 +2,18 @@
 
 This file provides guidance to Claude Code (claude.ai/code) when working with code in this repository.
 
+## ⚠️ READ THIS FIRST — every new session
+
+Before you touch any code, in this exact order:
+
+1. Open `SiteMemory/01_CURRENT_STATE.md` — the dated "what works / what's broken right now" doc. It is always more up to date than any other file in the repo (including this one). If anything in CLAUDE.md contradicts CURRENT_STATE, CURRENT_STATE wins.
+2. Skim the **two latest rounds** at the top of `SiteMemory/changelog/CHANGELOG.md`. That's the last ~week of changes. If the user asks you to "do X", check whether X (or its prerequisites) is already in those rounds before you start building.
+3. If the user's task touches a new file area (auth, payments, templates, EJS), open the matching architecture doc in `SiteMemory/architecture/` first.
+
+**Do not redo work that's already in the changelog.** This codebase has been built incrementally across many sessions. The user is frustrated by Claude Code re-implementing things that already exist. Read first, then act.
+
+When you finish a meaningful change: append a new round to `CHANGELOG.md` (never edit past rounds) and update `01_CURRENT_STATE.md` if the "what works" or "what's broken" list changed.
+
 ## What this is
 
 BeyondSite — a no-code generator for professional business websites. Pick a template → fill a schema-driven form (with AI fill assist) → preview → pay → download a self-contained ZIP of HTML/CSS/JS. 14 templates covering Indian-regulated SMBs (NBFC, BFSI, Insurance, AMFI MF Distributors) and global verticals. Built as an intern prototype handoff to BeyondSure's tech team.
@@ -16,7 +28,7 @@ npx prisma generate
 node server.js          # http://localhost:3000
 
 # Tests
-npm test                # Jest with coverage (86 tests)
+npm test                # Jest with coverage (260 tests)
 npm run test:watch      # Watch mode
 npx jest --coverage     # Windows fallback if NODE_ENV=test prefix fails
 
@@ -76,9 +88,9 @@ These are the stubs the tech team will swap for production implementations:
 
 | File | Status | To activate |
 |------|--------|-------------|
-| `auth.js` | Auth0 middleware wired, demo uses `DUMMY_USERS` | Set `AUTH0_DOMAIN` + `AUTH0_AUDIENCE` + `DEV_AUTH_BYPASS=false` |
-| `database.js` | Prisma client ready, runtime uses in-memory Maps | Set `DATABASE_URL` pointing at MySQL |
-| `payments.js` | Razorpay scaffold committed, test credentials active | Set `PAYMENT_PROVIDER=razorpay` + `RAZORPAY_*` env vars |
+| `auth.js` | Auth0 middleware wired + HMAC token bridge, demo uses `DUMMY_USERS` | Set `AUTH0_DOMAIN` + `AUTH0_AUDIENCE` + `DEV_AUTH_BYPASS=false` |
+| `database.js` | Prisma client ready, runtime wired to in-memory Maps | Set `DATABASE_URL` pointing at MySQL |
+| `payments.js` | Razorpay scaffold committed + Prisma-backed, test credentials active | Set `PAYMENT_PROVIDER=razorpay` + `RAZORPAY_*` env vars |
 | `storage.js` | Local disk default | Set `UPLOAD_STORAGE=s3` + `AWS_*` vars |
 
 Every stub has a `// HANDOFF:` comment pointing at the replacement callsite. `DEPLOYMENT.md` has the step-by-step recipe.
@@ -90,6 +102,13 @@ Every stub has a `// HANDOFF:` comment pointing at the replacement callsite. `DE
 Admin bypass: any `paymentId` starting with `admin_bypass_` skips `consumePayment()` entirely.
 
 Razorpay: `/api/pay` creates an order → frontend opens Razorpay checkout widget → `/api/payments/verify` validates HMAC-SHA256 → marks PAID → `/api/generate` gates on PAID status.
+
+**Payment sub-steps (Round N):** Step 3 ("Pay & Download") has 3 internal sub-steps with a mini progress bar:
+1. **Pay** — Payment button, Razorpay checkout
+2. **Confirmation** — "Payment received" with receipt details, auto-advances after 1.5s
+3. **Download** — Download button → ZIP downloads → success screen
+
+After payment succeeds, auto-advances through Confirmation → Download. Admin bypass skips checkout but still progresses through sub-steps.
 
 ## Critical conventions
 
@@ -152,6 +171,7 @@ No React/Vue/Svelte, no CSS framework (Tailwind/Bootstrap), no TypeScript, no bu
 - **No AI fallback below Groq** — if both providers fail, the form gets a 503. No canned defaults yet.
 - **Thumbnail CSS class names** for template-12/13 still carry old codenames (`template-heph-prev`, `template-turtlemint-prev`) — sample brands are now Stratus and Coverwise.
 - **Auth and DB are stubs** — all runtime state is in-memory. Drafts and payments are lost on server restart.
+- **Razorpay running on test credentials** — real charges won't happen until test keys are swapped for live keys.
 
 ## Template catalogue (14 templates)
 

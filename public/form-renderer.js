@@ -7,6 +7,10 @@
 //   FormRenderer.mergeForSchema(oldData, schema) — keep only values whose ids exist in schema
 //   FormRenderer.setContext({templateId, getBusinessName, getDescription, getTone})
 //                                                — wire up context for AI calls
+//   FormRenderer.goToSection(index)              — navigate to a specific section step
+//   FormRenderer.getCurrentSectionIndex()        — current step index (0-based)
+//   FormRenderer.getTotalSections()              — total number of sections
+//   FormRenderer.setOnLastStep(fn)               — callback fired when user clicks Next on last section
 
 (function () {
   const state = {
@@ -16,7 +20,10 @@
     ctx: { templateId: '', getBusinessName: () => '', getDescription: () => '', getTone: () => 'professional' },
     observer: null,
     activeSection: null,
-    mockupEl: null
+    mockupEl: null,
+    currentSectionIndex: 0,
+    totalSections: 0,
+    onLastStepCallback: null
   };
 
   // ── Small DOM helper ────────────────────────────────────────────
@@ -166,6 +173,90 @@
     }
     rerender();
     return wrap;
+  }
+
+  // ── Tab bar rendering ─────────────────────────────────────────────
+  function renderTabBar() {
+    const sections = state.schema.sections || [];
+    if (sections.length <= 1) return null; // No tabs needed for single section
+
+    const bar = el('div', { class: 'step-tab-bar' });
+    sections.forEach((s, i) => {
+      let cls = 'step-tab';
+      if (i < state.currentSectionIndex) cls += ' completed';
+      else if (i === state.currentSectionIndex) cls += ' active';
+
+      const tab = el('div', {
+        class: cls,
+        'data-tab-index': i,
+        onclick: () => goToSection(i)
+      }, [
+        el('span', { class: 'step-tab-num' }, String(i + 1)),
+        el('span', { class: 'step-tab-label' }, s.title || ('Step ' + (i + 1)))
+      ]);
+      bar.appendChild(tab);
+    });
+    return bar;
+  }
+
+  // ── Step navigation buttons ───────────────────────────────────────
+  function renderStepButtons() {
+    const sections = state.schema.sections || [];
+    if (sections.length <= 1) return null;
+
+    const wrap = el('div', { class: 'step-nav-buttons' });
+
+    // Previous button
+    if (state.currentSectionIndex > 0) {
+      wrap.appendChild(el('button', {
+        type: 'button', class: 'btn-step btn-prev',
+        onclick: () => prevSection()
+      }, '← Previous'));
+    } else {
+      wrap.appendChild(el('div', { class: 'btn-step-spacer' }));
+    }
+
+    // Step counter
+    const counter = el('span', { class: 'step-counter' },
+      'Step ' + (state.currentSectionIndex + 1) + ' of ' + sections.length);
+    wrap.appendChild(counter);
+
+    // Next / Preview button
+    const isLast = state.currentSectionIndex === sections.length - 1;
+    if (isLast) {
+      wrap.appendChild(el('button', {
+        type: 'button', class: 'btn-step btn-next btn-preview-trigger',
+        onclick: () => {
+          if (state.onLastStepCallback) {
+            state.onLastStepCallback();
+          }
+        }
+      }, 'Preview Website →'));
+    } else {
+      wrap.appendChild(el('button', {
+        type: 'button', class: 'btn-step btn-next',
+        onclick: () => nextSection()
+      }, 'Next →'));
+    }
+
+    return wrap;
+  }
+
+  // ── Navigation functions ──────────────────────────────────────────
+  function goToSection(index) {
+    if (!state.schema) return;
+    const sections = state.schema.sections || [];
+    if (index < 0 || index >= sections.length) return;
+    state.currentSectionIndex = index;
+    render(state.schema, state.mount);
+  }
+
+  function nextSection() {
+    goToSection(state.currentSectionIndex + 1);
+  }
+
+  function prevSection() {
+    goToSection(state.currentSectionIndex - 1);
   }
 
   // ── Arrow SVGs (clean curved, different angle per side) ─────────
@@ -383,7 +474,10 @@
       const data = await res.json();
       if (!res.ok) throw new Error(data.error || 'AI failed');
       Object.assign(state.data, data);
+      // Preserve current step position after re-render
+      const savedIndex = state.currentSectionIndex;
       render(state.schema, state.mount);
+      state.currentSectionIndex = savedIndex;
     } catch (e) {
       alert('AI error: ' + e.message);
     } finally {
@@ -406,15 +500,32 @@
   function render(schema, mount) {
     state.schema = schema;
     state.mount = mount;
+    state.totalSections = (schema.sections || []).length;
     mount.innerHTML = '';
     mount.classList.add('schema-form-grid');
+    mount.classList.add('schema-form-step-mode');
+
     if (schema && schema.complianceReview) {
       mount.appendChild(renderComplianceBanner(schema.complianceReview));
     }
-    (schema.sections || []).forEach(s => mount.appendChild(renderSection(s)));
-    buildMockup(schema);
-    // Defer observer setup so browser can finish layout first
-    requestAnimationFrame(() => setupObserver(mount));
+
+    // Tab bar
+    const tabBar = renderTabBar();
+    if (tabBar) mount.appendChild(tabBar);
+
+    // Render only the current section
+    const sections = schema.sections || [];
+    if (sections.length > 0 && state.currentSectionIndex < sections.length) {
+      const currentSection = sections[state.currentSectionIndex];
+      mount.appendChild(renderSection(currentSection));
+    }
+
+    // Step navigation buttons
+    const navButtons = renderStepButtons();
+    if (navButtons) mount.appendChild(navButtons);
+
+    // Mockup and observer are disabled in step mode — they're scroll-dependent
+    // and don't make sense when showing one section at a time.
   }
 
   function collect() { return JSON.parse(JSON.stringify(state.data)); }
@@ -456,6 +567,13 @@
   }
 
   function getActiveSection() { return state.activeSection || null; }
+  function getCurrentSectionIndex() { return state.currentSectionIndex; }
+  function getTotalSections() { return state.totalSections; }
+  function setOnLastStep(fn) { state.onLastStepCallback = fn; }
 
-  window.FormRenderer = { render, collect, setData, replaceData, mergeForSchema, setContext, getActiveSection };
+  window.FormRenderer = {
+    render, collect, setData, replaceData, mergeForSchema, setContext,
+    getActiveSection, goToSection, getCurrentSectionIndex, getTotalSections,
+    setOnLastStep
+  };
 })();

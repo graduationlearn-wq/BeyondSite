@@ -8,7 +8,7 @@
 - **Persistence:** **Prisma ORM** with **MySQL** target. Schema landed (six models); runtime still falls back to an in-memory `Map` for the dummy payment / draft flows until the wiring sprint. → [[ADR#ADR-012|ADR-012]]
 - **Auth:** **Auth0 JWT** middleware (`jsonwebtoken` + `jwks-rsa`) in `src/lib/auth.js`. Dev bypass via `DEV_AUTH_BYPASS=true`. Demo path uses a strict dummy whitelist (`DUMMY_USERS`). → [[ADR#ADR-013|ADR-013]] · [[ADR#ADR-016|ADR-016]]
 - **Logging:** **Winston** structured JSON in prod, human-readable in dev. → [[ADR#ADR-015|ADR-015]]
-- **Tests:** **Jest** — 86 unit tests covering core business logic and infrastructure modules.
+- **Tests:** **Jest** — 260 unit tests covering core business logic and infrastructure modules.
 - **CI:** **GitHub Actions** — `npm ci` → `prisma generate` → `npm test` → `npm audit` on push.
 - **Container:** **Multi-stage Dockerfile** + `docker-compose.yml` (app + MySQL sidecar). Non-root `nodejs:1001`. HEALTHCHECK against `/health`. → [[ADR#ADR-014|ADR-014]]
 
@@ -89,12 +89,13 @@ StaticWebsiteGenerator/
 │   └── ci.yml                            — npm ci → prisma generate → npm test → npm audit
 │
 ├── public/                              — Served by express.static
-│   ├── index.html                        — Main builder app + 13 picker cards
+│   ├── index.html                        — Main builder app + 14 picker cards
 │   ├── login.html                        — Login (click-to-fill chips for the two dummy accounts)
 │   ├── profile.html                      — Account shell (green theme, dark/light toggle)
 │   ├── plans.html                        — Pricing tiers (Free / Pro / Studio)
 │   ├── style.css                         — Global styles + thumbnails + chatbot + preview modal
-│   ├── script.js                         — Page-flow logic (step transitions, AI wiring)
+│   ├── step-wizard.css                   — Step wizard tab styles
+│   ├── script.js                         — Page-flow logic, payment sub-steps, auth headers
 │   ├── form-renderer.js                  — Schema → form, mockup, hints, AI button, validation
 │   ├── chatbot.js                        — Floating help-bot with local-intent matcher
 │   ├── template-preview.js               — Hover/long-press picker preview modal
@@ -104,8 +105,8 @@ StaticWebsiteGenerator/
 ├── templates/
 │   ├── schemas/
 │   │   ├── _base.json                    — Shared brand / contact / theme sections
-│   │   └── template-N.json               — Per-template schemas (1–13)
-│   ├── website-template-N.ejs            — Per-template renderers (1–13)
+│   │   └── template-N.json               — Per-template schemas (1–14)
+│   ├── website-template-N.ejs            — Per-template renderers (1–14)
 │   ├── preview-test.js                   — Local rendering harness with sample data
 │   ├── preview-N.html                    — Generated previews (run preview-test.js to refresh)
 │   └── preview-all.html                  — Side-by-side viewer (column / viewport / filter chips)
@@ -133,7 +134,7 @@ StaticWebsiteGenerator/
 - The **AI button** posts to `/api/ai-section` with `{ templateId, sectionId, businessName, description, tone }`. Server picks the prompt from `AI_PROMPTS[templateId][sectionId]`, calls Gemini with retries, falls back to Groq if Gemini fails.
 - The **chatbot** is rendered by `public/chatbot.js`. User messages first hit `LOCAL_INTENTS` regex matchers; if nothing matches, they're sent to `/api/chat` which calls Groq with a strict scope-locked system prompt + form context.
 - The **preview button (step 1 → step 2)** posts to `/api/preview` with the current form data. Server renders the EJS, returns HTML, frontend displays in an iframe inside a device-toggle stage (`preview-frame.js`, see ADR-020).
-- The **generate button (step 3)** requires a paymentId from `/api/pay`. Server consumes the payment, renders EJS, zips the HTML + uploaded images, streams as a ZIP.
+- The **generate button (step 3)** requires a paymentId from `/api/pay`. Server consumes the payment, renders EJS, zips the HTML + uploaded images, streams as a ZIP. Step 3 has 3 internal sub-steps (Pay → Confirmation → Download) with a mini progress bar.
 - The **template preview modal** loads `/template-previews/preview-N.html` in an iframe. That route is a server-side whitelist that only serves pre-generated files (won't leak EJS source).
 - The **`/profile` and `/plans` pages** read `localStorage.role` (set on login from the `DUMMY_USERS` response) to decide whether to show admin-only cards. Both pages own their own theme palette and persist the dark/light toggle to `localStorage`.
 - The **`/health` endpoint** returns `{ status: "ok" }` and is what the Docker HEALTHCHECK / future orchestrator pings.

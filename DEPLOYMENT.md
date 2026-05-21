@@ -12,8 +12,8 @@ This guide walks the tech team through taking BeyondSite from "intern repo on Gi
 |---                  |---          |---                                                                              |
 | Container build     | ✅ Ready    | `docker build -t beyondsite .` — multi-stage, non-root, healthcheck             |
 | MySQL schema        | ✅ Ready    | `prisma/migrations/20260515000000_init/migration.sql` — apply with `npm run db:migrate:deploy` |
-| Seed data           | ✅ Ready    | `npm run db:seed` — upserts 13 templates + first admin                          |
-| Auth0 middleware    | ✅ Ready    | Set `AUTH0_DOMAIN` + `AUTH0_AUDIENCE` → activates automatically                 |
+| Seed data           | ✅ Ready    | `npm run db:seed` — upserts 14 templates + first admin                          |
+| Auth0 middleware    | ✅ Ready    | Set `AUTH0_DOMAIN` + `AUTH0_AUDIENCE` → activates automatically. HMAC token bridge allows demo mode even with Auth0 configured. |
 | Login route swap    | 🟡 Manual   | Replace `DUMMY_USERS` block in `server.js` + add `/auth/google` routes (HANDOFF comment shows the recipe)   |
 | Razorpay / Stripe   | 🟡 Manual   | Uncomment the scaffold in `src/lib/payments.js`, set env vars, wire webhook    |
 | Logging             | ✅ Ready    | Winston JSON in prod, pipes to stdout (Datadog / CloudWatch / Loki pick up)    |
@@ -68,7 +68,7 @@ npx prisma studio
 # Opens http://localhost:5555 — browse your fresh DB
 ```
 
-You should see the `templates` table populated with 13 rows and one `users` row matching `AUTH0_BOOTSTRAP_ADMIN_EMAIL`.
+You should see the `templates` table populated with 14 rows and one `users` row matching `AUTH0_BOOTSTRAP_ADMIN_EMAIL`.
 
 ### 3. Configure environment variables
 
@@ -247,9 +247,9 @@ Run these tests after deployment to verify everything works:
 
 ### 1. Template Rendering (Critical)
 ```bash
-# Verify all 4 published templates render correctly
+# Verify all 14 published templates render correctly
 cd templates && node preview-test.js
-# Expected: "13/13 templates rendered cleanly" (or at least 4 published ones)
+# Expected: "14/14 templates rendered cleanly"
 
 # Verify preview HTML files exist for published templates
 ls -la preview-5.html preview-8.html preview-12.html preview-13.html
@@ -340,10 +340,10 @@ Prisma migrations are forward-only by default — if you need rollbacks, write `
 
 The deployer cannot fix these from the outside — they're roadmap items the BeyondSite team will pick up next:
 
-- Wire `prisma.draft.*` and `prisma.website.*` calls into the form-save and generate paths. Schema and client exist; the request handlers still use in-memory state.
 - Deterministic 4th-layer fallback for `/api/ai-section` (when both Gemini and Groq fail).
 - Extract custom-cursor logic from inline `<script>` in `index.html` to `public/cursor.js`.
 - Refactor `templates/website-template-1.ejs` to the safe-locals pattern.
+- Rename thumbnail CSS classes `template-heph-prev` / `template-turtlemint-prev` to `template-stratus-prev` / `template-coverwise-prev`.
 
 See [`SiteMemory/roadmap/ROADMAP.md`](./SiteMemory/roadmap/ROADMAP.md) for the full backlog.
 

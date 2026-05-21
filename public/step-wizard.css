@@ -1,0 +1,286 @@
+/* ═══════════════════════════════════════════════════════════════
+   BeyondSite — step-wizard.css
+   Tab-style step navigation for the schema-driven form.
+   Loaded separately so it doesn't pollute style.css.
+   ═══════════════════════════════════════════════════════════════ */
+
+/* ── Tab bar ─────────────────────────────────────────────────── */
+.step-tab-bar {
+  display: flex;
+  flex-wrap: nowrap;
+  gap: 6px;
+  padding: 12px 0;
+  margin-bottom: 16px;
+  border-bottom: 1px solid var(--border);
+  overflow-x: auto;
+  -webkit-overflow-scrolling: touch;
+  scrollbar-width: thin;
+  scrollbar-color: var(--border-hi) transparent;
+  max-width: 640px;
+  margin-left: auto;
+  margin-right: auto;
+  width: 100%;
+}
+
+.step-tab-bar::-webkit-scrollbar {
+  height: 4px;
+}
+
+.step-tab-bar::-webkit-scrollbar-track {
+  background: transparent;
+}
+
+.step-tab-bar::-webkit-scrollbar-thumb {
+  background: var(--border-hi);
+  border-radius: 4px;
+}
+
+.step-tab {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  padding: 8px 14px;
+  border-radius: 8px;
+  font-size: 0.85em;
+  font-weight: 500;
+  color: var(--text-muted);
+  background: var(--bg-card-2);
+  border: 1px solid var(--border);
+  cursor: pointer;
+  transition: all 0.2s ease;
+  user-select: none;
+  flex-shrink: 0;
+  white-space: nowrap;
+}
+
+.step-tab:hover {
+  border-color: var(--border-hi);
+  color: var(--text-soft);
+}
+
+.step-tab.active {
+  color: var(--accent);
+  background: var(--accent-dim);
+  border-color: var(--accent-glow);
+  font-weight: 600;
+}
+
+.step-tab.completed {
+  color: var(--success);
+  background: var(--success-dim);
+  border-color: rgba(52, 211, 153, 0.15);
+}
+
+.step-tab.completed .step-tab-num::after {
+  content: '✓';
+  margin-left: 2px;
+}
+
+.step-tab-num {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 20px;
+  height: 20px;
+  border-radius: 50%;
+  font-size: 0.8em;
+  font-weight: 700;
+  background: rgba(255, 255, 255, 0.06);
+}
+
+.step-tab.active .step-tab-num {
+  background: var(--accent);
+  color: var(--bg);
+}
+
+.step-tab.completed .step-tab-num {
+  background: var(--success);
+  color: #fff;
+}
+
+.step-tab-label {
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  max-width: 120px;
+}
+
+/* ── Step navigation buttons ─────────────────────────────────── */
+.step-nav-buttons {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+  padding: 16px 0 8px;
+  margin-top: 16px;
+  border-top: 1px solid var(--border);
+  max-width: 640px;
+  margin-left: auto;
+  margin-right: auto;
+  width: 100%;
+}
+
+.btn-step {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  padding: 10px 20px;
+  border-radius: 10px;
+  font-size: 0.9em;
+  font-weight: 600;
+  border: none;
+  cursor: pointer;
+  transition: all 0.2s ease;
+  font-family: var(--font);
+}
+
+.btn-prev {
+  color: var(--text-soft);
+  background: var(--bg-card-2);
+  border: 1px solid var(--border);
+}
+
+.btn-prev:hover {
+  border-color: var(--border-hi);
+  color: var(--text);
+}
+
+.btn-next {
+  color: #fff;
+  background: linear-gradient(135deg, var(--accent), var(--accent-lt));
+  box-shadow: 0 4px 12px var(--accent-glow);
+}
+
+.btn-next:hover {
+  box-shadow: 0 6px 16px var(--accent-glow);
+  transform: translateY(-1px);
+}
+
+.btn-preview-trigger {
+  background: linear-gradient(135deg, var(--primary), var(--primary-light));
+  font-size: 0.95em;
+  padding: 12px 24px;
+}
+
+.btn-step-spacer {
+  width: 120px;
+}
+
+.step-counter {
+  font-size: 0.85em;
+  color: var(--text-muted);
+  font-weight: 500;
+}
+
+/* ── Step mode: single section layout ────────────────────────── */
+.schema-form-step-mode .schema-section-row {
+  display: block;
+}
+
+.schema-form-step-mode .hint-gutter {
+  display: none;
+}
+
+.schema-form-step-mode .schema-section {
+  max-width: 640px;
+  margin-left: auto;
+  margin-right: auto;
+  width: 100%;
+}
+
+.schema-form-step-mode .compliance-banner {
+  max-width: 640px;
+  margin-left: auto;
+  margin-right: auto;
+}
+
+/* ── Responsive ──────────────────────────────────────────────── */
+@media (max-width: 768px) {
+  .step-tab {
+    padding: 6px 10px;
+    font-size: 0.8em;
+  }
+
+  .step-tab-label {
+    max-width: 80px;
+  }
+
+  .step-nav-buttons {
+    flex-wrap: wrap;
+    gap: 8px;
+  }
+
+  .btn-step {
+    padding: 8px 16px;
+    font-size: 0.85em;
+  }
+
+  .btn-step-spacer {
+    width: auto;
+    order: 3;
+    flex-basis: 100%;
+  }
+
+  .step-counter {
+    order: 1;
+    flex-basis: 100%;
+    text-align: center;
+  }
+
+  .btn-prev {
+    order: 2;
+    flex: 1;
+  }
+
+  .btn-next {
+    order: 2;
+    flex: 1;
+  }
+}
+
+@media (max-width: 480px) {
+  .step-tab {
+    padding: 5px 8px;
+    font-size: 0.75em;
+  }
+
+  .step-tab-label {
+    display: none;
+  }
+
+  .step-tab-num {
+    width: 18px;
+    height: 18px;
+    font-size: 0.75em;
+  }
+}
+
+/* ── Light mode adjustments ──────────────────────────────────── */
+[data-theme="light"] .step-tab {
+  background: #f5f9f7;
+  border-color: rgba(30, 100, 60, 0.1);
+}
+
+[data-theme="light"] .step-tab.active {
+  background: rgba(26, 153, 85, 0.08);
+  border-color: rgba(26, 153, 85, 0.2);
+}
+
+[data-theme="light"] .step-tab.completed {
+  background: rgba(5, 150, 105, 0.06);
+  border-color: rgba(5, 150, 105, 0.15);
+}
+
+[data-theme="light"] .step-tab-num {
+  background: rgba(0, 0, 0, 0.06);
+}
+
+[data-theme="light"] .step-tab.active .step-tab-num {
+  background: var(--accent);
+  color: #fff;
+}
+
+[data-theme="light"] .btn-prev {
+  background: #f5f9f7;
+  border-color: rgba(30, 100, 60, 0.15);
+}

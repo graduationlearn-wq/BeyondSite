@@ -242,6 +242,7 @@
     // ── ACCOUNT ACTIONS ──────────────────────────────────────
     function logoutNow() {
       localStorage.removeItem('beyondsite_login');
+      localStorage.removeItem('beyondsite_token');
       window.location.href = '/login';
     }
   </script>

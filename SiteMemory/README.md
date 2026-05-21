@@ -20,9 +20,9 @@ SiteMemory/
 │   ├── 04_template-system.md
 │   └── 05_preview-modal.md
 │
-├── templates/_registry.md     — Master index of all 13 templates
+├── templates/_registry.md     — Master index of all 14 templates
 ├── decisions/ADR.md           — Append-only log of architecture decisions
-├── changelog/CHANGELOG.md     — Round-by-round history (Round 0 → Round F)
+├── changelog/CHANGELOG.md     — Round-by-round history (Round 0 → Round N)
 └── roadmap/ROADMAP.md         — Short / medium / long-term
 └── _Context/                  — ARCHIVE: the original three root docs (stale)
 ```

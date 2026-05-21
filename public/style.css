@@ -962,6 +962,75 @@ select option:hover {
 .button-group { display: flex; gap: 12px; margin-top: 4px; }
 .button-group .btn { flex: 1; }
 
+/* ── PAYMENT SUB-STEPS PROGRESS ──────────────────────────────────── */
+.pay-substeps {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0;
+  max-width: 480px;
+  margin: 0 auto 24px;
+  padding: 0 12px;
+}
+.pay-substep {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  padding: 8px 12px;
+  border-radius: 20px;
+  background: transparent;
+  transition: all 0.25s ease;
+  opacity: 0.45;
+}
+.pay-substep.active {
+  opacity: 1;
+  background: var(--accent-dim);
+}
+.pay-substep.completed {
+  opacity: 0.85;
+}
+.pay-substep-num {
+  width: 24px;
+  height: 24px;
+  border-radius: 50%;
+  background: var(--border-hi);
+  color: var(--text-soft);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 0.75rem;
+  font-weight: 700;
+  transition: all 0.25s ease;
+}
+.pay-substep.active .pay-substep-num {
+  background: var(--accent);
+  color: var(--bg);
+}
+.pay-substep.completed .pay-substep-num {
+  background: var(--success);
+  color: var(--bg);
+}
+.pay-substep-label {
+  font-size: 0.82rem;
+  font-weight: 600;
+  color: var(--text-soft);
+  white-space: nowrap;
+}
+.pay-substep.active .pay-substep-label {
+  color: var(--text);
+}
+.pay-substep-connector {
+  width: 32px;
+  height: 2px;
+  background: var(--border-hi);
+  opacity: 0.4;
+  margin: 0 4px;
+}
+.pay-substep-connector.active {
+  background: var(--accent);
+  opacity: 0.6;
+}
+
 /* ── PAYMENT CARD (Step 3) ──────────────────────────────────────── */
 .pay-card {
   max-width: 520px;
@@ -1066,6 +1135,10 @@ select option:hover {
 @media (max-width: 640px) {
   .pay-card-inner { padding: 28px 22px; }
   .pay-val.pay-price { font-size: 1.35rem; }
+  .pay-substeps { max-width: 100%; gap: 0; }
+  .pay-substep { padding: 6px 8px; }
+  .pay-substep-label { font-size: 0.75rem; }
+  .pay-substep-connector { width: 20px; margin: 0 2px; }
 }
 
 /* ── LOADING STATE ───────────────────────────────────────────────── */
@@ -1518,6 +1591,52 @@ select option:hover {
    Three-column grid: [left hint] [form card] [right hint]
    With floating site-map mockup, mobile ⓘ toggle, arrows.
    ═══════════════════════════════════════════════════════════════ */
+
+/* ── Show More / Show Less toggle ─────────────────────────────── */
+.show-more-wrap {
+  text-align: center;
+  margin: 24px 0 0;
+}
+
+.btn-show-more {
+  background: none;
+  border: 1px solid var(--border-hi);
+  color: var(--text-soft);
+  padding: 10px 24px;
+  border-radius: 10px;
+  cursor: pointer;
+  font-size: 0.9em;
+  font-weight: 500;
+  font-family: var(--font);
+  transition: all 0.2s ease;
+}
+
+.btn-show-more:hover {
+  border-color: var(--accent);
+  color: var(--accent);
+}
+
+.show-more-arrow {
+  display: inline-block;
+  transition: transform 0.3s ease;
+  margin-left: 4px;
+}
+
+.btn-show-more.active .show-more-arrow {
+  transform: rotate(180deg);
+}
+
+.hidden-templates {
+  max-height: 0;
+  overflow: hidden;
+  opacity: 0;
+  transition: max-height 0.5s ease, opacity 0.3s ease;
+}
+
+.hidden-templates.open {
+  max-height: 2000px;
+  opacity: 1;
+}
 
 /* ── Schema form header ─────────────────────────────────────────── */
 .schema-form-wrap {

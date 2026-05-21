@@ -69,30 +69,37 @@ See [[_registry|Templates registry]] for one-line descriptions per template.
 - **`.env.example`** documents every required env var. **`.dockerignore`** keeps the image lean.
 
 ### Generation & payment
-- **Generate endpoint** zips rendered HTML as `index.html` plus referenced `/uploads/*` images into `assets/`. Streams as a downloadable ZIP with a slugified business name.
+- **Generate endpoint** zips rendered HTML as `index.html` plus referenced `/uploads/*` images into `assets/`. Streams as a downloadable ZIP with a slugified business name. **ZIP now has externalized assets** — `style.css` and `script.js` instead of inline code.
 - **Razorpay payment wired** — `PAYMENT_PROVIDER=razorpay` (test credentials in `.env`). `/api/pay` creates a real Razorpay order (₹4,999); `/api/payments/verify` validates HMAC signature and marks PAID; `/api/generate` gates on PAID status. Admin bypass (`admin_bypass_*`) skips payment entirely — no DB required. Fallback: set `PAYMENT_PROVIDER=dummy` for local dev without credentials.
+- **Payment sub-steps (Round N)** — Step 3 now has 3 internal sub-steps with a mini progress bar: Pay → Confirmation → Download. After payment succeeds, auto-advances to Confirmation (shows receipt), then auto-advances to Download after 1.5s. Download button triggers ZIP, then success screen.
 - **Prisma persistence wired (Round M)** — when `DATABASE_URL` is set: login upserts a `User` row; `POST /api/draft` + `GET /api/draft/:templateId` upsert/load `Draft` rows keyed on `{userId, templateId}`; `consumePayment` stamps `usedAt` on the `Payment` row; `/api/generate` creates a `Download` record after each successful ZIP. All paths fall back to in-memory when no DB configured — demo still boots without MySQL.
 - **Step-wise registration form** — `/register` now uses a 3-step wizard: Step 1 (Email + Password), Step 2 (Name), Step 3 (Summary + Terms). Same `/api/register` POST on submit.
 
 ### Polish
 - **Custom yellow-dot cursor** on main app pages (z-index 100000). Native cursor on login.html / profile.html / plans.html.
 - **Side-map mockup at bottom-LEFT**, chatbot at bottom-right.
-- **Side-by-side preview viewer** at `templates/preview-all.html` with column / viewport / schema-only filter chips.
 - **Payment section CSS** fully styled — gold gradient top accent, dashed dividers, big gold price, glowing-check success state.
 - **Select dropdowns** explicitly themed for the dark UI with custom gold chevron and dark `<option>` popup.
+- **Step wizard** — tab-style navigation with scrollable tabs, max-width 640px, AI preservation. Step persistence via localStorage.
+- **Template picker** — "Show More" toggle with animation (5 visible, 9 hidden).
+- **Payment sub-steps** — Step 3 has 3 internal sub-steps (Pay → Confirmation → Download) with mini progress bar.
+- **ZIP externalization** — downloaded ZIP has `style.css` and `script.js` instead of inline code.
+- **Auth token bridge** — HMAC dummy token allows demo mode even when `AUTH0_DOMAIN` is configured.
+- **Razorpay defensive fixes** — SDK guard, error detail propagation, 8s notifications, repaint delay, prefill from login state.
 
 ## What's broken / incomplete
 
-- **Template 1 (Editorial) is still on the legacy non-safe-locals pattern.** It works because `buildTemplateData` injects defaults for the legacy fields, but it's not as defensive as templates 2–13. Refactor is on the roadmap.
+- **Template 1 (Editorial) is still on the legacy non-safe-locals pattern.** It works because `buildTemplateData` injects defaults for the legacy fields, but it's not as defensive as templates 2–14. Refactor is on the roadmap.
 - **Razorpay running on test credentials** — real charges won't happen until test keys are swapped for live keys. `RAZORPAY_WEBHOOK_SECRET` is blank until a webhook is configured in the Razorpay dashboard. `npm install razorpay` must be run once after pulling this branch.
-- **Auth is dummy** — Auth0 middleware is wired, but production routes still defer to the `DUMMY_USERS` whitelist for the review demo. Flip the env vars + `DEV_AUTH_BYPASS=false` to switch over.
+- **Auth is dummy** — Auth0 middleware is wired, but production routes still defer to the `DUMMY_USERS` whitelist for the review demo. Flip the env vars + `DEV_AUTH_BYPASS=false` to switch over. HMAC token bridge allows demo mode even when `AUTH0_DOMAIN` is configured.
 - **Persistence requires `DATABASE_URL`** — demo mode (no DB) still loses drafts/payments on restart. Wire up `DATABASE_URL` + `npm run db:migrate:deploy` + `npm run db:seed` for durability. Draft list endpoint (`GET /api/drafts`) not yet added.
 - **Custom cursor logic is still inline in `index.html`.** Not yet extracted to `public/cursor.js`.
 - **No deterministic canned-response fallback below AI.** If both Gemini and Groq fail, the form gets a 503 error rather than a sensible default.
 - **No deployment.** Localhost / docker-compose only. No public URL.
 - **No real customer story yet.** All sample data is fictional.
-- **No category filter in the template picker.** Currently a flat grid of 13 cards. Will get crowded at 18+.
+- **No category filter in the template picker.** Currently shows 5 templates with "Show More" toggle for 9 hidden. Will need proper category chips at 18+.
 - **No template-family inheritance.** Schemas and AI prompts are still duplicated per template.
+- **Thumbnail CSS for template-12/13 still carries old codenames** (`template-heph-prev`, `template-turtlemint-prev`) — visual rename is on the low-priority pile.
 
 ## Right now / Open questions
 
@@ -109,11 +116,11 @@ node -c server.js
 
 # Render every template with sample data
 cd templates && node preview-test.js
-# Should print: "13/13 templates rendered cleanly"
+# Should print: "14/14 templates rendered cleanly"
 
 # Unit tests
 npm test
-# Should print: "Tests: 86 passed, 86 total"
+# Should print: "Tests: 260 passed, 260 total"
 
 # Container smoke test (optional but recommended pre-handoff)
 docker compose up --build

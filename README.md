@@ -2,7 +2,7 @@
 
 > **A no-code generator for professional business websites.** Pick a template → fill a form (with AI help) → preview → pay ₹4,999 → download a self-contained ZIP. Built by [BeyondSure](https://www.beyondsure.in/) (Shrigoda TechLabs Pvt Ltd) as an intern handoff. The website-output is plain HTML/CSS/JS the customer hosts anywhere.
 
-**Status:** Prototype handoff · 14 production-quality templates · Auth0 / MySQL / payment-gateway seams ready for the tech team to wire · Docker + Jest + GitHub Actions all set up · Prisma migration + seed scripts committed · Full architectural docs in [`SiteMemory/`](./SiteMemory/README.md).
+**Status:** Prototype handoff · 14 production-quality templates · Auth0 / MySQL / payment-gateway seams ready for the tech team to wire · Docker + Jest + GitHub Actions all set up · Prisma migration + seed scripts committed · Full architectural docs in [`SiteMemory/`](./SiteMemory/README.md) · Payment sub-steps with progress bar · Step wizard with persistence · ZIP externalization.
 
 **Deploying this?** Follow [`DEPLOYMENT.md`](./DEPLOYMENT.md) for the step-by-step. The guide below is for reviewers running the demo locally.
 
@@ -44,7 +44,7 @@ These are hard-coded in `server.js` for the demo. **All other email/password com
 2. **Fill Business Name, Tagline, Description** (≥20 chars) → hover any template card for ~1.5 seconds → a premium modal previews the template with Desktop / Tablet / Mobile toggles.
 3. **Pick a template → click ✨ AI on any section** → form fields auto-populate from Gemini (or Groq if Gemini's quota is hit).
 4. **Click Preview Website** → see your site rendered in an iframe, with device toggles above the preview chrome.
-5. **Click Pay** → dummy ₹4,999 charge → **Download ZIP** → unzip → open `index.html` in a browser. That's the deliverable.
+5. **Click Pay** → dummy ₹4,999 charge (or sign in as admin to bypass) → **Download ZIP** → unzip → open `index.html` in a browser. That's the deliverable. Payment flow has 3 sub-steps: Pay → Confirmation → Download with a mini progress bar.
 6. **Visit `/profile`** → real-feeling profile page with the 6 sample templates you "own", ₹29,994 total paid, recent-activity timeline. **The "View Plans →" button is hidden.**
 7. **Visit `/plans` directly in the URL bar** → blocked by a Coming-Soon overlay. Only "Back to Profile" button is available.
 8. **Try the chatbot** (gold bubble bottom-right) → say *"hi"* (handled locally, zero API cost) → ask *"what's the NBFC template for?"* (goes to Groq with scope-locked prompt) → ask *"write me a python script"* → it should politely redirect you to a general assistant.
@@ -63,7 +63,8 @@ On `/profile` or `/plans`, click the moon/sun icon in the top-right → entire p
 
 - **Gemini 429s during heavy demo?** Auto-falls back to Groq. Watch `logger.info` / `warn` output in the terminal — you'll see `[ai-section] template-X/hero ✓ Groq (fallback)`.
 - **Logout from profile** → clears localStorage, redirects to `/login`.
-- **Refresh the build page mid-fill** → form state is lost (no persistence yet — that's a known stub).
+- **Refresh the build page mid-fill** → current step is preserved (localStorage), form fields are lost (no persistence yet — that's a known stub).
+- **Admin bypass** — sign in as admin, click Pay, skips Razorpay entirely, auto-advances through sub-steps, download available immediately.
 
 ---
 
@@ -172,7 +173,7 @@ Copy `.env.example` → `.env` and fill in. All variables are documented in the 
 | Auth        | Auth0 (JWT + JWKS)                      | Tech team's pick. Industry-standard, free tier covers years    |
 | AI          | Gemini 2.5 Flash → Groq Llama-3.3-70b   | Cheap primary + always-on fallback                             |
 | Logging     | Winston (JSON)                          | Pipes cleanly into any aggregator                              |
-| Tests       | Jest                                    | Tech team's pick. 86 tests passing                              |
+| Tests       | Jest                                    | Tech team's pick. 260 tests passing                              |
 | CI          | GitHub Actions                          | Lockfile install, `prisma generate`, test, `npm audit`         |
 | Container   | Docker multi-stage, non-root user       | Production-ready out of the box                                |
 
@@ -204,10 +205,12 @@ StaticWebsiteGenerator/
 │   ├── login.html                       Demo-credentials login
 │   ├── register.html
 │   ├── style.css                        Global styles
+│   ├── step-wizard.css                  Step wizard tab styles
 │   ├── form-renderer.js                 Schema → form
 │   ├── chatbot.js                       Floating help bot (two-layer)
 │   ├── template-preview.js              Hover-to-preview modal
-│   └── preview-frame.js                 Step-2 iframe + device toggles
+│   ├── preview-frame.js                 Step-2 iframe + device toggles
+│   └── script.js                        Page-flow logic, payment sub-steps, auth headers
 ├── templates/
 │   ├── schemas/
 │   │   ├── _base.json                   Shared brand / contact / theme
@@ -228,13 +231,14 @@ The prototype intentionally leaves clean integration seams where production-only
 
 | Stub                  | Where                              | What to do                                                                 |
 |---                    |---                                 |---                                                                          |
-| Auth                  | `src/lib/auth.js` + `server.js::/api/login` | Set `AUTH0_DOMAIN` + `AUTH0_AUDIENCE` → middleware activates automatically. Then follow the HANDOFF block above `/api/login` to swap the `DUMMY_USERS` route for a real Auth0-callback handler. Dev bypass returns admin role. |
+| Auth                  | `src/lib/auth.js` + `server.js::/api/login` | Set `AUTH0_DOMAIN` + `AUTH0_AUDIENCE` → middleware activates automatically. Then follow the HANDOFF block above `/api/login` to swap the `DUMMY_USERS` route for a real Auth0-callback handler. Dev bypass returns admin role. HMAC token bridge allows demo mode even with Auth0 configured. |
 | Payments              | `src/lib/payments.js` + `server.js::/api/pay` | Razorpay AND Stripe scaffolds are committed (commented). Set `PAYMENT_PROVIDER=razorpay`, fill `RAZORPAY_*` env vars, uncomment the block, `npm i razorpay`, add a webhook route. Full recipe in [`DEPLOYMENT.md`](./DEPLOYMENT.md#5-swap-the-dummy-payment-for-razorpay-or-stripe). |
 | User persistence      | `server.js::/api/login`             | `getOrCreateUser()` in `src/lib/auth.js` already upserts users via Prisma — call it from the new Auth0 handler, then remove `DUMMY_USERS`. |
 | Uploads               | `src/lib/storage.js`                | Set `UPLOAD_STORAGE=s3` + AWS_* vars → switches to S3. Local-disk is default. |
 | 4th-layer AI fallback | `/api/ai-section`                   | If both Gemini and Groq fail, returns 503. Could add canned defaults. ~2hr. |
 | Template-1 (Editorial)| `templates/website-template-1.ejs`  | Only template not on the safe-locals pattern. Renders fine but flagged for refactor. |
 | Custom cursor         | Inline `<script>` in `index.html`   | Should be extracted to `public/cursor.js` before adding new pages.         |
+| Thumbnail CSS rename  | `public/style.css`                  | `template-heph-prev` / `template-turtlemint-prev` → `template-stratus-prev` / `template-coverwise-prev`. Cosmetic. |
 
 Every stub has a `// HANDOFF:` or `// TODO:` comment in code pointing at the replacement.
 
@@ -249,7 +253,7 @@ npm run lint           # ESLint
 npm run audit          # npm audit --audit-level=high
 ```
 
-86 tests pass. Coverage includes template rendering (4 published templates), payments, utils, auth middleware, storage, and infrastructure modules. Server routes are intentionally not unit-tested — they're better covered by integration tests once the tech team wires Auth0 and the DB.
+260 tests pass. Coverage includes template rendering (14 published templates), payments, utils, auth middleware, storage, and infrastructure modules. Server routes are intentionally not unit-tested — they're better covered by integration tests once the tech team wires Auth0 and the DB.
 
 **For testing as a reviewer with no Node experience:** just run `node server.js` after `npm install` and open the browser. You don't need to run any test suite — the manual flows in [What to Test](#what-to-test-the-actual-reviewers-checklist) cover everything customer-facing.
 
@@ -280,10 +284,11 @@ This vault is the single source of truth for the *why* behind everything. Code a
 | `Database not configured` warning at startup                 | Expected — the app falls back to in-memory mode if `DATABASE_URL` isn't set. Safe for UI testing.   |
 | AI button returns 503 immediately                            | Gemini quota hit AND Groq key not set. Add `GROQ_API_KEY` to `.env`, restart.                       |
 | `/preview` iframe blank                                      | Open browser console → check `/api/preview` response. Usually means a schema field broke EJS render. |
-| ZIP download "Payment required"                              | Click Pay button first, or sign in as admin to bypass.                                              |
+| ZIP download "Payment required"                              | Click Pay button first, or sign in as admin to bypass. Admin skips payment entirely.                                              |
 | `npm test` fails on Windows                                  | The `NODE_ENV=test` prefix breaks cmd.exe. Run `npx jest --coverage` instead.                       |
 | Preview cards out of date after editing a template            | Regenerate previews: `cd templates && node preview-test.js`. (Sample brands for template-12 / 13 are now **Stratus** and **Coverwise** — older preview HTML may still show the old codenames.) |
 | Logged-in but `/profile` redirects to `/login`               | LocalStorage cleared. Sign in again — the redirect-on-empty is intentional.                         |
+| Step wizard tabs overflow on mobile                          | Tabs are scrollable, max-width 640px. Swipe left/right to see all steps.                         |
 
 ---
 

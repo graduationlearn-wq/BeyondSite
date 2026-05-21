@@ -663,9 +663,12 @@
           // Store login state
           localStorage.setItem('beyondsite_login', JSON.stringify({
             email: email,
+            name:  data.name || email.split('@')[0],
             isAdmin: data.isAdmin || false,
             loginTime: Date.now()
           }));
+          // Store session token for authenticated API calls
+          if (data.token) localStorage.setItem('beyondsite_token', data.token);
           window.location.href = data.redirect || '/';
         } else {
           errorEl.textContent = data.error || 'Invalid email or password.';

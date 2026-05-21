@@ -24,6 +24,13 @@ function isAdmin() {
   return state && state.isAdmin === true;
 }
 
+// Returns an Authorization header if a session token is stored.
+// Used by all authenticated API calls (/api/generate, /api/draft, etc.)
+function getAuthHeader() {
+  const t = localStorage.getItem('beyondsite_token');
+  return t ? { 'Authorization': 'Bearer ' + t } : {};
+}
+
 // Require login - redirect to login if not logged in
 function requireLogin() {
   if (!isLoggedIn()) {
@@ -56,13 +63,34 @@ if (isFormPage) {
     });
   }
 
+  // Persist current step so navigating away (e.g. to /profile) and back
+  // restores the same step. Cleared on logout, template switch, or form reset.
+  function saveCurrentStep(step) {
+    localStorage.setItem('beyondsite_currentStep', String(step));
+  }
+
+  function restoreCurrentStep() {
+    const saved = localStorage.getItem('beyondsite_currentStep');
+    if (saved === '2') {
+      step1.style.display = 'none';
+      step2.style.display = 'block';
+      updateStepIndicator(2);
+    } else if (saved === '3') {
+      step1.style.display = 'none';
+      step2.style.display = 'none';
+      step3.style.display = 'block';
+      updateStepIndicator(3);
+    }
+  }
+
   function showNotification(message, type = 'info') {
     const n = document.createElement('div');
     n.className = `notification notification-${type}`;
     n.textContent = message;
     document.body.appendChild(n);
     setTimeout(() => { n.style.opacity = '1'; n.style.transform = 'translateY(0)'; }, 10);
-    setTimeout(() => { n.style.opacity = '0'; n.style.transform = 'translateY(-20px)'; setTimeout(() => n.remove(), 300); }, 4000);
+    const dismissMs = type === 'error' ? 8000 : 4000;
+    setTimeout(() => { n.style.opacity = '0'; n.style.transform = 'translateY(-20px)'; setTimeout(() => n.remove(), 300); }, dismissMs);
   }
 
   function showLoadingOverlay(show) {
@@ -119,7 +147,11 @@ if (isFormPage) {
         getDescription:  () => descriptionEl.value.trim(),
         getTone:         () => (FormRenderer.collect().tone || 'professional')
       });
+      // Wire the step wizard's last-step "Preview" button to showPreview()
+      FormRenderer.setOnLastStep(() => showPreview());
       FormRenderer.render(newSchema, schemaMount);
+      // Reset to first section after render has set the schema
+      FormRenderer.goToSection(0);
       currentSchema = newSchema;
     } catch (e) {
       console.error(e);
@@ -131,8 +163,24 @@ if (isFormPage) {
 
   // Listen for template switches (real-time rebuild)
   document.querySelectorAll('input[name="template"]').forEach(radio => {
-    radio.addEventListener('change', loadSchemaForCurrentTemplate);
+    radio.addEventListener('change', () => {
+      localStorage.removeItem('beyondsite_currentStep');
+      loadSchemaForCurrentTemplate();
+    });
   });
+
+  // Show More / Show Less templates toggle
+  const showMoreBtn = document.getElementById('showMoreBtn');
+  const hiddenTemplates = document.getElementById('hiddenTemplates');
+  if (showMoreBtn && hiddenTemplates) {
+    showMoreBtn.addEventListener('click', () => {
+      const isOpen = hiddenTemplates.classList.toggle('open');
+      showMoreBtn.classList.toggle('active', isOpen);
+      showMoreBtn.innerHTML = isOpen
+        ? 'Show Less <span class="show-more-arrow" style="transform:rotate(180deg)">&#9660;</span>'
+        : 'Show More Templates <span class="show-more-arrow">&#9660;</span>';
+    });
+  }
 
   // Keep FormRenderer state in sync with top form (silent — no re-render on keystroke)
   [businessNameEl, taglineEl, descriptionEl].forEach(el => {
@@ -147,6 +195,7 @@ if (isFormPage) {
 
   // Initial load
   loadSchemaForCurrentTemplate();
+  restoreCurrentStep();
 
   // ── Required-field validation helpers ─────────────────────────
   // Three fields that customers MUST fill before preview. Admin bypasses
@@ -285,6 +334,7 @@ if (isFormPage) {
       step1.style.display = 'none';
       step2.style.display = 'block';
       updateStepIndicator(2);
+      saveCurrentStep(2);
       window.scrollTo({ top: 0, behavior: 'smooth' });
     } catch (err) {
       showLoadingOverlay(false);
@@ -297,6 +347,7 @@ if (isFormPage) {
     step2.style.display = 'none';
     step1.style.display = 'block';
     updateStepIndicator(1);
+    saveCurrentStep(1);
     window.scrollTo({ top: 0, behavior: 'smooth' });
   };
 
@@ -304,6 +355,7 @@ if (isFormPage) {
     step3.style.display = 'none';
     step2.style.display = 'block';
     updateStepIndicator(2);
+    saveCurrentStep(2);
     window.scrollTo({ top: 0, behavior: 'smooth' });
   };
 
@@ -312,22 +364,45 @@ if (isFormPage) {
     step2.style.display = 'none';
     step3.style.display = 'block';
     updateStepIndicator(3);
-    // Reset payment state if user came back
+    saveCurrentStep(3);
+    // Reset payment sub-steps
     paymentId = null;
-    document.getElementById('payUnpaid').style.display = 'block';
-    document.getElementById('payPaid').style.display = 'none';
+    setPaySubstep(1);
     window.scrollTo({ top: 0, behavior: 'smooth' });
   };
+
+  // ── Payment Sub-Step Management ──
+  function setPaySubstep(num) {
+    // Hide all sub-steps
+    document.getElementById('payStep1').style.display = 'none';
+    document.getElementById('payStep2').style.display = 'none';
+    document.getElementById('payStep3').style.display = 'none';
+    // Show target sub-step
+    document.getElementById('payStep' + num).style.display = 'block';
+    // Update progress indicators
+    const substeps = document.querySelectorAll('.pay-substep');
+    const connectors = document.querySelectorAll('.pay-substep-connector');
+    substeps.forEach((el, i) => {
+      const stepNum = i + 1;
+      el.classList.remove('active', 'completed');
+      if (stepNum < num) el.classList.add('completed');
+      else if (stepNum === num) el.classList.add('active');
+    });
+    connectors.forEach((el, i) => {
+      el.classList.toggle('active', i < num - 1);
+    });
+  }
 
   // ── Payment (Razorpay or dummy depending on PAYMENT_PROVIDER) ──
   window.initPayment = async function () {
     // Admin bypass — skip checkout entirely, DB not required
     if (isAdmin()) {
       paymentId = 'admin_bypass_' + Date.now();
-      document.getElementById('payUnpaid').style.display = 'none';
-      document.getElementById('payPaid').style.display = 'block';
       document.getElementById('payReceipt').textContent = 'Admin bypass — no charge';
       showNotification('Admin bypass — payment skipped', 'success');
+      setPaySubstep(2);
+      // Auto-advance to download after brief pause
+      setTimeout(() => setPaySubstep(3), 1500);
       return;
     }
 
@@ -340,21 +415,24 @@ if (isFormPage) {
         body: JSON.stringify({ templateId: template })
       });
       const out = await res.json();
-      if (!res.ok) throw new Error(out.error || 'Payment setup failed');
+      if (!res.ok) throw new Error(out.detail || out.error || 'Payment setup failed');
       showLoadingOverlay(false);
+      await new Promise(r => requestAnimationFrame(r));
 
       if (out.providerData.provider === 'dummy') {
         // Dev / test mode with no real gateway
         paymentId = out.paymentId;
-        document.getElementById('payUnpaid').style.display = 'none';
-        document.getElementById('payPaid').style.display = 'block';
         document.getElementById('payReceipt').textContent = `Receipt: ${paymentId}`;
         showNotification('Payment successful (test mode)', 'success');
+        setPaySubstep(2);
+        // Auto-advance to download after brief pause
+        setTimeout(() => setPaySubstep(3), 1500);
         return;
       }
 
       // Razorpay checkout
       const { keyId, amount, currency } = out.providerData;
+      const loginState = getLoginState();
       const rzpOptions = {
         key:         keyId,
         amount:      amount,
@@ -363,6 +441,10 @@ if (isFormPage) {
         name:        'BeyondSite',
         description: 'Website Package · One-time',
         theme:       { color: '#2ec97b' },
+        prefill:     {
+          name:  loginState?.name || loginState?.email?.split('@')[0] || '',
+          email: loginState?.email || ''
+        },
         handler: async function (response) {
           showLoadingOverlay(true);
           try {
@@ -378,10 +460,11 @@ if (isFormPage) {
             const vOut = await vRes.json();
             if (!vRes.ok || !vOut.ok) throw new Error(vOut.error || 'Verification failed');
             paymentId = vOut.paymentId;
-            document.getElementById('payUnpaid').style.display = 'none';
-            document.getElementById('payPaid').style.display = 'block';
             document.getElementById('payReceipt').textContent = `Order: ${paymentId}`;
             showNotification('Payment successful 🎉', 'success');
+            setPaySubstep(2);
+            // Auto-advance to download after brief pause
+            setTimeout(() => setPaySubstep(3), 1500);
           } catch (err) {
             showNotification('Payment verification failed: ' + err.message, 'error');
           } finally {
@@ -394,6 +477,9 @@ if (isFormPage) {
           }
         }
       };
+      if (typeof window.Razorpay !== 'function') {
+        throw new Error('Payment gateway failed to load. Please disable ad blockers and try again.');
+      }
       const rzp = new window.Razorpay(rzpOptions);
       rzp.open();
     } catch (err) {
@@ -417,7 +503,7 @@ if (isFormPage) {
     try {
       const res = await fetch('/api/generate', {
         method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
+        headers: { 'Content-Type': 'application/json', ...getAuthHeader() },
         body: JSON.stringify({ template: selectedTemplate(), data, paymentId })
       });
       if (!res.ok) {
@@ -454,6 +540,7 @@ if (isFormPage) {
     FormRenderer.replaceData({});
     paymentId = null;
     updateStepIndicator(1);
+    localStorage.removeItem('beyondsite_currentStep');
     loadSchemaForCurrentTemplate();
     window.scrollTo({ top: 0, behavior: 'smooth' });
   };

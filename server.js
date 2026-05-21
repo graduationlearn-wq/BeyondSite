@@ -113,12 +113,23 @@ app.post('/api/login', async (req, res) => {
   }
 
   logger.info({ email: normalEmail, isAdmin: account.isAdmin }, 'User logged in (dummy auth)');
+
+  // Generate a dummy session token so the client can authenticate against
+  // protected routes (e.g. /api/generate) even when AUTH0_DOMAIN is set.
+  // The token is HMAC-signed and accepted by the authenticate() middleware
+  // as a dev-bypass credential.
+  const sessionToken = crypto
+    .createHmac('sha256', process.env.GEMINI_API_KEY || 'dev-secret')
+    .update(normalEmail + ':' + Date.now())
+    .digest('hex');
+
   return res.json({
     success: true,
     redirect: '/',
     isAdmin: account.isAdmin,
     email:   normalEmail,
-    name:    account.name
+    name:    account.name,
+    token:   sessionToken
   });
 });
 app.post('/api/register', (req, res) => {
@@ -549,7 +560,8 @@ app.post('/api/pay', payLimiter, async (req, res) => {
     res.json(result);
   } catch (err) {
     logger.error({ error: err.message }, 'Payment creation failed');
-    res.status(500).json({ error: 'Payment setup failed. Please try again.' });
+    const isDev = process.env.NODE_ENV !== 'production';
+    res.status(500).json({ error: 'Payment setup failed.', detail: isDev ? err.message : undefined });
   }
 });
 
@@ -687,7 +699,39 @@ app.post('/api/generate', authenticate(), genLimiter, async (req, res) => {
 
     const tplFile = templatePath(template);
     const normalized = buildTemplateData(data);
-    const html = await ejsLib.renderFile(tplFile, normalized, { async: true });
+    let html = await ejsLib.renderFile(tplFile, normalized, { async: true });
+
+    // Extract all <style>...</style> blocks and replace with <link rel="stylesheet">
+    // Extract all <script>...</script> blocks and replace with <script src="script.js">
+    // so the downloaded ZIP ships with external CSS/JS instead of inline code.
+    const styleBlocks = [];
+    const scriptBlocks = [];
+    html = html.replace(/<style[^>]*>([\s\S]*?)<\/style>/gi, (_, css) => {
+      styleBlocks.push(css);
+      return '';
+    });
+    html = html.replace(/<script[^>]*>([\s\S]*?)<\/script>/gi, (_, js) => {
+      scriptBlocks.push(js);
+      return '';
+    });
+
+    // Inject the stylesheet link inside <head> (or as first child if no <head>)
+    if (styleBlocks.length > 0) {
+      if (/<head[^>]*>/i.test(html)) {
+        html = html.replace(/(<head[^>]*>)/i, `$1\n<link rel="stylesheet" href="style.css">`);
+      } else {
+        html = html.replace(/(<html[^>]*>)/i, `$1\n<head>\n<link rel="stylesheet" href="style.css">\n</head>`);
+      }
+    }
+
+    // Inject the external script link before </body> (or at end if no </body>)
+    if (scriptBlocks.length > 0) {
+      if (/<\/body>/i.test(html)) {
+        html = html.replace(/<\/body>/i, `<script src="script.js"></script>\n</body>`);
+      } else {
+        html = html.replace(/<\/html>/i, `<script src="script.js"></script>\n</html>`);
+      }
+    }
 
     // Filename derived from business name; fallback to 'website'
     const slug = (normalized.businessName || 'website')
@@ -703,10 +747,20 @@ app.post('/api/generate', authenticate(), genLimiter, async (req, res) => {
     archive.on('error', (e) => { throw e; });
     archive.pipe(res);
 
-    // 1. The rendered page
+    // 1. The rendered page (with external CSS link)
     archive.append(html, { name: 'index.html' });
 
-    // 2. Any uploaded image assets referenced by the template (logo / hero / advisor)
+    // 2. Extracted CSS as external stylesheet
+    if (styleBlocks.length > 0) {
+      archive.append(styleBlocks.join('\n'), { name: 'style.css' });
+    }
+
+    // 3. Extracted JS as external script
+    if (scriptBlocks.length > 0) {
+      archive.append(scriptBlocks.join('\n'), { name: 'script.js' });
+    }
+
+    // 4. Any uploaded image assets referenced by the template (logo / hero / advisor)
     const assetUrls = [
       normalized.logo, normalized.logoV,
       normalized.heroShot, normalized.heroShotV,

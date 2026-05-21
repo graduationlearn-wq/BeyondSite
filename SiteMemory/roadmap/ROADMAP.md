@@ -5,10 +5,11 @@ What's next, organised by horizon. Updated as priorities shift, but generally th
 ## Now (this week)
 
 - **Refresh `01_CURRENT_STATE.md`** at the end of every session. The state decays fast.
-- **Refactor `templates/website-template-1.ejs` (Editorial)** to the safe-locals pattern used by templates 2–13. Currently the only template still on legacy.
-- **Wire Prisma into the form-save and generate paths.** Schema exists, models exist, client is generated — the runtime still uses in-memory state. One sprint of glue code.
+- **Refactor `templates/website-template-1.ejs` (Editorial)** to the safe-locals pattern used by templates 2–14. Currently the only template still on legacy.
+- **Wire Prisma into the form-save and generate paths.** Schema exists, models exist, client is generated — runtime now uses Prisma when `DATABASE_URL` is set (Round M). Verify end-to-end with real DB.
 - **Rename `template-heph-prev` / `template-turtlemint-prev` CSS classes** to match the new sample-brand names (`template-stratus-prev` / `template-coverwise-prev`). Cosmetic but tidies the codebase. → [[ADR#ADR-018|ADR-018]]
 - **Extract custom-cursor logic** from inline `<script>` in `index.html` to `public/cursor.js`. Pre-requisite for `/profile` and `/plans` to ever adopt the yellow-dot cursor cleanly.
+- **Add category filter to template picker.** Currently shows 5 templates with "Show More" toggle for 9 hidden. Will need proper category chips at 18+.
 
 ## Pillar 1 — Foundations (status: scaffolded, not yet finished)
 
@@ -16,13 +17,18 @@ The non-negotiable work that makes the product actually usable by anyone other t
 
 - [x] **Auth seam.** Auth0 JWT middleware with `jwks-rsa` key cache shipped in `src/lib/auth.js` with a `DEV_AUTH_BYPASS` flag for local dev. → [[ADR#ADR-013|ADR-013]] · the dummy whitelist bridge → [[ADR#ADR-016|ADR-016]]
 - [ ] **Wire Auth0 to production routes.** Middleware exists but the live demo still defers to the `DUMMY_USERS` whitelist. Flip env vars, point at an Auth0 tenant, replace the dummy `/api/login` callsites. Enable **Google OAuth** in Auth0 dashboard (Authentication → Connections → Social → Google) and add `/auth/google` + callback routes in `server.js`.
-- [x] **Persistence schema.** Prisma + MySQL — six models (`User`, `Website`, `Draft`, `Download`, `Template`, `Payment`) + enums shipped in `prisma/schema.prisma`. → [[ADR#ADR-012|ADR-012]]
-- [ ] **Wire Prisma to routes.** Schema is shape-only; in-memory state still backs the live demo. Next sprint: thread `prisma.draft.upsert(...)` etc. into the form-save / generate / payment paths.
-- [ ] **Real payment.** Replace the dummy `/api/pay` (see [[01_api-routes#Payment (dummy)|current dummy implementation]]). **Razorpay** for India (free integration, INR-native, takes UPI/cards/netbanking). **Stripe** for global. The Prisma `Payment` model is ready; the gateway integration isn't.
+- [x] **Wire Prisma to routes.** Round M shipped Prisma-backed payments, drafts, downloads, and user upserts. All paths fall back to in-memory when no DB configured.
+- [ ] **Real payment.** Razorpay scaffold committed + test credentials active. Swap test keys for live keys, configure webhook in Razorpay dashboard, set `RAZORPAY_WEBHOOK_SECRET`. **Stripe** for global. The Prisma `Payment` model is ready.
 - [x] **Containerisation.** Multi-stage Dockerfile + docker-compose for app + MySQL + `/health` endpoint + SIGTERM drain. → [[ADR#ADR-014|ADR-014]]
 - [x] **Structured logging.** Winston JSON logger in `src/lib/logger.js`. → [[ADR#ADR-015|ADR-015]]
 - [x] **CI.** GitHub Actions: `npm ci` → `prisma generate` → `npm test` → `npm audit` on push.
-- [x] **Unit tests.** Jest, 86 passing covering core business logic.
+- [x] **Unit tests.** Jest, 260 passing covering core business logic.
+- [x] **Step wizard.** Tab-style navigation with scrollable tabs, max-width 640px, AI preservation, step persistence via localStorage.
+- [x] **Payment sub-steps.** Step 3 has 3 internal sub-steps (Pay → Confirmation → Download) with mini progress bar, auto-advance flow.
+- [x] **ZIP externalization.** Downloaded ZIP has `style.css` and `script.js` instead of inline code.
+- [x] **Auth token bridge.** HMAC dummy token allows demo mode even when `AUTH0_DOMAIN` is configured.
+- [x] **Razorpay defensive fixes.** SDK guard, error detail propagation, 8s notifications, repaint delay, prefill from login state.
+- [x] **Template picker "Show More".** 5 templates visible, 9 hidden behind animated toggle.
 - [ ] **Deployment.** Stop being localhost-only. Deploy to Render (free tier works), Railway, or a small DigitalOcean droplet. Get a `.com` or `.in` domain (₹400/year). Docker image is ready — just needs a target. When manager asks "show me the URL", you have one.
 
 After Auth0-wiring + Prisma-wiring + payment-gateway + deployment, the demo flips from "polished prototype" to "real product."
@@ -67,7 +73,7 @@ After family scaffolding is in:
 
 When the product has real users and real revenue:
 
-- [ ] **Category filter in the picker.** Currently a flat grid of 13 cards. Will get crowded at 18+. Add filter chips: Food / Health / Finance / Tech / Service / Creative.
+- [ ] **Category filter in the picker.** Currently shows 5 templates with "Show More" toggle for 9 hidden. Will get crowded at 18+. Add filter chips: Food / Health / Finance / Tech / Service / Creative.
 - [ ] **Multi-language support** for India (Hindi, Marathi, Tamil) — niche but matches the regulatory-Indian positioning.
 - [ ] **Dynamic sites** (instead of static). Basic CMS for editing content post-download without re-running the generator. Significant scope expansion.
 - [ ] **Marketplace** — let third-party designers contribute templates and earn revenue share.

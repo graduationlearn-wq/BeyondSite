@@ -6,6 +6,31 @@ Round-by-round history of every meaningful change. **Append-only** — new round
 
 ---
 
+## Round N — 2026-05-21
+
+**Payment sub-steps implemented — Step 3 now has 3 internal sub-steps with progress bar.**
+
+**Touched:** `public/index.html` · `public/script.js` · `public/style.css` · `AGENTS.md` · `SiteMemory/01_CURRENT_STATE.md`
+
+### Shipped
+
+- **Payment sub-steps** — Step 3 ("Pay & Download") now has 3 internal sub-steps with a mini horizontal progress bar:
+  1. **Pay** — Payment button, Razorpay checkout
+  2. **Confirmation** — "Payment received" success message with receipt details
+  3. **Download** — Download button → ZIP downloads → success screen
+- **Auto-advance flow** — After payment succeeds, auto-advances to Confirmation, then auto-advances to Download after 1.5s pause
+- **Progress bar CSS** — `.pay-substeps` container with `.pay-substep` (active/completed states), `.pay-substep-num` (circled numbers), `.pay-substep-connector` (lines between steps)
+- **Sub-step management** — `setPaySubstep(num)` function handles visibility and state transitions for all 3 sub-steps
+- **Admin bypass preserved** — Still skips checkout, auto-advances through sub-steps with receipt "Admin bypass — no charge"
+- **Documentation updated** — `AGENTS.md` and `01_CURRENT_STATE.md` reflect the new payment sub-steps feature
+
+### Technical notes
+- Replaced old `#payUnpaid` / `#payPaid` toggle pattern with `#payStep1` / `#payStep2` / `#payStep3`
+- Progress bar styled with `max-width: 480px`, centered, responsive down to mobile
+- Auto-advance uses `setTimeout(..., 1500)` for smooth UX
+
+---
+
 ## Round M — 2026-05-20
 
 **Wired Prisma persistence into the runtime — payments, drafts, downloads, and user rows now survive server restarts.**

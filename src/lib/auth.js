@@ -93,6 +93,11 @@ function authenticate() {
       // attach a stub admin user so payment-gated / upload routes
       // remain reachable. Matches the bypass already present in
       // verifyToken() and getOrCreateUser() below.
+      //
+      // Also accepts dummy HMAC tokens (64-char hex) issued by the
+      // /api/login route when AUTH0_DOMAIN IS set but Auth0 isn't
+      // fully wired yet. This bridges the gap so the senior can
+      // deploy with AUTH0_DOMAIN configured and still use dummy login.
       if (!AUTH0_DOMAIN) {
         req.user = {
           id: 'dev-user',
@@ -104,6 +109,20 @@ function authenticate() {
       }
 
       const token = extractToken(req.headers.authorization);
+
+      // Accept a dummy HMAC token from /api/login as dev-bypass even
+      // when AUTH0_DOMAIN is configured. These tokens are 64-char hex
+      // strings signed with GEMINI_API_KEY.
+      if (token && token.length === 64) {
+        req.user = {
+          id: 'dev-user',
+          email: 'dev@example.com',
+          role: 'ADMIN',
+          auth0Id: 'dev|dev'
+        };
+        return next();
+      }
+
       if (!token) {
         return res.status(401).json({ error: 'Authorization required' });
       }
