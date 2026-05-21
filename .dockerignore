@@ -1,14 +1,49 @@
+# Dependencies (installed in builder stage)
 node_modules
-npm-debug.log*
-.git
-.gitignore
+
+# Environment files
 .env
 .env.*
-coverage
+
+# Test files
+__tests__/
+jest.config.js
+
+# Documentation vault
+SiteMemory/
+
+# Agent configs
+.claude/
+.coderabbit.yaml
+AGENTS.md
+CLAUDE.md
+
+# CI/CD
+.github/
+
+# Editor files
+.vscode/
+.idea/
+
+# OS files
+.DS_Store
+Thumbs.db
+
+# Logs
+npm-debug.log*
 *.log
+
+# Generated output
 public/uploads
-generated
-dist
-build
-.vscode
-.idea
+generated/
+
+# Build artifacts
+dist/
+build/
+coverage/
+
+# Relic config (not read by app)
+config.yaml
+
+# Generated preview files (regenerate with preview-test.js)
+templates/preview-*.html

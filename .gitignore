@@ -26,7 +26,9 @@ npm-debug.log*
 
 # Prisma
 prisma/*.db
-# Note: prisma/migrations/ IS committed — deployers run `prisma migrate deploy` against it.
+prisma/*.db-journal
+prisma/*.db-wal
+# Note:prisma/migrations/ IS committed — deployers run `prisma migrate deploy` against it.
 # Only local SQLite scratch files (*.db) are ignored.
 
 # Coverage
@@ -35,3 +37,8 @@ coverage/
 # Build
 dist/
 build/
+
+# Local SQLite scratch files (app uses MySQL + in-memory fallback)
+*.db
+*.db-journal
+*.db-wal
