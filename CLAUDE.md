@@ -93,7 +93,7 @@ These are the stubs the tech team will swap for production implementations:
 | `payments.js` | Razorpay scaffold committed + Prisma-backed, test credentials active | Set `PAYMENT_PROVIDER=razorpay` + `RAZORPAY_*` env vars |
 | `storage.js` | Local disk default | Set `UPLOAD_STORAGE=s3` + `AWS_*` vars |
 
-Every stub has a `// HANDOFF:` comment pointing at the replacement callsite. `DEPLOYMENT.md` has the step-by-step recipe.
+Every stub has a `// HANDOFF:` comment pointing at the replacement callsite. [[SiteMemory/deployment]] has the step-by-step recipe.
 
 ### Payment flow details
 
@@ -197,11 +197,17 @@ Templates 6, 8, 9, 13, 14 carry the `complianceReview` block — the form render
 ## SiteMemory vault
 
 `SiteMemory/` is the architectural brain. Read in this order for deep context:
-- [`SiteMemory/01_CURRENT_STATE.md`](SiteMemory/01_CURRENT_STATE.md) — what works / what's broken right now
-- [`SiteMemory/02_CONVENTIONS.md`](SiteMemory/02_CONVENTIONS.md) — full coding rules
-- [`SiteMemory/architecture/`](SiteMemory/architecture/) — per-feature deep dives (AI fallback, chatbot, template system, preview modal, API routes)
-- [`SiteMemory/decisions/ADR.md`](SiteMemory/decisions/ADR.md) — the why behind every architectural choice
-- [`SiteMemory/changelog/CHANGELOG.md`](SiteMemory/changelog/CHANGELOG.md) — append-only history (never edit past rounds)
+- [[SiteMemory/01_CURRENT_STATE]] — what works / what's broken right now
+- [[SiteMemory/02_CONVENTIONS]] — full coding rules
+- [[SiteMemory/architecture/]] — per-feature deep dives (AI fallback, chatbot, template system, preview modal, API routes)
+- [[SiteMemory/decisions/ADR]] — the why behind every architectural choice
+- [[SiteMemory/changelog/CHANGELOG]] — append-only history (never edit past rounds)
+
+## Handoff docs
+
+- [[HANDOFF]] — consolidated checklist: what's done vs. what the tech team needs to wire
+- [[DEMO]] — conversational walkthrough script for stakeholder demos
+- [[SiteMemory/deployment]] — step-by-step production deployment guide
 
 ## Environment variables
 

@@ -1,309 +1,180 @@
 # BeyondSite
 
-> **A no-code generator for professional business websites.** Pick a template → fill a form (with AI help) → preview → pay ₹4,999 → download a self-contained ZIP. Built by [BeyondSure](https://www.beyondsure.in/) (Shrigoda TechLabs Pvt Ltd) as an intern handoff. The website-output is plain HTML/CSS/JS the customer hosts anywhere.
+[![Tests](https://img.shields.io/badge/tests-376%20passing-brightgreen)]()
+[![Templates](https://img.shields.io/badge/templates-14-blue)]()
+[![Docker](https://img.shields.io/badge/docker-ready-orange)]()
+[![CI](https://img.shields.io/badge/ci-green-brightgreen)]()
 
-**Status:** Prototype handoff · 14 production-quality templates · Auth0 / MySQL / payment-gateway seams ready for the tech team to wire · Docker + Jest + GitHub Actions all set up · Prisma migration + seed scripts committed · Full architectural docs in [`SiteMemory/`](./SiteMemory/README.md) · Payment sub-steps with progress bar · Step wizard with persistence · ZIP externalization.
+> A no-code generator for professional business websites. Pick a template, fill a form with AI help, preview in real-time, pay ₹4,999, and download a self-contained ZIP. The output is plain HTML/CSS/JS — no framework, no build step, host anywhere.
 
-**Deploying this?** Follow [`DEPLOYMENT.md`](./DEPLOYMENT.md) for the step-by-step. The guide below is for reviewers running the demo locally.
+Built by [BeyondSure](https://www.beyondsure.in/) (Shrigoda TechLabs Pvt Ltd) as an intern handoff project.
 
 ---
 
-## Quick start — running locally in under 2 minutes
+## How It Works
+
+BeyondSite turns a blank form into a polished website in five steps:
+
+```
+┌─────────┐     ┌──────────┐     ┌─────────┐     ┌──────┐     ┌──────────┐
+│ 1. Pick │ ──▶ │ 2. Fill  │ ──▶ │ 3. Preview│ ──▶ │ 4. Pay│ ──▶ │ 5. Download│
+│Template │     │  Form    │     │  in iframe│     │      │     │   ZIP     │
+└─────────┘     └──────────┘     └─────────┘     └──────┘     └──────────┘
+```
+
+### 1. Pick a template
+
+14 production-quality templates covering Indian-regulated SMBs and global verticals. Each has a unique aesthetic, schema, and AI prompt set. Hover any card for ~1.5s to see a live preview with Desktop / Tablet / Mobile toggles.
+
+### 2. Fill the form
+
+A schema-driven form renders from `templates/schemas/template-N.json`. Each section has:
+- **Side-gutter hints** — label + arrow + description explaining what to write
+- **✨ AI button** — fills the section with Gemini 2.5 Flash (falls back to Groq if Gemini fails)
+- **Mockup thumbnails** — visual guide showing where each field appears in the output
+- **Required-field validation** — Business Name, Tagline, Description get red asterisks; missing fields shake and ring red with an inline error banner
+
+### 3. Preview in real-time
+
+Click "Preview Website" → your filled data renders through the EJS template server-side → returns as HTML → displayed in an iframe with device toggles (Desktop 16:9 / Tablet 3:4 / Mobile 9:19). The preview modal has a premium entrance animation with blur backdrop and auto-close on cursor leave.
+
+### 4. Pay
+
+Step 3 of the form wizard has 3 internal sub-steps with a mini progress bar:
+1. **Pay** — Razorpay checkout (test mode) or admin bypass
+2. **Confirmation** — "Payment received" with receipt details
+3. **Download** — ZIP download button
+
+Payment is gated: no ZIP without payment (unless admin). The flow auto-advances between sub-steps for smooth UX.
+
+### 5. Download the ZIP
+
+The downloaded ZIP contains:
+- `index.html` — the rendered website
+- `style.css` — all styles (externalized, not inline)
+- `script.js` — all interactivity (externalized, not inline)
+- `assets/` — any uploaded images referenced by the site
+
+Open `index.html` in a browser — that's the deliverable. No build step, no dependencies.
+
+---
+
+## Quick Start
 
 ```bash
-git clone <repo>
-cd StaticWebsiteGenerator
-cp .env.example .env          # then add GEMINI_API_KEY (Groq optional)
+git clone https://github.com/graduationlearn-wq/BeyondSite.git
+cd BeyondSite
+cp .env.example .env    # add GEMINI_API_KEY (Groq optional)
 npm install
-npx prisma generate            # generates Prisma client (DB not required to boot)
+npx prisma generate     # DB not required to boot
 node server.js
 ```
 
-Open **http://localhost:3000** → you'll land on the build page. Click **Sign In** in the nav and pick one of the demo accounts below.
+Open **http://localhost:3000** → click **Sign In** → pick a demo account:
 
-> **No database needed** to test the UI. The app boots without MySQL and falls back to dummy data. Drafts and payments live in memory (lost on restart).
+| Role | Email | Password | What they see |
+|------|-------|----------|---------------|
+| **Admin** | `admin@beyondsite.com` | `admin123` | Skips validation, bypasses payment, sees admin tools |
+| **Customer** | `customer@beyondsite.com` | `customer123` | Full flow with validation and payment gate |
 
----
-
-## Demo accounts — both seeded, click to fill on the login page
-
-| Role         | Email                          | Password       | What they see                                                                       |
-|---           |---                             |---             |---                                                                                  |
-| **Admin**    | `admin@beyondsite.com`         | `admin123`     | Can skip form validation · "View Plans" button enabled · Bypasses subscription gate |
-| **Customer** | `customer@beyondsite.com`      | `customer123`  | Must fill required fields · Subscription page locked behind "Coming Soon" overlay   |
-
-These are hard-coded in `server.js` for the demo. **All other email/password combos are rejected** — there's no open backdoor.
+> No database needed for testing. The app falls back to in-memory mode. Drafts and payments are lost on restart.
 
 ---
 
-## What to test (the actual reviewer's checklist)
-
-### Customer flow (sign in as customer)
-
-1. **Try clicking "Preview Website" without filling anything** — you should be smooth-scrolled to the first empty field, three red asterisks appear next to the required labels, the fields shake and ring red, and an inline banner explains what's missing.
-2. **Fill Business Name, Tagline, Description** (≥20 chars) → hover any template card for ~1.5 seconds → a premium modal previews the template with Desktop / Tablet / Mobile toggles.
-3. **Pick a template → click ✨ AI on any section** → form fields auto-populate from Gemini (or Groq if Gemini's quota is hit).
-4. **Click Preview Website** → see your site rendered in an iframe, with device toggles above the preview chrome.
-5. **Click Pay** → dummy ₹4,999 charge (or sign in as admin to bypass) → **Download ZIP** → unzip → open `index.html` in a browser. That's the deliverable. Payment flow has 3 sub-steps: Pay → Confirmation → Download with a mini progress bar.
-6. **Visit `/profile`** → real-feeling profile page with the 6 sample templates you "own", ₹29,994 total paid, recent-activity timeline. **The "View Plans →" button is hidden.**
-7. **Visit `/plans` directly in the URL bar** → blocked by a Coming-Soon overlay. Only "Back to Profile" button is available.
-8. **Try the chatbot** (gold bubble bottom-right) → say *"hi"* (handled locally, zero API cost) → ask *"what's the NBFC template for?"* (goes to Groq with scope-locked prompt) → ask *"write me a python script"* → it should politely redirect you to a general assistant.
-
-### Admin flow (sign in as admin)
-
-1. Same flow as customer, **except**: form validation is bypassed (admins can preview with empty fields and sample defaults appear instead).
-2. `/profile` shows a gold **"Admin · Bypass Enabled"** badge + the **"View Plans →"** button.
-3. `/plans` opens with a Coming-Soon overlay, but admin sees a **"Preview Plans (Admin)"** button on it — click → overlay dismisses → all three pricing tiers visible (Free Trial · Pro · Enterprise) with an amber "Admin preview" banner at the top.
-
-### Theme test (any account)
-
-On `/profile` or `/plans`, click the moon/sun icon in the top-right → entire page flips between **light** and **dark** themes. Choice persists across pages and refreshes (`localStorage.beyondsite_theme`).
-
-### Edge cases worth a glance
-
-- **Gemini 429s during heavy demo?** Auto-falls back to Groq. Watch `logger.info` / `warn` output in the terminal — you'll see `[ai-section] template-X/hero ✓ Groq (fallback)`.
-- **Logout from profile** → clears localStorage, redirects to `/login`.
-- **Refresh the build page mid-fill** → current step is preserved (localStorage), form fields are lost (no persistence yet — that's a known stub).
-- **Admin bypass** — sign in as admin, click Pay, skips Razorpay entirely, auto-advances through sub-steps, download available immediately.
-
----
-
-## How the thing actually works
+## Architecture at a Glance
 
 ```
-User picks template + fills form
-        │
-        ▼
-form-renderer.js reads templates/schemas/template-N.json from GET /api/schema/:id
-        │
-        ▼
-✨ button on a section → POST /api/ai-section
-   ├── Layer 1: Gemini 2.5 Flash (with 3-retry on 503)
-   └── Layer 2: Groq Llama-3.3-70b fallback (if Gemini fails)
-        │
-        ▼
-Preview button → POST /api/preview with form data
-   └── server-side ejsLib.renderFile() returns HTML
-        │
-        ▼
-Pay button → POST /api/pay (dummy, in-memory)
-        │
-        ▼
-Download button → POST /api/generate with paymentId
-   └── archiver zips rendered index.html + uploaded assets → streams as .zip
+┌─────────────────────────────────────────────────────────────┐
+│                      BeyondSite                              │
+├──────────┬──────────┬──────────┬──────────┬──────────────────┤
+│ Express  │   EJS    │  Gemini  │  Groq    │   Razorpay       │
+│ (server) │ (render) │  (AI)    │ (fallback│   (payments)     │
+│          │          │          │  + chat) │                  │
+├──────────┴──────────┴──────────┴──────────┴──────────────────┤
+│                    src/lib/ (integration seams)               │
+│  auth.js · database.js · payments.js · logger.js · storage.js│
+├──────────────────────────────────────────────────────────────┤
+│  Prisma ORM · MySQL (optional) · Winston · Jest · Docker     │
+└──────────────────────────────────────────────────────────────┘
 ```
 
-**The schema-driven core.** Every template is three coordinated files: a JSON schema (`templates/schemas/template-N.json`) describing the form sections and fields, an EJS file (`templates/website-template-N.ejs`) rendering the actual output, and an `AI_PROMPTS` entry in `server.js` for the ✨ button. Adding a new template = adding these three files plus sample data in `templates/preview-test.js` and a picker card in `public/index.html`. Convention is enforced by [`SiteMemory/02_CONVENTIONS.md`](./SiteMemory/02_CONVENTIONS.md).
+### Key design decisions
 
-**The chatbot is two-layer** for cost efficiency: `public/chatbot.js` matches social messages (greetings, thanks, identity, etc.) against regexes and replies locally with zero API cost. Only substantive questions hit Groq via `/api/chat` with a strict scope-lock system prompt.
+| Decision | Why | See |
+|----------|-----|-----|
+| Schema-driven templates | Add a template by writing JSON + EJS, not touching server code | [[SiteMemory/architecture/04_template-system]] |
+| Gemini → Groq fallback | Free-tier 429s shouldn't break the demo | [[SiteMemory/architecture/02_ai-fallback]] |
+| Two-layer chatbot | ~50% of messages are greetings — handled locally, zero API cost | [[SiteMemory/architecture/03_chatbot]] |
+| Clean integration seams | `src/lib/` files are swappable — tech team replaces them without touching `server.js` | [[SiteMemory/decisions/ADR]] |
+| In-memory fallback | App boots without MySQL for UI testing and demos | [[SiteMemory/01_CURRENT_STATE]] |
 
-**The preview modal** (hover any picker card for 1.5s) loads `templates/preview-N.html` files into an iframe and scales them to Desktop (16:9) / Tablet (3:4) / Mobile (9:19) via CSS `transform`.
+### What makes this different from Wix/Squarespace
 
----
-
-## Deployment — what the tech team needs
-
-> **For a step-by-step walkthrough**, read [`DEPLOYMENT.md`](./DEPLOYMENT.md). This section is a quick summary; that doc is the full guide.
-
-The project ships with everything needed for a clean container deploy:
-
-```bash
-# Build the image
-docker build -t beyondsite .
-
-# Run with the included docker-compose (boots MySQL too)
-docker-compose up -d
-
-# Or stand-alone, pointing at managed MySQL (AWS RDS, etc.)
-docker run -d -p 3000:3000 \
-  -e DATABASE_URL=mysql://user:pass@host:3306/beyondsite \
-  -e GEMINI_API_KEY=... \
-  -e GROQ_API_KEY=... \
-  -e AUTH0_DOMAIN=your-tenant.auth0.com \
-  -e AUTH0_AUDIENCE=https://api.beyondsite.com \
-  beyondsite
-```
-
-**Health-check endpoint:** `GET /health` returns 200 with DB-connection status. Already wired into the Dockerfile's `HEALTHCHECK` directive. Container runs as non-root user `nodejs:1001`.
-
-**CI/CD already configured:** `.github/workflows/ci.yml` runs install + `prisma generate` + `npm test` + `npm audit` on every PR. Branch-protection rules to enable in GitHub Settings:
-
-- Require PR reviews before merging (1–2 reviewers)
-- Require status checks to pass — add `ci` as required
-- No direct pushes to `main`
-
-**Logging:** Winston with JSON output in production (`NODE_ENV=production`), colorized human-readable in development. Centralized — no local file logging. Pipes straight to whatever log aggregator the team prefers (Datadog / ELK / CloudWatch).
-
-**Database migration:** `npm run db:migrate:deploy` applies the committed migration in `prisma/migrations/20260515000000_init/`. Tables created: `users`, `websites`, `drafts`, `payments`, `downloads`, `templates` with proper FKs and enums (`Role`, `WebsiteStatus`, `PaymentStatus`). Then `npm run db:seed` populates the 14 templates and upserts the bootstrap admin defined by `AUTH0_BOOTSTRAP_ADMIN_EMAIL`. Idempotent — safe to re-run.
+- **Regulatory accuracy** — templates for NBFCs, BFSI, Insurance, MF Distributors include RBI/IRDAI/AMFI-mandated disclosures, grievance redressal sections, and compliance banners
+- **Schema-driven, not drag-and-drop** — every template is a JSON schema + EJS renderer. Adding a new template = 3 files, not a visual editor
+- **AI-assisted, not AI-generated** — the ✨ button fills sections with context-aware prompts, but the human reviews and edits before previewing
+- **Static output** — the deliverable is plain HTML/CSS/JS. No framework, no build step, no hosting lock-in
 
 ---
 
-## Environment variables
+## Handoff Status
 
-Copy `.env.example` → `.env` and fill in. All variables are documented in the example file with inline comments. Summary:
+What's built vs. what the tech team needs to wire:
 
-| Variable                | Required?     | Purpose                                                                    |
-|---                      |---             |---                                                                          |
-| `GEMINI_API_KEY`        | **Required**   | Primary AI provider. Free tier works for testing.                          |
-| `GROQ_API_KEY`          | Recommended    | Fallback AI when Gemini 503s / 429s. Also powers the chatbot.              |
-| `DATABASE_URL`          | Prod required  | MySQL connection string. App boots without it for UI-only testing.         |
-| `AUTH0_DOMAIN`          | Prod required  | Activates Auth0 JWT verification. **Unset = dev-bypass mode (all admin).** |
-| `AUTH0_AUDIENCE`        | With Auth0     | Token audience for `jwt.verify()`.                                         |
-| `AUTH0_CLIENT_ID`       | With Auth0     | For the Auth0 SDK client init.                                              |
-| `AUTH0_CLIENT_SECRET`   | With Auth0     | Server-side secret.                                                         |
-| `AUTH0_BOOTSTRAP_ADMIN_EMAIL` | Prod recommended | Email upserted as ADMIN by `npm run db:seed` so somebody can sign in as admin on first deploy. |
-| `PAYMENT_PROVIDER`      | Optional       | `dummy` (default) / `razorpay` / `stripe`. Activates the matching scaffold in `src/lib/payments.js`. |
-| `RAZORPAY_KEY_ID/SECRET/WEBHOOK_SECRET` | With Razorpay | Credentials + webhook signing key from Razorpay dashboard.       |
-| `STRIPE_SECRET_KEY` + `STRIPE_WEBHOOK_SECRET` | With Stripe | Credentials + webhook secret from Stripe dashboard.            |
-| `UPLOAD_STORAGE`        | Optional       | `local` (default, disk) or `s3` (requires AWS_* vars).                     |
-| `AWS_REGION`, `AWS_*`   | If S3          | S3 bucket region + credentials.                                            |
-| `LOG_LEVEL`             | Optional       | `debug` / `info` / `warn` / `error`. Default `info`.                       |
-| `NODE_ENV`              | Optional       | `production` enables JSON-formatted logs. Default `development`.           |
-| `PORT`                  | Optional       | Default `3000`.                                                             |
+| Area | Status | What's left |
+|------|--------|-------------|
+| Templates | ✅ 14 rendering clean | Template-1 safe-locals refactor |
+| Auth | ✅ Auth0 middleware wired | Swap DUMMY_USERS for real Auth0 handler |
+| Payments | ✅ Razorpay scaffold + test keys | Live keys + webhook configuration |
+| Database | ✅ Prisma schema + migration + runtime | Apply to production MySQL |
+| Container | ✅ Multi-stage Docker + healthcheck | Deploy to host (Render/Railway/DO) |
+| CI/CD | ✅ GitHub Actions passing | Branch protection rules |
+| Logging | ✅ Winston JSON in prod | Connect to aggregator (Datadog/Loki) |
+| Storage | ✅ Local disk + S3-ready | Set `UPLOAD_STORAGE=s3` + AWS creds |
+
+Full checklist: [[HANDOFF]]
+Deployment guide: [[SiteMemory/deployment]]
 
 ---
 
-## Tech stack
+## For Reviewers
 
-| Layer       | Choice                                  | Why                                                            |
-|---          |---                                      |---                                                              |
-| Runtime     | Node.js 18+ · Express 5                 | Familiar, low-ceremony, async-first                            |
-| Templates   | EJS (server-rendered)                   | Output is static HTML — no SPA needed                          |
-| Database    | MySQL via Prisma ORM                    | Tech team's pick. Prisma gives type-safe queries + migrations  |
-| Auth        | Auth0 (JWT + JWKS)                      | Tech team's pick. Industry-standard, free tier covers years    |
-| AI          | Gemini 2.5 Flash → Groq Llama-3.3-70b   | Cheap primary + always-on fallback                             |
-| Logging     | Winston (JSON)                          | Pipes cleanly into any aggregator                              |
-| Tests       | Jest                                    | Tech team's pick. 376 tests passing                              |
-| CI          | GitHub Actions                          | Lockfile install, `prisma generate`, test, `npm audit`         |
-| Container   | Docker multi-stage, non-root user       | Production-ready out of the box                                |
+Want to see it working? Follow the step-by-step demo:
+
+→ [[DEMO]]
 
 ---
 
-## Project structure
+## For Deployers
 
-```
-StaticWebsiteGenerator/
-├── server.js                          Express app · all routes · 577 lines
-├── Dockerfile                          Multi-stage, non-root, healthcheck
-├── docker-compose.yml                  App + MySQL for local dev
-├── .env.example                        Documented env-var template
-├── prisma/
-│   ├── schema.prisma                   Models: User, Website, Draft, Payment, Download
-│   └── schema.sql                       Generated SQL (reference)
-├── src/lib/                            Isolated integration seams — tech team swaps these
-│   ├── auth.js                          Auth0 JWT verification + RBAC middleware
-│   ├── database.js                      Prisma client + connect / disconnect
-│   ├── storage.js                       Local-disk uploads (S3 swappable via env)
-│   ├── logger.js                        Winston JSON logger
-│   ├── payments.js                      Dummy payments — replace with Razorpay/Stripe
-│   ├── config.js                        Centralised env-var loading
-│   └── utils.js                         Pure helpers
-├── public/
-│   ├── index.html                       Main build page (custom cursor lives here)
-│   ├── profile.html                     User profile (dark/light theme)
-│   ├── plans.html                       Subscription plans (admin-gated)
-│   ├── login.html                       Demo-credentials login
-│   ├── register.html
-│   ├── style.css                        Global styles
-│   ├── step-wizard.css                  Step wizard tab styles
-│   ├── form-renderer.js                 Schema → form
-│   ├── chatbot.js                       Floating help bot (two-layer)
-│   ├── template-preview.js              Hover-to-preview modal
-│   ├── preview-frame.js                 Step-2 iframe + device toggles
-│   └── script.js                        Page-flow logic, payment sub-steps, auth headers
-├── templates/
-│   ├── schemas/
-│   │   ├── _base.json                   Shared brand / contact / theme
-│   │   └── template-N.json              14 template schemas
-│   ├── website-template-N.ejs           14 template renderers
-│   ├── preview-test.js                  Renders all templates with sample data
-│   └── preview-N.html                   Generated previews (regenerate with above)
-├── __tests__/                          Jest unit tests
-├── SiteMemory/                         Full architectural docs vault (Obsidian-friendly)
-└── .github/workflows/ci.yml             Lint + test + audit
-```
+Ready to put this on a real URL? The deployment guide covers:
+
+→ [[SiteMemory/deployment]]
 
 ---
 
-## Known limitations — what the tech team needs to finish
+## Deep Dives
 
-The prototype intentionally leaves clean integration seams where production-only concerns live. Everything below is **scaffolded with dev fallbacks** so the app runs without them:
+The full architectural brain lives in `SiteMemory/` — written as an Obsidian vault with cross-linked Markdown files.
 
-| Stub                  | Where                              | What to do                                                                 |
-|---                    |---                                 |---                                                                          |
-| Auth                  | `src/lib/auth.js` + `server.js::/api/login` | Set `AUTH0_DOMAIN` + `AUTH0_AUDIENCE` → middleware activates automatically. Then follow the HANDOFF block above `/api/login` to swap the `DUMMY_USERS` route for a real Auth0-callback handler. Dev bypass returns admin role. HMAC token bridge allows demo mode even with Auth0 configured. |
-| Payments              | `src/lib/payments.js` + `server.js::/api/pay` | Razorpay AND Stripe scaffolds are committed (commented). Set `PAYMENT_PROVIDER=razorpay`, fill `RAZORPAY_*` env vars, uncomment the block, `npm i razorpay`, add a webhook route. Full recipe in [`DEPLOYMENT.md`](./DEPLOYMENT.md#5-swap-the-dummy-payment-for-razorpay-or-stripe). |
-| User persistence      | `server.js::/api/login`             | `getOrCreateUser()` in `src/lib/auth.js` already upserts users via Prisma — call it from the new Auth0 handler, then remove `DUMMY_USERS`. |
-| Uploads               | `src/lib/storage.js`                | Set `UPLOAD_STORAGE=s3` + AWS_* vars → switches to S3. Local-disk is default. |
-| 4th-layer AI fallback | `/api/ai-section`                   | If both Gemini and Groq fail, returns 503. Could add canned defaults. ~2hr. |
-| Template-1 (Editorial)| `templates/website-template-1.ejs`  | Only template not on the safe-locals pattern. Renders fine but flagged for refactor. |
-| Custom cursor         | Inline `<script>` in `index.html`   | Should be extracted to `public/cursor.js` before adding new pages.         |
-| Thumbnail CSS rename  | `public/style.css`                  | `template-heph-prev` / `template-turtlemint-prev` → `template-stratus-prev` / `template-coverwise-prev`. Cosmetic. |
+| Read this | To understand |
+|-----------|---------------|
+| [[SiteMemory/00_BRIEF]] | What BeyondSite is and isn't |
+| [[SiteMemory/01_CURRENT_STATE]] | What works right now / what's broken |
+| [[SiteMemory/02_CONVENTIONS]] | The "six wired artifacts" rule for adding templates |
+| [[SiteMemory/architecture/01_api-routes]] | Every Express endpoint in one place |
+| [[SiteMemory/architecture/02_ai-fallback]] | How the AI button decides between Gemini and Groq |
+| [[SiteMemory/architecture/03_chatbot]] | How the chatbot avoids burning credits on greetings |
+| [[SiteMemory/architecture/04_template-system]] | How a schema becomes a rendered website |
+| [[SiteMemory/architecture/05_preview-modal]] | How the hover-preview modal works |
+| [[SiteMemory/decisions/ADR]] | Why we picked X over Y (20 decisions documented) |
+| [[SiteMemory/changelog/CHANGELOG]] | What we shipped in each session (Round 0 → Round O) |
+| [[SiteMemory/roadmap/ROADMAP]] | What's next (6 pillars, from foundations to scale) |
 
-Every stub has a `// HANDOFF:` or `// TODO:` comment in code pointing at the replacement.
-
----
-
-## Testing
-
-```bash
-npm test               # Run Jest with coverage
-npm run test:watch     # Watch mode
-npm run lint           # ESLint
-npm run audit          # npm audit --audit-level=high
-```
-
-376 tests pass. Coverage includes server routes (login, schema, preview, generate, payments, drafts), template rendering (14 published templates), payments (consume, create, verify, webhook), utils, auth middleware (requireRole, authenticate, optionalAuth), storage (local/S3, file filter, multer), database, config, health, and logger.
-
-**For testing as a reviewer with no Node experience:** just run `node server.js` after `npm install` and open the browser. You don't need to run any test suite — the manual flows in [What to Test](#what-to-test-the-actual-reviewers-checklist) cover everything customer-facing.
+Code answers *what*. The vault answers *why*.
 
 ---
 
-## Where to dig deeper
+## Built by
 
-[`SiteMemory/`](./SiteMemory/) is the project's full architectural brain — written as an Obsidian-friendly vault with cross-linked Markdown files. **Read in this order:**
-
-1. [`SiteMemory/README.md`](./SiteMemory/README.md) — vault index
-2. [`SiteMemory/00_BRIEF.md`](./SiteMemory/00_BRIEF.md) — what BeyondSite is and isn't
-3. [`SiteMemory/01_CURRENT_STATE.md`](./SiteMemory/01_CURRENT_STATE.md) — what works / what's broken / next steps
-4. [`SiteMemory/02_CONVENTIONS.md`](./SiteMemory/02_CONVENTIONS.md) — the "six wired artifacts" rule for adding templates
-5. [`SiteMemory/architecture/`](./SiteMemory/architecture/) — deep dives on AI fallback, chatbot, template system, preview modal, API routes
-6. [`SiteMemory/decisions/ADR.md`](./SiteMemory/decisions/ADR.md) — 20 architectural decisions with rationale
-7. [`SiteMemory/changelog/CHANGELOG.md`](./SiteMemory/changelog/CHANGELOG.md) — every shipped change, round-by-round
-8. [`SiteMemory/roadmap/ROADMAP.md`](./SiteMemory/roadmap/ROADMAP.md) — the post-handoff backlog
-
-This vault is the single source of truth for the *why* behind everything. Code answers *what*, the vault answers *why*.
-
----
-
-## Troubleshooting
-
-| Symptom                                                      | Fix                                                                                                 |
-|---                                                           |---                                                                                                  |
-| Server won't boot                                            | `GEMINI_API_KEY` is required even locally. Check `.env` exists and has it.                          |
-| `Database not configured` warning at startup                 | Expected — the app falls back to in-memory mode if `DATABASE_URL` isn't set. Safe for UI testing.   |
-| AI button returns 503 immediately                            | Gemini quota hit AND Groq key not set. Add `GROQ_API_KEY` to `.env`, restart.                       |
-| `/preview` iframe blank                                      | Open browser console → check `/api/preview` response. Usually means a schema field broke EJS render. |
-| ZIP download "Payment required"                              | Click Pay button first, or sign in as admin to bypass. Admin skips payment entirely.                                              |
-| `npm test` fails on Windows                                  | The `NODE_ENV=test` prefix breaks cmd.exe. Run `npx jest --coverage` instead.                       |
-| `verifyRazorpaySignature` tests fail in CI                   | `RAZORPAY_KEY_SECRET` is not set in the CI environment. The test file sets a fallback (`'test_secret'`) before loading the module. If you see this, check that `__tests__/payments-extended.test.js` has the env var guard at the top. |
-| Preview cards out of date after editing a template            | Regenerate previews: `cd templates && node preview-test.js`. (Sample brands for template-12 / 13 are now **Stratus** and **Coverwise** — older preview HTML may still show the old codenames.) |
-| Logged-in but `/profile` redirects to `/login`               | LocalStorage cleared. Sign in again — the redirect-on-empty is intentional.                         |
-| Step wizard tabs overflow on mobile                          | Tabs are scrollable, max-width 640px. Swipe left/right to see all steps.                         |
-
----
-
-## Contributing & handoff
-
-This project will hand off to the BeyondSure tech team for production wiring. Conventions to keep when extending:
-
-- **Six wired artifacts rule** for new templates (see [`02_CONVENTIONS.md`](./SiteMemory/02_CONVENTIONS.md))
-- **Append to** `SiteMemory/changelog/CHANGELOG.md` after every meaningful session — never edit past rounds
-- **Add an ADR** to `SiteMemory/decisions/ADR.md` for non-trivial architectural changes
-- **Run `node templates/preview-test.js`** before committing template changes — all 14 must render clean
-
-For questions about specific decisions, the ADR file has the *why*. For specific code, check the relevant `architecture/0N_*.md` doc.
-
----
-
-**Built by an intern at [BeyondSure](https://www.beyondsure.in/) · Shrigoda TechLabs Pvt Ltd · Mumbai, India**
+An intern at [BeyondSure](https://www.beyondsure.in/) · Shrigoda TechLabs Pvt Ltd · Mumbai, India

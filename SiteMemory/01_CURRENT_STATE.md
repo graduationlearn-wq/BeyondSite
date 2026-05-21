@@ -53,7 +53,7 @@ See [[_registry|Templates registry]] for one-line descriptions per template.
 - **Initial Prisma migration committed** at `prisma/migrations/20260515000000_init/migration.sql` — `npm run db:migrate:deploy` works against any fresh MySQL 8.
 - **Seed script** at `prisma/seed.js` — upserts 13 templates + the bootstrap admin keyed by `AUTH0_BOOTSTRAP_ADMIN_EMAIL`. Runs via `npm run db:seed` (also wired as `prisma db seed`).
 - **Razorpay + Stripe scaffolds** committed in `src/lib/payments.js` as ready-to-uncomment blocks with full webhook signature recipes. `PAYMENT_PROVIDER` env var picks the dispatcher target.
-- **`DEPLOYMENT.md`** — step-by-step deployer guide covering provisioning, migration, env vars, the two manual swaps, container deploy, smoke-test, rollback.
+- **[[deployment|Deployment guide]]** — step-by-step deployer guide covering provisioning, migration, env vars, the two manual swaps, container deploy, smoke-test, rollback.
 - **HANDOFF block above `/api/login`** expanded to a 5-step Auth0 recipe naming the exact `verifyToken` / `getOrCreateUser` callsites.
 
 ### Production-grade scaffolding (shipped Round G)

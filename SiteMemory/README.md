@@ -12,6 +12,7 @@ SiteMemory/
 ├── 01_CURRENT_STATE.md        — Snapshot of right now (refresh after each session)
 ├── 02_CONVENTIONS.md          — Coding rules · the "six wired artifacts" rule
 ├── 03_TECH_STACK.md           — Dependencies + file layout
+├── deployment.md              — Production deployment step-by-step
 │
 ├── architecture/              — Deep dives by feature area
 │   ├── 01_api-routes.md
@@ -23,7 +24,7 @@ SiteMemory/
 ├── templates/_registry.md     — Master index of all 14 templates
 ├── decisions/ADR.md           — Append-only log of architecture decisions
 ├── changelog/CHANGELOG.md     — Round-by-round history (Round 0 → Round N)
-└── roadmap/ROADMAP.md         — Short / medium / long-term
+├── roadmap/ROADMAP.md         — Short / medium / long-term
 └── _Context/                  — ARCHIVE: the original three root docs (stale)
 ```
 
@@ -44,6 +45,7 @@ SiteMemory/
 | Why did we pick X over Y?                    | [[ADR\|Decisions]]                                |
 | What did we ship in each session?            | [[CHANGELOG]]                                     |
 | What's the next 2 weeks / 2 months?          | [[ROADMAP]]                                       |
+| How do I deploy this to production?           | [[deployment]]                                    |
 
 ## Knowledge graph
 

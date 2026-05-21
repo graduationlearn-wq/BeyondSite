@@ -80,6 +80,12 @@ Single-file Express app (`server.js`, ~823 lines) that reads JSON schemas → re
 
 **Do not redo work that's already in the changelog.** When you finish a change: append to `CHANGELOG.md` and update `01_CURRENT_STATE.md`.
 
+## Handoff docs
+
+- `HANDOFF.md` — consolidated checklist: what's done vs. what the tech team needs to wire
+- `DEMO.md` — conversational walkthrough script for stakeholder demos
+- `SiteMemory/deployment.md` — step-by-step production deployment guide
+
 ## Known issues
 
 - Template 1 (Editorial) uses legacy non-safe-locals pattern — works but less defensive

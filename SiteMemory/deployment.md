@@ -2,7 +2,7 @@
 
 This guide walks the tech team through taking BeyondSite from "intern repo on GitHub" to "running production URL with real auth, real DB, and real payments." Every step has been scaffolded — the work below is configuration + small code swaps, not new implementation.
 
-> **Reviewer demo path?** Skip this guide and read [README.md](./README.md) → Quick Start. The app boots end-to-end without a DB, without Auth0, and without a payment gateway.
+> **Reviewer demo path?** Skip this guide and read [[../README|README]] → Quick Start. The app boots end-to-end without a DB, without Auth0, and without a payment gateway.
 
 ---
 
@@ -345,10 +345,10 @@ The deployer cannot fix these from the outside — they're roadmap items the Bey
 - Refactor `templates/website-template-1.ejs` to the safe-locals pattern.
 - Rename thumbnail CSS classes `template-heph-prev` / `template-turtlemint-prev` to `template-stratus-prev` / `template-coverwise-prev`.
 
-See [`SiteMemory/roadmap/ROADMAP.md`](./SiteMemory/roadmap/ROADMAP.md) for the full backlog.
+See [[roadmap/ROADMAP|ROADMAP]] for the full backlog.
 
 ---
 
 ## Questions / contact
 
-For questions about specific architectural decisions, read [`SiteMemory/decisions/ADR.md`](./SiteMemory/decisions/ADR.md) — every non-trivial choice is documented there with context, decision, and consequences. The code answers *what*, the ADRs answer *why*.
+For questions about specific architectural decisions, read [[decisions/ADR|ADR]] — every non-trivial choice is documented there with context, decision, and consequences. The code answers *what*, the ADRs answer *why*.

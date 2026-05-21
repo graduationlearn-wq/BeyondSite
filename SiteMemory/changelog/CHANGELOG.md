@@ -190,20 +190,20 @@ Round-by-round history of every meaningful change. **Append-only** — new round
 
 **Deployer-readiness pass. The intent of this round: someone outside Kunal's head should be able to deploy the app to production by following a checklist, not by reverse-engineering it.**
 
-**Touched:** [[01_CURRENT_STATE]] · [[03_TECH_STACK]] · [[README]] · created `DEPLOYMENT.md`
+**Touched:** [[01_CURRENT_STATE]] · [[03_TECH_STACK]] · [[../README|README]] · created `deployment.md`
 
 ### Shipped
 - **Initial Prisma migration committed** at `prisma/migrations/20260515000000_init/migration.sql` with the full schema (6 tables, indexes, foreign keys). `migration_lock.toml` pins the provider to `mysql`. The README's `prisma migrate deploy` claim is now actually true — it works.
 - **`prisma/seed.js`** — idempotent upsert of the 13 templates plus a bootstrap admin keyed by `AUTH0_BOOTSTRAP_ADMIN_EMAIL`. Wired through `package.json` as both `npm run db:seed` and the standard `prisma db seed` (via the `"prisma": { "seed": ... }` block).
 - **`src/lib/payments.js` rewritten as a real integration seam.** Public surface is now `createPayment`, `verifyWebhook`, `consumePayment`. The dummy path remains so the demo keeps working; full Razorpay and Stripe scaffolds are committed as ready-to-uncomment blocks with inline TODO recipes (signature verification, order creation, webhook persistence). `PAYMENT_PROVIDER` env var picks the dispatcher target.
-- **`DEPLOYMENT.md`** — single canonical step-by-step for the tech team. Covers infrastructure provisioning, schema migration, env-var configuration, the Auth0 swap, the Razorpay swap, container deploy, smoke-test, and rollback. Cross-linked from the README so it's discoverable from the entry point.
+- **`deployment.md`** — single canonical step-by-step for the tech team. Covers infrastructure provisioning, schema migration, env-var configuration, the Auth0 swap, the Razorpay swap, container deploy, smoke-test, and rollback. Cross-linked from the README so it's discoverable from the entry point.
 - **HANDOFF block above `/api/login`** beefed up from a one-line "replace with Auth0" comment to a 5-step recipe naming the exact `verifyToken` + `getOrCreateUser` callsites and the order in which to swap them.
 - **`.env.example` expanded** with `PAYMENT_PROVIDER` + `RAZORPAY_*` + `STRIPE_*` + `APP_URL` + `AUTH0_BOOTSTRAP_ADMIN_EMAIL` sections (commented with where to get each value).
 
 ### Changed
 - **`.gitignore`** — removed `prisma/migrations/` from the ignore list (deployers need it tracked). SQLite scratch files (`*.db`) still ignored.
 - **`package.json`** — added `db:seed` script and the `prisma.seed` config block.
-- **README** — fixed the `prisma migrate deploy` claim (now points at the committed migration + the new `db:seed` step). "Known limitations" table updated so the Auth, Payments, and User-persistence rows describe the *current* shape of the work, not the previous one. Status line now mentions the migration + seed scripts. New callout at the top pointing deployers at `DEPLOYMENT.md`.
+- **README** — fixed the `prisma migrate deploy` claim (now points at the committed migration + the new `db:seed` step). "Known limitations" table updated so the Auth, Payments, and User-persistence rows describe the *current* shape of the work, not the previous one. Status line now mentions the migration + seed scripts. New callout at the top pointing deployers at `deployment.md`.
 
 ### Fixed
 - **`prisma migrate deploy` was a broken promise.** Before this round, no migration files existed and the folder was gitignored. The README told deployers to run a command that would have failed silently with "No migrations found." Real init migration now committed.
@@ -228,7 +228,7 @@ Round-by-round history of every meaningful change. **Append-only** — new round
 - Did not install razorpay / stripe SDKs (scaffolds commented out — deployer chooses).
 - Did not delete `config.yaml` or the stray `5-28.jpg` — flagged as TODO, defer until cleanup-only round.
 
-After Round I the project is **deployer-ready** in the user's intended sense: the tech team can fork, follow `DEPLOYMENT.md`, swap two env vars + uncomment two code blocks + run two npm scripts, and reach a working production URL with real auth, real DB, and real payments. What they cannot do from outside is the product-side wiring (Prisma + Auth0 routes) — those land in the next sprint.
+After Round I the project is **deployer-ready** in the user's intended sense: the tech team can fork, follow `deployment.md`, swap two env vars + uncomment two code blocks + run two npm scripts, and reach a working production URL with real auth, real DB, and real payments. What they cannot do from outside is the product-side wiring (Prisma + Auth0 routes) — those land in the next sprint.
 
 ---
 
