@@ -132,8 +132,8 @@ What's built vs. what the tech team needs to wire:
 | Logging | ✅ Winston JSON in prod | Connect to aggregator (Datadog/Loki) |
 | Storage | ✅ Local disk + S3-ready | Set `UPLOAD_STORAGE=s3` + AWS creds |
 
-Full checklist: [[HANDOFF]]
-Deployment guide: [[SiteMemory/deployment]]
+Full checklist: [[SiteMemory/handoff/HANDOFF]]
+Deployment guide: [[SiteMemory/handoff/deployment]]
 
 ---
 
@@ -141,7 +141,7 @@ Deployment guide: [[SiteMemory/deployment]]
 
 Want to see it working? Follow the step-by-step demo:
 
-→ [[DEMO]]
+→ [[SiteMemory/handoff/DEMO]]
 
 ---
 
@@ -149,7 +149,7 @@ Want to see it working? Follow the step-by-step demo:
 
 Ready to put this on a real URL? The deployment guide covers:
 
-→ [[SiteMemory/deployment]]
+→ [[SiteMemory/handoff/deployment]]
 
 ---
 

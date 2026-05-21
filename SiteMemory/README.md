@@ -12,7 +12,10 @@ SiteMemory/
 ├── 01_CURRENT_STATE.md        — Snapshot of right now (refresh after each session)
 ├── 02_CONVENTIONS.md          — Coding rules · the "six wired artifacts" rule
 ├── 03_TECH_STACK.md           — Dependencies + file layout
-├── deployment.md              — Production deployment step-by-step
+├── handoff/                   — Handoff docs for the tech team
+│   ├── HANDOFF.md             — Consolidated checklist (done vs pending)
+│   ├── DEMO.md                — Conversational walkthrough script
+│   └── deployment.md          — Production deployment step-by-step
 │
 ├── architecture/              — Deep dives by feature area
 │   ├── 01_api-routes.md
@@ -45,7 +48,9 @@ SiteMemory/
 | Why did we pick X over Y?                    | [[ADR\|Decisions]]                                |
 | What did we ship in each session?            | [[CHANGELOG]]                                     |
 | What's the next 2 weeks / 2 months?          | [[ROADMAP]]                                       |
-| How do I deploy this to production?           | [[deployment]]                                    |
+| How do I deploy this to production?           | [[handoff/deployment]]                            |
+| What's the handoff checklist?                 | [[handoff/HANDOFF]]                               |
+| How do I demo this to stakeholders?           | [[handoff/DEMO]]                                  |
 
 ## Knowledge graph
 

@@ -27,7 +27,7 @@ Single source of truth for what's done vs. what the tech team needs to wire. Upd
 | HMAC token bridge | ✅ | Allows demo mode even when `AUTH0_DOMAIN` is configured |
 | DUMMY_USERS whitelist | ✅ | Strict 2-user whitelist in `server.js`, all others rejected |
 | Swap DUMMY_USERS for Auth0 | 🟡 | Follow `// HANDOFF` comment in `server.js` above `/api/login` — 5-step recipe |
-| Google OAuth routes | 🔴 | Add `/auth/google` + callback routes (recipe in [[SiteMemory/deployment#4-swap-the-dummy-login-for-auth0]]) |
+| Google OAuth routes | 🔴 | Add `/auth/google` + callback routes (recipe in [[deployment#4-swap-the-dummy-login-for-auth0]]) |
 | Custom role claim | 🔴 | Auth0 Login Action to set `https://beyondSure.com/role` claim |
 | Remove DUMMY_USERS entirely | 🔴 | After Auth0 handler is live |
 
@@ -125,7 +125,7 @@ Single source of truth for what's done vs. what the tech team needs to wire. Upd
 | Item | Status | Notes |
 |------|--------|-------|
 | README | ✅ | Redesigned as learning document |
-| DEPLOYMENT.md | ✅ | Moved to [[SiteMemory/deployment]] |
+| DEPLOYMENT.md | ✅ | Moved to [[deployment]] |
 | HANDOFF.md | ✅ | This file |
 | DEMO.md | ✅ | Conversational walkthrough script |
 | SiteMemory vault | ✅ | Obsidian-friendly docs with cross-links |
@@ -148,8 +148,8 @@ Single source of truth for what's done vs. what the tech team needs to wire. Upd
 
 ## Related
 
-- [[README]] — project overview and quick start
-- [[SiteMemory/deployment]] — step-by-step deployment guide
+- [[../../README]] — project overview and quick start
+- [[deployment]] — step-by-step deployment guide
 - [[DEMO]] — conversational walkthrough for stakeholders
-- [[SiteMemory/01_CURRENT_STATE]] — what works right now
-- [[SiteMemory/roadmap/ROADMAP]] — what's next
+- [[../01_CURRENT_STATE]] — what works right now
+- [[../roadmap/ROADMAP]] — what's next

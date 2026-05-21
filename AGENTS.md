@@ -82,9 +82,9 @@ Single-file Express app (`server.js`, ~823 lines) that reads JSON schemas → re
 
 ## Handoff docs
 
-- `HANDOFF.md` — consolidated checklist: what's done vs. what the tech team needs to wire
-- `DEMO.md` — conversational walkthrough script for stakeholder demos
-- `SiteMemory/deployment.md` — step-by-step production deployment guide
+- `SiteMemory/handoff/HANDOFF.md` — consolidated checklist: what's done vs. what the tech team needs to wire
+- `SiteMemory/handoff/DEMO.md` — conversational walkthrough script for stakeholder demos
+- `SiteMemory/handoff/deployment.md` — step-by-step production deployment guide
 
 ## Known issues
 

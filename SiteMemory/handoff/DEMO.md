@@ -173,7 +173,7 @@ Open **http://localhost:3000** in your browser. Have both demo credentials handy
 
 ## Related
 
-- [[README]] — project overview and quick start
+- [[../../README]] — project overview and quick start
 - [[HANDOFF]] — consolidated handoff checklist
-- [[SiteMemory/deployment]] — step-by-step deployment guide
-- [[SiteMemory/01_CURRENT_STATE]] — what works right now
+- [[deployment]] — step-by-step deployment guide
+- [[../01_CURRENT_STATE]] — what works right now

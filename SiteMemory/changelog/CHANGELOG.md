@@ -190,7 +190,7 @@ Round-by-round history of every meaningful change. **Append-only** — new round
 
 **Deployer-readiness pass. The intent of this round: someone outside Kunal's head should be able to deploy the app to production by following a checklist, not by reverse-engineering it.**
 
-**Touched:** [[01_CURRENT_STATE]] · [[03_TECH_STACK]] · [[../README|README]] · created `deployment.md`
+**Touched:** [[../01_CURRENT_STATE|01_CURRENT_STATE]] · [[../03_TECH_STACK|03_TECH_STACK]] · [[../README|README]] · created `deployment.md`
 
 ### Shipped
 - **Initial Prisma migration committed** at `prisma/migrations/20260515000000_init/migration.sql` with the full schema (6 tables, indexes, foreign keys). `migration_lock.toml` pins the provider to `mysql`. The README's `prisma migrate deploy` claim is now actually true — it works.
