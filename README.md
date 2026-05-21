@@ -70,12 +70,14 @@ npx prisma generate     # DB not required to boot
 node server.js
 ```
 
-Open **http://localhost:3000** → click **Sign In** → pick a demo account:
+Open **http://localhost:3000** → click **Sign In** → enter demo credentials from your `.env`:
 
-| Role | Email | Password | What they see |
-|------|-------|----------|---------------|
-| **Admin** | `admin@beyondsite.com` | `admin123` | Skips validation, bypasses payment, sees admin tools |
-| **Customer** | `customer@beyondsite.com` | `customer123` | Full flow with validation and payment gate |
+| Role | Env vars | What they see |
+|------|----------|---------------|
+| **Admin** | `DUMMY_ADMIN_EMAIL` / `DUMMY_ADMIN_PASSWORD` | Skips validation, bypasses payment, sees admin tools |
+| **Customer** | `DUMMY_CUSTOMER_EMAIL` / `DUMMY_CUSTOMER_PASSWORD` | Full flow with validation and payment gate |
+
+> Default demo accounts: `admin@beyondsite.com`/`admin123` and `customer@beyondsite.com`/`customer123`
 
 > No database needed for testing. The app falls back to in-memory mode. Drafts and payments are lost on restart.
 
@@ -124,7 +126,7 @@ What's built vs. what the tech team needs to wire:
 | Area | Status | What's left |
 |------|--------|-------------|
 | Templates | ✅ 14 rendering clean | Template-1 safe-locals refactor |
-| Auth | ✅ Auth0 middleware wired | Swap DUMMY_USERS for real Auth0 handler |
+| Auth | ✅ Auth0 middleware + RBAC wired server-side | Swap DUMMY_USERS for real Auth0 handler |
 | Payments | ✅ Razorpay scaffold + test keys | Live keys + webhook configuration |
 | Database | ✅ Prisma schema + migration + runtime | Apply to production MySQL |
 | Container | ✅ Multi-stage Docker + healthcheck | Deploy to host (Render/Railway/DO) |

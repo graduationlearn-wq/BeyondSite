@@ -1,8 +1,9 @@
-let jwt, jwksClient, logger, prisma;
+let jwt, jwksClient, logger, prisma, crypto;
 
 try {
   jwt = require('jsonwebtoken');
   jwksClient = require('jwks-rsa');
+  crypto = require('crypto');
   logger = require('./logger');
   const db = require('./database');
   prisma = db.prisma;
@@ -116,7 +117,7 @@ function authenticate() {
       // { email, role, ts }.
       if (token && token.includes('.')) {
         const [payload, sig] = token.split('.');
-        const expected = require('crypto')
+        const expected = crypto
           .createHmac('sha256', process.env.GEMINI_API_KEY || 'dev-secret')
           .update(payload)
           .digest('hex');

@@ -95,6 +95,9 @@ Single-file Express app (`server.js`, ~823 lines) that reads JSON schemas → re
 
 ## Recent features (post-initial release)
 
+- **RBAC server-side enforcement**: `requireRole()` wired to all protected routes (`/api/upload-image`, `/api/upload-logo`, `/api/draft`, `/api/generate`)
+- **Role-encoding session tokens**: Login returns `base64url({email,role,ts}).hex_signature` — `authenticate()` extracts role correctly
+- **Demo credentials in env vars**: `DUMMY_ADMIN_EMAIL`, `DUMMY_ADMIN_PASSWORD`, etc. — no hardcoded creds in source
 - **Payment sub-steps**: Step 3 now has 3 internal sub-steps (Pay → Confirmation → Download) with a mini progress bar
 - **Auth token bridge**: HMAC dummy token allows demo mode even when `AUTH0_DOMAIN` is configured
 - **Razorpay defensive fixes**: SDK guard, error detail propagation, 8s notifications, repaint delay

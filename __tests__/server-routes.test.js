@@ -1,7 +1,25 @@
 'use strict';
 
 const request = require('supertest');
+const crypto = require('crypto');
 const { app } = require('../server');
+
+const ADMIN_EMAIL = process.env.DUMMY_ADMIN_EMAIL || 'admin@beyondsite.com';
+const ADMIN_PASSWORD = process.env.DUMMY_ADMIN_PASSWORD || 'admin123';
+const CUSTOMER_EMAIL = process.env.DUMMY_CUSTOMER_EMAIL || 'customer@beyondsite.com';
+const CUSTOMER_PASSWORD = process.env.DUMMY_CUSTOMER_PASSWORD || 'customer123';
+
+function makeToken(email, role) {
+  const payload = Buffer.from(JSON.stringify({ email, role, ts: Date.now() })).toString('base64url');
+  const sig = crypto
+    .createHmac('sha256', process.env.GEMINI_API_KEY || 'dev-secret')
+    .update(payload)
+    .digest('hex');
+  return payload + '.' + sig;
+}
+
+const ADMIN_TOKEN = makeToken(ADMIN_EMAIL, 'ADMIN');
+const CUSTOMER_TOKEN = makeToken(CUSTOMER_EMAIL, 'CUSTOMER');
 
 describe('Server Routes', () => {
   describe('GET /health', () => {
@@ -22,13 +40,13 @@ describe('Server Routes', () => {
 
   describe('POST /api/login', () => {
     test('returns 400 when email is missing', async () => {
-      const res = await request(app).post('/api/login').send({ password: 'admin123' });
+      const res = await request(app).post('/api/login').send({ password: ADMIN_PASSWORD });
       expect(res.status).toBe(400);
       expect(res.body.error).toContain('required');
     });
 
     test('returns 400 when password is missing', async () => {
-      const res = await request(app).post('/api/login').send({ email: 'admin@beyondsite.com' });
+      const res = await request(app).post('/api/login').send({ email: ADMIN_EMAIL });
       expect(res.status).toBe(400);
       expect(res.body.error).toContain('required');
     });
@@ -40,33 +58,35 @@ describe('Server Routes', () => {
     });
 
     test('returns 401 for wrong password', async () => {
-      const res = await request(app).post('/api/login').send({ email: 'admin@beyondsite.com', password: 'wrong' });
+      const res = await request(app).post('/api/login').send({ email: ADMIN_EMAIL, password: 'wrong' });
       expect(res.status).toBe(401);
     });
 
     test('admin login returns success with admin role', async () => {
-      const res = await request(app).post('/api/login').send({ email: 'admin@beyondsite.com', password: 'admin123' });
+      const res = await request(app).post('/api/login').send({ email: ADMIN_EMAIL, password: ADMIN_PASSWORD });
       expect(res.status).toBe(200);
       expect(res.body.success).toBe(true);
       expect(res.body.isAdmin).toBe(true);
-      expect(res.body.email).toBe('admin@beyondsite.com');
+      expect(res.body.email).toBe(ADMIN_EMAIL);
       expect(res.body.name).toBe('Admin');
       expect(res.body.token).toBeDefined();
+      expect(res.body.role).toBe('ADMIN');
     });
 
     test('customer login returns success with customer role', async () => {
-      const res = await request(app).post('/api/login').send({ email: 'customer@beyondsite.com', password: 'customer123' });
+      const res = await request(app).post('/api/login').send({ email: CUSTOMER_EMAIL, password: CUSTOMER_PASSWORD });
       expect(res.status).toBe(200);
       expect(res.body.success).toBe(true);
       expect(res.body.isAdmin).toBe(false);
-      expect(res.body.email).toBe('customer@beyondsite.com');
+      expect(res.body.email).toBe(CUSTOMER_EMAIL);
       expect(res.body.name).toBe('Customer');
+      expect(res.body.role).toBe('CUSTOMER');
     });
 
     test('login is case-insensitive for email', async () => {
-      const res = await request(app).post('/api/login').send({ email: 'ADMIN@BEYONDSITE.COM', password: 'admin123' });
+      const res = await request(app).post('/api/login').send({ email: ADMIN_EMAIL.toUpperCase(), password: ADMIN_PASSWORD });
       expect(res.status).toBe(200);
-      expect(res.body.email).toBe('admin@beyondsite.com');
+      expect(res.body.email).toBe(ADMIN_EMAIL);
     });
   });
 
@@ -190,7 +210,7 @@ describe('Server Routes', () => {
 
     test('returns 402 without paymentId (with dev auth)', async () => {
       const res = await request(app).post('/api/generate')
-        .set('Authorization', 'Bearer dev-token')
+        .set('Authorization', `Bearer ${ADMIN_TOKEN}`)
         .send({ template: 'template-5', data: { businessName: 'Test', tagline: 'Test', _description: 'A test business with enough description text to pass validation' } });
       expect(res.status).toBe(402);
       expect(res.body.error).toBe('Payment required');
@@ -199,7 +219,7 @@ describe('Server Routes', () => {
     test('admin bypass generates ZIP without payment', async () => {
       const adminData = { businessName: 'Test Biz', tagline: 'Test Tagline', _description: 'A test business with enough description text to pass validation requirements' };
       const res = await request(app).post('/api/generate')
-        .set('Authorization', 'Bearer dev-token')
+        .set('Authorization', `Bearer ${ADMIN_TOKEN}`)
         .send({ template: 'template-5', data: adminData, paymentId: 'admin_bypass_123' });
       expect([200, 402]).toContain(res.status);
       if (res.status === 200) {
@@ -213,7 +233,7 @@ describe('Server Routes', () => {
 
       const data = { businessName: 'Test', tagline: 'Test', _description: 'A test business with enough description text to pass validation' };
       const res = await request(app).post('/api/generate')
-        .set('Authorization', 'Bearer dev-token')
+        .set('Authorization', `Bearer ${ADMIN_TOKEN}`)
         .send({ template: 'template-5', data, paymentId: 'pay_used_test' });
       expect([402, 500]).toContain(res.status);
     });
@@ -224,7 +244,7 @@ describe('Server Routes', () => {
 
       const data = { businessName: 'Valid Biz', tagline: 'Valid Tag', _description: 'A valid business with enough description text to pass validation requirements' };
       const res = await request(app).post('/api/generate')
-        .set('Authorization', 'Bearer dev-token')
+        .set('Authorization', `Bearer ${ADMIN_TOKEN}`)
         .send({ template: 'template-5', data, paymentId: 'pay_valid_test' });
       expect([200, 402, 500]).toContain(res.status);
     });
@@ -233,7 +253,7 @@ describe('Server Routes', () => {
   describe('POST /api/draft', () => {
     test('returns 400 without templateId', async () => {
       const res = await request(app).post('/api/draft')
-        .set('Authorization', 'Bearer dev-token')
+        .set('Authorization', `Bearer ${ADMIN_TOKEN}`)
         .send({ formData: { businessName: 'Test' } });
       expect(res.status).toBe(400);
       expect(res.body.error).toContain('templateId');
@@ -241,7 +261,7 @@ describe('Server Routes', () => {
 
     test('returns 400 without formData', async () => {
       const res = await request(app).post('/api/draft')
-        .set('Authorization', 'Bearer dev-token')
+        .set('Authorization', `Bearer ${ADMIN_TOKEN}`)
         .send({ templateId: 'template-5' });
       expect(res.status).toBe(400);
       expect(res.body.error).toContain('formData');
@@ -249,7 +269,7 @@ describe('Server Routes', () => {
 
     test('returns 400 for invalid templateId format', async () => {
       const res = await request(app).post('/api/draft')
-        .set('Authorization', 'Bearer dev-token')
+        .set('Authorization', `Bearer ${ADMIN_TOKEN}`)
         .send({ templateId: '../../../etc/passwd', formData: { test: true } });
       expect(res.status).toBe(400);
       expect(res.body.error).toContain('Invalid');
@@ -257,7 +277,7 @@ describe('Server Routes', () => {
 
     test('returns 400 when formData is array', async () => {
       const res = await request(app).post('/api/draft')
-        .set('Authorization', 'Bearer dev-token')
+        .set('Authorization', `Bearer ${ADMIN_TOKEN}`)
         .send({ templateId: 'template-5', formData: [1, 2, 3] });
       expect(res.status).toBe(400);
       expect(res.body.error).toContain('object');
@@ -265,7 +285,7 @@ describe('Server Routes', () => {
 
     test('returns ok with persisted:false when no DB', async () => {
       const res = await request(app).post('/api/draft')
-        .set('Authorization', 'Bearer dev-token')
+        .set('Authorization', `Bearer ${ADMIN_TOKEN}`)
         .send({ templateId: 'template-5', formData: { businessName: 'Test Draft' } });
       expect([200, 500]).toContain(res.status);
       if (res.status === 200) {
@@ -278,7 +298,7 @@ describe('Server Routes', () => {
   describe('GET /api/draft/:templateId', () => {
     test('returns null draft when no DB', async () => {
       const res = await request(app).get('/api/draft/template-5')
-        .set('Authorization', 'Bearer dev-token');
+        .set('Authorization', `Bearer ${ADMIN_TOKEN}`);
       expect([200, 500]).toContain(res.status);
       if (res.status === 200) {
         expect(res.body.draft).toBeNull();

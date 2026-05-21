@@ -88,10 +88,19 @@ These are the stubs the tech team will swap for production implementations:
 
 | File | Status | To activate |
 |------|--------|-------------|
-| `auth.js` | Auth0 middleware wired + HMAC token bridge, demo uses `DUMMY_USERS` | Set `AUTH0_DOMAIN` + `AUTH0_AUDIENCE` + `DEV_AUTH_BYPASS=false` |
+| `auth.js` | Auth0 middleware wired + RBAC enforced, demo uses env-based dummy accounts | Set `AUTH0_DOMAIN` + `AUTH0_AUDIENCE` + `DEV_AUTH_BYPASS=false` |
 | `database.js` | Prisma client ready, runtime wired to in-memory Maps | Set `DATABASE_URL` pointing at MySQL |
 | `payments.js` | Razorpay scaffold committed + Prisma-backed, test credentials active | Set `PAYMENT_PROVIDER=razorpay` + `RAZORPAY_*` env vars |
 | `storage.js` | Local disk default | Set `UPLOAD_STORAGE=s3` + `AWS_*` vars |
+
+### RBAC (Role-Based Access Control)
+
+`requireRole()` is wired server-side on all protected routes:
+- `/api/upload-image`, `/api/upload-logo` → `authenticate(), requireRole('ADMIN', 'CUSTOMER')`
+- `/api/draft` (POST + GET) → `authenticate(), requireRole('ADMIN', 'CUSTOMER')`
+- `/api/generate` → `authenticate(), requireRole('ADMIN', 'CUSTOMER')`
+
+Demo session tokens encode role: `base64url({ email, role, ts }).hex_signature`. The `authenticate()` middleware decodes the payload, verifies the HMAC signature, and sets `req.user.role`. Works with any OIDC provider (Auth0, Azure AD, Okta, custom SSO) — just env var changes.
 
 Every stub has a `// HANDOFF:` comment pointing at the replacement callsite. [[SiteMemory/handoff/deployment]] has the step-by-step recipe.
 
