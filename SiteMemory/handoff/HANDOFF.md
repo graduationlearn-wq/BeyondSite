@@ -23,13 +23,40 @@ Single source of truth for what's done vs. what the tech team needs to wire. Upd
 | Item | Status | Notes |
 |------|--------|-------|
 | Auth0 JWT middleware | ✅ | `src/lib/auth.js` — `jsonwebtoken` + `jwks-rsa` with key rotation cache |
-| Dev bypass mode | ✅ | `DEV_AUTH_BYPASS=true` returns placeholder admin user |
-| HMAC token bridge | ✅ | Allows demo mode even when `AUTH0_DOMAIN` is configured |
-| DUMMY_USERS whitelist | ✅ | Strict 2-user whitelist in `server.js`, all others rejected |
+| Dev bypass mode | ✅ | When `AUTH0_DOMAIN` unset, returns placeholder admin user |
+| Role-encoding session tokens | ✅ | Login returns `base64url(payload).hex_sig` with `{ email, role, ts }` |
+| `authenticate()` decodes role | ✅ | Accepts both Auth0 JWTs and role-encoded dummy tokens |
+| `requireRole()` middleware | ✅ | Enforces role checks server-side on all protected routes |
+| RBAC wired to routes | ✅ | `/api/upload-image`, `/api/upload-logo`, `/api/draft`, `/api/generate` all gated |
+| Demo accounts from env vars | ✅ | `DUMMY_ADMIN_EMAIL`, `DUMMY_ADMIN_PASSWORD`, etc. — no hardcoded creds in source |
+| Credential chips removed | ✅ | Login page no longer exposes credentials in HTML source |
 | Swap DUMMY_USERS for Auth0 | 🟡 | Follow `// HANDOFF` comment in `server.js` above `/api/login` — 5-step recipe |
 | Google OAuth routes | 🔴 | Add `/auth/google` + callback routes (recipe in [[deployment#4-swap-the-dummy-login-for-auth0]]) |
-| Custom role claim | 🔴 | Auth0 Login Action to set `https://beyondSure.com/role` claim |
+| Custom role claim | 🔴 | Auth0/SSO Login Action to set `https://beyondSure.com/role` claim |
 | Remove DUMMY_USERS entirely | 🔴 | After Auth0 handler is live |
+
+### Auth0 / SSO activation
+
+The middleware works with **any OIDC provider** (Auth0, Azure AD, Okta, custom SSO). Just set env vars:
+
+```env
+# For Auth0
+AUTH0_DOMAIN=your-tenant.auth0.com
+AUTH0_AUDIENCE=https://api.beyondsite.com
+
+# For custom SSO (same JWKS-based verification)
+OIDC_ISSUER=https://sso.yourcompany.com
+OIDC_JWKS_URI=https://sso.yourcompany.com/.well-known/jwks.json
+OIDC_AUDIENCE=https://api.beyondsite.com
+```
+
+**Role assignment:** Add a Login Action that sets the `https://beyondSure.com/role` claim:
+```js
+// Auth0 Action — sets role based on email
+const adminEmails = ['admin1@company.com', 'admin2@company.com'];
+const role = adminEmails.includes(event.user.email) ? 'admin' : 'customer';
+api.idToken.setCustomClaim('https://beyondSure.com/role', role);
+```
 
 ## Payments
 

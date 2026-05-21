@@ -6,6 +6,36 @@ Round-by-round history of every meaningful change. **Append-only** — new round
 
 ---
 
+## Round P — 2026-05-21
+
+**RBAC fully wired — `requireRole()` now enforces roles server-side on all protected routes. Demo credentials moved to env vars (no hardcoded creds in source). Session tokens now encode role properly.**
+
+**Touched:** `server.js` · `src/lib/auth.js` · `public/login.html` · `__tests__/setup.js` · `.env.example` · `SiteMemory/handoff/HANDOFF.md`
+
+### Shipped
+
+- **`DUMMY_USERS` moved to env vars** — `DUMMY_ADMIN_EMAIL`, `DUMMY_ADMIN_PASSWORD`, `DUMMY_CUSTOMER_EMAIL`, `DUMMY_CUSTOMER_PASSWORD`. No hardcoded credentials in source code. If env vars aren't set, demo accounts don't exist (safe for production).
+- **Role-encoding session tokens** — Login now returns `base64url({ email, role, ts }).hex_signature` instead of a plain HMAC hash. The token carries the user's role (`ADMIN` / `CUSTOMER`) so `authenticate()` can extract it without guessing.
+- **`authenticate()` decodes role from token** — Updated to parse the role-encoded dummy token format. When `AUTH0_DOMAIN` is set but a dummy token is provided, it decodes the payload, verifies the HMAC signature, and sets `req.user.role` correctly.
+- **`requireRole()` wired to all protected routes** — `/api/upload-image`, `/api/upload-logo`, `/api/draft` (POST + GET), `/api/generate` now all use `authenticate(), requireRole('ADMIN', 'CUSTOMER')`. This establishes the pattern for future admin-only routes (`requireRole('ADMIN')`).
+- **Credential chips removed from login.html** — No more clickable buttons exposing email/password in HTML source. Replaced with a note pointing to README/`.env`.
+- **Tests updated** — `__tests__/setup.js` sets demo account env vars before any module loads. All 376 tests pass.
+- **`.env.example` updated** — Documents the new `DUMMY_*` env vars with placeholder values.
+- **`HANDOFF.md` updated** — Auth section now shows RBAC as wired, includes Auth0/SSO activation guide with Login Action snippet for role assignment.
+
+### Why this mattered
+
+- **Security** — Credentials are no longer discoverable from source code or HTML. Anyone can `git clone` and see the old hardcoded emails/passwords. Now they live in `.env` (gitignored).
+- **RBAC enforcement** — Previously `requireRole()` was imported but never used on any route. The admin/customer distinction was purely client-side. Now the server enforces role checks on every protected endpoint.
+- **Production-ready auth** — The middleware works with any OIDC provider (Auth0, Azure AD, Okta, custom SSO). Just set env vars — no code changes needed. The tech team can swap in their SSO by changing env vars only.
+
+### Verification
+
+- `npx jest --coverage` → 376/376 green
+- `cd templates && node preview-test.js` → 14/14 templates rendered cleanly
+
+---
+
 ## Round O — 2026-05-21
 
 **CI test fix for `verifyRazorpaySignature` — tests now pass in GitHub Actions. Defensive guard added to production code.**

@@ -55,10 +55,11 @@ app.get('/plans', (req, res) => res.sendFile(path.join(__dirname, 'public', 'pla
 // HANDOFF — Replace the DUMMY_USERS path below with Auth0 + Prisma.
 // ─────────────────────────────────────────────────────────────────
 //
-// Current behaviour (demo-only):
-//   admin@beyondsite.com    / admin123     → admin role (bypasses subscription gate)
-//   customer@beyondsite.com / customer123  → customer role (sees locked flow)
-// All other credentials are REJECTED — the earlier "any email" backdoor is closed.
+// Current behaviour (demo-only, credentials from env vars):
+//   DUMMY_ADMIN_EMAIL / DUMMY_ADMIN_PASSWORD → admin role
+//   DUMMY_CUSTOMER_EMAIL / DUMMY_CUSTOMER_PASSWORD → customer role
+// All other credentials are REJECTED.
+// If env vars are not set, demo accounts don't exist (safe for production).
 //
 // Production wiring (already scaffolded — just swap the route body):
 //   1. Set AUTH0_DOMAIN + AUTH0_AUDIENCE in .env. Without them the
@@ -71,16 +72,40 @@ app.get('/plans', (req, res) => res.sendFile(path.join(__dirname, 'public', 'pla
 //          const user    = await getOrCreateUser(decoded);      // upserts via Prisma
 //          res.json({ success: true, isAdmin: user.role === 'ADMIN', ... });
 //   4. Protect routes that need a user with:
-//          app.post('/api/generate', authenticate(), handler)   // src/lib/auth.js
-//   5. Drop the DUMMY_USERS constant entirely once the above ships.
+//          app.post('/api/generate', authenticate(), requireRole('ADMIN', 'CUSTOMER'), handler)
+//          app.post('/api/admin-only', authenticate(), requireRole('ADMIN'), handler)
+//   5. Drop the DUMMY_USERS block entirely once the above ships.
 //
 // First admin: run `npm run db:seed` after the first deploy — it
 // upserts an ADMIN row keyed by AUTH0_BOOTSTRAP_ADMIN_EMAIL.
 // ─────────────────────────────────────────────────────────────────
-const DUMMY_USERS = {
-  'admin@beyondsite.com':    { password: 'admin123',    isAdmin: true,  name: 'Admin' },
-  'customer@beyondsite.com': { password: 'customer123', isAdmin: false, name: 'Customer' }
-};
+
+function buildDummyAccounts() {
+  const accounts = {};
+  const adminEmail = process.env.DUMMY_ADMIN_EMAIL;
+  const adminPassword = process.env.DUMMY_ADMIN_PASSWORD;
+  const customerEmail = process.env.DUMMY_CUSTOMER_EMAIL;
+  const customerPassword = process.env.DUMMY_CUSTOMER_PASSWORD;
+
+  if (adminEmail && adminPassword) {
+    accounts[adminEmail.toLowerCase().trim()] = { password: adminPassword, isAdmin: true, name: 'Admin' };
+  }
+  if (customerEmail && customerPassword) {
+    accounts[customerEmail.toLowerCase().trim()] = { password: customerPassword, isAdmin: false, name: 'Customer' };
+  }
+  return accounts;
+}
+
+const DUMMY_USERS = buildDummyAccounts();
+
+function generateSessionToken(email, role) {
+  const payload = Buffer.from(JSON.stringify({ email, role, ts: Date.now() })).toString('base64url');
+  const sig = crypto
+    .createHmac('sha256', process.env.GEMINI_API_KEY || 'dev-secret')
+    .update(payload)
+    .digest('hex');
+  return payload + '.' + sig;
+}
 
 app.post('/api/login', async (req, res) => {
   const { email, password } = req.body || {};
@@ -93,18 +118,20 @@ app.post('/api/login', async (req, res) => {
     return res.status(401).json({ error: 'Invalid email or password.' });
   }
 
+  const role = account.isAdmin ? 'ADMIN' : 'CUSTOMER';
+
   // Persist user to DB when available — creates a real User row that draft /
   // download foreign keys can reference. No-op (logged warning) when no DB.
   if (prisma) {
     try {
       await prisma.user.upsert({
         where:  { email: normalEmail },
-        update: { role: account.isAdmin ? 'ADMIN' : 'CUSTOMER' },
+        update: { role },
         create: {
           auth0Id: `dummy|${normalEmail}`,
           email:   normalEmail,
           name:    account.name,
-          role:    account.isAdmin ? 'ADMIN' : 'CUSTOMER'
+          role
         }
       });
     } catch (err) {
@@ -112,21 +139,17 @@ app.post('/api/login', async (req, res) => {
     }
   }
 
-  logger.info({ email: normalEmail, isAdmin: account.isAdmin }, 'User logged in (dummy auth)');
+  logger.info({ email: normalEmail, role }, 'User logged in (dummy auth)');
 
-  // Generate a dummy session token so the client can authenticate against
-  // protected routes (e.g. /api/generate) even when AUTH0_DOMAIN is set.
-  // The token is HMAC-signed and accepted by the authenticate() middleware
-  // as a dev-bypass credential.
-  const sessionToken = crypto
-    .createHmac('sha256', process.env.GEMINI_API_KEY || 'dev-secret')
-    .update(normalEmail + ':' + Date.now())
-    .digest('hex');
+  // Generate a session token that encodes the role. The token is HMAC-signed
+  // and accepted by the authenticate() middleware as a dev-bypass credential.
+  const sessionToken = generateSessionToken(normalEmail, role);
 
   return res.json({
     success: true,
     redirect: '/',
     isAdmin: account.isAdmin,
+    role,
     email:   normalEmail,
     name:    account.name,
     token:   sessionToken
@@ -228,7 +251,7 @@ app.get(/^\/template-previews\/preview-([a-z0-9-]+)\.html$/, (req, res) => {
 });
 
 // ── Generalized image upload ────────────────────────────
-app.post('/api/upload-image', authenticate(), imageUpload.single('file'), (req, res) => {
+app.post('/api/upload-image', authenticate(), requireRole('ADMIN', 'CUSTOMER'), imageUpload.single('file'), (req, res) => {
   if (!req.file) return res.status(400).json({ error: 'No file uploaded' });
   const filename = isS3() ? req.file.key : req.file.filename;
   const base = isS3() ? getFileBaseUrl() : '/uploads/images';
@@ -236,7 +259,7 @@ app.post('/api/upload-image', authenticate(), imageUpload.single('file'), (req, 
 });
 
 // Back-compat alias — old client builds still use this route / field name.
-app.post('/api/upload-logo', authenticate(), imageUpload.single('logo'), (req, res) => {
+app.post('/api/upload-logo', authenticate(), requireRole('ADMIN', 'CUSTOMER'), imageUpload.single('logo'), (req, res) => {
   if (!req.file) return res.status(400).json({ error: 'No file uploaded' });
   const filename = isS3() ? req.file.key : req.file.filename;
   const base = isS3() ? getFileBaseUrl() : '/uploads/images';
@@ -611,7 +634,7 @@ app.post('/api/payments/webhook',
 // Key: { userId, templateId } — @@unique in schema, so upsert is idempotent.
 // Falls back silently when DB is not configured so the form keeps working.
 
-app.post('/api/draft', authenticate(), async (req, res) => {
+app.post('/api/draft', authenticate(), requireRole('ADMIN', 'CUSTOMER'), async (req, res) => {
   const { templateId, formData } = req.body || {};
   if (!templateId || !formData) {
     return res.status(400).json({ error: 'templateId and formData are required.' });
@@ -640,7 +663,7 @@ app.post('/api/draft', authenticate(), async (req, res) => {
   }
 });
 
-app.get('/api/draft/:templateId', authenticate(), async (req, res) => {
+app.get('/api/draft/:templateId', authenticate(), requireRole('ADMIN', 'CUSTOMER'), async (req, res) => {
   if (!prisma) return res.json({ draft: null });
   try {
     const userId    = req.user.id;
@@ -669,7 +692,7 @@ app.post('/api/preview', previewLimiter, async (req, res) => {
 });
 
 // Download (payment-gated, zips the rendered index.html + any uploaded assets)
-app.post('/api/generate', authenticate(), genLimiter, async (req, res) => {
+app.post('/api/generate', authenticate(), requireRole('ADMIN', 'CUSTOMER'), genLimiter, async (req, res) => {
   try {
     const { template, data = {}, paymentId } = req.body || {};
     if (!paymentId) return res.status(402).json({ error: 'Payment required' });

@@ -43,10 +43,12 @@ See [[_registry|Templates registry]] for one-line descriptions per template.
 - **Preview-modal device bar** lifted above the browser-chrome row so the iframe's own nav is no longer hidden behind the toggle buttons. Stage gets offset by `headerOffset()` of bar + chrome. → [[ADR#ADR-020|ADR-020]] · `public/preview-frame.js`
 
 ### Auth & accounts (dummy but strict)
-- **Two dummy accounts** wired through `/api/login` against a strict whitelist `DUMMY_USERS` table in `server.js`:
-  - `admin@beyondsite.com` / `admin123` → `role: "admin"` (sees Admin Tools panel, plan-bypass on /plans)
-  - `customer@beyondsite.com` / `customer123` → `role: "customer"` (standard view)
-- Login page exposes both via click-to-fill chips so reviewers don't have to remember credentials.
+- **Two dummy accounts** wired through `/api/login` — credentials live in env vars (`DUMMY_ADMIN_EMAIL`, `DUMMY_ADMIN_PASSWORD`, etc.), not hardcoded in source.
+  - Admin → `role: "ADMIN"` (sees Admin Tools panel, plan-bypass on /plans)
+  - Customer → `role: "CUSTOMER"` (standard view)
+- **RBAC fully wired** — `requireRole('ADMIN', 'CUSTOMER')` enforced server-side on all protected routes (`/api/upload-image`, `/api/upload-logo`, `/api/draft`, `/api/generate`).
+- **Session tokens encode role** — `base64url({ email, role, ts }).hex_signature` — `authenticate()` extracts role correctly.
+- **Works with any OIDC provider** — Auth0, Azure AD, Okta, custom SSO. Just set env vars. → [[handoff/HANDOFF#auth0--sso-activation]]
 - The previous "any email/password works" backdoor is closed. → [[ADR#ADR-016|ADR-016]]
 
 ### Deployer-readiness (shipped Round I)

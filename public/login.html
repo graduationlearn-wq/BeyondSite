@@ -560,20 +560,11 @@
         </button>
       </form>
 
-      <!-- Dev demo credentials — REMOVE before production launch -->
+      <!-- Demo accounts note — credentials are in .env / README -->
       <div class="dev-creds">
-        <div class="dev-creds-label">Demo accounts — click to fill</div>
+        <div class="dev-creds-label">Demo accounts configured in <code>.env</code></div>
         <div class="dev-creds-row">
-          <button type="button" class="dev-cred-btn" data-email="admin@beyondsite.com" data-password="admin123">
-            <span class="dev-cred-role admin">Admin</span>
-            <span class="dev-cred-email">admin@beyondsite.com</span>
-            <span class="dev-cred-pw">admin123</span>
-          </button>
-          <button type="button" class="dev-cred-btn" data-email="customer@beyondsite.com" data-password="customer123">
-            <span class="dev-cred-role">Customer</span>
-            <span class="dev-cred-email">customer@beyondsite.com</span>
-            <span class="dev-cred-pw">customer123</span>
-          </button>
+          <span class="dev-cred-note">See README.md for demo credentials</span>
         </div>
       </div>
 
@@ -599,20 +590,6 @@
         } catch (e) {}
       }
     })();
-
-    // ── Demo credentials — click-to-fill ──
-    document.querySelectorAll('.dev-cred-btn').forEach(btn => {
-      btn.addEventListener('click', () => {
-        const emailField = document.getElementById('loginEmail');
-        const passField  = document.getElementById('loginPassword');
-        emailField.value = btn.dataset.email;
-        passField.value  = btn.dataset.password;
-        // Quick visual ack — flash a green ring then submit on next click
-        btn.style.borderColor = '#34d399';
-        setTimeout(() => { btn.style.borderColor = ''; }, 500);
-        emailField.focus();
-      });
-    });
 
     // ── Password visibility toggle ──
     const toggleBtn = document.getElementById('togglePassword');

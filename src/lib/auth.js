@@ -94,8 +94,8 @@ function authenticate() {
       // remain reachable. Matches the bypass already present in
       // verifyToken() and getOrCreateUser() below.
       //
-      // Also accepts dummy HMAC tokens (64-char hex) issued by the
-      // /api/login route when AUTH0_DOMAIN IS set but Auth0 isn't
+      // Also accepts dummy HMAC tokens (base64url.json_sig) issued by
+      // the /api/login route when AUTH0_DOMAIN IS set but Auth0 isn't
       // fully wired yet. This bridges the gap so the senior can
       // deploy with AUTH0_DOMAIN configured and still use dummy login.
       if (!AUTH0_DOMAIN) {
@@ -110,17 +110,30 @@ function authenticate() {
 
       const token = extractToken(req.headers.authorization);
 
-      // Accept a dummy HMAC token from /api/login as dev-bypass even
-      // when AUTH0_DOMAIN is configured. These tokens are 64-char hex
-      // strings signed with GEMINI_API_KEY.
-      if (token && token.length === 64) {
-        req.user = {
-          id: 'dev-user',
-          email: 'dev@example.com',
-          role: 'ADMIN',
-          auth0Id: 'dev|dev'
-        };
-        return next();
+      // Accept a dummy token from /api/login as dev-bypass even
+      // when AUTH0_DOMAIN is configured. These tokens are
+      // base64url(payload).hex_signature where the payload contains
+      // { email, role, ts }.
+      if (token && token.includes('.')) {
+        const [payload, sig] = token.split('.');
+        const expected = require('crypto')
+          .createHmac('sha256', process.env.GEMINI_API_KEY || 'dev-secret')
+          .update(payload)
+          .digest('hex');
+        if (sig === expected) {
+          try {
+            const decoded = JSON.parse(Buffer.from(payload, 'base64url').toString());
+            req.user = {
+              id: `dummy|${decoded.email}`,
+              email: decoded.email,
+              role: decoded.role || 'CUSTOMER',
+              auth0Id: `dummy|${decoded.email}`
+            };
+            return next();
+          } catch (_) {
+            // payload decode failed — fall through to JWT check
+          }
+        }
       }
 
       if (!token) {
