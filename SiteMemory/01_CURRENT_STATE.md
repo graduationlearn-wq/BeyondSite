@@ -120,7 +120,7 @@ cd templates && node preview-test.js
 
 # Unit tests
 npm test
-# Should print: "Tests: 260 passed, 260 total"
+# Should print: "Tests: 376 passed, 376 total"
 
 # Container smoke test (optional but recommended pre-handoff)
 docker compose up --build

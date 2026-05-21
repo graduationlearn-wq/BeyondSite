@@ -8,7 +8,7 @@
 - **Persistence:** **Prisma ORM** with **MySQL** target. Schema landed (six models); runtime still falls back to an in-memory `Map` for the dummy payment / draft flows until the wiring sprint. → [[ADR#ADR-012|ADR-012]]
 - **Auth:** **Auth0 JWT** middleware (`jsonwebtoken` + `jwks-rsa`) in `src/lib/auth.js`. Dev bypass via `DEV_AUTH_BYPASS=true`. Demo path uses a strict dummy whitelist (`DUMMY_USERS`). → [[ADR#ADR-013|ADR-013]] · [[ADR#ADR-016|ADR-016]]
 - **Logging:** **Winston** structured JSON in prod, human-readable in dev. → [[ADR#ADR-015|ADR-015]]
-- **Tests:** **Jest** — 260 unit tests covering core business logic and infrastructure modules.
+- **Tests:** **Jest** — 376 unit tests covering server routes, core business logic, and infrastructure modules.
 - **CI:** **GitHub Actions** — `npm ci` → `prisma generate` → `npm test` → `npm audit` on push.
 - **Container:** **Multi-stage Dockerfile** + `docker-compose.yml` (app + MySQL sidecar). Non-root `nodejs:1001`. HEALTHCHECK against `/health`. → [[ADR#ADR-014|ADR-014]]
 

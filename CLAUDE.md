@@ -28,7 +28,7 @@ npx prisma generate
 node server.js          # http://localhost:3000
 
 # Tests
-npm test                # Jest with coverage (260 tests)
+npm test                # Jest with coverage (376 tests)
 npm run test:watch      # Watch mode
 npx jest --coverage     # Windows fallback if NODE_ENV=test prefix fails
 

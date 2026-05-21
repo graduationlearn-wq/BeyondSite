@@ -22,7 +22,7 @@ The non-negotiable work that makes the product actually usable by anyone other t
 - [x] **Containerisation.** Multi-stage Dockerfile + docker-compose for app + MySQL + `/health` endpoint + SIGTERM drain. → [[ADR#ADR-014|ADR-014]]
 - [x] **Structured logging.** Winston JSON logger in `src/lib/logger.js`. → [[ADR#ADR-015|ADR-015]]
 - [x] **CI.** GitHub Actions: `npm ci` → `prisma generate` → `npm test` → `npm audit` on push.
-- [x] **Unit tests.** Jest, 260 passing covering core business logic.
+- [x] **Unit tests.** Jest, 376 passing covering server routes, core business logic, and infrastructure.
 - [x] **Step wizard.** Tab-style navigation with scrollable tabs, max-width 640px, AI preservation, step persistence via localStorage.
 - [x] **Payment sub-steps.** Step 3 has 3 internal sub-steps (Pay → Confirmation → Download) with mini progress bar, auto-advance flow.
 - [x] **ZIP externalization.** Downloaded ZIP has `style.css` and `script.js` instead of inline code.

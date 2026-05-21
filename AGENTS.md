@@ -22,7 +22,7 @@ node -c server.js
 cd templates && node preview-test.js   # must print "14/14 templates rendered cleanly"
 
 # Tests — Windows: npm test may fail due to NODE_ENV=test prefix
-npx jest --coverage    # works on Windows; npm test works on Linux/macOS
+npx jest --coverage    # works on Windows; 376 tests passing
 
 # Lint
 npm run lint && npm run lint:fix

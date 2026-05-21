@@ -31,7 +31,7 @@ Two distinct customer cohorts:
 - **Account shell shipped** — `/profile` (avatar, plan badge, editable fields, download history) and `/plans` (Free / Pro / Studio tiers), both green-themed with a dark/light toggle persisted to localStorage
 - **Two dummy accounts** via strict whitelist — `admin@beyondsite.com` / `admin123` and `customer@beyondsite.com` / `customer123`. Login page exposes click-to-fill chips for both. The old "any email works" backdoor is closed.
 - **BeyondSure parent-company footer** on every main page (corporate office, legal nav, disclaimer band)
-- **Production scaffolding landed** — Dockerised (multi-stage, non-root, HEALTHCHECK), Prisma schema with six models, Auth0 JWT middleware with jwks-rsa key cache, Winston structured logging, Jest tests (260 passing), GitHub Actions CI
+- **Production scaffolding landed** — Dockerised (multi-stage, non-root, HEALTHCHECK), Prisma schema with six models, Auth0 JWT middleware with jwks-rsa key cache, Winston structured logging, Jest tests (376 passing), GitHub Actions CI
 - **Prisma persistence wired** — when `DATABASE_URL` is set: login upserts User, drafts persist, payments tracked, downloads logged. Falls back to in-memory without DB.
 - **Step wizard** — tab-style navigation with scrollable tabs, max-width 640px, AI preservation
 - **Step persistence** — current step saved in localStorage to survive navigation

@@ -8,9 +8,9 @@ Round-by-round history of every meaningful change. **Append-only** — new round
 
 ## Round N — 2026-05-21
 
-**Payment sub-steps implemented — Step 3 now has 3 internal sub-steps with progress bar.**
+**Payment sub-steps implemented — Step 3 now has 3 internal sub-steps with progress bar. Comprehensive test suite expanded to 376 tests.**
 
-**Touched:** `public/index.html` · `public/script.js` · `public/style.css` · `AGENTS.md` · `SiteMemory/01_CURRENT_STATE.md`
+**Touched:** `public/index.html` · `public/script.js` · `public/style.css` · `__tests__/server-routes.test.js` · `__tests__/payments-extended.test.js` · `__tests__/auth-extended.test.js` · `__tests__/database-extended.test.js` · `__tests__/storage-extended.test.js` · `__tests__/logger-extended.test.js` · `AGENTS.md` · `SiteMemory/01_CURRENT_STATE.md`
 
 ### Shipped
 
@@ -22,12 +22,55 @@ Round-by-round history of every meaningful change. **Append-only** — new round
 - **Progress bar CSS** — `.pay-substeps` container with `.pay-substep` (active/completed states), `.pay-substep-num` (circled numbers), `.pay-substep-connector` (lines between steps)
 - **Sub-step management** — `setPaySubstep(num)` function handles visibility and state transitions for all 3 sub-steps
 - **Admin bypass preserved** — Still skips checkout, auto-advances through sub-steps with receipt "Admin bypass — no charge"
-- **Documentation updated** — `AGENTS.md` and `01_CURRENT_STATE.md` reflect the new payment sub-steps feature
+
+### Test Suite Expansion (260 → 376 tests)
+
+- **`__tests__/server-routes.test.js`** (43 tests) — Full route coverage:
+  - `GET /health` — status, checks, timestamp
+  - `POST /api/login` — valid/invalid credentials, admin vs customer, case-insensitive email
+  - `POST /api/register` — validation, sanitization, password length
+  - `GET /api/schema/:templateId` — valid template, 404, path traversal, all 14 templates
+  - `GET /template-previews/preview-:slug.html` — existing file, missing file, invalid slug
+  - `POST /api/pay` — dummy/razorpay order creation
+  - `POST /api/generate` — auth, payment gate, admin bypass, used payment, valid payment
+  - `POST /api/draft` + `GET /api/draft/:templateId` — validation, no DB fallback
+  - `POST /api/preview` — render HTML, empty data
+  - Static routes — `/`, `/login`, `/register`, `/profile`, `/plans`
+
+- **`__tests__/payments-extended.test.js`** (20 tests) — Extended payment coverage:
+  - `consumePayment` — all edge cases including razorpay provider mode
+  - `createPayment` — default values, custom amount, map storage, paymentId prefix
+  - `verifyRazorpaySignature` — valid/invalid/tampered signatures
+  - `markPaymentPaid` — valid order, missing order, without razorpayPaymentId
+  - `PAYMENT_TTL_MS`, `PROVIDER` constants
+
+- **`__tests__/auth-extended.test.js`** (13 tests) — Extended auth coverage:
+  - `requireRole` — 401, 403, valid role, multiple roles, undefined role
+  - `authenticate` — Auth0 configured vs dev bypass, invalid token
+  - `optionalAuth` — with/without token, Auth0 configured
+
+- **`__tests__/database-extended.test.js`** (6 tests) — Database module coverage:
+  - Module exports, prisma getter, connect/disconnect handling
+
+- **`__tests__/storage-extended.test.js`** (16 tests) — Extended storage coverage:
+  - `isS3` — local vs S3 mode
+  - `getFileBaseUrl` — local path vs S3 URL
+  - `getUploadDir` — local directory vs null for S3
+  - `fileFilter` — accepts PNG/JPG/JPEG/SVG/WEBP/GIF, rejects EXE/JS/PDF/HTML
+  - `getMulterStorage` — storage object, DiskStorage type
+
+- **`__tests__/logger-extended.test.js`** (11 tests) — Extended logger coverage:
+  - Log levels (info, warn, error, debug)
+  - Metadata handling (object, null, undefined, empty)
+  - Child logger creation and metadata merging
+  - Error handling (Error objects, stack traces, empty string)
+  - Production mode loading
 
 ### Technical notes
 - Replaced old `#payUnpaid` / `#payPaid` toggle pattern with `#payStep1` / `#payStep2` / `#payStep3`
 - Progress bar styled with `max-width: 480px`, centered, responsive down to mobile
 - Auto-advance uses `setTimeout(..., 1500)` for smooth UX
+- All tests pass: 376/376 green
 
 ---
 
