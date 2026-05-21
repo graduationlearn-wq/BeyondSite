@@ -286,6 +286,7 @@ This vault is the single source of truth for the *why* behind everything. Code a
 | `/preview` iframe blank                                      | Open browser console → check `/api/preview` response. Usually means a schema field broke EJS render. |
 | ZIP download "Payment required"                              | Click Pay button first, or sign in as admin to bypass. Admin skips payment entirely.                                              |
 | `npm test` fails on Windows                                  | The `NODE_ENV=test` prefix breaks cmd.exe. Run `npx jest --coverage` instead.                       |
+| `verifyRazorpaySignature` tests fail in CI                   | `RAZORPAY_KEY_SECRET` is not set in the CI environment. The test file sets a fallback (`'test_secret'`) before loading the module. If you see this, check that `__tests__/payments-extended.test.js` has the env var guard at the top. |
 | Preview cards out of date after editing a template            | Regenerate previews: `cd templates && node preview-test.js`. (Sample brands for template-12 / 13 are now **Stratus** and **Coverwise** — older preview HTML may still show the old codenames.) |
 | Logged-in but `/profile` redirects to `/login`               | LocalStorage cleared. Sign in again — the redirect-on-empty is intentional.                         |
 | Step wizard tabs overflow on mobile                          | Tabs are scrollable, max-width 640px. Swipe left/right to see all steps.                         |

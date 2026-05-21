@@ -1,4 +1,4 @@
-# Current State — 2026-05-20
+# Current State — 2026-05-21
 
 **Refresh this file at the end of every meaningful work session.** Don't preserve old state — that's what `changelog/CHANGELOG.md` is for. This file is always "right now."
 
@@ -63,7 +63,7 @@ See [[_registry|Templates registry]] for one-line descriptions per template.
 - **Winston structured logging** in `src/lib/logger.js` — JSON output in prod, human-readable in dev. → [[ADR#ADR-015|ADR-015]]
 - **Storage abstraction** in `src/lib/storage.js` (local FS now, S3-ready later).
 - **Config + utils + payments helpers** in `src/lib/{config,utils,payments}.js`.
-- **Jest unit tests** — 86 passing. Covers template rendering (4 published templates), payments, utils, auth middleware, storage, database, config, health, and logger.
+- **Jest unit tests** — 376 passing across 33 suites. Covers server routes (login, schema, preview, generate, payments, drafts), template rendering (14 published templates), payments (consume, create, verify, webhook, signature verification), utils, auth middleware (requireRole, authenticate, optionalAuth), storage (local/S3, file filter, multer), database, config, health, and logger. CI passes in GitHub Actions.
 - **GitHub Actions CI** — `.github/workflows/ci.yml` runs `npm ci` → `prisma generate` → `npm test` → `npm audit` on push.
 - **`/health` endpoint** for orchestrators; **SIGTERM handler** drains active requests before exit.
 - **`.env.example`** documents every required env var. **`.dockerignore`** keeps the image lean.
@@ -91,6 +91,7 @@ See [[_registry|Templates registry]] for one-line descriptions per template.
 
 - **Template 1 (Editorial) is still on the legacy non-safe-locals pattern.** It works because `buildTemplateData` injects defaults for the legacy fields, but it's not as defensive as templates 2–14. Refactor is on the roadmap.
 - **Razorpay running on test credentials** — real charges won't happen until test keys are swapped for live keys. `RAZORPAY_WEBHOOK_SECRET` is blank until a webhook is configured in the Razorpay dashboard. `npm install razorpay` must be run once after pulling this branch.
+- **`verifyRazorpaySignature` returns `false` when `RAZORPAY_KEY_SECRET` is unset** — a defensive guard was added (Round O) so it no longer crashes, but signature verification will fail until the env var is configured. This is intentional: payments should not succeed without a valid secret.
 - **Auth is dummy** — Auth0 middleware is wired, but production routes still defer to the `DUMMY_USERS` whitelist for the review demo. Flip the env vars + `DEV_AUTH_BYPASS=false` to switch over. HMAC token bridge allows demo mode even when `AUTH0_DOMAIN` is configured.
 - **Persistence requires `DATABASE_URL`** — demo mode (no DB) still loses drafts/payments on restart. Wire up `DATABASE_URL` + `npm run db:migrate:deploy` + `npm run db:seed` for durability. Draft list endpoint (`GET /api/drafts`) not yet added.
 - **Custom cursor logic is still inline in `index.html`.** Not yet extracted to `public/cursor.js`.
@@ -131,7 +132,7 @@ If any template fails to render, fix BEFORE shipping. The preview is what the cu
 
 ## Related
 
-- [[CHANGELOG]] — every round we shipped, with details (Round H + G are the most recent)
+- [[CHANGELOG]] — every round we shipped, with details (Round O + N are the most recent)
 - [[02_CONVENTIONS]] — the rules to follow when fixing or adding things
 - [[ROADMAP]] — what comes after the current state
 - [[ADR|Decisions]] — the why behind each architectural choice

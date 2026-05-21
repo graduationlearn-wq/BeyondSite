@@ -94,8 +94,13 @@ async function createRazorpayPayment({ userId = null, templateId, amount = 49990
 
 // Called from /api/payments/verify after the Razorpay checkout widget succeeds.
 function verifyRazorpaySignature({ razorpay_order_id, razorpay_payment_id, razorpay_signature }) {
+  const secret = process.env.RAZORPAY_KEY_SECRET;
+  if (!secret) {
+    logger.warn('RAZORPAY_KEY_SECRET is not set — signature verification skipped (dummy mode)');
+    return false;
+  }
   const expected = crypto
-    .createHmac('sha256', process.env.RAZORPAY_KEY_SECRET)
+    .createHmac('sha256', secret)
     .update(`${razorpay_order_id}|${razorpay_payment_id}`)
     .digest('hex');
   return expected === razorpay_signature;

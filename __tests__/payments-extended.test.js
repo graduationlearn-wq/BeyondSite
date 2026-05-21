@@ -1,5 +1,9 @@
 'use strict';
 
+// Must be set BEFORE requiring payments.js so verifyRazorpaySignature has a valid key.
+// In CI, RAZORPAY_KEY_SECRET is not configured by default, so we provide a test-only fallback.
+process.env.RAZORPAY_KEY_SECRET = process.env.RAZORPAY_KEY_SECRET || 'test_secret';
+
 const crypto = require('crypto');
 const { payments, PAYMENT_TTL_MS, consumePayment, createPayment, verifyRazorpaySignature, markPaymentPaid } = require('../src/lib/payments');
 

@@ -23,6 +23,8 @@ cd templates && node preview-test.js   # must print "14/14 templates rendered cl
 
 # Tests — Windows: npm test may fail due to NODE_ENV=test prefix
 npx jest --coverage    # works on Windows; 376 tests passing
+# Note: verifyRazorpaySignature tests require RAZORPAY_KEY_SECRET to be set.
+#       __tests__/payments-extended.test.js sets a test-only fallback ('test_secret') before loading the module.
 
 # Lint
 npm run lint && npm run lint:fix

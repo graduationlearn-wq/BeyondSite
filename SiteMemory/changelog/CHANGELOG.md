@@ -6,6 +6,33 @@ Round-by-round history of every meaningful change. **Append-only** — new round
 
 ---
 
+## Round O — 2026-05-21
+
+**CI test fix for `verifyRazorpaySignature` — tests now pass in GitHub Actions. Defensive guard added to production code.**
+
+**Touched:** `__tests__/payments-extended.test.js` · `src/lib/payments.js` · `SiteMemory/01_CURRENT_STATE.md` · `AGENTS.md` · `README.md`
+
+### Shipped
+
+- **`__tests__/payments-extended.test.js`** — Added `process.env.RAZORPAY_KEY_SECRET = process.env.RAZORPAY_KEY_SECRET || 'test_secret';` at the top of the file, **before** the `require('../src/lib/payments')` call. This ensures the env var is set in the test process before the module loads, so `verifyRazorpaySignature` has a valid key to use with `crypto.createHmac()`.
+- **`src/lib/payments.js`** — Added defensive guard in `verifyRazorpaySignature`: if `RAZORPAY_KEY_SECRET` is undefined, logs a warning and returns `false` instead of crashing with `TypeError: The "key" argument must be of type string... Received undefined`. This protects production from unhandled exceptions when the env var is accidentally omitted.
+
+### Why this mattered
+
+- **CI was failing** with 3 test failures in `payments-extended.test.js` because GitHub Actions doesn't set `RAZORPAY_KEY_SECRET` by default. The test computed the expected HMAC using `'test_secret'` as a fallback, but the actual `verifyRazorpaySignature` function used `process.env.RAZORPAY_KEY_SECRET` directly (which was `undefined`), causing `crypto.createHmac('sha256', undefined)` to throw.
+- **Production safety** — without the guard, a deployer who forgets `RAZORPAY_KEY_SECRET` would get a 500 error on every payment verification instead of a clean `false` response.
+
+### Verification
+
+- `npx jest --coverage` → 376/376 green (all 33 suites pass)
+- `cd templates && node preview-test.js` → 14/14 templates rendered cleanly
+
+### Deployer note
+
+- **`RAZORPAY_KEY_SECRET` is required for real Razorpay payments.** The test fallback (`'test_secret'`) is test-only and doesn't affect production. If this env var is missing in production, signature verification will log a warning and return `false` — payments will fail verification gracefully rather than crashing.
+
+---
+
 ## Round N — 2026-05-21
 
 **Payment sub-steps implemented — Step 3 now has 3 internal sub-steps with progress bar. Comprehensive test suite expanded to 376 tests.**
