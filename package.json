@@ -35,7 +35,7 @@
     "node": ">=18.0.0"
   },
   "dependencies": {
-    "@google/generative-ai": "^0.21.0",
+    "@google/generative-ai": "^0.24.1",
     "@prisma/client": "^5.22.0",
     "archiver": "^7.0.1",
     "axios": "^1.15.0",
