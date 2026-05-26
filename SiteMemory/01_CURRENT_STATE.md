@@ -1,10 +1,10 @@
-# Current State — 2026-05-21
+# Current State — 2026-05-27
 
 **Refresh this file at the end of every meaningful work session.** Don't preserve old state — that's what `changelog/CHANGELOG.md` is for. This file is always "right now."
 
 ## Catalogue
 
-**14 templates · all rendering clean** (`node preview-test.js` reports 14/14 ✓):
+**15 templates · all rendering clean** (`node preview-test.js` reports 15/15 ✓):
 
 | #  | Slug                       | Display name              | Aesthetic                                        |
 |----|---                         |---                        |---                                               |
@@ -22,17 +22,18 @@
 | 12 | InsurTech                   | InsurTech SaaS          | **light · Stripe-pattern · dark code panel** |
 | 13 | Insurance Market            | Insurance Market          | bright green + gold, consumer aggregator         |
 | 14 | mf-distributor              | Mutual Fund Distributor   | sandstone + maroon + brass, Marwari wealth-house |
+| 15 | broker                      | Stock Broker / Demat      | violet + white, Plus Jakarta display, phone-mockup hero |
 
 See [[_registry|Templates registry]] for one-line descriptions per template.
 
 ## What works
 
 ### Core product
-- **All 14 templates render clean** end-to-end via `node preview-test.js` with realistic sample data. → [[04_template-system]] · [[_registry|Templates registry]]
+- **All 15 templates render clean** end-to-end via `node preview-test.js` with realistic sample data. → [[04_template-system]] · [[_registry|Templates registry]]
 - **Schema-driven form** with side-gutter hints (label + arrow + description on left/right of each section), mockup thumbnails per section, ⓘ tap-to-expand on mobile. → [[04_template-system]]
 - **Per-section AI button (✨)** with **Gemini → Groq → friendly error** failover chain. → [[02_ai-fallback]] · [[ADR#ADR-005|ADR-005]]
 - **Help chatbot** — floating gold bubble bottom-right. Two-layer: client-side intent matcher catches ~9 social categories locally (zero API cost); substantive questions go to Groq via `/api/chat`. → [[03_chatbot]] · [[ADR#ADR-007|ADR-007]]
-- **Compliance review banner** appears on regulated templates (BFSI, Insurance, NBFC, Insurance Market). → [[ADR#ADR-008|ADR-008]]
+- **Compliance review banner** appears on regulated templates (BFSI, Insurance, NBFC, Insurance Market, MF Distributor, Stock Broker). → [[ADR#ADR-008|ADR-008]]
 - **Hover-preview modal** — desktop hover ~1.5s or touch long-press ~600ms. Three device toggles (Desktop / Tablet / Mobile) with live iframe scaling. → [[05_preview-modal]] · [[ADR#ADR-009|ADR-009]] · [[ADR#ADR-020|ADR-020]]
 
 ### UX shell
@@ -119,7 +120,7 @@ node -c server.js
 
 # Render every template with sample data
 cd templates && node preview-test.js
-# Should print: "14/14 templates rendered cleanly"
+# Should print: "15/15 templates rendered cleanly"
 
 # Unit tests
 npm test

@@ -1,6 +1,6 @@
 # Template Registry
 
-Master index of all 14 templates. One row per template — quick scan to know what we have. For implementation details, read the schema (`templates/schemas/template-N.json`) and EJS (`templates/website-template-N.ejs`) directly.
+Master index of all 15 templates. One row per template — quick scan to know what we have. For implementation details, read the schema (`templates/schemas/template-N.json`) and EJS (`templates/website-template-N.ejs`) directly.
 
 | #  | Display Name              | Aesthetic / Palette                       | Sample brand            | Industry / Use case                                    | Schema-driven? | Compliance |
 |----|---                        |---                                         |---                      |---                                                       |---             |---         |
@@ -18,6 +18,7 @@ Master index of all 14 templates. One row per template — quick scan to know wh
 | 12 | **InsurTech SaaS**         | Light · Stripe-pattern · dark code panel  | Stratus                 | B2B InsurTech APIs, embedded-insurance platforms         | ✓              | SOC 2 · IRDAI-aligned |
 | 13 | **Insurance Market**       | Bright green + gold, consumer aggregator   | Coverwise               | IRDAI-licensed insurance brokers, comparison platforms   | ✓              | IRDAI      |
 | 14 | **Mutual Fund Distributor** | Sandstone + maroon + brass, Playfair serif | Vrddhi Wealth           | AMFI-registered ARN holders, MF distributors/advisors    | ✓              | AMFI · SEBI SCORES |
+| 15 | **Stock Broker / Demat**    | Violet + white, Plus Jakarta display, phone-mockup hero | Stallion Capital | SEBI-registered stock brokers offering equities, F&O, MF, IPO, ETFs, MTF, commodities | ✓ | SEBI · NSE · BSE · MCX · CDSL/NSDL · SCORES · SMART ODR |
 
 \* Template-1 (Editorial) still on legacy non-safe-locals pattern. Refactor on roadmap.
 
@@ -27,13 +28,14 @@ Templates 12 and 13 originally shipped under codenames "Heph" and "Turtlemint". 
 
 ## Compliance flag templates
 
-Four templates carry the `complianceReview` block at the top of their schema. The form-renderer surfaces an amber warning banner above the form when these are selected, reminding users that AI-generated regulatory copy must be reviewed before publishing:
+Six templates carry the `complianceReview` block at the top of their schema. The form-renderer surfaces an amber warning banner above the form when these are selected, reminding users that AI-generated regulatory copy must be reviewed before publishing:
 
 - **Template 6** (BFSI / Banking) — RBI registration, DICGC deposit insurance disclosures
 - **Template 8** (Insurance Advisor) — IRDAI licence, claim-process descriptions
 - **Template 9** (NBFC / Lender) — RBI registration, NBFC category, Fair Practice Code, Grievance Redressal escalation
 - **Template 13** (Insurance Market) — IRDAI broker licence, partner insurer disclosures
 - **Template 14** (Mutual Fund Distributor) — AMFI ARN + EUIN, mandatory MF risk disclaimer, past-performance disclaimer, KYC/CKYC section, SEBI SCORES 4-tier grievance escalation
+- **Template 15** (Stock Broker / Demat) — SEBI registration, NSE/BSE/MCX member codes, CDSL/NSDL DP ID, CIN, full brokerage schedule, ATTENTION INVESTORS block, 5-tier escalation (Customer Care → Compliance Officer → Exchange → SCORES → SMART ODR), Investor Charter + RDD + MITC downloads
 
 ## Aesthetic differentiation matrix
 
@@ -46,6 +48,7 @@ No two templates share an accent colour. Quick scan:
 | Light + warm               | Local Service (orange), Restaurant (burgundy), NBFC (orange)  |
 | Light + cool               | Startup (blue), Insurance (green), Insurance Market (green)   |
 | Light + dark code panel    | InsurTech (Stripe-pattern, dark hero panel)                   |
+| Light + violet (fintech)   | Stock Broker (purple Groww-style with phone mockup)           |
 | Pure mono                  | Editorial (newspaper), Portfolio (B&W)                        |
 
 ## Catalogue gaps

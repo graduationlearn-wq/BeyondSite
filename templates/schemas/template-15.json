@@ -1,0 +1,278 @@
+{
+  "id": "template-15",
+  "name": "Stock Broker / Demat",
+  "extends": "_base",
+  "complianceReview": {
+    "title": "SEBI / NSE / BSE / CDSL / MCX regulatory content — have your compliance officer review before publishing.",
+    "body": "This template includes your SEBI registration number, Exchange member codes (NSE/BSE/MCX), CDSL/NSDL Depository Participant ID, CIN, brokerage table, ATTENTION INVESTORS disclosures, and the SEBI SCORES + SMART ODR grievance escalation matrix. The risk disclaimer ('Investment in securities market is subject to market risks. Read all related documents carefully before investing.') and brokerage limit disclaimer are SEBI-mandated and must not be removed."
+  },
+  "sections": [
+    {
+      "id": "regulatoryDetails",
+      "title": "Regulatory Registrations",
+      "hint": {
+        "label": "SEBI / Exchange / Depository registrations",
+        "description": "Every stock broker must display SEBI registration, NSE/BSE/MCX member codes, and CDSL/NSDL DP ID prominently. These appear in the compliance topbar and the regulatory footer."
+      },
+      "fields": [
+        { "id": "brokerSebiReg",       "label": "SEBI Registration Number",                "type": "text", "max": 30,  "placeholder": "INZ000301838" },
+        { "id": "nseBseMemberCode",    "label": "NSE / BSE Member Code",                  "type": "text", "max": 30,  "placeholder": "NSE-11724 · BSE-1234" },
+        { "id": "cdslDpId",            "label": "CDSL / NSDL Depository Participant ID", "type": "text", "max": 30,  "placeholder": "CDSL: IN-DP-417-2019" },
+        { "id": "mcxMemberCode",       "label": "MCX Member Code (optional)",            "type": "text", "max": 30,  "placeholder": "MCX-56789" },
+        { "id": "brokerCin",           "label": "CIN (Company Identification Number)",   "type": "text", "max": 30,  "placeholder": "U65100KA2016PTC092879" },
+        { "id": "amfiArn",             "label": "AMFI ARN (if distributing MF)",          "type": "text", "max": 30,  "placeholder": "ARN-111686" }
+      ]
+    },
+    {
+      "id": "hero",
+      "title": "Hero",
+      "aiable": true,
+      "hint": {
+        "label": "Opening pitch",
+        "description": "Lead with the wealth-creation outcome, not the product. A trust pill ('India's #1', 'X Cr+ investors') anchors credibility. The right-hand panel shows a live-feel chart card.",
+        "mockupTarget": "header"
+      },
+      "fields": [
+        { "id": "heroEyebrow",       "label": "Trust pill (above headline)", "type": "text",     "max": 80,  "placeholder": "Trusted by 2 Cr+ active investors", "aiable": true },
+        { "id": "heroHeadlineLead",  "label": "Headline — first part",       "type": "text",     "max": 60,  "placeholder": "Invest in",                          "aiable": true },
+        { "id": "heroHeadlineEmph",  "label": "Headline — italic accent",    "type": "text",     "max": 40,  "placeholder": "everything.",                        "aiable": true },
+        { "id": "heroSub",           "label": "Sub-headline (25–40 words)",  "type": "textarea", "rows": 3,  "max": 240, "aiable": true },
+        { "id": "heroCtaPrimary",    "label": "Primary CTA",                 "type": "text",     "max": 30,  "placeholder": "Open Free Demat" },
+        { "id": "heroCtaSecondary",  "label": "Secondary CTA",               "type": "text",     "max": 30,  "placeholder": "Explore Stocks" },
+        { "id": "heroActiveUsers",   "label": "Active investors (stat)",      "type": "text",     "max": 30,  "placeholder": "2 Cr+ Active Investors" },
+        { "id": "heroAumValue",      "label": "AUM / volume stat",            "type": "text",     "max": 30,  "placeholder": "₹2.4 Lakh Cr AUM" },
+        {
+          "id": "trustStats", "label": "Trust strip (below hero)",
+          "type": "repeater", "min": 3, "max": 5, "itemLabel": "Stat",
+          "item": [
+            { "id": "value", "label": "Big number / value", "type": "text", "max": 30 },
+            { "id": "label", "label": "Caption",            "type": "text", "max": 60 }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "products",
+      "title": "What You Can Trade",
+      "aiable": true,
+      "hint": {
+        "label": "Tradable instruments",
+        "description": "Show the full product universe — Stocks, F&O, Mutual Funds, IPO, ETFs, Bonds, MTF, Commodities. Each card briefly frames the investor outcome.",
+        "mockupTarget": "services"
+      },
+      "fields": [
+        { "id": "productsLabel",    "label": "Section eyebrow",  "type": "text",     "max": 40,  "placeholder": "Build your portfolio" },
+        { "id": "productsHeadline", "label": "Section headline", "type": "text",     "max": 80,  "aiable": true },
+        { "id": "productsBody",     "label": "Section sub-copy", "type": "textarea", "rows": 2,  "max": 200, "aiable": true },
+        {
+          "id": "products", "label": "Product cards",
+          "type": "repeater", "min": 4, "max": 8, "itemLabel": "Product",
+          "item": [
+            { "id": "icon",    "label": "Icon (emoji)",                "type": "text",     "max": 4 },
+            { "id": "name",    "label": "Product name",                "type": "text",     "max": 40,  "placeholder": "Stocks" },
+            { "id": "tagline", "label": "One-line tagline",            "type": "text",     "max": 80,  "placeholder": "Invest in NSE / BSE listed companies" },
+            { "id": "body",    "label": "Short description (15–25 words)", "type": "textarea", "rows": 2, "max": 160 }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "whyChoose",
+      "title": "Why Choose Us",
+      "aiable": true,
+      "hint": {
+        "label": "Trust pillars",
+        "description": "4–6 reasons an investor should pick you over competitors: zero-commission MF, fast execution, real-time charts, security, mobile-first, 24×7 support."
+      },
+      "fields": [
+        { "id": "whyChooseLabel",    "label": "Section eyebrow",  "type": "text",     "max": 40,  "placeholder": "Why investors trust us" },
+        { "id": "whyChooseHeadline", "label": "Section headline", "type": "text",     "max": 80,  "aiable": true },
+        { "id": "whyChooseBody",     "label": "Section sub-copy", "type": "textarea", "rows": 2,  "max": 200, "aiable": true },
+        {
+          "id": "whyChoosePoints", "label": "Why-choose points",
+          "type": "repeater", "min": 4, "max": 6, "itemLabel": "Pillar",
+          "item": [
+            { "id": "icon",  "label": "Icon (emoji)",                "type": "text",     "max": 4 },
+            { "id": "title", "label": "Title",                       "type": "text",     "max": 50 },
+            { "id": "body",  "label": "Description (15–25 words)",   "type": "textarea", "rows": 2, "max": 160 }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "process",
+      "title": "Open Your Demat in Minutes",
+      "aiable": true,
+      "hint": {
+        "label": "Onboarding steps",
+        "description": "4 steps — Sign up → Aadhaar eKYC → eSign with PAN → Start trading. Each step has an illustrative duration ('2 mins').",
+        "mockupTarget": "process"
+      },
+      "fields": [
+        { "id": "processLabel",    "label": "Section eyebrow",  "type": "text", "max": 40, "placeholder": "How it works" },
+        { "id": "processHeadline", "label": "Section headline", "type": "text", "max": 80, "aiable": true },
+        {
+          "id": "processSteps", "label": "Steps",
+          "type": "repeater", "min": 3, "max": 5, "itemLabel": "Step",
+          "item": [
+            { "id": "icon",     "label": "Icon (emoji)",                "type": "text",     "max": 4 },
+            { "id": "title",    "label": "Step title",                  "type": "text",     "max": 50 },
+            { "id": "body",     "label": "Description (15–25 words)",   "type": "textarea", "rows": 2, "max": 160 },
+            { "id": "duration", "label": "Time note",                    "type": "text",     "max": 40, "placeholder": "2 minutes" }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "calculators",
+      "title": "Investor Calculators",
+      "aiable": true,
+      "hint": {
+        "label": "Calculator suite",
+        "description": "Display calculators you offer — SIP, Lumpsum, Brokerage, Margin, FD, EMI. Helps SEO and proves you have planning tools beyond just execution."
+      },
+      "fields": [
+        { "id": "calculatorsLabel",    "label": "Section eyebrow",  "type": "text",     "max": 40,  "placeholder": "Plan before you invest" },
+        { "id": "calculatorsHeadline", "label": "Section headline", "type": "text",     "max": 80,  "aiable": true },
+        { "id": "calculatorsBody",     "label": "Section sub-copy", "type": "textarea", "rows": 2,  "max": 200, "aiable": true },
+        {
+          "id": "calculators", "label": "Calculator cards",
+          "type": "repeater", "min": 3, "max": 8, "itemLabel": "Calculator",
+          "item": [
+            { "id": "icon", "label": "Icon (emoji)",            "type": "text", "max": 4 },
+            { "id": "name", "label": "Calculator name",         "type": "text", "max": 40, "placeholder": "SIP Calculator" },
+            { "id": "body", "label": "One-line description",    "type": "text", "max": 100 }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "pricing",
+      "title": "Brokerage & Charges",
+      "hint": {
+        "label": "Transparent pricing — required by SEBI",
+        "description": "SEBI requires brokers to publish their full charge schedule on the website. Include: Account opening, Equity Delivery, Intraday, F&O, Currency, Commodity, MF, DP charges. Brokerage cannot exceed the SEBI prescribed limit."
+      },
+      "fields": [
+        { "id": "pricingLabel",    "label": "Section eyebrow",            "type": "text",     "max": 40,  "placeholder": "Brokerage & Charges" },
+        { "id": "pricingHeadline", "label": "Section headline",           "type": "text",     "max": 80 },
+        { "id": "pricingBody",     "label": "Section sub-copy (20–40 w)", "type": "textarea", "rows": 2,  "max": 200 },
+        {
+          "id": "pricingRows", "label": "Brokerage rate rows",
+          "type": "repeater", "min": 4, "max": 10, "itemLabel": "Charge row",
+          "item": [
+            { "id": "segment", "label": "Segment / charge", "type": "text", "max": 60, "placeholder": "Equity Delivery" },
+            { "id": "rate",    "label": "Rate",             "type": "text", "max": 60, "placeholder": "₹0 (Free)" },
+            { "id": "note",    "label": "Note (optional)",  "type": "text", "max": 80 }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "trustSignals",
+      "title": "Regulator & Exchange Memberships",
+      "hint": {
+        "label": "Registration badges",
+        "description": "Show the exchanges, depositories, and AMFI registrations that prove you're a regulated entity. SEBI · NSE · BSE · MCX · CDSL · NSDL · AMFI."
+      },
+      "fields": [
+        { "id": "trustLabel",    "label": "Section eyebrow",  "type": "text", "max": 40, "placeholder": "Regulated. Transparent. Secure." },
+        { "id": "trustHeadline", "label": "Section headline", "type": "text", "max": 80 },
+        {
+          "id": "partnerLogos", "label": "Regulator / Exchange / Depository names",
+          "type": "repeater", "min": 3, "max": 10, "itemLabel": "Body",
+          "item": [
+            { "id": "name", "label": "Name / registration short text", "type": "text", "max": 60, "placeholder": "SEBI Registered" }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "testimonials",
+      "title": "Investor Stories",
+      "hint": {
+        "label": "Social proof",
+        "description": "Real investor stories. Mention the investor segment (first-time, F&O, long-term). Avoid quoting specific returns without the past-performance disclaimer."
+      },
+      "fields": [
+        {
+          "id": "testimonials", "label": "Investor testimonials",
+          "type": "repeater", "min": 2, "max": 6, "itemLabel": "Testimonial",
+          "item": [
+            { "id": "quote",       "label": "Quote (30–60 words)",    "type": "textarea", "rows": 3, "max": 320 },
+            { "id": "name",        "label": "Name",                   "type": "text",     "max": 60 },
+            { "id": "role",        "label": "City / context",         "type": "text",     "max": 60 },
+            { "id": "productUsed", "label": "Product used",           "type": "text",     "max": 80, "placeholder": "Long-term Equity Investor" }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "grievance",
+      "title": "Grievance Redressal",
+      "hint": {
+        "label": "SEBI-mandated escalation matrix",
+        "description": "Escalation flow: Customer Care → Compliance Officer → Exchange (NSE/BSE/MCX) → SEBI SCORES → SMART ODR. All grievances must be acknowledged within 24 hours and resolved within 30 days per SEBI norms."
+      },
+      "fields": [
+        { "id": "grievanceLabel",    "label": "Section eyebrow",            "type": "text",     "max": 40 },
+        { "id": "grievanceHeadline", "label": "Section headline",           "type": "text",     "max": 80 },
+        { "id": "grievanceBody",     "label": "Section body (40–80 words)", "type": "textarea", "rows": 3, "max": 500 },
+        { "id": "groName",    "label": "Compliance officer name",  "type": "text",     "max": 80 },
+        { "id": "groRole",    "label": "Compliance officer role",  "type": "text",     "max": 80 },
+        { "id": "groEmail",   "label": "Compliance email",          "type": "text",     "max": 100 },
+        { "id": "groPhone",   "label": "Compliance phone",          "type": "text",     "max": 40 },
+        { "id": "groAddress", "label": "Office address",            "type": "textarea", "rows": 2, "max": 200 },
+        { "id": "groTimings", "label": "Office hours",              "type": "text",     "max": 80 },
+        {
+          "id": "escalationLevels", "label": "Escalation matrix",
+          "type": "repeater", "min": 3, "max": 6, "itemLabel": "Level",
+          "item": [
+            { "id": "level",   "label": "Level label",    "type": "text",     "max": 80 },
+            { "id": "body",    "label": "Description",    "type": "textarea", "rows": 2, "max": 200 },
+            { "id": "contact", "label": "Contact / URL",  "type": "text",     "max": 120 },
+            { "id": "tat",     "label": "TAT / timeline", "type": "text",     "max": 40 }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "investorEducation",
+      "title": "Investor Charter & Downloads",
+      "hint": {
+        "label": "Regulatory documents",
+        "description": "SEBI requires brokers to publish Investor Charter, Risk Disclosure Document (RDD), Rights & Obligations, MITC, Policies & Procedures, and KYC forms. List downloadable resources here."
+      },
+      "fields": [
+        { "id": "eduLabel",    "label": "Section eyebrow",  "type": "text",     "max": 40,  "placeholder": "Investor Education" },
+        { "id": "eduHeadline", "label": "Section headline", "type": "text",     "max": 80 },
+        { "id": "eduBody",     "label": "Section sub-copy", "type": "textarea", "rows": 2,  "max": 200 },
+        {
+          "id": "riskDocs", "label": "Document / link rows",
+          "type": "repeater", "min": 3, "max": 10, "itemLabel": "Document",
+          "item": [
+            { "id": "icon",  "label": "Icon (emoji)",         "type": "text", "max": 4 },
+            { "id": "title", "label": "Document title",       "type": "text", "max": 80, "placeholder": "Investor Charter" },
+            { "id": "body",  "label": "Short description",    "type": "text", "max": 120 }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "cta",
+      "title": "Call to Action",
+      "aiable": true,
+      "hint": {
+        "label": "Closing CTA",
+        "description": "Frame around the investor outcome — 'Open your Demat in 5 minutes'. Fine print should reference 'No account opening charges' and the SEBI risk disclaimer.",
+        "mockupTarget": "cta"
+      },
+      "fields": [
+        { "id": "ctaHeadline", "label": "CTA headline",               "type": "text",     "max": 100, "aiable": true },
+        { "id": "ctaBody",     "label": "CTA sub-copy (15–25 words)", "type": "textarea", "rows": 2,  "max": 200, "aiable": true },
+        { "id": "ctaButton",   "label": "Button text",                "type": "text",     "max": 40 },
+        { "id": "ctaNote",     "label": "Fine print",                 "type": "text",     "max": 160 }
+      ]
+    }
+  ]
+}

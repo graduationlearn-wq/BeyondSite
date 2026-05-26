@@ -91,7 +91,15 @@ function buildTemplateData(payload = {}) {
     // Round K â€” MF Distributor (template-14)
     'arnNumber','euinNumber','amfiDisclosure','sipStartingAmount',
     'schemesLabel','schemesHeadline','schemesBody',
-    'kycLabel','kycHeadline','kycBody','kycNote'
+    'kycLabel','kycHeadline','kycBody','kycNote',
+    // Round Q â€” Stock Broker / Demat (template-15)
+    'brokerSebiReg','nseBseMemberCode','cdslDpId','mcxMemberCode','brokerCin','amfiArn',
+    'heroActiveUsers','heroAumValue',
+    'whyChooseLabel','whyChooseHeadline','whyChooseBody',
+    'calculatorsLabel','calculatorsHeadline','calculatorsBody',
+    'pricingLabel','pricingHeadline','pricingBody',
+    'trustLabel','trustHeadline',
+    'eduLabel','eduHeadline','eduBody'
   ];
   for (const k of strKeys) if (data[k] === undefined) data[k] = '';
 
@@ -117,7 +125,9 @@ function buildTemplateData(payload = {}) {
                    'customerLogos','howSteps','platformStats','complianceBadges','pricingPlans',
                    'categories','whyPoints','marketStats','insurerPartners','marketReviews',
                    // Round K â€” MF Distributor (template-14)
-                   'schemes','kycSteps','amcPartners','sipBenefits'];
+                   'schemes','kycSteps','amcPartners','sipBenefits',
+                   // Round Q â€” Stock Broker / Demat (template-15)
+                   'trustStats','whyChoosePoints','calculators','pricingRows','partnerLogos','riskDocs'];
   for (const k of arrKeys) if (!Array.isArray(data[k])) data[k] = [];
   return data;
 }
@@ -1270,6 +1280,141 @@ function mfDistributorSample() {
   };
 }
 
+function stockBrokerSample() {
+  return {
+    ...commonSample,
+    businessName: 'Stallion Capital',
+    tagline: 'India\'s simplest investing platform.',
+    _description: 'Stallion Capital is a SEBI-registered stock broker (INZ000301838), NSE/BSE/MCX member, and CDSL depository participant offering stocks, F&O, mutual funds, IPOs, ETFs, bonds and commodities on one paperless platform. Founded in 2016 and trusted by over 5 lakh active investors across India.',
+    primaryColor: '#5500eb',
+    foundedYear: '2016',
+    tone: 'professional',
+    email: 'hello@stallioncapital.in',
+    phone: '+91 80 4000 8000',
+    address: 'Indiranagar, 100 Feet Road\nBengaluru, Karnataka 560038',
+    hours: 'Monâ€“Fri Â· 9:00 AM â€“ 6:00 PM IST',
+    brokerSebiReg: 'INZ000301838',
+    nseBseMemberCode: 'NSE-11724 Â· BSE-1234',
+    cdslDpId: 'CDSL: IN-DP-417-2019',
+    mcxMemberCode: 'MCX-56789',
+    brokerCin: 'U65100KA2016PTC092879',
+    amfiArn: 'ARN-111686',
+    heroEyebrow: 'Trusted by 5 Lakh+ active investors',
+    heroHeadlineLead: 'Invest in',
+    heroHeadlineEmph: 'everything.',
+    heroSub: 'Stocks, F&O, IPOs, Mutual Funds, ETFs, Bonds â€” one app, zero account opening charges. SEBI-registered since 2016, with sub-millisecond order execution and 24x7 investor support.',
+    heroCtaPrimary: 'Open Free Demat',
+    heroCtaSecondary: 'Explore Stocks',
+    heroActiveUsers: '5 Lakh+ active investors',
+    heroAumValue: 'â‚¹38,000 Cr+ Assets',
+    trustStats: [
+      { value: '5L+',     label: 'Active investors' },
+      { value: 'â‚¹38KCr',  label: 'Assets under custody' },
+      { value: '0',       label: 'Account opening charges' },
+      { value: '24/7',    label: 'Customer support' }
+    ],
+    productsLabel: 'Build your portfolio',
+    productsHeadline: 'One account. Every asset class.',
+    productsBody: 'Whether you are buying your first share or running a derivatives book â€” every product is in the same login, with one consolidated P&L and a single statement at year-end.',
+    products: [
+      { icon: 'ðŸ“ˆ', name: 'Stocks',         tagline: 'NSE & BSE listed equities',          body: 'Invest in companies across market caps. Real-time P&L, price alerts, sub-millisecond orders.' },
+      { icon: 'ðŸ“Š', name: 'F&O',            tagline: 'Futures & Options terminal',         body: 'Trade Nifty, Bank Nifty, and stock derivatives with charts, option chains, basket orders.' },
+      { icon: 'ðŸªª', name: 'Mutual Funds',    tagline: 'Direct plans Â· zero commission',     body: 'Invest via SIP or lumpsum across every AMC. Direct plans only â€” your returns stay yours.' },
+      { icon: 'ðŸš€', name: 'IPO',            tagline: 'Apply with one click',                body: 'Track and apply to upcoming and ongoing IPOs. UPI mandate in seconds â€” no cheques, no paperwork.' },
+      { icon: 'ðŸ›¡',  name: 'ETFs',           tagline: 'Index, Gold, Silver, International', body: 'Diversified exposure at low cost. Hold ETFs alongside stocks in the same demat account.' },
+      { icon: 'ðŸ’¼', name: 'Bonds',           tagline: 'Fixed-income with regular yield',    body: 'Government and corporate bonds with transparent yields. Settle into your demat account.' },
+      { icon: 'ðŸ’°', name: 'MTF',             tagline: 'Buy now, pay later',                 body: 'Margin Trading Facility â€” up to 4Ã— leverage on eligible stocks. Pledge holdings for instant margin.' },
+      { icon: 'ðŸ›¢',  name: 'Commodities',     tagline: 'Crude, Gold, Silver â€” MCX',          body: 'Trade real-world assets on the MCX with the same terminal you use for equities.' }
+    ],
+    whyChooseLabel: 'Why investors trust us',
+    whyChooseHeadline: 'Built for the modern Indian investor.',
+    whyChooseBody: 'A platform engineered for speed, transparency, and the regulatory promises a SEBI-registered broker is obligated to keep.',
+    whyChoosePoints: [
+      { icon: 'âš¡',  title: 'Lightning-fast orders',  body: 'Sub-millisecond order routing to NSE and BSE. Scalper mode for one-tap trades.' },
+      { icon: 'ðŸ”’', title: 'Bank-grade security',    body: '2FA on every login, biometric on mobile. ISO 27001 certified data centres.' },
+      { icon: 'ðŸ’¯', title: 'Zero commission on MF',  body: '100% direct plans. We earn nothing â€” you keep the trail commission across the fund\'s life.' },
+      { icon: 'ðŸ“Š', title: 'Pro charts, free',       body: 'Advanced candlesticks, 50+ indicators, drawing tools. Same terminal that institutions use.' },
+      { icon: 'ðŸ“±', title: 'Mobile-first design',    body: 'iOS, Android, Web â€” same data, same speed, real-time sync across devices.' },
+      { icon: 'â˜Ž',  title: '24Ã—7 investor support', body: 'Real humans on chat, email, and phone. Average first-response under 4 minutes.' }
+    ],
+    processLabel: 'Get started in minutes',
+    processHeadline: 'Open your Demat â€” fully digital, paperless.',
+    processSteps: [
+      { icon: 'ðŸ“', title: 'Sign up',           body: 'Enter your mobile number and email. Get an OTP-verified account in under a minute.', duration: '1 minute' },
+      { icon: 'ðŸªª', title: 'Aadhaar eKYC',      body: 'Verify identity with Aadhaar OTP. PAN is auto-pulled from the income-tax database.', duration: '2 minutes' },
+      { icon: 'âœ',  title: 'eSign your forms',  body: 'Aadhaar-based eSign on the account opening forms. No printing, no couriers, no branch visit.', duration: '1 minute' },
+      { icon: 'ðŸš€', title: 'Start investing',   body: 'Your demat and trading accounts are activated within 24 hours â€” usually much sooner.',          duration: 'Same day' }
+    ],
+    calculatorsLabel: 'Plan before you invest',
+    calculatorsHeadline: 'Calculators for every kind of decision.',
+    calculatorsBody: 'From a first â‚¹500 SIP to a leveraged intraday trade â€” figure out the math before the money moves.',
+    calculators: [
+      { icon: 'ðŸ’¹', name: 'SIP Calculator',        body: 'Estimate corpus from a recurring SIP across years and expected returns.' },
+      { icon: 'ðŸ’µ', name: 'Lumpsum Calculator',    body: 'Future value of a one-time investment compounded annually.' },
+      { icon: 'ðŸ§¾', name: 'Brokerage Calculator',  body: 'Total charges on a trade â€” brokerage, STT, exchange, GST, SEBI fee.' },
+      { icon: 'âš–',  name: 'Margin Calculator',    body: 'Pre-trade margin requirement for equity, F&O, and commodity positions.' },
+      { icon: 'ðŸ¦', name: 'FD Calculator',         body: 'Maturity value of a fixed deposit across tenures and interest rates.' },
+      { icon: 'ðŸš—', name: 'EMI Calculator',        body: 'Monthly EMI for car, home, or personal loans with full amortisation.' }
+    ],
+    pricingLabel: 'Brokerage & Charges',
+    pricingHeadline: 'Transparent pricing. No surprises.',
+    pricingBody: 'Every paisa, listed. SEBI requires brokers to publish their charge schedule â€” we go a step further and show the math on every order.',
+    pricingRows: [
+      { segment: 'Account opening',          rate: 'â‚¹0',                          note: 'Lifetime free demat account' },
+      { segment: 'Equity Delivery',          rate: 'â‚¹0',                          note: 'Zero brokerage on long-term equity' },
+      { segment: 'Equity Intraday',          rate: '0.05% or â‚¹20 per order',      note: 'Whichever is lower' },
+      { segment: 'F&O â€” Futures',            rate: 'â‚¹20 per order',               note: 'Flat fee on Nifty, Bank Nifty, stock futures' },
+      { segment: 'F&O â€” Options',            rate: 'â‚¹20 per order',               note: 'Flat fee regardless of lot size' },
+      { segment: 'Currency / Commodity',     rate: 'â‚¹20 per order',               note: 'MCX & NSE currency derivatives' },
+      { segment: 'Mutual Funds (Direct)',     rate: 'â‚¹0',                          note: '100% commission-free, no DP charges on MF units' },
+      { segment: 'DP charges',               rate: 'â‚¹13.5 + GST per scrip',       note: 'On debit of stocks from demat account' }
+    ],
+    trustLabel: 'Regulated. Transparent. Secure.',
+    trustHeadline: 'A SEBI-registered broker with full exchange memberships.',
+    partnerLogos: [
+      { name: 'SEBI Registered' }, { name: 'NSE Member' }, { name: 'BSE Member' },
+      { name: 'MCX Member' },      { name: 'CDSL DP' },    { name: 'NSDL DP' },
+      { name: 'AMFI Registered' }, { name: 'ISO 27001 Certified' }
+    ],
+    testimonials: [
+      { quote: 'Switched from a legacy broker after watching one too many order delays during market hours. Stallion fills orders instantly â€” and the charges are a fraction of what I used to pay.', name: 'Aman Khurana',  role: 'Bengaluru', productUsed: 'Intraday trader Â· 4 years' },
+      { quote: 'I started with a â‚¹500 SIP because the app made it that easy. Three years later I run a 12-fund portfolio with goal-mapped buckets. Zero commission on direct plans changed everything.',     name: 'Sneha Iyer',    role: 'Pune',      productUsed: 'SIP investor Â· MF portfolio' },
+      { quote: 'The F&O terminal is what kept me. Option chain, payoff diagrams, basket orders â€” everything in one window. And the brokerage is flat â‚¹20 per order regardless of lot size.',                  name: 'Rakesh Bansal', role: 'Delhi NCR', productUsed: 'F&O active trader' }
+    ],
+    grievanceLabel: 'Investor Care Â· Grievance Redressal',
+    grievanceHeadline: 'Every complaint reaches a real person. Within hours.',
+    grievanceBody: 'As a SEBI-registered stock broker and depository participant, Stallion Capital operates a 5-tier grievance mechanism. All complaints are acknowledged within 24 hours and resolved within 30 days as mandated by SEBI.',
+    groName: 'Ms. Priya Bhandari',
+    groRole: 'Principal Compliance Officer',
+    groEmail: 'compliance@stallioncapital.in',
+    groPhone: '+91 80 4000 8001',
+    groAddress: 'Stallion Capital\nIndiranagar, 100 Feet Road\nBengaluru â€” 560038, Karnataka',
+    groTimings: 'Monâ€“Fri Â· 9:00 AM â€“ 6:00 PM IST',
+    escalationLevels: [
+      { level: 'Level 1 Â· Customer Care',       body: 'Raise a ticket via chat, email, or phone. First-response under 4 hours; most cases closed in 24.', contact: 'support@stallioncapital.in Â· 1800-000-0000', tat: 'Within 24 hours' },
+      { level: 'Level 2 Â· Compliance Officer',  body: 'Unresolved in 3 days? Escalate to the Principal Compliance Officer with your ticket reference.', contact: 'compliance@stallioncapital.in',               tat: 'Within 7 days' },
+      { level: 'Level 3 Â· Exchange (NSE/BSE)',  body: 'Lodge directly with the exchange via the investor complaint portal of NSE, BSE, or MCX.',         contact: 'investorhelpline.nseindia.com',                tat: 'Within 15 days' },
+      { level: 'Level 4 Â· SEBI SCORES',         body: 'If unresolved after 30 days, register your complaint on SEBI\'s official investor grievance portal.', contact: 'scores.sebi.gov.in Â· 1800-266-7575',         tat: 'Per SEBI norms' },
+      { level: 'Level 5 Â· SMART ODR',           body: 'Online Dispute Resolution for unresolved investor grievances under SEBI\'s SMART ODR mechanism.', contact: 'smartodr.in',                                  tat: 'Per SMART ODR norms' }
+    ],
+    eduLabel: 'Investor Charter & Downloads',
+    eduHeadline: 'Regulatory documents â€” published, downloadable, current.',
+    eduBody: 'Every disclosure SEBI requires a broker to publish â€” gathered in one place, plain-language summaries included.',
+    riskDocs: [
+      { icon: 'ðŸ“œ', title: 'Investor Charter',                  body: 'Your rights and responsibilities as a securities-market investor.' },
+      { icon: 'âš ',  title: 'Risk Disclosure Document (RDD)',   body: 'Mandatory pre-investment risk disclosure prescribed by SEBI.' },
+      { icon: 'ðŸ“‹', title: 'Rights & Obligations',              body: 'Rights and obligations of broker, sub-broker, depository participant, and client.' },
+      { icon: 'ðŸ“„', title: 'MITC (Most Important Terms)',       body: 'Plain-language summary of the most important terms and conditions.' },
+      { icon: 'ðŸ§¾', title: 'Policies & Procedures',             body: 'Internal policies on brokerage, margin, settlement, and dispute resolution.' },
+      { icon: 'ðŸ†”', title: 'KYC Forms',                         body: 'Account opening, modification, and nomination forms â€” printable PDF.' }
+    ],
+    ctaHeadline: 'Open your Demat in 5 minutes. Free, for life.',
+    ctaBody: 'Aadhaar eKYC, eSign, and instant activation. No account opening charges, no annual maintenance for the first year.',
+    ctaButton: 'Open Free Account',
+    ctaNote: 'No account opening charges Â· SEBI Registered Â· INZ000301838'
+  };
+}
+
 // â”€â”€ Per-template data picker â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
 function sampleFor(templateId) {
   if (templateId === 'template-2')  return agencySample();
@@ -1285,6 +1430,7 @@ function sampleFor(templateId) {
   if (templateId === 'template-12') return insurtechSample();
   if (templateId === 'template-13') return insuranceMarketSample();
   if (templateId === 'template-14') return mfDistributorSample();
+  if (templateId === 'template-15') return stockBrokerSample();
   return commonSample;
 }
 
@@ -1321,12 +1467,13 @@ function errorPage(n, message) {
 
 // â”€â”€ Write individual preview files â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
 const OUTDIR = __dirname;
-const TEMPLATES = [1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14];
+const TEMPLATES = [1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15];
 const NAMES = {
   1: 'Editorial',   2: 'Agency',     3: 'Terminal',  4: 'Web3',
   5: 'Local',       6: 'BFSI',       7: 'Startup',   8: 'Insurance',
   9: 'NBFC',       10: 'Restaurant', 11: 'Portfolio',
-  12: 'InsurTech SaaS', 13: 'Insurance Market', 14: 'MF Distributor'
+  12: 'InsurTech SaaS', 13: 'Insurance Market', 14: 'MF Distributor',
+  15: 'Stock Broker'
 };
 
 const results = TEMPLATES.map(n => {

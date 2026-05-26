@@ -117,7 +117,15 @@ function buildTemplateData(payload = {}) {
     // Round K — MF Distributor (template-14)
     'arnNumber','euinNumber','amfiDisclosure','sipStartingAmount',
     'schemesLabel','schemesHeadline','schemesBody',
-    'kycLabel','kycHeadline','kycBody','kycNote'
+    'kycLabel','kycHeadline','kycBody','kycNote',
+    // Round Q — Stock Broker / Demat (template-15)
+    'brokerSebiReg','nseBseMemberCode','cdslDpId','mcxMemberCode','brokerCin','amfiArn',
+    'heroActiveUsers','heroAumValue',
+    'whyChooseLabel','whyChooseHeadline','whyChooseBody',
+    'calculatorsLabel','calculatorsHeadline','calculatorsBody',
+    'pricingLabel','pricingHeadline','pricingBody',
+    'trustLabel','trustHeadline',
+    'eduLabel','eduHeadline','eduBody'
   ];
   for (const k of strKeys) if (data[k] === undefined) data[k] = '';
 
@@ -138,7 +146,9 @@ function buildTemplateData(payload = {}) {
     'customerLogos','howSteps','platformStats','complianceBadges','pricingPlans',
     'categories','whyPoints','insurerPartners','marketReviews',
     // Round K — MF Distributor (template-14)
-    'schemes','kycSteps','amcPartners','sipBenefits'
+    'schemes','kycSteps','amcPartners','sipBenefits',
+    // Round Q — Stock Broker / Demat (template-15)
+    'trustStats','whyChoosePoints','calculators','pricingRows','partnerLogos','riskDocs'
   ];
   for (const k of arrKeys) if (!Array.isArray(data[k])) data[k] = [];
 
