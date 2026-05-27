@@ -1,0 +1,284 @@
+{
+  "id": "template-16",
+  "name": "SEBI RIA / Investment Adviser",
+  "extends": "_base",
+  "complianceReview": {
+    "title": "SEBI Investment Adviser (RIA) — have your compliance officer review before publishing.",
+    "body": "This template includes your SEBI INA registration number, BASL membership ID, NISM Series-X-A and X-B certificates, your fee mode (with SEBI's maximum-fee cap), fiduciary disclosure, conflict-of-interest note, and the SCORES + SMART ODR + BASL grievance escalation. The SEBI risk disclaimer ('Investment in securities market is subject to market risks. Read all related documents carefully before investing.') and the past-performance disclaimer are mandatory under SEBI (Investment Advisers) Regulations, 2013 and must not be removed."
+  },
+  "sections": [
+    {
+      "id": "regulatoryDetails",
+      "title": "Regulatory Registrations",
+      "hint": {
+        "label": "SEBI INA · BASL · NISM",
+        "description": "Every Registered Investment Adviser must publish their SEBI INA registration, BASL (BSE Administration & Supervision Ltd) membership, NISM Series-X-A and X-B certificates, and type of registration (Individual / Non-Individual). These appear in the trust band and the regulatory footer."
+      },
+      "fields": [
+        { "id": "sebiInaReg",   "label": "SEBI INA Registration Number",                     "type": "text", "max": 30,  "placeholder": "INA000012345" },
+        { "id": "regValidity",  "label": "Validity",                                          "type": "text", "max": 40,  "placeholder": "Permanent" },
+        { "id": "raRegType",    "label": "Type of registration",                              "type": "select", "options": ["Individual","Non-Individual (Body Corporate)","Non-Individual (Partnership)","Non-Individual (LLP)"] },
+        { "id": "basMemberId",  "label": "BASL Membership ID",                                "type": "text", "max": 30,  "placeholder": "BASL2125" },
+        { "id": "nismCertA",    "label": "NISM Series-X-A (Level 1)",                         "type": "text", "max": 80,  "placeholder": "NISM-Series-X-A · valid till 2029" },
+        { "id": "nismCertB",    "label": "NISM Series-X-B (Level 2)",                         "type": "text", "max": 80,  "placeholder": "NISM-Series-X-B · valid till 2029" },
+        { "id": "brokerCin",    "label": "CIN (only for Non-Individual)",                     "type": "text", "max": 30,  "placeholder": "—" }
+      ]
+    },
+    {
+      "id": "hero",
+      "title": "Hero",
+      "aiable": true,
+      "hint": {
+        "label": "Warm, conversational opening",
+        "description": "Lead with the human outcome — 'finally uncomplicated', 'someone in your corner'. RIAs sell advice and clarity, not products. The right-hand panel shows your photo + a handwritten-feel pull quote.",
+        "mockupTarget": "header"
+      },
+      "fields": [
+        { "id": "heroEyebrow",      "label": "Trust pill above headline",       "type": "text",     "max": 80,  "placeholder": "SEBI Registered Investment Adviser · Fee-only",        "aiable": true },
+        { "id": "heroHeadlineLead", "label": "Headline — first part",            "type": "text",     "max": 80,  "placeholder": "Your money decisions,",                                  "aiable": true },
+        { "id": "heroHeadlineEmph", "label": "Headline — italic accent",         "type": "text",     "max": 60,  "placeholder": "finally uncomplicated.",                                 "aiable": true },
+        { "id": "heroSub",          "label": "Sub-headline (25–40 words)",       "type": "textarea", "rows": 3,  "max": 240, "aiable": true },
+        { "id": "heroCtaPrimary",   "label": "Primary CTA",                      "type": "text",     "max": 30,  "placeholder": "Book a free intro call" },
+        { "id": "heroCtaSecondary", "label": "Secondary CTA",                    "type": "text",     "max": 30,  "placeholder": "How we work" },
+        { "id": "adviserSign",      "label": "Hand-signed pull-quote (one line)","type": "text",     "max": 120, "placeholder": "I'd rather lose a client than mis-sell to them." },
+        { "id": "adviserName",      "label": "Adviser display name",             "type": "text",     "max": 80,  "placeholder": "Aanya Bhargava, CFP" }
+      ]
+    },
+    {
+      "id": "fees",
+      "title": "How We Charge",
+      "aiable": true,
+      "hint": {
+        "label": "Fees — required by SEBI",
+        "description": "RIAs must publish fee structure upfront. SEBI caps RIA fees at MAX 2.5% of AUA per annum OR a fixed fee of ₹1,25,000 per family per annum. Either mode is allowed but you must declare which. No commission income permitted — only fees direct from clients."
+      },
+      "fields": [
+        { "id": "feesLabel",     "label": "Section eyebrow",  "type": "text",     "max": 40,  "placeholder": "How we charge" },
+        { "id": "feesHeadline",  "label": "Section headline", "type": "text",     "max": 80,  "aiable": true },
+        { "id": "feesBody",      "label": "Section sub-copy (30–50 words)", "type": "textarea", "rows": 3, "max": 320, "aiable": true },
+        { "id": "feeFinePrint",  "label": "Fine print line",  "type": "text",     "max": 180, "placeholder": "Per SEBI norms, RIA fees do not exceed 2.5% of AUA per annum OR ₹1,25,000 fixed per family per year. We never earn commissions on products we recommend." },
+        {
+          "id": "feePlans", "label": "Fee plans (2 cards side-by-side)",
+          "type": "repeater", "min": 1, "max": 3, "itemLabel": "Plan",
+          "item": [
+            { "id": "name",      "label": "Plan name",                "type": "text",     "max": 50,  "placeholder": "Flat Fee Plan" },
+            { "id": "price",     "label": "Headline price",           "type": "text",     "max": 40,  "placeholder": "₹60,000 / year" },
+            { "id": "priceNote", "label": "Price caveat",             "type": "text",     "max": 80,  "placeholder": "Per family · Paid quarterly" },
+            { "id": "ideal",     "label": "Who it's for",             "type": "text",     "max": 100, "placeholder": "Investors with assets under ₹50 lakh" },
+            {
+              "id": "perks", "label": "What's included",
+              "type": "repeater", "min": 3, "max": 7, "itemLabel": "Inclusion",
+              "item": [ { "id": "label", "label": "Inclusion line", "type": "text", "max": 100 } ]
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "approach",
+      "title": "Our Approach",
+      "aiable": true,
+      "hint": {
+        "label": "What makes you different",
+        "description": "RIAs differ from MFDs by fiduciary duty (acting in client interest), fee-only model (no commissions), and evidence-based planning. Frame these as warm reasons people choose you, not as a checklist.",
+        "mockupTarget": "about"
+      },
+      "fields": [
+        { "id": "approachLabel",    "label": "Section eyebrow",  "type": "text",     "max": 40,  "placeholder": "What you can expect" },
+        { "id": "approachHeadline", "label": "Section headline", "type": "text",     "max": 80,  "aiable": true },
+        { "id": "approachBody",     "label": "Section sub-copy", "type": "textarea", "rows": 2,  "max": 220, "aiable": true },
+        {
+          "id": "aboutPillars", "label": "Approach pillars",
+          "type": "repeater", "min": 3, "max": 5, "itemLabel": "Pillar",
+          "item": [
+            { "id": "icon",  "label": "Icon (emoji)",            "type": "text",     "max": 4 },
+            { "id": "title", "label": "Pillar title",            "type": "text",     "max": 60 },
+            { "id": "body",  "label": "Description (20–35 words)","type": "textarea", "rows": 2, "max": 220 }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "services",
+      "title": "Services",
+      "aiable": true,
+      "hint": {
+        "label": "What you actually do for clients",
+        "description": "Financial planning, goal planning, retirement, tax, estate, insurance review. RIAs don't sell insurance — review only.",
+        "mockupTarget": "services"
+      },
+      "fields": [
+        { "id": "servicesLabel",    "label": "Section eyebrow",  "type": "text",     "max": 40,  "placeholder": "What we help with" },
+        { "id": "servicesHeadline", "label": "Section headline", "type": "text",     "max": 80,  "aiable": true },
+        { "id": "servicesBody",     "label": "Section sub-copy", "type": "textarea", "rows": 2,  "max": 200, "aiable": true },
+        {
+          "id": "services", "label": "Service cards",
+          "type": "repeater", "min": 3, "max": 6, "itemLabel": "Service",
+          "item": [
+            { "id": "icon", "label": "Icon (emoji)",              "type": "text",     "max": 4 },
+            { "id": "name", "label": "Service name",              "type": "text",     "max": 50 },
+            { "id": "body", "label": "Description (20–30 words)", "type": "textarea", "rows": 2, "max": 180 }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "process",
+      "title": "How we work together",
+      "aiable": true,
+      "hint": {
+        "label": "Onboarding journey",
+        "description": "Discovery call → Plan → Implementation → Quarterly review. Keep it human — not a corporate funnel.",
+        "mockupTarget": "process"
+      },
+      "fields": [
+        { "id": "processLabel",    "label": "Section eyebrow",  "type": "text", "max": 40, "placeholder": "How we work together" },
+        { "id": "processHeadline", "label": "Section headline", "type": "text", "max": 80, "aiable": true },
+        {
+          "id": "processSteps", "label": "Steps",
+          "type": "repeater", "min": 3, "max": 5, "itemLabel": "Step",
+          "item": [
+            { "id": "icon",     "label": "Icon (emoji)",                   "type": "text",     "max": 4 },
+            { "id": "title",    "label": "Step title",                     "type": "text",     "max": 50 },
+            { "id": "body",     "label": "Step description (20–30 words)", "type": "textarea", "rows": 2, "max": 200 },
+            { "id": "duration", "label": "Duration",                       "type": "text",     "max": 40, "placeholder": "30 minutes" }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "about",
+      "title": "About the Adviser",
+      "aiable": true,
+      "hint": {
+        "label": "Your story",
+        "description": "People hire RIAs because they trust the person — not just the certificate wall. Lead with story, follow with credentials. NISM-X-A, NISM-X-B, CFP, CFA, MBA Finance, years of practice.",
+        "mockupTarget": "about"
+      },
+      "fields": [
+        { "id": "aboutLabel",        "label": "Section eyebrow",                "type": "text",     "max": 40 },
+        { "id": "aboutHeadlineLead", "label": "Headline — first part",          "type": "text",     "max": 60, "aiable": true },
+        { "id": "aboutHeadlineEmph", "label": "Headline — italic accent",        "type": "text",     "max": 40, "aiable": true },
+        { "id": "adviserBio",        "label": "Adviser bio (120–180 words)",     "type": "textarea", "rows": 8, "max": 1100, "aiable": true },
+        { "id": "adviserYears",      "label": "Years of practice",               "type": "text",     "max": 30, "placeholder": "14 years" },
+        { "id": "adviserPhoto",      "label": "Photo URL (optional)",            "type": "image" },
+        {
+          "id": "credentials", "label": "Credentials / certifications",
+          "type": "repeater", "min": 2, "max": 8, "itemLabel": "Credential",
+          "item": [ { "id": "label", "label": "Credential text", "type": "text", "max": 60 } ]
+        }
+      ]
+    },
+    {
+      "id": "articles",
+      "title": "From the journal",
+      "aiable": true,
+      "hint": {
+        "label": "Notes & articles",
+        "description": "Soft-sell blog teasers. Articles, opinions, or notes you've written. Builds authority without feeling salesy."
+      },
+      "fields": [
+        { "id": "articlesLabel",    "label": "Section eyebrow",  "type": "text",     "max": 40,  "placeholder": "From the journal" },
+        { "id": "articlesHeadline", "label": "Section headline", "type": "text",     "max": 80,  "aiable": true },
+        { "id": "articlesBody",     "label": "Section sub-copy", "type": "textarea", "rows": 2,  "max": 200, "aiable": true },
+        {
+          "id": "articles", "label": "Article cards",
+          "type": "repeater", "min": 2, "max": 6, "itemLabel": "Article",
+          "item": [
+            { "id": "category", "label": "Category",          "type": "text",     "max": 40, "placeholder": "Planning" },
+            { "id": "title",    "label": "Article title",     "type": "text",     "max": 100 },
+            { "id": "body",     "label": "Snippet (20–30 w)", "type": "textarea", "rows": 2, "max": 240 },
+            { "id": "readTime", "label": "Read time",         "type": "text",     "max": 30, "placeholder": "4 min read" }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "testimonials",
+      "title": "Client Stories",
+      "hint": {
+        "label": "Polaroid-style social proof",
+        "description": "Real client stories. Mention the life-stage and goal. RIAs cannot publish specific scheme returns — frame around the decision and outcome (peace of mind, clarity, retirement on track)."
+      },
+      "fields": [
+        {
+          "id": "testimonials", "label": "Client testimonials",
+          "type": "repeater", "min": 2, "max": 6, "itemLabel": "Testimonial",
+          "item": [
+            { "id": "quote",       "label": "Quote (30–60 words)",     "type": "textarea", "rows": 3, "max": 360 },
+            { "id": "name",        "label": "Name",                    "type": "text",     "max": 60 },
+            { "id": "role",        "label": "City / life stage",        "type": "text",     "max": 80 },
+            { "id": "productUsed", "label": "Service used",            "type": "text",     "max": 80, "placeholder": "Retirement planning" }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "grievance",
+      "title": "Grievance Redressal",
+      "hint": {
+        "label": "SCORES + BASL + SMART ODR escalation",
+        "description": "SEBI requires RIAs to publish a complete grievance pathway: Adviser → Compliance Officer → BASL → SEBI SCORES → SMART ODR. All complaints acknowledged within 24h and resolved within 21 working days per SEBI norms."
+      },
+      "fields": [
+        { "id": "grievanceLabel",    "label": "Section eyebrow",            "type": "text",     "max": 40 },
+        { "id": "grievanceHeadline", "label": "Section headline",           "type": "text",     "max": 80 },
+        { "id": "grievanceBody",     "label": "Section body (40–80 words)", "type": "textarea", "rows": 3, "max": 500 },
+        { "id": "groName",    "label": "Compliance officer name",  "type": "text",     "max": 80 },
+        { "id": "groRole",    "label": "Compliance officer role",  "type": "text",     "max": 80 },
+        { "id": "groEmail",   "label": "Compliance email",          "type": "text",     "max": 100 },
+        { "id": "groPhone",   "label": "Compliance phone",          "type": "text",     "max": 40 },
+        { "id": "groAddress", "label": "Office address",            "type": "textarea", "rows": 2, "max": 200 },
+        { "id": "groTimings", "label": "Office hours",              "type": "text",     "max": 80 },
+        {
+          "id": "escalationLevels", "label": "Escalation matrix",
+          "type": "repeater", "min": 3, "max": 5, "itemLabel": "Level",
+          "item": [
+            { "id": "level",   "label": "Level label",    "type": "text",     "max": 80 },
+            { "id": "body",    "label": "Description",    "type": "textarea", "rows": 2, "max": 220 },
+            { "id": "contact", "label": "Contact / URL",  "type": "text",     "max": 140 },
+            { "id": "tat",     "label": "TAT",             "type": "text",     "max": 40 }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "disclosures",
+      "title": "Disclosures & Documents",
+      "hint": {
+        "label": "Mandatory RIA disclosures",
+        "description": "RIAs must publish: Conflict of Interest policy, Business model (fee-only), Terms & Conditions of advice, Risk profiling methodology, Most Important Terms & Conditions (MITC). Link or summarise each."
+      },
+      "fields": [
+        { "id": "disclosuresLabel",    "label": "Section eyebrow",  "type": "text",     "max": 40,  "placeholder": "Required disclosures" },
+        { "id": "disclosuresHeadline", "label": "Section headline", "type": "text",     "max": 80 },
+        { "id": "disclosuresBody",     "label": "Section sub-copy", "type": "textarea", "rows": 2,  "max": 200 },
+        {
+          "id": "riskDocs", "label": "Disclosure documents",
+          "type": "repeater", "min": 3, "max": 8, "itemLabel": "Document",
+          "item": [
+            { "id": "icon",  "label": "Icon (emoji)",         "type": "text", "max": 4 },
+            { "id": "title", "label": "Document title",       "type": "text", "max": 80, "placeholder": "Conflict of Interest Policy" },
+            { "id": "body",  "label": "Plain-language summary","type": "text", "max": 140 }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "cta",
+      "title": "Call to Action",
+      "aiable": true,
+      "hint": {
+        "label": "Closing CTA",
+        "description": "RIAs convert through trust, not urgency. 'Book a free 30-minute discovery call — no obligation, no pitch.'",
+        "mockupTarget": "cta"
+      },
+      "fields": [
+        { "id": "ctaHeadline", "label": "CTA headline",               "type": "text",     "max": 100, "aiable": true },
+        { "id": "ctaBody",     "label": "CTA sub-copy (15–25 words)", "type": "textarea", "rows": 2,  "max": 220, "aiable": true },
+        { "id": "ctaButton",   "label": "Button text",                "type": "text",     "max": 40 },
+        { "id": "ctaNote",     "label": "Fine print",                 "type": "text",     "max": 160 }
+      ]
+    }
+  ]
+}

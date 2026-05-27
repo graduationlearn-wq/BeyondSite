@@ -125,7 +125,14 @@ function buildTemplateData(payload = {}) {
     'calculatorsLabel','calculatorsHeadline','calculatorsBody',
     'pricingLabel','pricingHeadline','pricingBody',
     'trustLabel','trustHeadline',
-    'eduLabel','eduHeadline','eduBody'
+    'eduLabel','eduHeadline','eduBody',
+    // Round R — SEBI RIA / Investment Adviser (template-16)
+    'sebiInaReg','regValidity','raRegType','basMemberId','nismCertA','nismCertB',
+    'adviserName','adviserBio','adviserYears','adviserPhoto','adviserSign',
+    'feesLabel','feesHeadline','feesBody','feeFinePrint',
+    'approachLabel','approachHeadline','approachBody',
+    'articlesLabel','articlesHeadline','articlesBody',
+    'disclosuresLabel','disclosuresHeadline','disclosuresBody'
   ];
   for (const k of strKeys) if (data[k] === undefined) data[k] = '';
 
@@ -148,7 +155,9 @@ function buildTemplateData(payload = {}) {
     // Round K — MF Distributor (template-14)
     'schemes','kycSteps','amcPartners','sipBenefits',
     // Round Q — Stock Broker / Demat (template-15)
-    'trustStats','whyChoosePoints','calculators','pricingRows','partnerLogos','riskDocs'
+    'trustStats','whyChoosePoints','calculators','pricingRows','partnerLogos','riskDocs',
+    // Round R — SEBI RIA / Investment Adviser (template-16)
+    'feePlans','articles'
   ];
   for (const k of arrKeys) if (!Array.isArray(data[k])) data[k] = [];
 

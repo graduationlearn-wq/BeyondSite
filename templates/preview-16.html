@@ -1,0 +1,951 @@
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Saaransh Advisory — Money advice that actually feels like advice.</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Fraunces:ital,opsz,wght@0,9..144,400;0,9..144,500;0,9..144,600;0,9..144,700;1,9..144,500;1,9..144,600&family=Inter:wght@300;400;500;600;700&family=Caveat:wght@500;700&display=swap" rel="stylesheet">
+  <style>
+    *,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
+    :root{
+      --sage:        #6b9080;
+      --sage-soft:   #8aab9c;
+      --sage-deep:   #4f6f63;
+      --sage-tint:   rgba(107,144,128,.12);
+      --peach:       #e8a87c;
+      --peach-soft:  #f2c4a3;
+      --peach-tint:  rgba(232,168,124,.14);
+      --gold:        #c79e4c;
+      --gold-tint:   rgba(199,158,76,.16);
+      --cream:       #faf6ef;
+      --cream-deep:  #f3ebda;
+      --cream-warm:  #fcf3e2;
+      --paper:       #fffefa;
+      --ink:         #2a3030;
+      --ink-soft:    #5a6b6b;
+      --ink-mute:    rgba(42,48,48,.55);
+      --ink-line:    rgba(42,48,48,.08);
+      --ink-line-md: rgba(42,48,48,.14);
+      --serif:       'Fraunces', 'Georgia', serif;
+      --sans:        'Inter', system-ui, -apple-system, sans-serif;
+      --hand:        'Caveat', 'Bradley Hand', cursive;
+    }
+    html{scroll-behavior:smooth}
+    body{font-family:var(--sans);background:var(--cream);color:var(--ink);line-height:1.7;-webkit-font-smoothing:antialiased}
+    a{color:inherit;text-decoration:none}
+    button{font-family:inherit;cursor:pointer;border:none}
+    em{font-style:italic;color:var(--sage-deep);font-family:var(--serif);font-weight:500}
+    .container{max-width:1200px;margin:0 auto;padding:0 32px}
+    .reveal{opacity:0;transform:translateY(20px);transition:opacity .7s ease,transform .7s ease}
+    .reveal.visible{opacity:1;transform:translateY(0)}
+
+    /* ── TOPBAR ─────────────────────────────────────────────── */
+    .topbar{background:var(--sage-deep);color:rgba(255,253,247,.86);font-size:.74rem;padding:9px 0}
+    .topbar-inner{display:flex;align-items:center;justify-content:space-between;gap:18px;flex-wrap:wrap;max-width:1200px;margin:0 auto;padding:0 32px}
+    .topbar-info{display:flex;gap:18px;flex-wrap:wrap;align-items:center}
+    .topbar-info b{font-weight:600;color:#fff}
+    .topbar-links{display:flex;gap:14px;flex-wrap:wrap}
+    .topbar-links a{color:rgba(255,253,247,.65);transition:color .2s}
+    .topbar-links a:hover{color:#fff;text-decoration:underline}
+
+    /* ── NAV ────────────────────────────────────────────────── */
+    .nav{position:sticky;top:0;z-index:50;background:rgba(250,246,239,.92);backdrop-filter:blur(14px);border-bottom:1px solid var(--ink-line)}
+    .nav-inner{display:flex;align-items:center;justify-content:space-between;padding:18px 0}
+    .brand{display:flex;align-items:center;gap:14px;font-family:var(--serif);font-size:1.35rem;font-weight:600;color:var(--ink);letter-spacing:-.005em}
+    .brand-mark{width:42px;height:42px;border-radius:50%;background:linear-gradient(135deg,var(--sage),var(--sage-deep));color:#fffefa;display:flex;align-items:center;justify-content:center;font-family:var(--serif);font-weight:600;font-size:1.15rem;font-style:italic;box-shadow:0 6px 18px rgba(107,144,128,.3)}
+    .nav-links{display:flex;gap:28px;align-items:center;list-style:none}
+    .nav-links a{color:var(--ink-soft);font-size:.93rem;font-weight:500;transition:color .2s}
+    .nav-links a:hover{color:var(--sage-deep)}
+    .nav-cta{background:var(--ink);color:#fffefa;padding:10px 22px;border-radius:100px;font-weight:600;box-shadow:0 8px 22px rgba(42,48,48,.2);white-space:nowrap}
+    .nav-cta:hover{background:var(--sage-deep)}
+
+    /* ── BUTTONS ────────────────────────────────────────────── */
+    .btn{display:inline-flex;align-items:center;gap:10px;padding:15px 30px;border-radius:100px;font-size:.95rem;font-weight:600;transition:transform .15s,box-shadow .25s,background .25s}
+    .btn:hover{transform:translateY(-2px)}
+    .btn-primary{background:var(--ink);color:#fffefa;box-shadow:0 10px 28px rgba(42,48,48,.22)}
+    .btn-primary:hover{background:var(--sage-deep);box-shadow:0 14px 36px rgba(79,111,99,.36)}
+    .btn-ghost{background:transparent;color:var(--ink);border:1.5px solid var(--ink-line-md)}
+    .btn-ghost:hover{background:var(--paper);border-color:var(--sage-deep);color:var(--sage-deep)}
+
+    /* ── HERO ───────────────────────────────────────────────── */
+    .hero{padding:72px 0 110px;position:relative;overflow:hidden}
+    .hero::before{content:'';position:absolute;top:-220px;right:-200px;width:580px;height:580px;border-radius:50%;background:radial-gradient(circle,var(--peach-tint) 0%,transparent 70%);pointer-events:none}
+    .hero::after{content:'';position:absolute;bottom:-160px;left:-180px;width:480px;height:480px;border-radius:50%;background:radial-gradient(circle,var(--sage-tint) 0%,transparent 70%);pointer-events:none}
+    .hero-grid{display:grid;grid-template-columns:1.1fr .9fr;gap:60px;align-items:center;position:relative}
+    .hero-eyebrow{display:inline-flex;align-items:center;gap:10px;font-size:.78rem;font-weight:600;letter-spacing:.04em;color:var(--sage-deep);background:var(--sage-tint);padding:9px 18px;border-radius:100px;margin-bottom:26px}
+    .hero-eyebrow::before{content:'';width:7px;height:7px;border-radius:50%;background:var(--sage);box-shadow:0 0 0 4px rgba(107,144,128,.18)}
+    .hero-title{font-family:var(--serif);font-weight:500;font-size:clamp(2.6rem,5.5vw,4.7rem);line-height:1.05;letter-spacing:-.015em;color:var(--ink);margin-bottom:24px}
+    .hero-title em{display:inline;color:var(--sage-deep)}
+    .hero-sub{font-size:1.08rem;color:var(--ink-soft);max-width:520px;margin-bottom:34px;line-height:1.8}
+    .hero-actions{display:flex;gap:14px;flex-wrap:wrap;margin-bottom:34px}
+    .hero-creds{display:flex;flex-wrap:wrap;gap:8px;padding-top:26px;border-top:1px dashed var(--ink-line-md)}
+    .hero-cred{font-size:.78rem;color:var(--ink-soft);background:var(--paper);border:1px solid var(--ink-line);padding:6px 13px;border-radius:100px;font-weight:500}
+    .hero-cred::before{content:'◆';color:var(--gold);margin-right:6px;font-size:.55rem;display:inline-block;vertical-align:middle}
+
+    /* Hero portrait card */
+    .portrait-wrap{position:relative;display:flex;justify-content:center;align-items:center}
+    .portrait-disc{position:absolute;top:-10px;left:50%;transform:translateX(-50%);width:380px;height:380px;border-radius:50%;background:linear-gradient(160deg,var(--peach-soft),var(--peach));z-index:0;box-shadow:0 30px 80px -30px rgba(232,168,124,.5)}
+    .portrait-card{position:relative;z-index:2;background:var(--paper);border-radius:24px;padding:28px;width:340px;box-shadow:0 30px 70px -28px rgba(42,48,48,.22);border:1px solid var(--ink-line);transform:rotate(-1.5deg)}
+    .portrait-card:hover{transform:rotate(0deg);transition:transform .35s}
+    .portrait-svg{width:100%;height:240px;border-radius:18px;background:linear-gradient(180deg,var(--cream-warm),var(--cream-deep));overflow:hidden;display:block;margin-bottom:18px;position:relative}
+    .portrait-name{font-family:var(--serif);font-size:1.25rem;font-weight:600;color:var(--ink);margin-bottom:3px;letter-spacing:-.01em}
+    .portrait-role{font-size:.84rem;color:var(--ink-mute);margin-bottom:14px}
+    .portrait-quote{font-family:var(--hand);font-size:1.45rem;line-height:1.35;color:var(--sage-deep);position:relative;padding:8px 0 0;border-top:1px dashed var(--ink-line-md)}
+    .portrait-quote::before{content:'\201C';font-family:var(--serif);font-size:2.4rem;font-style:italic;color:var(--peach);position:absolute;top:-12px;left:-6px;line-height:1}
+
+    .float-sticker{position:absolute;background:var(--sage-deep);color:#fffefa;padding:12px 18px;border-radius:14px;font-size:.78rem;font-weight:600;box-shadow:0 14px 28px -14px rgba(79,111,99,.5);z-index:3;transform:rotate(5deg)}
+    .float-sticker-1{top:-2%;right:-6%;background:var(--gold);color:#2a3030;transform:rotate(-7deg)}
+    .float-sticker-1 b{display:block;font-family:var(--serif);font-size:1.05rem;font-weight:600;margin-top:1px;letter-spacing:-.01em}
+
+    /* Wave separator */
+    .wave{display:block;width:100%;height:60px;color:var(--cream-warm)}
+
+    /* ── SECTION ────────────────────────────────────────────── */
+    .section-pad{padding:100px 0}
+    .section-head{text-align:left;max-width:720px;margin-bottom:54px}
+    .section-head.center{margin-left:auto;margin-right:auto;text-align:center}
+    .section-eyebrow{display:inline-block;font-family:var(--hand);font-size:1.25rem;font-weight:500;color:var(--sage-deep);margin-bottom:8px;letter-spacing:.005em}
+    .section-title{font-family:var(--serif);font-size:clamp(2rem,3.6vw,3.1rem);font-weight:500;line-height:1.15;letter-spacing:-.015em;color:var(--ink);margin-bottom:18px}
+    .section-body{font-size:1.02rem;color:var(--ink-soft);line-height:1.8;max-width:640px}
+
+    /* ── FEES ───────────────────────────────────────────────── */
+    .fees{background:var(--cream-warm)}
+    .fees-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(320px,1fr));gap:24px;margin-bottom:30px}
+    .fee-card{background:var(--paper);border:1px solid var(--ink-line);border-radius:24px;padding:36px;display:flex;flex-direction:column;transition:transform .3s,box-shadow .3s;position:relative;overflow:hidden}
+    .fee-card:nth-child(2){background:linear-gradient(160deg,var(--ink) 0%,var(--sage-deep) 100%);color:#fffefa;border:none}
+    .fee-card:nth-child(2) .fee-name,.fee-card:nth-child(2) .fee-price,.fee-card:nth-child(2) .fee-perks li{color:#fffefa}
+    .fee-card:nth-child(2) .fee-price-note,.fee-card:nth-child(2) .fee-ideal{color:rgba(255,254,250,.7)}
+    .fee-card:nth-child(2) .fee-perks li::before{color:var(--peach)}
+    .fee-card:hover{transform:translateY(-4px);box-shadow:0 22px 44px -22px rgba(42,48,48,.18)}
+    .fee-name{font-family:var(--serif);font-size:1.5rem;font-weight:600;color:var(--ink);margin-bottom:6px;letter-spacing:-.01em}
+    .fee-price{font-family:var(--serif);font-size:2.3rem;font-weight:500;color:var(--sage-deep);line-height:1;margin-bottom:6px;letter-spacing:-.015em}
+    .fee-price-note{font-size:.86rem;color:var(--ink-mute);margin-bottom:18px;font-style:italic}
+    .fee-ideal{font-size:.9rem;color:var(--ink-soft);padding:12px 16px;background:var(--cream-warm);border-radius:12px;margin-bottom:22px;border:1px dashed var(--ink-line-md)}
+    .fee-card:nth-child(2) .fee-ideal{background:rgba(255,254,250,.08);border-color:rgba(255,254,250,.16)}
+    .fee-perks{list-style:none;display:flex;flex-direction:column;gap:11px;flex:1}
+    .fee-perks li{font-size:.94rem;color:var(--ink-soft);line-height:1.55;padding-left:26px;position:relative}
+    .fee-perks li::before{content:'✓';position:absolute;left:0;top:1px;color:var(--sage-deep);font-weight:700;font-size:1rem}
+    .fee-fine{font-size:.84rem;color:var(--ink-mute);text-align:center;font-style:italic;line-height:1.7;max-width:780px;margin:0 auto;padding:20px 24px;background:var(--paper);border-radius:14px;border:1px dashed var(--ink-line-md)}
+
+    /* ── APPROACH (asymmetric pillars) ──────────────────────── */
+    .approach{background:var(--cream);position:relative}
+    .approach-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(280px,1fr));gap:24px}
+    .pillar{background:var(--paper);border:1px solid var(--ink-line);border-radius:22px;padding:34px 30px;transition:transform .3s,box-shadow .3s}
+    .pillar:nth-child(odd){transform:translateY(8px)}
+    .pillar:hover{transform:translateY(0);box-shadow:0 20px 44px -22px rgba(42,48,48,.16)}
+    .pillar-icon{width:54px;height:54px;border-radius:50%;background:var(--peach-tint);color:var(--ink);display:flex;align-items:center;justify-content:center;font-size:1.6rem;margin-bottom:18px}
+    .pillar-title{font-family:var(--serif);font-size:1.32rem;font-weight:600;color:var(--ink);margin-bottom:8px;letter-spacing:-.01em}
+    .pillar-body{font-size:.94rem;color:var(--ink-soft);line-height:1.75}
+
+    /* ── SERVICES ───────────────────────────────────────────── */
+    .services{background:var(--cream-warm);border-top:1px solid var(--ink-line)}
+    .services-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(290px,1fr));gap:20px}
+    .service-card{background:var(--paper);border:1px solid var(--ink-line);border-radius:18px;padding:30px 28px;transition:transform .25s,box-shadow .25s}
+    .service-card:hover{transform:translateY(-3px);box-shadow:0 18px 36px -22px rgba(42,48,48,.14)}
+    .service-icon{width:46px;height:46px;border-radius:14px;background:var(--sage-tint);color:var(--sage-deep);display:flex;align-items:center;justify-content:center;font-size:1.4rem;margin-bottom:16px}
+    .service-name{font-family:var(--serif);font-size:1.22rem;font-weight:600;color:var(--ink);margin-bottom:8px;letter-spacing:-.01em}
+    .service-body{font-size:.92rem;color:var(--ink-soft);line-height:1.7}
+
+    /* ── PROCESS ───────────────────────────────────────────── */
+    .process{background:var(--cream)}
+    .process-grid{display:grid;grid-template-columns:repeat(4,1fr);gap:24px;position:relative}
+    .process-grid::before{content:'';position:absolute;top:48px;left:8%;right:8%;height:2px;background:repeating-linear-gradient(90deg,var(--sage) 0 6px,transparent 6px 14px);opacity:.4;z-index:0}
+    .process-step{position:relative;z-index:1;text-align:center;padding:0 8px}
+    .process-icon{width:100px;height:100px;border-radius:50%;background:var(--paper);border:2px solid var(--sage);color:var(--sage-deep);font-size:2.1rem;display:flex;align-items:center;justify-content:center;margin:0 auto 22px;position:relative;box-shadow:0 14px 28px -14px rgba(107,144,128,.32)}
+    .process-num{position:absolute;top:-8px;right:-8px;width:30px;height:30px;border-radius:50%;background:var(--peach);color:#2a3030;font-family:var(--serif);font-weight:600;font-size:.85rem;display:flex;align-items:center;justify-content:center;box-shadow:0 4px 10px rgba(232,168,124,.5)}
+    .process-title{font-family:var(--serif);font-size:1.2rem;font-weight:600;color:var(--ink);margin-bottom:9px;letter-spacing:-.01em}
+    .process-body{font-size:.91rem;color:var(--ink-soft);line-height:1.7;max-width:230px;margin:0 auto 12px}
+    .process-duration{display:inline-block;font-family:var(--hand);font-size:1.05rem;font-weight:500;color:var(--sage-deep)}
+
+    /* ── ABOUT ──────────────────────────────────────────────── */
+    .about{background:var(--cream-warm);border-top:1px solid var(--ink-line)}
+    .about-grid{display:grid;grid-template-columns:.9fr 1.1fr;gap:64px;align-items:start}
+    .about-photo{position:relative;border-radius:24px;overflow:hidden;background:linear-gradient(160deg,var(--peach-soft),var(--peach));aspect-ratio:4/5;box-shadow:0 30px 60px -28px rgba(42,48,48,.22)}
+    .about-photo img{width:100%;height:100%;object-fit:cover;display:block}
+    .about-photo-fallback{position:absolute;inset:0;display:flex;align-items:center;justify-content:center}
+    .about-years{position:absolute;bottom:24px;left:24px;background:var(--paper);padding:14px 18px;border-radius:14px;font-family:var(--serif);font-size:1.5rem;font-weight:500;color:var(--ink);box-shadow:0 12px 24px -10px rgba(42,48,48,.2);letter-spacing:-.01em}
+    .about-years small{display:block;font-family:var(--sans);font-size:.74rem;color:var(--ink-mute);font-weight:500;letter-spacing:.04em;text-transform:uppercase;margin-top:2px}
+    .about-body{font-size:1rem;color:var(--ink-soft);line-height:1.85;margin-bottom:30px;white-space:pre-line}
+    .creds-list{display:flex;flex-wrap:wrap;gap:8px;margin-top:6px}
+    .cred-pill{background:var(--sage-tint);color:var(--sage-deep);font-size:.82rem;font-weight:600;padding:8px 14px;border-radius:100px;display:inline-flex;align-items:center;gap:6px}
+    .cred-pill::before{content:'◆';color:var(--gold);font-size:.55rem}
+
+    /* ── ARTICLES ──────────────────────────────────────────── */
+    .articles{background:var(--cream)}
+    .articles-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(280px,1fr));gap:22px}
+    .article-card{background:var(--paper);border:1px solid var(--ink-line);border-radius:18px;padding:30px;display:flex;flex-direction:column;transition:transform .25s,box-shadow .25s;cursor:pointer}
+    .article-card:hover{transform:translateY(-3px);box-shadow:0 18px 36px -20px rgba(42,48,48,.14)}
+    .article-category{font-family:var(--hand);font-size:1.15rem;font-weight:500;color:var(--peach);margin-bottom:8px}
+    .article-title{font-family:var(--serif);font-size:1.3rem;font-weight:500;color:var(--ink);margin-bottom:10px;line-height:1.3;letter-spacing:-.01em}
+    .article-body{font-size:.92rem;color:var(--ink-soft);line-height:1.7;margin-bottom:18px;flex:1}
+    .article-meta{display:flex;align-items:center;gap:8px;font-size:.82rem;color:var(--ink-mute);padding-top:14px;border-top:1px dashed var(--ink-line-md)}
+    .article-meta::after{content:'→';margin-left:auto;font-size:1.1rem;color:var(--sage-deep);font-weight:600}
+
+    /* ── TESTIMONIALS (Polaroid style) ─────────────────────── */
+    .testi{background:var(--cream-warm);border-top:1px solid var(--ink-line);position:relative;overflow:hidden}
+    .testi-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(290px,1fr));gap:32px}
+    .testi-card{background:var(--paper);padding:32px 30px 30px;border-radius:8px;display:flex;flex-direction:column;box-shadow:0 18px 36px -22px rgba(42,48,48,.18);transition:transform .3s}
+    .testi-card:nth-child(1){transform:rotate(-1deg)}
+    .testi-card:nth-child(2){transform:rotate(0.8deg)}
+    .testi-card:nth-child(3){transform:rotate(-0.5deg)}
+    .testi-card:nth-child(4){transform:rotate(1.2deg)}
+    .testi-card:nth-child(5){transform:rotate(-1.4deg)}
+    .testi-card:hover{transform:rotate(0deg) translateY(-4px)}
+    .testi-product{font-family:var(--hand);font-size:1.1rem;color:var(--peach);font-weight:500;margin-bottom:14px}
+    .testi-quote{font-family:var(--serif);font-size:1.04rem;color:var(--ink);line-height:1.65;margin-bottom:22px;flex:1;font-style:italic}
+    .testi-author{display:flex;align-items:center;gap:12px;border-top:1px dashed var(--ink-line-md);padding-top:18px}
+    .testi-avatar{width:46px;height:46px;border-radius:50%;background:linear-gradient(135deg,var(--sage),var(--sage-deep));color:#fffefa;display:flex;align-items:center;justify-content:center;font-family:var(--serif);font-weight:600;font-size:.95rem;flex-shrink:0}
+    .testi-name{display:block;font-weight:600;color:var(--ink);font-size:.94rem}
+    .testi-role{display:block;font-size:.82rem;color:var(--ink-mute);margin-top:2px}
+
+    /* ── GRIEVANCE ─────────────────────────────────────────── */
+    .grievance{background:var(--cream)}
+    .gv-card{background:var(--paper);border:1px solid var(--ink-line-md);border-radius:24px;padding:48px;box-shadow:0 18px 48px -24px rgba(42,48,48,.12)}
+    .gv-grid{display:grid;grid-template-columns:1fr 1.2fr;gap:48px;align-items:start}
+    .gv-officer{background:linear-gradient(160deg,var(--sage-deep),var(--ink));color:#fffefa;border-radius:20px;padding:32px;position:sticky;top:100px}
+    .gv-officer-eyebrow{font-family:var(--hand);font-size:1.05rem;color:var(--peach);margin-bottom:6px}
+    .gv-officer-name{font-family:var(--serif);font-size:1.55rem;font-weight:600;margin-bottom:4px;letter-spacing:-.01em}
+    .gv-officer-role{color:rgba(255,254,250,.72);font-size:.92rem;margin-bottom:24px}
+    .gv-info{display:grid;gap:14px;padding-top:20px;border-top:1px dashed rgba(255,254,250,.16)}
+    .gv-info-row{display:grid;grid-template-columns:78px 1fr;gap:12px;font-size:.86rem}
+    .gv-info-key{color:rgba(255,254,250,.55);font-weight:500;text-transform:uppercase;letter-spacing:.05em;font-size:.7rem;padding-top:2px}
+    .gv-info-val{color:#fffefa;line-height:1.55;word-break:break-word}
+    .gv-escalation{display:flex;flex-direction:column;gap:14px}
+    .gv-step{background:var(--cream-warm);border:1px solid var(--ink-line);border-left:4px solid var(--sage);border-radius:14px;padding:20px 22px}
+    .gv-step-head{display:flex;align-items:baseline;justify-content:space-between;gap:10px;flex-wrap:wrap;margin-bottom:8px}
+    .gv-level{font-family:var(--serif);font-size:1rem;font-weight:600;color:var(--sage-deep);letter-spacing:-.01em}
+    .gv-tat{font-family:var(--hand);font-size:1rem;font-weight:500;color:var(--peach)}
+    .gv-step-body{font-size:.91rem;color:var(--ink-soft);line-height:1.7;margin-bottom:8px}
+    .gv-step-contact{font-size:.84rem;font-weight:500;font-family:ui-monospace,monospace;background:var(--sage-tint);padding:6px 10px;border-radius:6px;display:inline-block;color:var(--sage-deep)}
+
+    /* ── DISCLOSURES ───────────────────────────────────────── */
+    .disclosures{background:var(--cream-warm);border-top:1px solid var(--ink-line)}
+    .disc-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(290px,1fr));gap:18px}
+    .disc-card{background:var(--paper);border:1px solid var(--ink-line);border-radius:16px;padding:24px;display:flex;gap:16px;align-items:flex-start;transition:transform .25s,box-shadow .25s,border-color .25s}
+    .disc-card:hover{transform:translateY(-2px);border-color:var(--sage);box-shadow:0 14px 30px -18px rgba(42,48,48,.14)}
+    .disc-icon{width:42px;height:42px;border-radius:50%;background:var(--peach-tint);color:var(--ink);display:flex;align-items:center;justify-content:center;font-size:1.2rem;flex-shrink:0}
+    .disc-title{font-family:var(--serif);font-size:1.05rem;font-weight:600;color:var(--ink);margin-bottom:5px;letter-spacing:-.005em}
+    .disc-body{font-size:.86rem;color:var(--ink-soft);line-height:1.6}
+
+    /* ── CTA BAND ──────────────────────────────────────────── */
+    .cta-band{background:linear-gradient(160deg,var(--ink) 0%,var(--sage-deep) 100%);color:#fffefa;padding:88px 0;position:relative;overflow:hidden}
+    .cta-band::before{content:'';position:absolute;right:-220px;top:-200px;width:560px;height:560px;border-radius:50%;background:radial-gradient(circle,rgba(232,168,124,.18) 0%,transparent 70%);pointer-events:none}
+    .cta-band::after{content:'';position:absolute;left:-180px;bottom:-160px;width:420px;height:420px;border-radius:50%;background:radial-gradient(circle,rgba(199,158,76,.16) 0%,transparent 70%);pointer-events:none}
+    .cta-inner{display:grid;grid-template-columns:1.4fr 1fr;gap:36px;align-items:center;position:relative}
+    .cta-title{font-family:var(--serif);font-size:clamp(2rem,3.3vw,2.8rem);font-weight:500;line-height:1.2;margin-bottom:18px;letter-spacing:-.01em;color:#fffefa}
+    .cta-sub{color:rgba(255,254,250,.84);font-size:1.04rem;line-height:1.75}
+    .cta-actions{text-align:right;display:flex;flex-direction:column;align-items:flex-end;gap:12px}
+    .cta-actions .btn-primary{background:var(--peach);color:var(--ink);box-shadow:0 14px 32px rgba(232,168,124,.4)}
+    .cta-actions .btn-primary:hover{background:var(--peach-soft)}
+    .cta-note{font-size:.8rem;color:rgba(255,254,250,.6)}
+    .cta-disclaim{font-size:.78rem;color:rgba(255,254,250,.58);margin-top:26px;font-style:italic;line-height:1.7;border-top:1px dashed rgba(255,254,250,.18);padding-top:22px}
+
+    /* ── CONTACT ───────────────────────────────────────────── */
+    .contact{background:var(--cream);border-top:1px solid var(--ink-line)}
+    .contact-grid{display:grid;grid-template-columns:1fr 1.2fr;gap:64px;align-items:start}
+    .contact-info{margin-top:28px;padding-top:24px;border-top:1px dashed var(--ink-line-md);display:grid;gap:12px;font-size:.95rem;color:var(--ink-soft)}
+    .contact-info b{color:var(--ink);font-weight:600}
+    .form-card{background:var(--paper);border:1px solid var(--ink-line);border-radius:20px;padding:38px;box-shadow:0 18px 44px -22px rgba(42,48,48,.1)}
+    .fg{display:flex;flex-direction:column;gap:6px;margin-bottom:18px}
+    .fg label{font-size:.84rem;font-weight:600;color:var(--ink)}
+    .fg input,.fg select,.fg textarea{padding:13px 16px;border:1.5px solid var(--ink-line-md);border-radius:12px;background:var(--cream);font-family:inherit;font-size:.95rem;color:var(--ink);outline:none;transition:border-color .2s,background .2s}
+    .fg input:focus,.fg select:focus,.fg textarea:focus{border-color:var(--sage-deep);background:var(--paper)}
+    .fg select option{background:#fff;color:var(--ink)}
+    .fg-row{display:grid;grid-template-columns:1fr 1fr;gap:12px}
+    .form-submit{width:100%;background:var(--ink);color:#fffefa;padding:15px;border-radius:12px;font-size:.96rem;font-weight:600;transition:background .2s,transform .15s}
+    .form-submit:hover{background:var(--sage-deep);transform:translateY(-1px)}
+    .form-disclaim{font-size:.78rem;color:var(--ink-mute);margin-top:12px;line-height:1.6}
+
+    /* ── FOOTER ────────────────────────────────────────────── */
+    .footer{background:var(--ink);color:rgba(255,254,250,.65);padding:64px 0 0}
+    .footer-grid{display:grid;grid-template-columns:1.4fr 1fr 1fr 1fr;gap:44px;margin-bottom:44px}
+    .f-brand{font-family:var(--serif);color:#fffefa;font-size:1.4rem;font-weight:500;margin-bottom:8px;letter-spacing:-.01em}
+    .f-tag{font-size:.88rem;color:rgba(255,254,250,.5);max-width:300px;line-height:1.7;margin-bottom:14px}
+    .f-reg{font-size:.78rem;font-weight:600;color:var(--gold);margin-bottom:6px;letter-spacing:.02em}
+    .f-cert-row{display:flex;flex-wrap:wrap;gap:8px;margin-top:10px}
+    .f-cert{font-size:.7rem;font-weight:600;color:#fffefa;background:rgba(255,254,250,.06);border:1px solid rgba(255,254,250,.14);padding:6px 11px;border-radius:100px}
+    .f-col-title{font-family:var(--serif);font-size:.95rem;font-weight:600;color:#fffefa;margin-bottom:16px;letter-spacing:-.005em}
+    .f-links{list-style:none;display:flex;flex-direction:column;gap:10px}
+    .f-links a{color:rgba(255,254,250,.55);font-size:.88rem;transition:color .2s}
+    .f-links a:hover{color:#fffefa}
+    .footer-disclaim{padding:24px 0;border-top:1px solid rgba(255,254,250,.08);font-size:.76rem;color:rgba(255,254,250,.5);line-height:1.8;font-style:italic}
+    .footer-bottom{border-top:1px solid rgba(255,254,250,.08);padding:20px 0;display:flex;justify-content:space-between;align-items:center;flex-wrap:wrap;gap:16px;font-size:.78rem;color:rgba(255,254,250,.42)}
+
+    /* ── RESPONSIVE ────────────────────────────────────────── */
+    @media(max-width:980px){
+      .brand{font-size:1.15rem}
+      .nav-cta{padding:9px 16px;font-size:.86rem}
+      .hero-grid,.about-grid,.gv-grid,.cta-inner,.contact-grid{grid-template-columns:1fr;gap:48px}
+      .gv-officer{position:static}
+      .process-grid{grid-template-columns:repeat(2,1fr)}
+      .process-grid::before{display:none}
+      .footer-grid{grid-template-columns:1fr 1fr;gap:32px}
+      .cta-actions{text-align:left;align-items:flex-start}
+      .portrait-disc{width:340px;height:340px}
+      .portrait-card{width:300px}
+      .about-photo{aspect-ratio:1/1;max-width:420px;margin:0 auto}
+      .pillar:nth-child(odd){transform:translateY(0)}
+    }
+    @media(max-width:640px){
+      .container{padding:0 22px}
+      .nav-inner{padding:14px 0}
+      .nav-links li:not(:last-child){display:none}
+      .brand{font-size:1.02rem;gap:10px}
+      .brand-mark{width:34px;height:34px;font-size:1rem}
+      .nav-cta{padding:8px 14px;font-size:.82rem}
+      .topbar{font-size:.68rem;padding:7px 0}
+      .topbar-inner{flex-direction:column;gap:6px;align-items:flex-start}
+      .topbar-info{gap:6px 12px}
+      .topbar-links{display:none}
+      .section-pad{padding:72px 0}
+      .process-grid{grid-template-columns:1fr}
+      .footer-grid{grid-template-columns:1fr}
+      .fg-row{grid-template-columns:1fr}
+      .gv-card{padding:30px 22px}
+      .portrait-card{width:280px;padding:22px}
+      .portrait-disc{width:300px;height:300px}
+      .float-sticker-1{display:none}
+      .testi-card{transform:none !important}
+    }
+  </style>
+</head>
+<body>
+
+<div class="topbar">
+  <div class="topbar-inner">
+    <div class="topbar-info">
+      <span>SEBI RIA: <b>INA000012345</b></span>
+      <span>Type: <b>Individual</b></span>
+      <span>BASL: <b>BASL2125</b></span>
+    </div>
+    <div class="topbar-links">
+      <a href="#fees">Fees</a>
+      <a href="#disclosures">Disclosures</a>
+      <a href="#grievance">Grievance</a>
+      <a href="https://scores.sebi.gov.in" target="_blank" rel="noopener">SCORES ↗</a>
+    </div>
+  </div>
+</div>
+
+<nav class="nav">
+  <div class="container nav-inner">
+    <a href="#" class="brand">
+      <span class="brand-mark">s</span>
+      <span>Saaransh Advisory</span>
+    </a>
+    <ul class="nav-links">
+      <li><a href="#fees">Fees</a></li>
+      <li><a href="#approach">Approach</a></li>
+      <li><a href="#services">What we do</a></li>
+      <li><a href="#about">About</a></li>
+      <li><a href="#articles">Journal</a></li>
+      <li><a href="#contact" class="nav-cta">Book a call</a></li>
+    </ul>
+  </div>
+</nav>
+
+<section class="hero">
+  <div class="container hero-grid">
+    <div class="reveal">
+      <div class="hero-eyebrow">SEBI Registered Investment Adviser Â· Fee-only Â· INA000012345</div>
+      <h1 class="hero-title">Your money decisions,<br><em>finally uncomplicated.</em></h1>
+      <p class="hero-sub">A SEBI-registered fee-only investment adviser. No commissions on what we recommend, no pressure to act â€” just clear thinking, written down, and reviewed with you every quarter.</p>
+      <div class="hero-actions">
+        <a href="#contact" class="btn btn-primary">Book a call →</a>
+        <a href="#approach" class="btn btn-ghost">How we work</a>
+      </div>
+      <div class="hero-creds">
+        <span class="hero-cred">SEBI RIA · INA000012345</span>
+        <span class="hero-cred">Fee-only · No commissions</span>
+        <span class="hero-cred">BASL Member</span>
+        <span class="hero-cred">CFP · NISM XA · XB</span>
+      </div>
+    </div>
+
+    <div class="portrait-wrap reveal">
+      <div class="portrait-disc"></div>
+      <div class="float-sticker float-sticker-1">SEBI Registered<b>since 2018</b></div>
+      <div class="portrait-card">
+        <div class="portrait-svg">
+          
+            <!-- Inline SVG portrait placeholder — warm illustration -->
+            <svg viewBox="0 0 280 240" xmlns="http://www.w3.org/2000/svg" style="width:100%;height:100%;display:block">
+              <defs>
+                <linearGradient id="bgg16" x1="0" y1="0" x2="0" y2="1">
+                  <stop offset="0%" stop-color="#fcf3e2"/>
+                  <stop offset="100%" stop-color="#f3ebda"/>
+                </linearGradient>
+                <linearGradient id="skin16" x1="0" y1="0" x2="0" y2="1">
+                  <stop offset="0%" stop-color="#f1c79a"/>
+                  <stop offset="100%" stop-color="#e8a87c"/>
+                </linearGradient>
+              </defs>
+              <rect width="280" height="240" fill="url(#bgg16)"/>
+              <!-- ambient plant -->
+              <path d="M 30 220 Q 35 150 55 130 Q 60 145 50 175 Q 45 200 30 220 Z" fill="#6b9080" opacity=".4"/>
+              <path d="M 250 230 Q 245 170 230 150 Q 225 165 235 195 Q 240 215 250 230 Z" fill="#6b9080" opacity=".35"/>
+              <!-- shoulders/body -->
+              <path d="M 80 240 L 80 200 Q 140 160 200 200 L 200 240 Z" fill="#4f6f63"/>
+              <!-- neck -->
+              <rect x="128" y="125" width="24" height="38" rx="8" fill="url(#skin16)"/>
+              <!-- head -->
+              <ellipse cx="140" cy="100" rx="42" ry="48" fill="url(#skin16)"/>
+              <!-- hair -->
+              <path d="M 98 95 Q 95 50 140 50 Q 185 50 182 92 Q 185 80 178 70 Q 170 56 140 56 Q 110 56 102 70 Q 95 82 98 95 Z" fill="#3a2820"/>
+              <path d="M 100 105 Q 96 130 108 145 L 92 142 Q 88 120 100 105 Z" fill="#3a2820"/>
+              <!-- subtle smile -->
+              <path d="M 130 118 Q 140 124 150 118" stroke="#2a1810" stroke-width="2" fill="none" stroke-linecap="round"/>
+              <!-- eyes -->
+              <ellipse cx="125" cy="98" rx="3" ry="4" fill="#2a1810"/>
+              <ellipse cx="155" cy="98" rx="3" ry="4" fill="#2a1810"/>
+              <!-- earrings -->
+              <circle cx="100" cy="108" r="2.5" fill="#c79e4c"/>
+              <circle cx="180" cy="108" r="2.5" fill="#c79e4c"/>
+              <!-- collar accent -->
+              <path d="M 125 165 L 140 175 L 155 165 L 152 188 L 128 188 Z" fill="#fcf3e2" opacity=".9"/>
+            </svg>
+          
+        </div>
+        <div class="portrait-name">Aanya Bhargava, CFP</div>
+        <div class="portrait-role">Principal Officer · SEBI RIA</div>
+        <div class="portrait-quote">I&#39;d rather lose a client than mis-sell to them.</div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section id="fees" class="fees section-pad">
+  <div class="container">
+    <div class="section-head reveal">
+      <div class="section-eyebrow">How we charge</div>
+      <h2 class="section-title">Fee-only. No commissions. Ever.</h2>
+      <p class="section-body">We are paid only by you â€” never by AMCs, insurers, or brokers. It means we have no incentive to recommend one fund over another, or to suggest you buy anything you don&#39;t need.</p>
+    </div>
+    <div class="fees-grid">
+      
+        <article class="fee-card reveal">
+          <div class="fee-name">Flat Fee Plan</div>
+          <div class="fee-price">â‚¹60,000 / year</div>
+          <div class="fee-price-note">Per family Â· Paid quarterly</div>
+          <div class="fee-ideal">★ For investors with assets under â‚¹50 lakh</div>
+          
+          <ul class="fee-perks">
+            <li>Comprehensive financial plan, refreshed annually</li><li>Quarterly portfolio review calls (60 mins each)</li><li>Unlimited email questions across the year</li><li>Tax-saving review every January</li><li>Goal-mapping for retirement, education, and home</li>
+          </ul>
+          
+        </article>
+      
+        <article class="fee-card reveal">
+          <div class="fee-name">AUA-Linked Plan</div>
+          <div class="fee-price">0.75% of AUA / year</div>
+          <div class="fee-price-note">Capped at 2.5% per SEBI norms</div>
+          <div class="fee-ideal">★ For investors with assets over â‚¹50 lakh</div>
+          
+          <ul class="fee-perks">
+            <li>Everything in the Flat Fee Plan, plus:</li><li>Monthly portfolio check-in calls (45 mins each)</li><li>Estate planning review with an empanelled lawyer</li><li>Dedicated WhatsApp line for urgent decisions</li><li>Annual in-person review at our Bandra office</li>
+          </ul>
+          
+        </article>
+      
+    </div>
+    <div class="fee-fine reveal">Per SEBI (Investment Advisers) Regulations 2013, RIA fees do not exceed 2.5% of Assets under Advice per annum, or â‚¹1,25,000 fixed per family per annum. We never accept trail commissions, referral fees, or kickbacks on any product we recommend.</div>
+  </div>
+</section>
+
+<section id="approach" class="approach section-pad">
+  <div class="container">
+    <div class="section-head reveal">
+      <div class="section-eyebrow">What you can expect</div>
+      <h2 class="section-title">Not a salesperson. A second brain for your money.</h2>
+      <p class="section-body">You&#39;ve probably been pitched a lot of things. We pitch nothing. We listen, we plan with you on a shared screen, and we put it all in writing. Then we review it together â€” four times a year, forever.</p>
+    </div>
+    <div class="approach-grid">
+      
+        <article class="pillar reveal">
+          <div class="pillar-icon">ðŸ¤</div>
+          <h3 class="pillar-title">Fiduciary by law</h3>
+          <p class="pillar-body">As a SEBI-registered RIA, we are legally obligated to act in your interest first â€” not the AMC&#39;s, not the insurer&#39;s, not ours.</p>
+        </article>
+      
+        <article class="pillar reveal">
+          <div class="pillar-icon">ðŸª¶</div>
+          <h3 class="pillar-title">Fee-only model</h3>
+          <p class="pillar-body">Our income comes entirely from the fee you pay. No trail commissions, no referral kickbacks, no product targets to hit.</p>
+        </article>
+      
+        <article class="pillar reveal">
+          <div class="pillar-icon">ðŸ“š</div>
+          <h3 class="pillar-title">Evidence-based planning</h3>
+          <p class="pillar-body">Asset allocation, low-cost index exposure, goal-mapped buckets. We don&#39;t chase tips, themes, or someone&#39;s trading idea.</p>
+        </article>
+      
+        <article class="pillar reveal">
+          <div class="pillar-icon">ðŸ•¯</div>
+          <h3 class="pillar-title">Calm, not clever</h3>
+          <p class="pillar-body">We help you make boring, repeatable decisions that quietly compound â€” not exciting ones that make for great stories at parties.</p>
+        </article>
+      
+    </div>
+  </div>
+</section>
+
+<section id="services" class="services section-pad">
+  <div class="container">
+    <div class="section-head reveal">
+      <div class="section-eyebrow">What we help with</div>
+      <h2 class="section-title">A full financial life â€” handled together.</h2>
+      <p class="section-body">From your first SIP to your estate plan, we work through every money decision with you. We don&#39;t sell insurance, mutual funds, or any product â€” we just help you make the choice yourself.</p>
+    </div>
+    <div class="services-grid">
+      
+        <article class="service-card reveal">
+          <div class="service-icon">ðŸŒ±</div>
+          <h3 class="service-name">Financial Planning</h3>
+          <p class="service-body">A written plan that maps your income, goals, and timelines. Reviewed and refreshed every year as life shifts.</p>
+        </article>
+      
+        <article class="service-card reveal">
+          <div class="service-icon">ðŸŽ¯</div>
+          <h3 class="service-name">Goal Planning</h3>
+          <p class="service-body">Retirement, child&#39;s education, home down-payment, sabbatical fund â€” each goal with its own portfolio bucket and timeline.</p>
+        </article>
+      
+        <article class="service-card reveal">
+          <div class="service-icon">ðŸªª</div>
+          <h3 class="service-name">Investment Advisory</h3>
+          <p class="service-body">Direct mutual funds, ETFs, fixed deposits, bonds. Allocation by asset class, not by product â€” and never by commission.</p>
+        </article>
+      
+        <article class="service-card reveal">
+          <div class="service-icon">ðŸ§¾</div>
+          <h3 class="service-name">Tax Planning</h3>
+          <p class="service-body">Optimise across 80C, 80D, capital-gains, NRE/NRO, and ESOP situations. Built into the plan, not bolted on in March.</p>
+        </article>
+      
+        <article class="service-card reveal">
+          <div class="service-icon">ðŸ¡</div>
+          <h3 class="service-name">Estate Planning Review</h3>
+          <p class="service-body">Will-writing, nominations, and succession structure. We coordinate with an empanelled lawyer for the legal side.</p>
+        </article>
+      
+        <article class="service-card reveal">
+          <div class="service-icon">ðŸ›¡</div>
+          <h3 class="service-name">Insurance Review</h3>
+          <p class="service-body">We review your existing covers and tell you what to keep, lapse, or top up. We earn nothing on any insurance product.</p>
+        </article>
+      
+    </div>
+  </div>
+</section>
+
+<section class="process section-pad">
+  <div class="container">
+    <div class="section-head center reveal">
+      <div class="section-eyebrow">How we work together</div>
+      <h2 class="section-title">From first call to first review â€” without the pitch.</h2>
+    </div>
+    <div class="process-grid">
+      
+        <div class="process-step reveal">
+          <div class="process-icon">â˜•<span class="process-num">01</span></div>
+          <h3 class="process-title">Discovery call</h3>
+          <p class="process-body">A 30-minute chat over coffee or video. We listen to where you are, what worries you, and what you want money to do for you.</p>
+          <span class="process-duration">~ 30 minutes</span>
+        </div>
+      
+        <div class="process-step reveal">
+          <div class="process-icon">ðŸ“<span class="process-num">02</span></div>
+          <h3 class="process-title">Written plan</h3>
+          <p class="process-body">A 12â€“20 page financial plan, drafted with you on a shared screen across two working sessions. You sign it only if it makes sense.</p>
+          <span class="process-duration">~ 2â€“3 weeks</span>
+        </div>
+      
+        <div class="process-step reveal">
+          <div class="process-icon">ðŸŒ¿<span class="process-num">03</span></div>
+          <h3 class="process-title">Implementation</h3>
+          <p class="process-body">We help you set up SIPs, switch out high-cost funds, complete KYC, and sequence the transitions. No products are sold â€” only direct routes used.</p>
+          <span class="process-duration">~ 2 weeks</span>
+        </div>
+      
+        <div class="process-step reveal">
+          <div class="process-icon">ðŸƒ<span class="process-num">04</span></div>
+          <h3 class="process-title">Quarterly catch-ups</h3>
+          <p class="process-body">A 60-minute review every quarter â€” what changed, what to leave alone, and what to revisit. Always with notes you keep.</p>
+          <span class="process-duration">~ Ongoing</span>
+        </div>
+      
+    </div>
+  </div>
+</section>
+
+<section id="about" class="about section-pad">
+  <div class="container about-grid">
+    <div class="about-photo reveal">
+      
+        <div class="about-photo-fallback">
+          <svg viewBox="0 0 320 400" xmlns="http://www.w3.org/2000/svg" style="width:80%;height:80%">
+            <defs>
+              <linearGradient id="abg16" x1="0" y1="0" x2="0" y2="1">
+                <stop offset="0%" stop-color="#fcf3e2"/>
+                <stop offset="100%" stop-color="#f3ebda"/>
+              </linearGradient>
+              <linearGradient id="askin16" x1="0" y1="0" x2="0" y2="1">
+                <stop offset="0%" stop-color="#f1c79a"/>
+                <stop offset="100%" stop-color="#e8a87c"/>
+              </linearGradient>
+            </defs>
+            <ellipse cx="160" cy="380" rx="180" ry="40" fill="url(#abg16)"/>
+            <path d="M 90 400 L 90 320 Q 160 260 230 320 L 230 400 Z" fill="#4f6f63"/>
+            <rect x="148" y="240" width="24" height="36" rx="8" fill="url(#askin16)"/>
+            <ellipse cx="160" cy="210" rx="48" ry="55" fill="url(#askin16)"/>
+            <path d="M 112 205 Q 110 150 160 150 Q 210 150 208 200 Q 211 188 204 175 Q 194 158 160 158 Q 126 158 116 175 Q 109 188 112 205 Z" fill="#3a2820"/>
+            <path d="M 114 220 Q 110 250 124 268 L 106 263 Q 100 240 114 220 Z" fill="#3a2820"/>
+            <ellipse cx="142" cy="208" rx="3.5" ry="4.5" fill="#2a1810"/>
+            <ellipse cx="178" cy="208" rx="3.5" ry="4.5" fill="#2a1810"/>
+            <path d="M 148 232 Q 160 240 172 232" stroke="#2a1810" stroke-width="2.5" fill="none" stroke-linecap="round"/>
+            <circle cx="115" cy="220" r="3" fill="#c79e4c"/>
+            <circle cx="205" cy="220" r="3" fill="#c79e4c"/>
+            <path d="M 144 285 L 160 298 L 176 285 L 173 318 L 147 318 Z" fill="#fcf3e2" opacity=".95"/>
+          </svg>
+        </div>
+      
+      <div class="about-years">14 years in personal finance<small>in personal finance</small></div>
+    </div>
+    <div class="reveal">
+      <div class="section-eyebrow">About the adviser</div>
+      <h2 class="section-title">A small practice <em>by design.</em></h2>
+      <p class="about-body">I started Saaransh Advisory in 2018 after a decade in wealth management, watching too many families being sold products they didn&#39;t need. The model never sat well with me â€” being paid by the same companies whose products I was supposed to assess. So I shut that down, completed NISM-X-A and NISM-X-B, registered with SEBI as an Investment Adviser (INA000012345), and went fee-only. Today I work with 40 families across India. I deliberately keep the practice small so I can know every client&#39;s plan by name.</p>
+      <div class="creds-list">
+        <span class="cred-pill">SEBI RIA Â· INA000012345</span><span class="cred-pill">NISM Series-X-A Â· Level 1</span><span class="cred-pill">NISM Series-X-B Â· Level 2</span><span class="cred-pill">CFP â€” Certified Financial Planner</span><span class="cred-pill">BASL Member Â· BASL2125</span><span class="cred-pill">14 years in personal finance</span>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section id="articles" class="articles section-pad">
+  <div class="container">
+    <div class="section-head reveal">
+      <div class="section-eyebrow">From the journal</div>
+      <h2 class="section-title">Notes we send to clients â€” and to you.</h2>
+      <p class="section-body">Plain-English writing on the questions we get asked most often. No bait-and-switch, no scary headlines â€” just the kind of explanation a friend who happens to be a CFP would write.</p>
+    </div>
+    <div class="articles-grid">
+      
+        <article class="article-card reveal">
+          <div class="article-category">Planning</div>
+          <h3 class="article-title">A boring guide to setting your first financial goal</h3>
+          <p class="article-body">The four numbers you actually need before you can map a portfolio. Hint: returns isn&#39;t one of them.</p>
+          <div class="article-meta">6 min read</div>
+        </article>
+      
+        <article class="article-card reveal">
+          <div class="article-category">Investing</div>
+          <h3 class="article-title">Why we mostly recommend index funds (and when we don&#39;t)</h3>
+          <p class="article-body">On the difference between active alpha and active fees â€” and how we think about a four-fund portfolio.</p>
+          <div class="article-meta">8 min read</div>
+        </article>
+      
+        <article class="article-card reveal">
+          <div class="article-category">Tax</div>
+          <h3 class="article-title">What changed in this year&#39;s budget for the salaried investor</h3>
+          <p class="article-body">A short rundown on the new vs. old regime, NPS, ESOP taxation, and capital-gains rules to remember.</p>
+          <div class="article-meta">5 min read</div>
+        </article>
+      
+        <article class="article-card reveal">
+          <div class="article-category">Retirement</div>
+          <h3 class="article-title">How much is &#34;enough&#34; â€” a framework, not a number</h3>
+          <p class="article-body">The two-bucket method for retirement corpus â€” one for the worry, one for the warmth.</p>
+          <div class="article-meta">7 min read</div>
+        </article>
+      
+    </div>
+  </div>
+</section>
+
+<section class="testi section-pad">
+  <div class="container">
+    <div class="section-head center reveal">
+      <div class="section-eyebrow">In their own words</div>
+      <h2 class="section-title">A handful of clients, <em>kept for a decade.</em></h2>
+    </div>
+    <div class="testi-grid">
+      
+        <article class="testi-card reveal">
+          <div class="testi-product">Comprehensive financial planning</div>
+          <p class="testi-quote">"For years I felt embarrassed about not understanding my own portfolio. Aanya walked me through it without making me feel small. The plan is two pages I actually read, not forty I never will."</p>
+          <div class="testi-author">
+            <div class="testi-avatar">MB</div>
+            <div><span class="testi-name">Meera Bhatnagar</span><span class="testi-role">Mumbai Â· 41, doctor</span></div>
+          </div>
+        </article>
+      
+        <article class="testi-card reveal">
+          <div class="testi-product">AUA-linked plan</div>
+          <p class="testi-quote">"I came to test out the &#34;fee-only&#34; promise, half expecting an upsell. There never was one. We pay them, they help us, and there is nothing else hidden in the wiring. That trust is the whole product."</p>
+          <div class="testi-author">
+            <div class="testi-avatar">RK</div>
+            <div><span class="testi-name">Rohan Krishnamurthy</span><span class="testi-role">Bengaluru Â· 38, founder</span></div>
+          </div>
+        </article>
+      
+        <article class="testi-card reveal">
+          <div class="testi-product">Estate planning + advisory</div>
+          <p class="testi-quote">"After my husband passed, I had no idea what we owned or what to do with it. They sat with me for hours â€” twice â€” without charging more. Today my finances are organised, and I sleep better."</p>
+          <div class="testi-author">
+            <div class="testi-avatar">SI</div>
+            <div><span class="testi-name">Sushma Iyer</span><span class="testi-role">Chennai Â· 62, retired</span></div>
+          </div>
+        </article>
+      
+    </div>
+  </div>
+</section>
+
+<section id="grievance" class="grievance section-pad">
+  <div class="container">
+    <div class="section-head reveal">
+      <div class="section-eyebrow">Investor Care Â· Grievance Redressal</div>
+      <h2 class="section-title">A clear path, in case anything ever goes wrong.</h2>
+      <p class="section-body">As a SEBI-registered Investment Adviser, Saaransh Advisory maintains a 4-tier grievance mechanism. All complaints are acknowledged within 24 hours and resolved within 21 working days as mandated by SEBI.</p>
+    </div>
+    <div class="gv-card reveal">
+      <div class="gv-grid">
+        <aside class="gv-officer">
+          <div class="gv-officer-eyebrow">Compliance officer</div>
+          <div class="gv-officer-name">Ms. Aanya Bhargava</div>
+          <div class="gv-officer-role">Principal Officer &amp; Compliance Officer</div>
+          <div class="gv-info">
+            <div class="gv-info-row"><span class="gv-info-key">Email</span><span class="gv-info-val">compliance@saaranshadvisory.in</span></div>
+            <div class="gv-info-row"><span class="gv-info-key">Phone</span><span class="gv-info-val">+91 98 1234 5679</span></div>
+            <div class="gv-info-row"><span class="gv-info-key">Address</span><span class="gv-info-val">Saaransh Advisory<br>Bandra West, Mumbai â€” 400050<br>Maharashtra</span></div>
+            <div class="gv-info-row"><span class="gv-info-key">Hours</span><span class="gv-info-val">Monâ€“Fri Â· 10:00 AM â€“ 6:00 PM IST</span></div>
+          </div>
+        </aside>
+        <div class="gv-escalation">
+          
+            <div class="gv-step">
+              <div class="gv-step-head">
+                <span class="gv-level">Level 1 Â· Adviser / Principal Officer</span>
+                <span class="gv-tat">~ Within 7 days</span>
+              </div>
+              <p class="gv-step-body">Write to us directly. Most concerns are addressed in one conversation, almost always within 3 working days.</p>
+              <span class="gv-step-contact">compliance@saaranshadvisory.in</span>
+            </div>
+          
+            <div class="gv-step">
+              <div class="gv-step-head">
+                <span class="gv-level">Level 2 Â· BASL</span>
+                <span class="gv-tat">~ Within 15 days</span>
+              </div>
+              <p class="gv-step-body">BSE Administration &amp; Supervision Ltd supervises SEBI-registered RIAs. Lodge unresolved complaints there.</p>
+              <span class="gv-step-contact">investorgrievance.basl@bseindia.com</span>
+            </div>
+          
+            <div class="gv-step">
+              <div class="gv-step-head">
+                <span class="gv-level">Level 3 Â· SEBI SCORES</span>
+                <span class="gv-tat">~ Per SEBI norms</span>
+              </div>
+              <p class="gv-step-body">SEBI&#39;s official investor grievance portal. Register if unresolved after 21 days.</p>
+              <span class="gv-step-contact">scores.sebi.gov.in Â· 1800-266-7575</span>
+            </div>
+          
+            <div class="gv-step">
+              <div class="gv-step-head">
+                <span class="gv-level">Level 4 Â· SMART ODR</span>
+                <span class="gv-tat">~ Per SMART ODR norms</span>
+              </div>
+              <p class="gv-step-body">Online Dispute Resolution platform for unresolved investor grievances against SEBI-registered intermediaries.</p>
+              <span class="gv-step-contact">smartodr.in</span>
+            </div>
+          
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section id="disclosures" class="disclosures section-pad">
+  <div class="container">
+    <div class="section-head reveal">
+      <div class="section-eyebrow">Required Disclosures</div>
+      <h2 class="section-title">Everything SEBI asks an Investment Adviser to publish â€” gathered here.</h2>
+      <p class="section-body">Plain-language summaries with downloadable PDFs. If anything is unclear, please ask â€” we explain rather than send you to read fine print alone.</p>
+    </div>
+    <div class="disc-grid">
+      
+        <article class="disc-card reveal">
+          <div class="disc-icon">ðŸ¤</div>
+          <div><div class="disc-title">Conflict of Interest Policy</div><div class="disc-body">How we identify, disclose, and mitigate any conflicts that arise in advising you.</div></div>
+        </article>
+      
+        <article class="disc-card reveal">
+          <div class="disc-icon">ðŸ’¼</div>
+          <div><div class="disc-title">Business Model Note</div><div class="disc-body">A one-pager on how we earn (fees only) and what we will never do (sell products for commission).</div></div>
+        </article>
+      
+        <article class="disc-card reveal">
+          <div class="disc-icon">ðŸ“œ</div>
+          <div><div class="disc-title">Terms of Advisory Service</div><div class="disc-body">The standard advisory agreement clients sign â€” fees, scope, termination, and confidentiality.</div></div>
+        </article>
+      
+        <article class="disc-card reveal">
+          <div class="disc-icon">ðŸ§­</div>
+          <div><div class="disc-title">Risk Profiling Methodology</div><div class="disc-body">The questionnaire and scoring approach we use to assess your risk capacity and tolerance.</div></div>
+        </article>
+      
+        <article class="disc-card reveal">
+          <div class="disc-icon">ðŸ“„</div>
+          <div><div class="disc-title">MITC â€” Most Important Terms</div><div class="disc-body">A short summary of the most important terms in plain English. Always read this first.</div></div>
+        </article>
+      
+        <article class="disc-card reveal">
+          <div class="disc-icon">ðŸ†”</div>
+          <div><div class="disc-title">KYC &amp; On-boarding Forms</div><div class="disc-body">PAN, Aadhaar, address-proof, and risk-profile forms. Most of this is now paperless via DigiLocker.</div></div>
+        </article>
+      
+    </div>
+  </div>
+</section>
+
+<section class="cta-band">
+  <div class="container cta-inner">
+    <div class="reveal">
+      <h2 class="cta-title">Have a 30-minute chat. No pitch. No obligation.</h2>
+      <p class="cta-sub">If your money decisions have been quietly stressing you out, this is the cheapest way to find out whether a written plan would help.</p>
+      <p class="cta-disclaim">Investment in securities market is subject to market risks. Read all the related documents carefully before investing. · Past performance does not guarantee future returns.</p>
+    </div>
+    <div class="cta-actions reveal">
+      <a href="#contact" class="btn btn-primary">Book a call →</a>
+      <span class="cta-note">Fee-only Â· SEBI Registered Â· INA000012345</span>
+    </div>
+  </div>
+</section>
+
+<section id="contact" class="contact section-pad">
+  <div class="container contact-grid">
+    <div class="reveal">
+      <div class="section-eyebrow">Schedule a call</div>
+      <h2 class="section-title">A free <em>30-minute chat.</em> No pitch attached.</h2>
+      <p class="section-body">Tell us a little about where you are and we will reply within one working day with two or three time slots that suit us both.</p>
+      <div class="contact-info">
+        <div><b>Email:</b> hello@saaranshadvisory.in</div>
+        <div><b>Phone:</b> +91 98 1234 5678</div>
+        <div><b>Office:</b> Bandra West<br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Mumbai, Maharashtra 400050</div>
+        <div><b>Hours:</b> Monâ€“Fri Â· 10:00 AM â€“ 6:00 PM IST</div>
+      </div>
+    </div>
+    <div class="form-card reveal">
+      <form data-contact>
+        <div class="fg-row">
+          <div class="fg"><label>Your name</label><input type="text" placeholder="What should we call you?" required></div>
+          <div class="fg"><label>Mobile</label><input type="tel" placeholder="+91 9XXXXXXXXX" required></div>
+        </div>
+        <div class="fg"><label>Email</label><input type="email" placeholder="you@example.com" required></div>
+        <div class="fg">
+          <label>What's on your mind</label>
+          <select required>
+            <option value="" disabled selected>Pick what fits closest</option>
+            <option>I want a written financial plan</option>
+            <option>Retirement planning</option>
+            <option>Child's education planning</option>
+            <option>Portfolio review (existing investments)</option>
+            <option>Tax planning</option>
+            <option>Estate planning</option>
+            <option>Just exploring — not sure yet</option>
+          </select>
+        </div>
+        <div class="fg"><label>A short note (optional)</label><textarea rows="3" placeholder="Anything you want us to know before we chat?"></textarea></div>
+        <button type="submit" class="form-submit">Send · We'll reply within a day →</button>
+        <p class="form-disclaim">By submitting, you agree to be contacted by Saaransh Advisory (INA000012345). Your details are never shared. Investment in securities market is subject to market risks. Read all the related documents carefully before investing.</p>
+      </form>
+    </div>
+  </div>
+</section>
+
+<footer class="footer">
+  <div class="container">
+    <div class="footer-grid">
+      <div>
+        <div class="f-brand">Saaransh Advisory</div>
+        <p class="f-tag">Money advice that actually feels like advice.</p>
+        <div class="f-reg">SEBI INA: INA000012345 · Permanent</div>
+        
+        <div class="f-cert-row">
+          <span class="f-cert">Individual</span>
+          <span class="f-cert">BASL · BASL2125</span>
+          <span class="f-cert">NISM-X-A</span>
+          <span class="f-cert">NISM-X-B</span>
+        </div>
+      </div>
+      <div>
+        <p class="f-col-title">What we do</p>
+        <ul class="f-links">
+          <li><a href="#services">Financial Planning</a></li><li><a href="#services">Goal Planning</a></li><li><a href="#services">Investment Advisory</a></li><li><a href="#services">Tax Planning</a></li><li><a href="#services">Estate Planning Review</a></li><li><a href="#services">Insurance Review</a></li>
+        </ul>
+      </div>
+      <div>
+        <p class="f-col-title">Investor</p>
+        <ul class="f-links">
+          <li><a href="#fees">Fees</a></li>
+          <li><a href="#disclosures">Disclosures</a></li>
+          <li><a href="#grievance">Grievance Redressal</a></li>
+          <li><a href="https://scores.sebi.gov.in" target="_blank" rel="noopener">SEBI SCORES ↗</a></li>
+          <li><a href="https://smartodr.in" target="_blank" rel="noopener">SMART ODR ↗</a></li>
+        </ul>
+      </div>
+      <div>
+        <p class="f-col-title">Regulatory</p>
+        <ul class="f-links">
+          <li><a href="https://www.sebi.gov.in" target="_blank" rel="noopener">SEBI ↗</a></li>
+          <li><a href="https://www.bseasl.com" target="_blank" rel="noopener">BASL ↗</a></li>
+          <li><a href="#disclosures">Conflict of Interest</a></li>
+          <li><a href="#disclosures">Terms of Advisory</a></li>
+          <li><a href="#disclosures">MITC</a></li>
+        </ul>
+      </div>
+    </div>
+    <div class="footer-disclaim">
+      Investment in securities market is subject to market risks. Read all the related documents carefully before investing. · Past performance does not guarantee future returns. · Per SEBI (Investment Advisers) Regulations 2013, RIA fees do not exceed 2.5% of Assets under Advice per annum, or ₹1,25,000 fixed per family per annum.
+      <br>The information shared by Saaransh Advisory is for educational purposes and constitutes investment advice only when delivered under a signed advisory agreement. Past performance of any specific recommendation is not indicative of future returns.
+      <br>Registered as Investment Adviser with SEBI vide registration number INA000012345 (Permanent). All complaints may be lodged at SEBI SCORES (scores.sebi.gov.in) or SMART ODR (smartodr.in).
+    </div>
+    <div class="footer-bottom">
+      <span>© 2026 Saaransh Advisory. All rights reserved.</span>
+      <span>Privacy · Terms · Disclosure</span>
+    </div>
+  </div>
+</footer>
+
+<script>
+  var ro=new IntersectionObserver(function(es){
+    es.forEach(function(e){if(e.isIntersecting){e.target.classList.add('visible');ro.unobserve(e.target);}});
+  },{threshold:.06,rootMargin:'0px 0px -40px 0px'});
+  document.querySelectorAll('.reveal').forEach(function(el){ro.observe(el);});
+  document.querySelectorAll('a[href^="#"]').forEach(function(a){
+    a.addEventListener('click',function(e){
+      var t=document.querySelector(a.getAttribute('href'));
+      if(t){e.preventDefault();t.scrollIntoView({behavior:'smooth',block:'start'});}
+    });
+  });
+  var f=document.querySelector('[data-contact]');
+  if(f){f.addEventListener('submit',function(e){
+    e.preventDefault();
+    var b=f.querySelector('.form-submit');
+    b.textContent='Sending…';b.disabled=true;
+    setTimeout(function(){
+      var ok=document.createElement('div');
+      ok.style.cssText='background:rgba(107,144,128,.12);border:1px solid rgba(107,144,128,.32);color:#4f6f63;padding:15px 18px;border-radius:12px;font-size:.93rem;margin-bottom:14px;font-weight:600;font-family:Inter,sans-serif';
+      ok.textContent='✓ Thank you. We will write back within one working day.';
+      f.insertAdjacentElement('beforebegin',ok);
+      f.reset();b.textContent='Send · We\'ll reply within a day →';b.disabled=false;
+      setTimeout(function(){ok.remove();},8000);
+    },900);
+  });}
+</script>
+</body>
+</html>

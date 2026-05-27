@@ -99,7 +99,14 @@ function buildTemplateData(payload = {}) {
     'calculatorsLabel','calculatorsHeadline','calculatorsBody',
     'pricingLabel','pricingHeadline','pricingBody',
     'trustLabel','trustHeadline',
-    'eduLabel','eduHeadline','eduBody'
+    'eduLabel','eduHeadline','eduBody',
+    // Round R â€” SEBI RIA / Investment Adviser (template-16)
+    'sebiInaReg','regValidity','raRegType','basMemberId','nismCertA','nismCertB',
+    'adviserName','adviserBio','adviserYears','adviserPhoto','adviserSign',
+    'feesLabel','feesHeadline','feesBody','feeFinePrint',
+    'approachLabel','approachHeadline','approachBody',
+    'articlesLabel','articlesHeadline','articlesBody',
+    'disclosuresLabel','disclosuresHeadline','disclosuresBody'
   ];
   for (const k of strKeys) if (data[k] === undefined) data[k] = '';
 
@@ -127,7 +134,9 @@ function buildTemplateData(payload = {}) {
                    // Round K â€” MF Distributor (template-14)
                    'schemes','kycSteps','amcPartners','sipBenefits',
                    // Round Q â€” Stock Broker / Demat (template-15)
-                   'trustStats','whyChoosePoints','calculators','pricingRows','partnerLogos','riskDocs'];
+                   'trustStats','whyChoosePoints','calculators','pricingRows','partnerLogos','riskDocs',
+                   // Round R â€” SEBI RIA / Investment Adviser (template-16)
+                   'feePlans','articles'];
   for (const k of arrKeys) if (!Array.isArray(data[k])) data[k] = [];
   return data;
 }
@@ -1415,6 +1424,153 @@ function stockBrokerSample() {
   };
 }
 
+function sebiRiaSample() {
+  return {
+    ...commonSample,
+    businessName: 'Saaransh Advisory',
+    tagline: 'Money advice that actually feels like advice.',
+    _description: 'Saaransh Advisory is a SEBI-registered Individual Investment Adviser (INA000012345), fee-only, with BASL membership BASL2125. Founded in 2018, we work with around 40 families across India on written financial plans, refreshed annually, with quarterly review calls. We never accept commissions on any product we recommend.',
+    primaryColor: '#6b9080',
+    foundedYear: '2018',
+    tone: 'warm, conversational',
+    email: 'hello@saaranshadvisory.in',
+    phone: '+91 98 1234 5678',
+    address: 'Bandra West\nMumbai, Maharashtra 400050',
+    hours: 'Monâ€“Fri Â· 10:00 AM â€“ 6:00 PM IST',
+    sebiInaReg: 'INA000012345',
+    regValidity: 'Permanent',
+    raRegType: 'Individual',
+    basMemberId: 'BASL2125',
+    nismCertA: 'NISM Series-X-A Â· valid till 2029',
+    nismCertB: 'NISM Series-X-B Â· valid till 2029',
+    adviserName: 'Aanya Bhargava, CFP',
+    adviserYears: '14 years in personal finance',
+    adviserSign: 'I\'d rather lose a client than mis-sell to them.',
+    heroEyebrow: 'SEBI Registered Investment Adviser Â· Fee-only Â· INA000012345',
+    heroHeadlineLead: 'Your money decisions,',
+    heroHeadlineEmph: 'finally uncomplicated.',
+    heroSub: 'A SEBI-registered fee-only investment adviser. No commissions on what we recommend, no pressure to act â€” just clear thinking, written down, and reviewed with you every quarter.',
+    heroCtaPrimary: 'Book a call',
+    heroCtaSecondary: 'How we work',
+    feesLabel: 'How we charge',
+    feesHeadline: 'Fee-only. No commissions. Ever.',
+    feesBody: 'We are paid only by you â€” never by AMCs, insurers, or brokers. It means we have no incentive to recommend one fund over another, or to suggest you buy anything you don\'t need.',
+    feeFinePrint: 'Per SEBI (Investment Advisers) Regulations 2013, RIA fees do not exceed 2.5% of Assets under Advice per annum, or â‚¹1,25,000 fixed per family per annum. We never accept trail commissions, referral fees, or kickbacks on any product we recommend.',
+    feePlans: [
+      {
+        name: 'Flat Fee Plan',
+        price: 'â‚¹60,000 / year',
+        priceNote: 'Per family Â· Paid quarterly',
+        ideal: 'For investors with assets under â‚¹50 lakh',
+        perks: [
+          { label: 'Comprehensive financial plan, refreshed annually' },
+          { label: 'Quarterly portfolio review calls (60 mins each)' },
+          { label: 'Unlimited email questions across the year' },
+          { label: 'Tax-saving review every January' },
+          { label: 'Goal-mapping for retirement, education, and home' }
+        ]
+      },
+      {
+        name: 'AUA-Linked Plan',
+        price: '0.75% of AUA / year',
+        priceNote: 'Capped at 2.5% per SEBI norms',
+        ideal: 'For investors with assets over â‚¹50 lakh',
+        perks: [
+          { label: 'Everything in the Flat Fee Plan, plus:' },
+          { label: 'Monthly portfolio check-in calls (45 mins each)' },
+          { label: 'Estate planning review with an empanelled lawyer' },
+          { label: 'Dedicated WhatsApp line for urgent decisions' },
+          { label: 'Annual in-person review at our Bandra office' }
+        ]
+      }
+    ],
+    approachLabel: 'What you can expect',
+    approachHeadline: 'Not a salesperson. A second brain for your money.',
+    approachBody: 'You\'ve probably been pitched a lot of things. We pitch nothing. We listen, we plan with you on a shared screen, and we put it all in writing. Then we review it together â€” four times a year, forever.',
+    aboutPillars: [
+      { icon: 'ðŸ¤', title: 'Fiduciary by law',        body: 'As a SEBI-registered RIA, we are legally obligated to act in your interest first â€” not the AMC\'s, not the insurer\'s, not ours.' },
+      { icon: 'ðŸª¶', title: 'Fee-only model',          body: 'Our income comes entirely from the fee you pay. No trail commissions, no referral kickbacks, no product targets to hit.' },
+      { icon: 'ðŸ“š', title: 'Evidence-based planning', body: 'Asset allocation, low-cost index exposure, goal-mapped buckets. We don\'t chase tips, themes, or someone\'s trading idea.' },
+      { icon: 'ðŸ•¯', title: 'Calm, not clever',         body: 'We help you make boring, repeatable decisions that quietly compound â€” not exciting ones that make for great stories at parties.' }
+    ],
+    servicesLabel: 'What we help with',
+    servicesHeadline: 'A full financial life â€” handled together.',
+    servicesBody: 'From your first SIP to your estate plan, we work through every money decision with you. We don\'t sell insurance, mutual funds, or any product â€” we just help you make the choice yourself.',
+    services: [
+      { icon: 'ðŸŒ±', name: 'Financial Planning',      body: 'A written plan that maps your income, goals, and timelines. Reviewed and refreshed every year as life shifts.' },
+      { icon: 'ðŸŽ¯', name: 'Goal Planning',           body: 'Retirement, child\'s education, home down-payment, sabbatical fund â€” each goal with its own portfolio bucket and timeline.' },
+      { icon: 'ðŸªª', name: 'Investment Advisory',     body: 'Direct mutual funds, ETFs, fixed deposits, bonds. Allocation by asset class, not by product â€” and never by commission.' },
+      { icon: 'ðŸ§¾', name: 'Tax Planning',            body: 'Optimise across 80C, 80D, capital-gains, NRE/NRO, and ESOP situations. Built into the plan, not bolted on in March.' },
+      { icon: 'ðŸ¡', name: 'Estate Planning Review',  body: 'Will-writing, nominations, and succession structure. We coordinate with an empanelled lawyer for the legal side.' },
+      { icon: 'ðŸ›¡', name: 'Insurance Review',         body: 'We review your existing covers and tell you what to keep, lapse, or top up. We earn nothing on any insurance product.' }
+    ],
+    processLabel: 'How we work together',
+    processHeadline: 'From first call to first review â€” without the pitch.',
+    processSteps: [
+      { icon: 'â˜•', title: 'Discovery call',     body: 'A 30-minute chat over coffee or video. We listen to where you are, what worries you, and what you want money to do for you.', duration: '30 minutes' },
+      { icon: 'ðŸ“', title: 'Written plan',       body: 'A 12â€“20 page financial plan, drafted with you on a shared screen across two working sessions. You sign it only if it makes sense.', duration: '2â€“3 weeks' },
+      { icon: 'ðŸŒ¿', title: 'Implementation',     body: 'We help you set up SIPs, switch out high-cost funds, complete KYC, and sequence the transitions. No products are sold â€” only direct routes used.', duration: '2 weeks' },
+      { icon: 'ðŸƒ', title: 'Quarterly catch-ups', body: 'A 60-minute review every quarter â€” what changed, what to leave alone, and what to revisit. Always with notes you keep.', duration: 'Ongoing' }
+    ],
+    aboutLabel: 'About the adviser',
+    aboutHeadlineLead: 'A small practice',
+    aboutHeadlineEmph: 'by design.',
+    adviserBio: 'I started Saaransh Advisory in 2018 after a decade in wealth management, watching too many families being sold products they didn\'t need. The model never sat well with me â€” being paid by the same companies whose products I was supposed to assess. So I shut that down, completed NISM-X-A and NISM-X-B, registered with SEBI as an Investment Adviser (INA000012345), and went fee-only. Today I work with 40 families across India. I deliberately keep the practice small so I can know every client\'s plan by name.',
+    credentials: [
+      { label: 'SEBI RIA Â· INA000012345' },
+      { label: 'NISM Series-X-A Â· Level 1' },
+      { label: 'NISM Series-X-B Â· Level 2' },
+      { label: 'CFP â€” Certified Financial Planner' },
+      { label: 'BASL Member Â· BASL2125' },
+      { label: '14 years in personal finance' }
+    ],
+    articlesLabel: 'From the journal',
+    articlesHeadline: 'Notes we send to clients â€” and to you.',
+    articlesBody: 'Plain-English writing on the questions we get asked most often. No bait-and-switch, no scary headlines â€” just the kind of explanation a friend who happens to be a CFP would write.',
+    articles: [
+      { category: 'Planning',    title: 'A boring guide to setting your first financial goal',          body: 'The four numbers you actually need before you can map a portfolio. Hint: returns isn\'t one of them.',  readTime: '6 min read' },
+      { category: 'Investing',   title: 'Why we mostly recommend index funds (and when we don\'t)',     body: 'On the difference between active alpha and active fees â€” and how we think about a four-fund portfolio.', readTime: '8 min read' },
+      { category: 'Tax',         title: 'What changed in this year\'s budget for the salaried investor', body: 'A short rundown on the new vs. old regime, NPS, ESOP taxation, and capital-gains rules to remember.', readTime: '5 min read' },
+      { category: 'Retirement',  title: 'How much is "enough" â€” a framework, not a number',             body: 'The two-bucket method for retirement corpus â€” one for the worry, one for the warmth.',                 readTime: '7 min read' }
+    ],
+    testimonials: [
+      { quote: 'For years I felt embarrassed about not understanding my own portfolio. Aanya walked me through it without making me feel small. The plan is two pages I actually read, not forty I never will.', name: 'Meera Bhatnagar',    role: 'Mumbai Â· 41, doctor',          productUsed: 'Comprehensive financial planning' },
+      { quote: 'I came to test out the "fee-only" promise, half expecting an upsell. There never was one. We pay them, they help us, and there is nothing else hidden in the wiring. That trust is the whole product.',  name: 'Rohan Krishnamurthy', role: 'Bengaluru Â· 38, founder',     productUsed: 'AUA-linked plan' },
+      { quote: 'After my husband passed, I had no idea what we owned or what to do with it. They sat with me for hours â€” twice â€” without charging more. Today my finances are organised, and I sleep better.',         name: 'Sushma Iyer',          role: 'Chennai Â· 62, retired',       productUsed: 'Estate planning + advisory' }
+    ],
+    grievanceLabel: 'Investor Care Â· Grievance Redressal',
+    grievanceHeadline: 'A clear path, in case anything ever goes wrong.',
+    grievanceBody: 'As a SEBI-registered Investment Adviser, Saaransh Advisory maintains a 4-tier grievance mechanism. All complaints are acknowledged within 24 hours and resolved within 21 working days as mandated by SEBI.',
+    groName: 'Ms. Aanya Bhargava',
+    groRole: 'Principal Officer & Compliance Officer',
+    groEmail: 'compliance@saaranshadvisory.in',
+    groPhone: '+91 98 1234 5679',
+    groAddress: 'Saaransh Advisory\nBandra West, Mumbai â€” 400050\nMaharashtra',
+    groTimings: 'Monâ€“Fri Â· 10:00 AM â€“ 6:00 PM IST',
+    escalationLevels: [
+      { level: 'Level 1 Â· Adviser / Principal Officer', body: 'Write to us directly. Most concerns are addressed in one conversation, almost always within 3 working days.', contact: 'compliance@saaranshadvisory.in',      tat: 'Within 7 days' },
+      { level: 'Level 2 Â· BASL',                         body: 'BSE Administration & Supervision Ltd supervises SEBI-registered RIAs. Lodge unresolved complaints there.',  contact: 'investorgrievance.basl@bseindia.com',  tat: 'Within 15 days' },
+      { level: 'Level 3 Â· SEBI SCORES',                  body: 'SEBI\'s official investor grievance portal. Register if unresolved after 21 days.',                          contact: 'scores.sebi.gov.in Â· 1800-266-7575', tat: 'Per SEBI norms' },
+      { level: 'Level 4 Â· SMART ODR',                    body: 'Online Dispute Resolution platform for unresolved investor grievances against SEBI-registered intermediaries.', contact: 'smartodr.in',                          tat: 'Per SMART ODR norms' }
+    ],
+    disclosuresLabel: 'Required Disclosures',
+    disclosuresHeadline: 'Everything SEBI asks an Investment Adviser to publish â€” gathered here.',
+    disclosuresBody: 'Plain-language summaries with downloadable PDFs. If anything is unclear, please ask â€” we explain rather than send you to read fine print alone.',
+    riskDocs: [
+      { icon: 'ðŸ¤', title: 'Conflict of Interest Policy',  body: 'How we identify, disclose, and mitigate any conflicts that arise in advising you.' },
+      { icon: 'ðŸ’¼', title: 'Business Model Note',          body: 'A one-pager on how we earn (fees only) and what we will never do (sell products for commission).' },
+      { icon: 'ðŸ“œ', title: 'Terms of Advisory Service',    body: 'The standard advisory agreement clients sign â€” fees, scope, termination, and confidentiality.' },
+      { icon: 'ðŸ§­', title: 'Risk Profiling Methodology',   body: 'The questionnaire and scoring approach we use to assess your risk capacity and tolerance.' },
+      { icon: 'ðŸ“„', title: 'MITC â€” Most Important Terms',  body: 'A short summary of the most important terms in plain English. Always read this first.' },
+      { icon: 'ðŸ†”', title: 'KYC & On-boarding Forms',      body: 'PAN, Aadhaar, address-proof, and risk-profile forms. Most of this is now paperless via DigiLocker.' }
+    ],
+    ctaHeadline: 'Have a 30-minute chat. No pitch. No obligation.',
+    ctaBody: 'If your money decisions have been quietly stressing you out, this is the cheapest way to find out whether a written plan would help.',
+    ctaButton: 'Book a call',
+    ctaNote: 'Fee-only Â· SEBI Registered Â· INA000012345'
+  };
+}
+
 // â”€â”€ Per-template data picker â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
 function sampleFor(templateId) {
   if (templateId === 'template-2')  return agencySample();
@@ -1431,6 +1587,7 @@ function sampleFor(templateId) {
   if (templateId === 'template-13') return insuranceMarketSample();
   if (templateId === 'template-14') return mfDistributorSample();
   if (templateId === 'template-15') return stockBrokerSample();
+  if (templateId === 'template-16') return sebiRiaSample();
   return commonSample;
 }
 
@@ -1467,13 +1624,13 @@ function errorPage(n, message) {
 
 // â”€â”€ Write individual preview files â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
 const OUTDIR = __dirname;
-const TEMPLATES = [1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15];
+const TEMPLATES = [1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16];
 const NAMES = {
   1: 'Editorial',   2: 'Agency',     3: 'Terminal',  4: 'Web3',
   5: 'Local',       6: 'BFSI',       7: 'Startup',   8: 'Insurance',
   9: 'NBFC',       10: 'Restaurant', 11: 'Portfolio',
   12: 'InsurTech SaaS', 13: 'Insurance Market', 14: 'MF Distributor',
-  15: 'Stock Broker'
+  15: 'Stock Broker', 16: 'SEBI RIA'
 };
 
 const results = TEMPLATES.map(n => {
