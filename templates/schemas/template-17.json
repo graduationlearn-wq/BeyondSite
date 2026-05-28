@@ -1,0 +1,291 @@
+{
+  "id": "template-17",
+  "name": "Healthcare Clinic / Hospital",
+  "extends": "_base",
+  "complianceReview": {
+    "title": "Healthcare regulatory content — have your compliance officer review before publishing.",
+    "body": "This template includes your NMC (National Medical Commission) registration, NABH accreditation, Clinical Establishment Act state-level registration, Bio-Medical Waste authorisation, drug licence (if applicable), doctor registration numbers, and patient grievance officer details. Medical claims, treatment outcomes, and emergency contact information must be reviewed by your compliance officer before publishing. Do not publish disease-cure claims; the Drugs and Magic Remedies Act prohibits them."
+  },
+  "sections": [
+    {
+      "id": "regulatoryDetails",
+      "title": "Hospital Registrations",
+      "hint": {
+        "label": "NMC · NABH · Clinical Establishment Act",
+        "description": "Hospitals and clinics must display their NMC registration, NABH/NABL accreditation (if any), Clinical Establishment Act state registration, and biomedical waste authorisation. These appear in the trust band and the regulatory footer."
+      },
+      "fields": [
+        { "id": "nmcReg",             "label": "NMC Registration Number",                   "type": "text", "max": 40, "placeholder": "NMC-12345" },
+        { "id": "nabhReg",            "label": "NABH Accreditation Number (if any)",        "type": "text", "max": 60, "placeholder": "NABH-H-001-2024" },
+        { "id": "clinicalEstabReg",   "label": "Clinical Establishment Act Reg. (state)",   "type": "text", "max": 60, "placeholder": "CEA/MH/2023/04891" },
+        { "id": "bmwReg",             "label": "Bio-Medical Waste Authorisation",            "type": "text", "max": 60, "placeholder": "MPCB-BMW-2023-789" },
+        { "id": "drugLicense",        "label": "Drug Licence (in-house pharmacy, optional)", "type": "text", "max": 60, "placeholder": "DL: 20B/21B-MH-2024-1234" },
+        { "id": "hospitalCin",        "label": "CIN (for corporate hospitals)",              "type": "text", "max": 30, "placeholder": "U85110MH2010PTC209876" }
+      ]
+    },
+    {
+      "id": "hero",
+      "title": "Hero",
+      "aiable": true,
+      "hint": {
+        "label": "Welcoming opening",
+        "description": "Hospitals win trust by sounding human, not corporate. Lead with the patient outcome — 'care that listens', 'world-class, neighbourhood-feel'. The right-hand panel shows a friendly cartoon doctor with floating heart/plus icons.",
+        "mockupTarget": "header"
+      },
+      "fields": [
+        { "id": "heroEyebrow",       "label": "Trust pill above headline",        "type": "text",     "max": 80,  "placeholder": "NABH Accredited · 24/7 Emergency · Bandra West",   "aiable": true },
+        { "id": "heroHeadlineLead",  "label": "Headline — first part",            "type": "text",     "max": 60,  "placeholder": "Healthcare that",                                   "aiable": true },
+        { "id": "heroHeadlineEmph",  "label": "Headline — accent",                "type": "text",     "max": 40,  "placeholder": "listens.",                                          "aiable": true },
+        { "id": "heroSub",           "label": "Sub-headline (25–40 words)",       "type": "textarea", "rows": 3,  "max": 240, "aiable": true },
+        { "id": "heroCtaPrimary",    "label": "Primary CTA",                      "type": "text",     "max": 30,  "placeholder": "Book Appointment" },
+        { "id": "heroCtaSecondary",  "label": "Secondary CTA",                    "type": "text",     "max": 30,  "placeholder": "Find a Doctor" },
+        { "id": "emergencyPhone",    "label": "24/7 emergency phone (hero card)",  "type": "text",     "max": 30,  "placeholder": "+91 1800 000 911" },
+        {
+          "id": "trustStats", "label": "Trust strip (below hero)",
+          "type": "repeater", "min": 3, "max": 5, "itemLabel": "Stat",
+          "item": [
+            { "id": "value", "label": "Big number",  "type": "text", "max": 30 },
+            { "id": "label", "label": "Caption",      "type": "text", "max": 60 }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "specialties",
+      "title": "Specialties / Departments",
+      "aiable": true,
+      "hint": {
+        "label": "Medical departments",
+        "description": "Show the full list of OPDs and specialty departments. Use simple, recognised names — Cardiology, Paediatrics, Orthopaedics, etc. Each card carries a friendly icon and one-line scope.",
+        "mockupTarget": "services"
+      },
+      "fields": [
+        { "id": "specialtiesLabel",    "label": "Section eyebrow",  "type": "text",     "max": 40,  "placeholder": "Find the right care" },
+        { "id": "specialtiesHeadline", "label": "Section headline", "type": "text",     "max": 80,  "aiable": true },
+        { "id": "specialtiesBody",     "label": "Section sub-copy", "type": "textarea", "rows": 2,  "max": 220, "aiable": true },
+        {
+          "id": "specialties", "label": "Specialty cards",
+          "type": "repeater", "min": 6, "max": 12, "itemLabel": "Specialty",
+          "item": [
+            { "id": "icon", "label": "Icon (emoji)",            "type": "text",     "max": 4 },
+            { "id": "name", "label": "Specialty name",          "type": "text",     "max": 40, "placeholder": "Cardiology" },
+            { "id": "body", "label": "One-line scope (12–20 w)","type": "text",     "max": 120 }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "doctors",
+      "title": "Our Doctors",
+      "aiable": true,
+      "hint": {
+        "label": "Featured doctors",
+        "description": "Patients hire doctors, not hospitals. Lead with names, qualifications, NMC registration, years of practice, and OPD timings. Use illustrated avatars if real photos aren’t ready.",
+        "mockupTarget": "about"
+      },
+      "fields": [
+        { "id": "doctorsLabel",    "label": "Section eyebrow",  "type": "text",     "max": 40,  "placeholder": "Meet our consultants" },
+        { "id": "doctorsHeadline", "label": "Section headline", "type": "text",     "max": 80,  "aiable": true },
+        { "id": "doctorsBody",     "label": "Section sub-copy", "type": "textarea", "rows": 2,  "max": 220, "aiable": true },
+        {
+          "id": "doctors", "label": "Doctor cards",
+          "type": "repeater", "min": 3, "max": 8, "itemLabel": "Doctor",
+          "item": [
+            { "id": "name",      "label": "Full name",                       "type": "text",  "max": 80, "placeholder": "Dr. Ananya Verma" },
+            { "id": "specialty", "label": "Specialty",                        "type": "text",  "max": 60, "placeholder": "Consultant Cardiologist" },
+            { "id": "quals",     "label": "Qualifications",                   "type": "text",  "max": 100, "placeholder": "MBBS, MD (Medicine), DM (Cardiology)" },
+            { "id": "years",     "label": "Years of practice",                "type": "text",  "max": 40, "placeholder": "16 years" },
+            { "id": "nmcId",     "label": "NMC / State Council Reg. No.",      "type": "text",  "max": 40, "placeholder": "MMC-12345" },
+            { "id": "opd",       "label": "OPD timings",                      "type": "text",  "max": 100, "placeholder": "Mon–Fri · 10 AM – 1 PM, 5 PM – 8 PM" },
+            { "id": "avatar",    "label": "Avatar style",                     "type": "select", "options": ["a","b","c","d"] }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "services",
+      "title": "Services",
+      "aiable": true,
+      "hint": {
+        "label": "Care services",
+        "description": "OPD consultations, in-patient (IPD), 24/7 emergency, diagnostics, pharmacy, ICU, day-care procedures, preventive health check-ups.",
+        "mockupTarget": "services"
+      },
+      "fields": [
+        { "id": "servicesLabel",    "label": "Section eyebrow",  "type": "text",     "max": 40,  "placeholder": "What we offer" },
+        { "id": "servicesHeadline", "label": "Section headline", "type": "text",     "max": 80,  "aiable": true },
+        { "id": "servicesBody",     "label": "Section sub-copy", "type": "textarea", "rows": 2,  "max": 220, "aiable": true },
+        {
+          "id": "services", "label": "Service cards",
+          "type": "repeater", "min": 3, "max": 6, "itemLabel": "Service",
+          "item": [
+            { "id": "icon", "label": "Icon (emoji)",              "type": "text",     "max": 4 },
+            { "id": "name", "label": "Service name",              "type": "text",     "max": 60 },
+            { "id": "body", "label": "Description (20–30 words)", "type": "textarea", "rows": 2, "max": 200 }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "process",
+      "title": "How an appointment works",
+      "aiable": true,
+      "hint": {
+        "label": "Patient journey",
+        "description": "Book → Visit → Diagnose → Care plan. Keep it human and reassuring.",
+        "mockupTarget": "process"
+      },
+      "fields": [
+        { "id": "processLabel",    "label": "Section eyebrow",  "type": "text", "max": 40, "placeholder": "Simple visit, real care" },
+        { "id": "processHeadline", "label": "Section headline", "type": "text", "max": 80, "aiable": true },
+        {
+          "id": "processSteps", "label": "Steps",
+          "type": "repeater", "min": 3, "max": 5, "itemLabel": "Step",
+          "item": [
+            { "id": "icon",     "label": "Icon (emoji)",                   "type": "text",     "max": 4 },
+            { "id": "title",    "label": "Step title",                     "type": "text",     "max": 50 },
+            { "id": "body",     "label": "Step description (15–25 words)", "type": "textarea", "rows": 2, "max": 200 },
+            { "id": "duration", "label": "Duration",                       "type": "text",     "max": 40, "placeholder": "2 minutes" }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "packages",
+      "title": "Health Check Packages",
+      "aiable": true,
+      "hint": {
+        "label": "Preventive packages",
+        "description": "Three cards — Basic / Comprehensive / Senior or Women's Wellness. Each with a price, target audience, and 5–7 tests included.",
+        "mockupTarget": "services"
+      },
+      "fields": [
+        { "id": "packagesLabel",    "label": "Section eyebrow",  "type": "text",     "max": 40,  "placeholder": "Stay ahead with prevention" },
+        { "id": "packagesHeadline", "label": "Section headline", "type": "text",     "max": 80,  "aiable": true },
+        { "id": "packagesBody",     "label": "Section sub-copy", "type": "textarea", "rows": 2,  "max": 220, "aiable": true },
+        {
+          "id": "healthPackages", "label": "Package cards",
+          "type": "repeater", "min": 1, "max": 4, "itemLabel": "Package",
+          "item": [
+            { "id": "name",      "label": "Package name",   "type": "text", "max": 50,  "placeholder": "Basic Health Check" },
+            { "id": "price",     "label": "Price",          "type": "text", "max": 30,  "placeholder": "₹1,499" },
+            { "id": "priceNote", "label": "Price caveat",   "type": "text", "max": 60,  "placeholder": "All-inclusive · No hidden tests" },
+            { "id": "ideal",     "label": "Who it's for",   "type": "text", "max": 100, "placeholder": "Adults 25–40 · Annual screening" },
+            {
+              "id": "tests", "label": "Tests / inclusions",
+              "type": "repeater", "min": 3, "max": 10, "itemLabel": "Test",
+              "item": [ { "id": "label", "label": "Test / inclusion", "type": "text", "max": 100 } ]
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "about",
+      "title": "About the hospital",
+      "aiable": true,
+      "hint": {
+        "label": "Hospital values & story",
+        "description": "Why this hospital exists, who founded it, and the values that guide care decisions — patient-first, evidence-based, accessible.",
+        "mockupTarget": "about"
+      },
+      "fields": [
+        { "id": "aboutLabel",        "label": "Section eyebrow",                "type": "text",     "max": 40 },
+        { "id": "aboutHeadlineLead", "label": "Headline — first part",          "type": "text",     "max": 60, "aiable": true },
+        { "id": "aboutHeadlineEmph", "label": "Headline — accent",              "type": "text",     "max": 40, "aiable": true },
+        { "id": "aboutBody",         "label": "About text (120–180 words)",     "type": "textarea", "rows": 6, "max": 1100, "aiable": true },
+        {
+          "id": "aboutPillars", "label": "Care pillars",
+          "type": "repeater", "min": 3, "max": 5, "itemLabel": "Pillar",
+          "item": [
+            { "id": "icon",  "label": "Icon (emoji)",            "type": "text",     "max": 4 },
+            { "id": "title", "label": "Pillar title",            "type": "text",     "max": 60 },
+            { "id": "body",  "label": "Description (20–30 words)","type": "textarea", "rows": 2, "max": 200 }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "insurers",
+      "title": "Cashless Insurance Partners",
+      "hint": {
+        "label": "Empanelled TPAs / insurers",
+        "description": "List insurance partners you accept for cashless treatment. Helps patients confirm coverage before visiting."
+      },
+      "fields": [
+        { "id": "insurersLabel",    "label": "Section eyebrow",  "type": "text", "max": 40, "placeholder": "Cashless treatment available" },
+        { "id": "insurersHeadline", "label": "Section headline", "type": "text", "max": 80 },
+        {
+          "id": "insurers", "label": "Insurance / TPA names",
+          "type": "repeater", "min": 3, "max": 16, "itemLabel": "Insurer",
+          "item": [ { "id": "name", "label": "Insurer / TPA name", "type": "text", "max": 60 } ]
+        }
+      ]
+    },
+    {
+      "id": "testimonials",
+      "title": "Patient Stories",
+      "hint": {
+        "label": "Patient experiences",
+        "description": "Anonymised patient stories or with explicit permission. Focus on care experience, not specific medical outcomes (no cure claims — Drugs & Magic Remedies Act)."
+      },
+      "fields": [
+        {
+          "id": "testimonials", "label": "Patient testimonials",
+          "type": "repeater", "min": 2, "max": 6, "itemLabel": "Testimonial",
+          "item": [
+            { "id": "quote",       "label": "Quote (30–60 words)",    "type": "textarea", "rows": 3, "max": 360 },
+            { "id": "name",        "label": "Name",                   "type": "text",     "max": 60 },
+            { "id": "role",        "label": "City / life stage",      "type": "text",     "max": 80 },
+            { "id": "productUsed", "label": "Service used",           "type": "text",     "max": 80, "placeholder": "Cardiac consultation" }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "grievance",
+      "title": "Patient Grievance Redressal",
+      "hint": {
+        "label": "Patient charter & escalation",
+        "description": "Hospitals must display a Patient Grievance Officer and an escalation path to the state Medical Council and the District Health Officer per Clinical Establishment Act norms."
+      },
+      "fields": [
+        { "id": "grievanceLabel",    "label": "Section eyebrow",            "type": "text",     "max": 40 },
+        { "id": "grievanceHeadline", "label": "Section headline",           "type": "text",     "max": 80 },
+        { "id": "grievanceBody",     "label": "Section body (40–80 words)", "type": "textarea", "rows": 3, "max": 500 },
+        { "id": "groName",    "label": "Patient grievance officer name", "type": "text",     "max": 80 },
+        { "id": "groRole",    "label": "Officer role",                    "type": "text",     "max": 80 },
+        { "id": "groEmail",   "label": "Grievance email",                 "type": "text",     "max": 100 },
+        { "id": "groPhone",   "label": "Grievance phone",                 "type": "text",     "max": 40 },
+        { "id": "groAddress", "label": "Office address",                  "type": "textarea", "rows": 2, "max": 200 },
+        { "id": "groTimings", "label": "Office hours",                    "type": "text",     "max": 80 },
+        {
+          "id": "escalationLevels", "label": "Escalation matrix",
+          "type": "repeater", "min": 3, "max": 5, "itemLabel": "Level",
+          "item": [
+            { "id": "level",   "label": "Level label",    "type": "text",     "max": 80 },
+            { "id": "body",    "label": "Description",    "type": "textarea", "rows": 2, "max": 220 },
+            { "id": "contact", "label": "Contact / URL",  "type": "text",     "max": 140 },
+            { "id": "tat",     "label": "TAT",             "type": "text",     "max": 40 }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "cta",
+      "title": "Call to Action",
+      "aiable": true,
+      "hint": {
+        "label": "Closing CTA",
+        "description": "Frame around appointment booking. Always include the emergency number.",
+        "mockupTarget": "cta"
+      },
+      "fields": [
+        { "id": "ctaHeadline", "label": "CTA headline",               "type": "text",     "max": 100, "aiable": true },
+        { "id": "ctaBody",     "label": "CTA sub-copy (15–25 words)", "type": "textarea", "rows": 2,  "max": 220, "aiable": true },
+        { "id": "ctaButton",   "label": "Button text",                "type": "text",     "max": 40 },
+        { "id": "ctaNote",     "label": "Fine print",                 "type": "text",     "max": 160 }
+      ]
+    }
+  ]
+}

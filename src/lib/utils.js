@@ -132,7 +132,14 @@ function buildTemplateData(payload = {}) {
     'feesLabel','feesHeadline','feesBody','feeFinePrint',
     'approachLabel','approachHeadline','approachBody',
     'articlesLabel','articlesHeadline','articlesBody',
-    'disclosuresLabel','disclosuresHeadline','disclosuresBody'
+    'disclosuresLabel','disclosuresHeadline','disclosuresBody',
+    // Round S — Healthcare Clinic / Hospital (template-17)
+    'nmcReg','nabhReg','clinicalEstabReg','bmwReg','drugLicense','hospitalCin',
+    'emergencyPhone',
+    'specialtiesLabel','specialtiesHeadline','specialtiesBody',
+    'doctorsLabel','doctorsHeadline','doctorsBody',
+    'packagesLabel','packagesHeadline','packagesBody',
+    'insurersLabel','insurersHeadline'
   ];
   for (const k of strKeys) if (data[k] === undefined) data[k] = '';
 
@@ -157,7 +164,9 @@ function buildTemplateData(payload = {}) {
     // Round Q — Stock Broker / Demat (template-15)
     'trustStats','whyChoosePoints','calculators','pricingRows','partnerLogos','riskDocs',
     // Round R — SEBI RIA / Investment Adviser (template-16)
-    'feePlans','articles'
+    'feePlans','articles',
+    // Round S — Healthcare Clinic / Hospital (template-17)
+    'specialties','doctors','healthPackages','insurers'
   ];
   for (const k of arrKeys) if (!Array.isArray(data[k])) data[k] = [];
 

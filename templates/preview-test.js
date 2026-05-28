@@ -106,7 +106,14 @@ function buildTemplateData(payload = {}) {
     'feesLabel','feesHeadline','feesBody','feeFinePrint',
     'approachLabel','approachHeadline','approachBody',
     'articlesLabel','articlesHeadline','articlesBody',
-    'disclosuresLabel','disclosuresHeadline','disclosuresBody'
+    'disclosuresLabel','disclosuresHeadline','disclosuresBody',
+    // Round S â€” Healthcare Clinic / Hospital (template-17)
+    'nmcReg','nabhReg','clinicalEstabReg','bmwReg','drugLicense','hospitalCin',
+    'emergencyPhone',
+    'specialtiesLabel','specialtiesHeadline','specialtiesBody',
+    'doctorsLabel','doctorsHeadline','doctorsBody',
+    'packagesLabel','packagesHeadline','packagesBody',
+    'insurersLabel','insurersHeadline'
   ];
   for (const k of strKeys) if (data[k] === undefined) data[k] = '';
 
@@ -136,7 +143,9 @@ function buildTemplateData(payload = {}) {
                    // Round Q â€” Stock Broker / Demat (template-15)
                    'trustStats','whyChoosePoints','calculators','pricingRows','partnerLogos','riskDocs',
                    // Round R â€” SEBI RIA / Investment Adviser (template-16)
-                   'feePlans','articles'];
+                   'feePlans','articles',
+                   // Round S â€” Healthcare Clinic / Hospital (template-17)
+                   'specialties','doctors','healthPackages','insurers'];
   for (const k of arrKeys) if (!Array.isArray(data[k])) data[k] = [];
   return data;
 }
@@ -1571,6 +1580,150 @@ function sebiRiaSample() {
   };
 }
 
+function hospitalSample() {
+  return {
+    ...commonSample,
+    businessName: 'Aarogya Hospital',
+    tagline: 'World-class care, neighbourhood feel.',
+    _description: 'Aarogya Hospital is a NABH-accredited multi-specialty hospital in Bandra West, Mumbai. Founded in 2008, we run 180 beds across 28 specialties with a 24x7 emergency department, in-house pharmacy, and full diagnostics. We employ 120+ consultants and are empanelled with 38+ insurers for cashless treatment.',
+    primaryColor: '#5eb0ef',
+    foundedYear: '2008',
+    tone: 'warm, reassuring',
+    email: 'hello@aarogyahospital.in',
+    phone: '+91 22 4000 2000',
+    address: 'Bandra West\nMumbai, Maharashtra 400050',
+    hours: 'OPDs: Monâ€“Sat Â· 9 AM â€“ 9 PM Â· Emergency 24/7',
+    nmcReg: 'NMC-12345',
+    nabhReg: 'NABH-H-001-2024',
+    clinicalEstabReg: 'CEA/MH/2023/04891',
+    bmwReg: 'MPCB-BMW-2023-789',
+    drugLicense: 'DL: 20B/21B-MH-2024-1234',
+    emergencyPhone: '+91 1800 000 911',
+    heroEyebrow: 'NABH Accredited Â· 24/7 Emergency Â· Since 2008',
+    heroHeadlineLead: 'Healthcare that',
+    heroHeadlineEmph: 'listens.',
+    heroSub: 'A NABH-accredited multi-specialty hospital with a calm waiting room and consultants who give you their full appointment slot. 28 specialties under one roof.',
+    heroCtaPrimary: 'Book Appointment',
+    heroCtaSecondary: 'Find a Doctor',
+    trustStats: [
+      { value: '28',      label: 'Specialties' },
+      { value: '120+',    label: 'Consultants' },
+      { value: '4 Lakh+', label: 'Patients cared for' },
+      { value: '24/7',    label: 'Emergency response' }
+    ],
+    specialtiesLabel: 'Find the right care',
+    specialtiesHeadline: 'Twenty-eight specialties. One unhurried appointment.',
+    specialtiesBody: 'From the everyday clinic visit to the most complex multi-disciplinary case â€” we keep all of it under one calm roof with consultants who actually return your call.',
+    specialties: [
+      { icon: 'â¤ï¸', name: 'Cardiology',          body: 'Heart attacks, rhythm disorders, valve disease and preventive cardiology.' },
+      { icon: 'ðŸ§ ', name: 'Neurology',           body: 'Stroke care, epilepsy, migraine clinics and movement-disorder evaluation.' },
+      { icon: 'ðŸ¦´', name: 'Orthopaedics',        body: 'Joint replacements, sports injuries, spine pain and complex trauma.' },
+      { icon: 'ðŸ‘¶', name: 'Paediatrics',         body: 'Newborn care, vaccination tracking, and a warm play-corner OPD.' },
+      { icon: 'ðŸ¤°', name: 'Obstetrics & Gyn.',   body: 'Antenatal care, painless delivery, gynaecological surgery and fertility.' },
+      { icon: 'ðŸ‘',  name: 'Ophthalmology',      body: 'Cataract, retina clinics, paediatric squint and refractive surgery.' },
+      { icon: 'ðŸ¦·', name: 'Dental',              body: 'Full restorative dentistry, root canals, implants and child dentistry.' },
+      { icon: 'ðŸ«',  name: 'Pulmonology',         body: 'Asthma, COPD, sleep apnoea evaluation, and chronic cough clinic.' },
+      { icon: 'ðŸ§¬', name: 'Oncology',            body: 'Medical & radiation oncology, day-care chemotherapy and tumour board.' },
+      { icon: 'ðŸ«€', name: 'Cardio-thoracic',     body: 'Bypass surgery, valve repair/replacement and thoracic surgery.' },
+      { icon: 'ðŸ©º', name: 'General Medicine',    body: 'Adult OPDs, diabetes & hypertension management, preventive care.' },
+      { icon: 'ðŸ§´', name: 'Dermatology',         body: 'Eczema, acne, psoriasis, aesthetic dermatology and paediatric skin.' }
+    ],
+    doctorsLabel: 'Meet our consultants',
+    doctorsHeadline: 'A bench of doctors youâ€™d want for your own family.',
+    doctorsBody: 'Every consultant is fully NMC-registered with average practice over a decade. We donâ€™t hand you off â€” your treating doctor sees you on every visit.',
+    doctors: [
+      { name: 'Dr. Ananya Verma', specialty: 'Consultant Cardiologist',              quals: 'MBBS, MD (Medicine), DM (Cardiology)',   years: '16 years', nmcId: 'MMC-12345', opd: 'Monâ€“Fri Â· 10 AM â€“ 1 PM, 5 PM â€“ 8 PM', avatar: 'a' },
+      { name: 'Dr. Vikram Rao',    specialty: 'Senior Consultant Neurologist',       quals: 'MBBS, MD (Medicine), DM (Neurology)',    years: '20 years', nmcId: 'KMC-23456', opd: 'Tueâ€“Sat Â· 11 AM â€“ 2 PM, 6 PM â€“ 8 PM', avatar: 'b' },
+      { name: 'Dr. Priya Nair',    specialty: 'Consultant Paediatrician',             quals: 'MBBS, DCH, MD (Paediatrics)',             years: '14 years', nmcId: 'TNMC-34567',opd: 'Monâ€“Sat Â· 9 AM â€“ 12 PM, 4 PM â€“ 7 PM',  avatar: 'c' },
+      { name: 'Dr. Arun Kapoor',   specialty: 'HOD Orthopaedics & Joint Replacement', quals: 'MBBS, MS (Ortho), FRCS',                  years: '22 years', nmcId: 'DMC-45678', opd: 'Mon, Wed, Fri Â· 10 AM â€“ 1 PM, 6 PM â€“ 8 PM', avatar: 'd' },
+      { name: 'Dr. Sunita Iyer',    specialty: 'Consultant Gynaecologist',            quals: 'MBBS, MS (OBG), Fellowship Laparoscopy', years: '18 years', nmcId: 'MMC-56789', opd: 'Monâ€“Sat Â· 11 AM â€“ 2 PM',                avatar: 'a' },
+      { name: 'Dr. Rohan Mehta',    specialty: 'Consultant Pulmonologist',            quals: 'MBBS, MD (Pulmonary Medicine)',           years: '12 years', nmcId: 'MMC-67890', opd: 'Tue, Thu, Sat Â· 10 AM â€“ 1 PM',           avatar: 'b' }
+    ],
+    servicesLabel: 'What we offer',
+    servicesHeadline: 'Every stage of care, under one roof.',
+    servicesBody: 'OPDs and walk-in clinics, in-patient wards, intensive care, day-care procedures, full-spectrum diagnostics and a 24Ã—7 pharmacy. So you donâ€™t bounce across the city.',
+    services: [
+      { icon: 'ðŸ©»', name: 'OPD Consultations',  body: 'Walk-in or booked OPDs across 28 specialties. Most consultants give a 20-minute slot per patient.' },
+      { icon: 'ðŸ›',  name: 'In-patient & ICU',    body: '180 beds across general, semi-private, private and ICU. 24Ã—7 resident doctor on every floor.' },
+      { icon: 'ðŸš‘', name: '24Ã—7 Emergency',      body: 'Triage in under 5 minutes. Cardiac, stroke, trauma and paediatric emergency teams on call.' },
+      { icon: 'ðŸ”¬', name: 'Diagnostics',         body: 'Full radiology suite â€” MRI, CT, ultrasound, X-ray â€” and a NABL-accredited pathology lab.' },
+      { icon: 'ðŸ’Š', name: '24Ã—7 Pharmacy',       body: 'In-house pharmacy stocking generic and branded medicines. No closure even on holidays.' },
+      { icon: 'ðŸ§˜', name: 'Day-care Procedures', body: 'Minor surgeries, infusions, endoscopies and chemo day-care with home-by-evening discharge.' }
+    ],
+    processLabel: 'Simple visit, real care',
+    processHeadline: 'How an appointment works here.',
+    processSteps: [
+      { icon: 'ðŸ“±', title: 'Book online or call',   body: 'Pick your specialty and doctor on the website, or call our help-desk. You get instant SMS confirmation.', duration: '2 minutes' },
+      { icon: 'ðŸ¥',  title: 'Walk in calmly',        body: 'Show the SMS at the help-desk. A care coordinator escorts you to your consultant on time.',                 duration: 'No wait' },
+      { icon: 'ðŸ©º', title: 'Unhurried consultation', body: 'Your doctor gives you their full 20-minute slot, listens, examines, and explains the plan.',                duration: '20 minutes' },
+      { icon: 'ðŸ“‹', title: 'Care plan in writing',   body: 'You leave with a printed care plan â€” diagnosis, tests if any, prescription, and review schedule.',          duration: 'Same visit' }
+    ],
+    packagesLabel: 'Stay ahead with prevention',
+    packagesHeadline: 'Health check-ups that catch what matters.',
+    packagesBody: 'Tests grouped by age and risk profile â€” not by what we can up-sell. Each package includes a consult with a physician to walk you through the results.',
+    healthPackages: [
+      { name: 'Basic Health Check',  price: 'â‚¹1,499', priceNote: 'All-inclusive Â· No hidden tests', ideal: 'Adults 25â€“40 Â· Annual screening', tests: [
+        { label: 'Complete blood count + ESR' }, { label: 'Fasting blood sugar + HbA1c' },
+        { label: 'Lipid profile (cholesterol)' }, { label: 'Liver & kidney function tests' },
+        { label: 'Urine routine' }, { label: 'Physician consultation included' }
+      ] },
+      { name: 'Comprehensive Plus',  price: 'â‚¹4,999', priceNote: 'All-inclusive Â· Includes imaging', ideal: 'Adults 35â€“55 Â· Mid-career checkpoint', tests: [
+        { label: 'Everything in Basic, plus:' }, { label: 'Thyroid panel (TSH, T3, T4)' },
+        { label: 'ECG + 2D Echo cardiogram' }, { label: 'Chest X-ray + Ultrasound abdomen' },
+        { label: 'Vitamin D and B12 levels' }, { label: 'Eye check-up + consultation' }
+      ] },
+      { name: 'Senior Care 60+',      price: 'â‚¹6,999', priceNote: 'For adults 60+ Â· Annual',          ideal: 'Adults 60+ Â· Holistic geriatric', tests: [
+        { label: 'Everything in Comprehensive, plus:' }, { label: 'Bone density (DEXA) scan' },
+        { label: 'PSA / mammography (gender-specific)' }, { label: 'Stress test (TMT) â€” if cleared' },
+        { label: 'Memory & mood screening' }, { label: 'Geriatrician consultation' }
+      ] }
+    ],
+    aboutLabel: 'About the hospital',
+    aboutHeadlineLead: 'A hospital you can',
+    aboutHeadlineEmph: 'walk into without dread.',
+    aboutBody: 'Aarogya Hospital was founded in 2008 by a small group of doctors who wanted to slow medicine down â€” to give every patient their full appointment slot, write a clear care plan in plain language, and never up-sell investigations that didnâ€™t belong. Today we run 180 beds across 28 specialties, NABH-accredited and Clinical Establishment Act registered, with a 24Ã—7 emergency department and an in-house pharmacy. We employ over 120 full-time doctors and 350 nursing and allied staff. Half our patients return for a second concern, and half of those bring family along. We are quietly proud of that.',
+    aboutPillars: [
+      { icon: 'ðŸ¤', title: 'Patient-first',       body: 'Decisions made with the patient, not for them. Written care plans, time to ask questions, and no rushed exits.' },
+      { icon: 'ðŸ“Š', title: 'Evidence-based',      body: 'We follow Indian medical-society guidelines and refuse therapies without proven benefit, even when popular.' },
+      { icon: 'ðŸ’¸', title: 'Transparent pricing', body: 'Every package and surgery has a published price. Estimates are itemised. No surprise on discharge.' },
+      { icon: 'ðŸ§‘â€ðŸ¤â€ðŸ§‘', title: 'Always accessible',   body: 'Cashless across 38 insurers. EMI plans for self-paid procedures. We never turn away an emergency.' }
+    ],
+    insurersLabel: 'Cashless treatment available',
+    insurersHeadline: 'Empanelled with 38 insurers & TPAs.',
+    insurers: [
+      { name: 'Star Health' },     { name: 'Niva Bupa' },    { name: 'HDFC ERGO Health' },
+      { name: 'ICICI Lombard' },   { name: 'Bajaj Allianz' }, { name: 'Aditya Birla Health' },
+      { name: 'Care Health' },     { name: 'New India Assurance' }, { name: 'TATA AIG' },
+      { name: 'CGHS' },            { name: 'ECHS' },          { name: 'MediAssist TPA' },
+      { name: 'Paramount TPA' },   { name: 'Vidal Health TPA' }
+    ],
+    testimonials: [
+      { quote: 'I came in panicking after my fatherâ€™s chest-pain episode at 11 PM. The triage nurse calmed us in two minutes, the cardiologist was on the floor within ten. They explained every decision before they made it.', name: 'Karthik Subramaniam', role: 'Bandra Â· 36, son of patient',       productUsed: 'Emergency Â· Cardiology' },
+      { quote: 'My daughterâ€™s paediatric OPD has been our weekly stop for three years now. Dr. Priya remembers every detail â€” what worried us last month, what we tried, whether it worked. Thatâ€™s the part you canâ€™t fake.',    name: 'Maitri Shah',          role: 'Khar West Â· 34, parent',          productUsed: 'Paediatrics' },
+      { quote: 'I dreaded my motherâ€™s knee replacement. The pre-op coordinator walked us through the costs, the estimate matched the final bill almost to the rupee, and she was back home walking in four weeks.',                name: 'Rohit Phadnis',        role: 'Vile Parle Â· 48, family-caregiver', productUsed: 'Orthopaedics Â· Joint replacement' }
+    ],
+    grievanceLabel: 'Patient Care Â· Grievance Redressal',
+    grievanceHeadline: 'A clear path if something ever goes wrong.',
+    grievanceBody: 'Aarogya Hospital maintains a Patient Charter and a 4-tier grievance pathway as required under the Clinical Establishment Act. All complaints are acknowledged within 24 hours.',
+    groName: 'Ms. Rashmi Khanna',
+    groRole: 'Patient Grievance Officer',
+    groEmail: 'patientcare@aarogyahospital.in',
+    groPhone: '+91 22 4000 2000',
+    groAddress: 'Aarogya Hospital\nBandra West, Mumbai â€” 400050\nMaharashtra',
+    groTimings: 'Monâ€“Sat Â· 10 AM â€“ 6 PM IST',
+    escalationLevels: [
+      { level: 'Level 1 Â· Patient Grievance Officer', body: 'Write or call the Patient Grievance Officer. Almost all concerns are addressed at this stage.', contact: 'patientcare@aarogyahospital.in Â· +91 22 4000 2000', tat: 'Within 3 days' },
+      { level: 'Level 2 Â· Medical Superintendent',     body: 'Unresolved? Escalate to the Medical Superintendent with your ticket reference.',               contact: 'ms@aarogyahospital.in',                                tat: 'Within 10 days' },
+      { level: 'Level 3 Â· State Medical Council',      body: 'For complaints involving professional medical conduct, lodge with the State Medical Council.', contact: 'mahamedicalcouncil.in',                                tat: 'Per Council norms' },
+      { level: 'Level 4 Â· District Health Officer',    body: 'For Clinical Establishment Act violations, write to the District Health Officer / DGHS.',      contact: 'dho-mumbai.maharashtra.gov.in',                        tat: 'Per CEA norms' }
+    ],
+    ctaHeadline: 'Book an appointment â€” the doctor will see you on time.',
+    ctaBody: 'Walk-ins welcome, but a booking saves you the wait. For emergencies, please call our 24Ã—7 helpline directly.',
+    ctaButton: 'Book Appointment',
+    ctaNote: '24Ã—7 Emergency: +91 1800 000 911 Â· NABH Accredited Â· NABH-H-001-2024'
+  };
+}
+
 // â”€â”€ Per-template data picker â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
 function sampleFor(templateId) {
   if (templateId === 'template-2')  return agencySample();
@@ -1588,6 +1741,7 @@ function sampleFor(templateId) {
   if (templateId === 'template-14') return mfDistributorSample();
   if (templateId === 'template-15') return stockBrokerSample();
   if (templateId === 'template-16') return sebiRiaSample();
+  if (templateId === 'template-17') return hospitalSample();
   return commonSample;
 }
 
@@ -1624,13 +1778,13 @@ function errorPage(n, message) {
 
 // â”€â”€ Write individual preview files â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
 const OUTDIR = __dirname;
-const TEMPLATES = [1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16];
+const TEMPLATES = [1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17];
 const NAMES = {
   1: 'Editorial',   2: 'Agency',     3: 'Terminal',  4: 'Web3',
   5: 'Local',       6: 'BFSI',       7: 'Startup',   8: 'Insurance',
   9: 'NBFC',       10: 'Restaurant', 11: 'Portfolio',
   12: 'InsurTech SaaS', 13: 'Insurance Market', 14: 'MF Distributor',
-  15: 'Stock Broker', 16: 'SEBI RIA'
+  15: 'Stock Broker', 16: 'SEBI RIA', 17: 'Healthcare Clinic'
 };
 
 const results = TEMPLATES.map(n => {

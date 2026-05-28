@@ -30,7 +30,8 @@ const TEMPLATES = [
   { templateId: 'template-13', displayName: 'Insurance Market',       isPublished: true  },
   { templateId: 'template-14', displayName: 'Mutual Fund Distributor',   isPublished: true  },
   { templateId: 'template-15', displayName: 'Stock Broker / Demat',      isPublished: true  },
-  { templateId: 'template-16', displayName: 'SEBI RIA / Investment Adviser', isPublished: true }
+  { templateId: 'template-16', displayName: 'SEBI RIA / Investment Adviser',   isPublished: true },
+  { templateId: 'template-17', displayName: 'Healthcare Clinic / Hospital',    isPublished: true }
 ];
 
 async function seedTemplates() {

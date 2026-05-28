@@ -1,0 +1,1109 @@
+<%
+  // ── SAFE LOCALS (Round S — Healthcare Clinic / Hospital, template-17) ─────
+  const L = locals || {};
+  const esc = (s) => (s == null ? '' : String(s));
+  const def = (v, d) => (v && String(v).trim() ? v : d);
+
+  const bn      = esc(L.businessName) || 'Aarogya Hospital';
+  const tagln   = esc(L.tagline)      || 'World-class care, neighbourhood feel.';
+  const accent  = L.primaryColor      || '#5eb0ef';
+  const year    = L.year              || new Date().getFullYear();
+  const founded = esc(L.foundedYear)  || '2008';
+
+  // Regulatory
+  const nmcRegV           = def(L.nmcReg,           'NMC-12345');
+  const nabhRegV          = def(L.nabhReg,          'NABH-H-001-2024');
+  const clinicalEstabRegV = def(L.clinicalEstabReg, 'CEA/MH/2023/04891');
+  const bmwRegV           = def(L.bmwReg,           'MPCB-BMW-2023-789');
+  const drugLicenseV      = def(L.drugLicense,      'DL: 20B/21B-MH-2024-1234');
+  const hospitalCinV      = esc(L.hospitalCin);
+
+  // Mandatory healthcare disclaimers — must not be removed
+  const MEDICAL_DISC   = 'Information on this website is for general awareness only and does not constitute medical advice. Always consult a qualified medical professional for diagnosis and treatment decisions specific to your condition.';
+  const EMERGENCY_DISC = 'For medical emergencies, please call our 24×7 helpline or visit the nearest emergency department immediately.';
+  const NO_CURE_DISC   = 'We do not advertise cures or guaranteed outcomes for any disease (per Drugs and Magic Remedies (Objectionable Advertisements) Act).';
+
+  // Hero
+  const heroEyebrowV      = def(L.heroEyebrow,      'NABH Accredited · 24/7 Emergency · Since ' + founded);
+  const heroHeadlineLeadV = def(L.heroHeadlineLead, 'Healthcare that');
+  const heroHeadlineEmphV = def(L.heroHeadlineEmph, 'listens.');
+  const heroSubV          = def(L.heroSub,          'A NABH-accredited multi-specialty hospital with a calm waiting room and consultants who give you their full appointment slot. 28 specialties under one roof.');
+  const heroCtaPrimaryV   = def(L.heroCtaPrimary,   'Book Appointment');
+  const heroCtaSecondaryV = def(L.heroCtaSecondary, 'Find a Doctor');
+  const emergencyPhoneV   = def(L.emergencyPhone,   '+91 1800 000 911');
+  const trustStatsList    = (Array.isArray(L.trustStats) && L.trustStats.length)
+    ? L.trustStats
+    : [
+        { value: '28',      label: 'Specialties' },
+        { value: '120+',    label: 'Consultants' },
+        { value: '4 Lakh+', label: 'Patients cared for' },
+        { value: '24/7',    label: 'Emergency response' }
+      ];
+
+  // Specialties
+  const specialtiesLabelV    = def(L.specialtiesLabel,    'Find the right care');
+  const specialtiesHeadlineV = def(L.specialtiesHeadline, 'Twenty-eight specialties. One unhurried appointment.');
+  const specialtiesBodyV     = def(L.specialtiesBody,     'From the everyday clinic visit to the most complex multi-disciplinary case — we keep all of it under one calm roof with consultants who actually return your call.');
+  const specialtiesList      = (Array.isArray(L.specialties) && L.specialties.length)
+    ? L.specialties
+    : [
+        { icon: '❤️', name: 'Cardiology',         body: 'Heart attacks, rhythm disorders, valve disease and preventive cardiology.' },
+        { icon: '🧠', name: 'Neurology',          body: 'Stroke care, epilepsy, migraine clinics and movement-disorder evaluation.' },
+        { icon: '🦴', name: 'Orthopaedics',       body: 'Joint replacements, sports injuries, spine pain and complex trauma.' },
+        { icon: '👶', name: 'Paediatrics',        body: 'Newborn care, vaccination tracking, and a warm play-corner OPD.' },
+        { icon: '🤰', name: 'Obstetrics & Gyn.',   body: 'Antenatal care, painless delivery, gynaecological surgery and fertility.' },
+        { icon: '👁',  name: 'Ophthalmology',     body: 'Cataract, retina clinics, paediatric squint and refractive surgery.' },
+        { icon: '🦷', name: 'Dental',              body: 'Full restorative dentistry, root canals, implants and child dentistry.' },
+        { icon: '🫁', name: 'Pulmonology',         body: 'Asthma, COPD, sleep apnoea evaluation, and chronic cough clinic.' },
+        { icon: '🧬', name: 'Oncology',            body: 'Medical & radiation oncology, day-care chemotherapy and tumour board.' },
+        { icon: '🫀', name: 'Cardio-thoracic',     body: 'Bypass surgery, valve repair/replacement and thoracic surgery.' },
+        { icon: '🩺', name: 'General Medicine',    body: 'Adult OPDs, diabetes & hypertension management, preventive care.' },
+        { icon: '🧴', name: 'Dermatology',         body: 'Eczema, acne, psoriasis, aesthetic dermatology and paediatric skin.' }
+      ];
+
+  // Doctors
+  const doctorsLabelV    = def(L.doctorsLabel,    'Meet our consultants');
+  const doctorsHeadlineV = def(L.doctorsHeadline, 'A bench of doctors you’d want for your own family.');
+  const doctorsBodyV     = def(L.doctorsBody,     'Every consultant is fully NMC-registered with average practice over a decade. We don’t hand you off — your treating doctor sees you on every visit.');
+  const doctorsList      = (Array.isArray(L.doctors) && L.doctors.length)
+    ? L.doctors
+    : [
+        { name: 'Dr. Ananya Verma',    specialty: 'Consultant Cardiologist',          quals: 'MBBS, MD (Medicine), DM (Cardiology)',    years: '16 years', nmcId: 'MMC-12345', opd: 'Mon–Fri · 10 AM – 1 PM, 5 PM – 8 PM', avatar: 'a' },
+        { name: 'Dr. Vikram Rao',       specialty: 'Senior Consultant Neurologist',    quals: 'MBBS, MD (Medicine), DM (Neurology)',     years: '20 years', nmcId: 'KMC-23456', opd: 'Tue–Sat · 11 AM – 2 PM, 6 PM – 8 PM', avatar: 'b' },
+        { name: 'Dr. Priya Nair',       specialty: 'Consultant Paediatrician',         quals: 'MBBS, DCH, MD (Paediatrics)',             years: '14 years', nmcId: 'TNMC-34567', opd: 'Mon–Sat · 9 AM – 12 PM, 4 PM – 7 PM', avatar: 'c' },
+        { name: 'Dr. Arun Kapoor',      specialty: 'HOD Orthopaedics & Joint Replacement', quals: 'MBBS, MS (Ortho), FRCS', years: '22 years', nmcId: 'DMC-45678', opd: 'Mon, Wed, Fri · 10 AM – 1 PM, 6 PM – 8 PM', avatar: 'd' },
+        { name: 'Dr. Sunita Iyer',      specialty: 'Consultant Gynaecologist',         quals: 'MBBS, MS (OBG), Fellowship Laparoscopy',  years: '18 years', nmcId: 'MMC-56789', opd: 'Mon–Sat · 11 AM – 2 PM', avatar: 'a' },
+        { name: 'Dr. Rohan Mehta',      specialty: 'Consultant Pulmonologist',         quals: 'MBBS, MD (Pulmonary Medicine)',           years: '12 years', nmcId: 'MMC-67890', opd: 'Tue, Thu, Sat · 10 AM – 1 PM', avatar: 'b' }
+      ];
+
+  // Services
+  const servicesLabelV    = def(L.servicesLabel,    'What we offer');
+  const servicesHeadlineV = def(L.servicesHeadline, 'Every stage of care, under one roof.');
+  const servicesBodyV     = def(L.servicesBody,     'OPDs and walk-in clinics, in-patient wards, intensive care, day-care procedures, full-spectrum diagnostics and a 24×7 pharmacy. So you don’t bounce across the city.');
+  const servicesList      = (Array.isArray(L.services) && L.services.length && (L.services[0].name || L.services[0].title))
+    ? L.services
+    : [
+        { icon: '🩻', name: 'OPD Consultations',     body: 'Walk-in or booked OPDs across 28 specialties. Most consultants give a 20-minute slot per patient.' },
+        { icon: '🛏', name: 'In-patient & ICU',       body: '180 beds across general, semi-private, private and ICU. 24×7 resident doctor on every floor.' },
+        { icon: '🚑', name: '24×7 Emergency',         body: 'Triage in under 5 minutes. Cardiac, stroke, trauma and paediatric emergency teams on call.' },
+        { icon: '🔬', name: 'Diagnostics',            body: 'Full radiology suite — MRI, CT, ultrasound, X-ray — and a NABL-accredited pathology lab.' },
+        { icon: '💊', name: '24×7 Pharmacy',          body: 'In-house pharmacy stocking generic and branded medicines. No closure even on holidays.' },
+        { icon: '🧘', name: 'Day-care Procedures',    body: 'Minor surgeries, infusions, endoscopies and chemo day-care with home-by-evening discharge.' }
+      ];
+
+  // Process
+  const processLabelV    = def(L.processLabel,    'Simple visit, real care');
+  const processHeadlineV = def(L.processHeadline, 'How an appointment works here.');
+  const processStepsList = (Array.isArray(L.processSteps) && L.processSteps.length)
+    ? L.processSteps
+    : [
+        { icon: '📱', title: 'Book online or call',  body: 'Pick your specialty and doctor on the website, or call our help-desk. You get instant SMS confirmation.', duration: '2 minutes' },
+        { icon: '🏥', title: 'Walk in calmly',        body: 'Show the SMS at the help-desk. A care coordinator escorts you to your consultant on time.',         duration: 'No wait' },
+        { icon: '🩺', title: 'Unhurried consultation', body: 'Your doctor gives you their full 20-minute slot, listens, examines, and explains the plan.',          duration: '20 minutes' },
+        { icon: '📋', title: 'Care plan in writing',   body: 'You leave with a printed care plan — diagnosis, tests if any, prescription, and review schedule.',     duration: 'Same visit' }
+      ];
+
+  // Packages
+  const packagesLabelV    = def(L.packagesLabel,    'Stay ahead with prevention');
+  const packagesHeadlineV = def(L.packagesHeadline, 'Health check-ups that catch what matters.');
+  const packagesBodyV     = def(L.packagesBody,     'Tests grouped by age and risk profile — not by what we can up-sell. Each package includes a consult with a physician to walk you through the results.');
+  const healthPackagesList = (Array.isArray(L.healthPackages) && L.healthPackages.length)
+    ? L.healthPackages
+    : [
+        {
+          name: 'Basic Health Check', price: '₹1,499', priceNote: 'All-inclusive · No hidden tests',
+          ideal: 'Adults 25–40 · Annual screening',
+          tests: [
+            { label: 'Complete blood count + ESR' },
+            { label: 'Fasting blood sugar + HbA1c' },
+            { label: 'Lipid profile (cholesterol)' },
+            { label: 'Liver & kidney function tests' },
+            { label: 'Urine routine' },
+            { label: 'Physician consultation included' }
+          ]
+        },
+        {
+          name: 'Comprehensive Plus', price: '₹4,999', priceNote: 'All-inclusive · Includes imaging',
+          ideal: 'Adults 35–55 · Mid-career checkpoint',
+          tests: [
+            { label: 'Everything in Basic, plus:' },
+            { label: 'Thyroid panel (TSH, T3, T4)' },
+            { label: 'ECG + 2D Echo cardiogram' },
+            { label: 'Chest X-ray + Ultrasound abdomen' },
+            { label: 'Vitamin D and B12 levels' },
+            { label: 'Eye check-up + consultation' }
+          ]
+        },
+        {
+          name: 'Senior Care 60+', price: '₹6,999', priceNote: 'For adults 60+ · Annual',
+          ideal: 'Adults 60+ · Holistic geriatric',
+          tests: [
+            { label: 'Everything in Comprehensive, plus:' },
+            { label: 'Bone density (DEXA) scan' },
+            { label: 'PSA / mammography (gender-specific)' },
+            { label: 'Stress test (TMT) — if cleared' },
+            { label: 'Memory & mood screening' },
+            { label: 'Geriatrician consultation' }
+          ]
+        }
+      ];
+
+  // About
+  const aboutLabelV        = def(L.aboutLabel,        'About the hospital');
+  const aboutHeadlineLeadV = def(L.aboutHeadlineLead, 'A hospital you can');
+  const aboutHeadlineEmphV = def(L.aboutHeadlineEmph, 'walk into without dread.');
+  const aboutBodyV         = def(L.aboutBody,
+    bn + ' was founded in ' + founded + ' by a small group of doctors who wanted to slow medicine down — to give every patient their full appointment slot, write a clear care plan in plain language, and never up-sell investigations that didn’t belong. Today we run 180 beds across 28 specialties, NABH-accredited and Clinical Establishment Act registered, with a 24×7 emergency department and an in-house pharmacy. We employ over 120 full-time doctors and 350 nursing and allied staff. Half our patients return for a second concern, and half of those bring family along. We are quietly proud of that.'
+  );
+  const aboutPillarsList   = (Array.isArray(L.aboutPillars) && L.aboutPillars.length)
+    ? L.aboutPillars
+    : [
+        { icon: '🤝', title: 'Patient-first',       body: 'Decisions made with the patient, not for them. Written care plans, time to ask questions, and no rushed exits.' },
+        { icon: '📊', title: 'Evidence-based',      body: 'We follow Indian medical-society guidelines and refuse therapies without proven benefit, even when popular.' },
+        { icon: '💸', title: 'Transparent pricing', body: 'Every package and surgery has a published price. Estimates are itemised. No surprise on discharge.' },
+        { icon: '🧑‍🤝‍🧑', title: 'Always accessible',   body: 'Cashless across 38 insurers. EMI plans for self-paid procedures. We never turn away an emergency.' }
+      ];
+
+  // Insurers
+  const insurersLabelV    = def(L.insurersLabel,    'Cashless treatment available');
+  const insurersHeadlineV = def(L.insurersHeadline, 'Empanelled with 38 insurers & TPAs.');
+  const insurersList      = (Array.isArray(L.insurers) && L.insurers.length)
+    ? L.insurers
+    : [
+        { name: 'Star Health' },     { name: 'Niva Bupa' },    { name: 'HDFC ERGO Health' },
+        { name: 'ICICI Lombard' },   { name: 'Bajaj Allianz' }, { name: 'Aditya Birla Health' },
+        { name: 'Care Health' },     { name: 'New India Assurance' }, { name: 'TATA AIG' },
+        { name: 'CGHS' },            { name: 'ECHS' },          { name: 'MediAssist TPA' },
+        { name: 'Paramount TPA' },   { name: 'Vidal Health TPA' }
+      ];
+
+  // Testimonials
+  const testimonialsList = (Array.isArray(L.testimonials) && L.testimonials.length)
+    ? L.testimonials
+    : [
+        { quote: 'I came in panicking after my father’s chest-pain episode at 11 PM. The triage nurse calmed us in two minutes, the cardiologist was on the floor within ten. They explained every decision before they made it.', name: 'Karthik Subramaniam', role: 'Bandra · 36, son of patient',     productUsed: 'Emergency · Cardiology' },
+        { quote: 'My daughter’s paediatric OPD has been our weekly stop for three years now. Dr. Priya remembers every detail — what worried us last month, what we tried, whether it worked. That’s the part you can’t fake.',    name: 'Maitri Shah',            role: 'Khar West · 34, parent',         productUsed: 'Paediatrics' },
+        { quote: 'I dreaded my mother’s knee replacement. The pre-op coordinator walked us through the costs, the estimate matched the final bill almost to the rupee, and she was back home walking in four weeks.',              name: 'Rohit Phadnis',          role: 'Vile Parle · 48, family-caregiver', productUsed: 'Orthopaedics · Joint replacement' }
+      ];
+
+  // Grievance
+  const grievanceLabelV    = def(L.grievanceLabel,    'Patient Care · Grievance Redressal');
+  const grievanceHeadlineV = def(L.grievanceHeadline, 'A clear path if something ever goes wrong.');
+  const grievanceBodyV     = def(L.grievanceBody,     bn + ' maintains a Patient Charter and a 4-tier grievance pathway as required under the Clinical Establishment Act. All complaints are acknowledged within 24 hours.');
+  const groNameV    = def(L.groName,    'Ms. Rashmi Khanna');
+  const groRoleV    = def(L.groRole,    'Patient Grievance Officer');
+  const groEmailV   = def(L.groEmail,   'patientcare@aarogyahospital.in');
+  const groPhoneV   = def(L.groPhone,   '+91 22 4000 2000');
+  const groAddressV = def(L.groAddress, bn + '\nBandra West, Mumbai — 400050\nMaharashtra');
+  const groTimingsV = def(L.groTimings, 'Mon–Sat · 10 AM – 6 PM IST');
+  const escalationLevelsList = (Array.isArray(L.escalationLevels) && L.escalationLevels.length)
+    ? L.escalationLevels
+    : [
+        { level: 'Level 1 · Patient Grievance Officer', body: 'Write or call the Patient Grievance Officer. Almost all concerns are addressed at this stage.', contact: groEmailV + ' · ' + groPhoneV,                                tat: 'Within 3 days' },
+        { level: 'Level 2 · Medical Superintendent',     body: 'Unresolved? Escalate to the Medical Superintendent with your ticket reference.',               contact: 'ms@aarogyahospital.in',                                       tat: 'Within 10 days' },
+        { level: 'Level 3 · State Medical Council',      body: 'For complaints involving professional medical conduct, lodge with the State Medical Council.', contact: 'mahamedicalcouncil.in',                                       tat: 'Per Council norms' },
+        { level: 'Level 4 · District Health Officer',    body: 'For Clinical Establishment Act violations, write to the District Health Officer / DGHS.',     contact: 'dho-mumbai.maharashtra.gov.in',                               tat: 'Per CEA norms' }
+      ];
+
+  // CTA
+  const ctaHeadlineV = def(L.ctaHeadline, 'Book an appointment — the doctor will see you on time.');
+  const ctaBodyV     = def(L.ctaBody,     'Walk-ins welcome, but a booking saves you the wait. For emergencies, please call our 24×7 helpline directly.');
+  const ctaButtonV   = def(L.ctaButton,   'Book Appointment');
+  const ctaNoteV     = def(L.ctaNote,     '24×7 Emergency: ' + emergencyPhoneV + ' · NABH Accredited · ' + nabhRegV);
+
+  // Contact
+  const emailV   = esc(L.email)   || 'hello@aarogyahospital.in';
+  const phoneV   = esc(L.phone)   || '+91 22 4000 2000';
+  const addressV = esc(L.address) || 'Bandra West, Mumbai 400050';
+  const hoursV   = esc(L.hours)   || 'OPDs: Mon–Sat · 9 AM – 9 PM · Emergency 24/7';
+
+  function initialsOf(name) {
+    if (!name) return '·';
+    const parts = String(name).trim().replace(/^Dr\.?\s+/i, '').split(/\s+/);
+    const a = (parts[0] || '')[0] || '';
+    const b = (parts[1] || '')[0] || (parts[0] || '').slice(1, 2);
+    return (a + b).toUpperCase();
+  }
+
+  // Doctor cartoon avatar — 4 variants, all SVG. Different hair, skin, glasses.
+  function avatarSvg(style) {
+    const s = (style || 'a').toLowerCase();
+    const variants = {
+      a: { skin: '#f4c79a', hair: '#3a2820', glasses: false, hairPath: 'M 92 100 Q 88 50 140 50 Q 192 50 188 96 Q 192 78 184 66 Q 170 52 140 52 Q 110 52 96 66 Q 88 78 92 100 Z M 94 106 Q 90 132 104 148 L 86 144 Q 84 122 94 106 Z' },
+      b: { skin: '#e8b890', hair: '#2c2118', glasses: true,  hairPath: 'M 100 90 Q 95 55 140 55 Q 185 55 180 90 Q 184 78 178 70 Q 168 60 140 60 Q 112 60 102 70 Q 96 78 100 90 Z' },
+      c: { skin: '#ddb088', hair: '#1a1208', glasses: false, hairPath: 'M 90 110 Q 86 48 140 48 Q 194 48 190 108 Q 195 88 188 72 Q 174 56 140 56 Q 106 56 92 72 Q 85 88 90 110 Z M 86 120 Q 78 150 92 168 L 70 162 Q 70 136 86 120 Z M 194 120 Q 202 150 188 168 L 210 162 Q 210 136 194 120 Z' },
+      d: { skin: '#d9a679', hair: '#1f1208', glasses: true,  hairPath: 'M 104 86 Q 100 52 140 52 Q 180 52 176 86 Q 180 76 174 68 Q 164 58 140 58 Q 116 58 106 68 Q 100 76 104 86 Z' }
+    };
+    const v = variants[s] || variants.a;
+    const glassesSvg = v.glasses
+      ? '<rect x="116" y="92" width="20" height="14" rx="4" fill="none" stroke="#1c2330" stroke-width="2"/><rect x="144" y="92" width="20" height="14" rx="4" fill="none" stroke="#1c2330" stroke-width="2"/><line x1="136" y1="99" x2="144" y2="99" stroke="#1c2330" stroke-width="2"/>'
+      : '';
+    return `
+      <svg viewBox="0 0 280 280" xmlns="http://www.w3.org/2000/svg" style="width:100%;height:100%;display:block">
+        <defs><linearGradient id="bg-${s}" x1="0" y1="0" x2="0" y2="1"><stop offset="0%" stop-color="#eaf4fc"/><stop offset="100%" stop-color="#d6e9f7"/></linearGradient></defs>
+        <rect width="280" height="280" fill="url(#bg-${s})"/>
+        <!-- Soft blob behind head -->
+        <circle cx="140" cy="200" r="120" fill="#ffffff" opacity=".55"/>
+        <!-- Lab coat body -->
+        <path d="M 70 280 L 70 220 Q 90 188 140 188 Q 190 188 210 220 L 210 280 Z" fill="#ffffff" stroke="#cfdfee" stroke-width="2"/>
+        <!-- Coat collar V -->
+        <path d="M 124 188 L 140 208 L 156 188 L 154 218 L 126 218 Z" fill="#5eb0ef" opacity=".25"/>
+        <!-- Stethoscope (around neck) -->
+        <path d="M 116 192 Q 100 220 116 245" stroke="#34d399" stroke-width="3" fill="none" stroke-linecap="round"/>
+        <path d="M 164 192 Q 180 220 164 245" stroke="#34d399" stroke-width="3" fill="none" stroke-linecap="round"/>
+        <circle cx="140" cy="252" r="9" fill="#34d399"/>
+        <circle cx="140" cy="252" r="4" fill="#10b981"/>
+        <!-- ID badge -->
+        <rect x="178" y="215" width="22" height="28" rx="3" fill="#fff" stroke="#cfdfee" stroke-width="1.5"/>
+        <line x1="183" y1="222" x2="195" y2="222" stroke="#5eb0ef" stroke-width="2"/>
+        <line x1="183" y1="227" x2="192" y2="227" stroke="#9ec5e6" stroke-width="1.5"/>
+        <line x1="183" y1="232" x2="194" y2="232" stroke="#9ec5e6" stroke-width="1.5"/>
+        <!-- Neck -->
+        <rect x="128" y="155" width="24" height="38" rx="8" fill="${v.skin}"/>
+        <path d="M 128 168 Q 140 175 152 168 L 152 192 L 128 192 Z" fill="rgba(0,0,0,.06)"/>
+        <!-- Head -->
+        <ellipse cx="140" cy="120" rx="46" ry="52" fill="${v.skin}"/>
+        <!-- Hair -->
+        <path d="${v.hairPath}" fill="${v.hair}"/>
+        <!-- Subtle cheeks -->
+        <ellipse cx="111" cy="132" rx="6" ry="4" fill="#f48b94" opacity=".35"/>
+        <ellipse cx="169" cy="132" rx="6" ry="4" fill="#f48b94" opacity=".35"/>
+        <!-- Smile -->
+        <path d="M 128 140 Q 140 150 152 140" stroke="#2a1810" stroke-width="2.2" fill="none" stroke-linecap="round"/>
+        <!-- Eyes -->
+        <ellipse cx="124" cy="118" rx="3.5" ry="4.5" fill="#1f1208"/>
+        <ellipse cx="156" cy="118" rx="3.5" ry="4.5" fill="#1f1208"/>
+        <!-- Eye highlights -->
+        <circle cx="125.5" cy="116" r="1" fill="#fff"/>
+        <circle cx="157.5" cy="116" r="1" fill="#fff"/>
+        ${glassesSvg}
+        <!-- Floating medical icons -->
+        <g opacity=".7">
+          <path d="M 32 60 L 40 60 M 36 56 L 36 64" stroke="#34d399" stroke-width="2.5" stroke-linecap="round"/>
+          <path d="M 240 70 L 252 80 M 250 64 L 244 76" stroke="#5eb0ef" stroke-width="2.5" stroke-linecap="round"/>
+          <path d="M 222 38 C 222 32 230 32 230 38 C 230 44 226 46 226 50 C 226 46 222 44 222 38 Z" fill="#fda4af"/>
+        </g>
+      </svg>
+    `;
+  }
+%>
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title><%= bn %> — <%= tagln %></title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@500;600;700;800&family=Inter:wght@300;400;500;600;700&family=Caveat:wght@500;700&display=swap" rel="stylesheet">
+  <style>
+    *,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
+    :root{
+      --blue:       <%= accent %>;
+      --blue-soft:  #8fc7f3;
+      --blue-deep:  #2d7fc2;
+      --blue-tint:  rgba(94,176,239,.12);
+      --blue-glow:  rgba(94,176,239,.28);
+      --mint:       #34d399;
+      --mint-deep:  #10b981;
+      --mint-tint:  rgba(52,211,153,.12);
+      --coral:      #fda4af;
+      --coral-tint: rgba(253,164,175,.18);
+      --sun:        #fbbf24;
+      --sun-tint:   rgba(251,191,36,.18);
+      --red:        #ef4444;
+      --red-tint:   rgba(239,68,68,.1);
+      --white:      #ffffff;
+      --cloud:      #f8fbfd;
+      --sky:        #eaf4fc;
+      --ink:        #0f1a2c;
+      --ink-soft:   #4a5568;
+      --ink-mute:   rgba(15,26,44,.5);
+      --ink-line:   rgba(15,26,44,.07);
+      --ink-line-md:rgba(15,26,44,.12);
+      --display:    'Plus Jakarta Sans', system-ui, sans-serif;
+      --sans:       'Inter', system-ui, -apple-system, sans-serif;
+      --hand:       'Caveat', 'Bradley Hand', cursive;
+    }
+    html{scroll-behavior:smooth}
+    body{font-family:var(--sans);background:var(--white);color:var(--ink);line-height:1.7;-webkit-font-smoothing:antialiased}
+    a{color:inherit;text-decoration:none}
+    button{font-family:inherit;cursor:pointer;border:none}
+    em{font-style:normal;color:var(--blue-deep);position:relative;display:inline-block}
+    em::after{content:'';position:absolute;left:0;right:0;bottom:.06em;height:.28em;background:var(--mint-tint);border-radius:100px;z-index:-1}
+    .container{max-width:1200px;margin:0 auto;padding:0 32px}
+    .reveal{opacity:0;transform:translateY(20px);transition:opacity .6s ease,transform .6s ease}
+    .reveal.visible{opacity:1;transform:translateY(0)}
+
+    /* ── TOPBAR ─────────────────────────────────────────────── */
+    .topbar{background:var(--cloud);color:var(--ink-soft);font-size:.74rem;padding:9px 0;border-bottom:1px solid var(--ink-line)}
+    .topbar-inner{display:flex;align-items:center;justify-content:space-between;gap:18px;flex-wrap:wrap;max-width:1200px;margin:0 auto;padding:0 32px}
+    .topbar-info{display:flex;gap:18px;flex-wrap:wrap;align-items:center}
+    .topbar-info b{font-weight:700;color:var(--ink)}
+    .topbar-emergency{display:inline-flex;align-items:center;gap:8px;background:var(--red-tint);color:#b91c1c;padding:5px 12px;border-radius:100px;font-weight:700;font-size:.74rem}
+    .topbar-emergency::before{content:'🚑';font-size:.85rem}
+
+    /* ── NAV ────────────────────────────────────────────────── */
+    .nav{position:sticky;top:0;z-index:50;background:rgba(255,255,255,.95);backdrop-filter:blur(14px);border-bottom:1px solid var(--ink-line)}
+    .nav-inner{display:flex;align-items:center;justify-content:space-between;padding:16px 0}
+    .brand{display:flex;align-items:center;gap:12px;font-family:var(--display);font-size:1.3rem;font-weight:800;color:var(--ink);letter-spacing:-.015em;white-space:nowrap}
+    .brand-mark{width:42px;height:42px;border-radius:50%;background:linear-gradient(135deg,var(--blue),var(--blue-deep));color:#fff;display:flex;align-items:center;justify-content:center;font-size:1.2rem;box-shadow:0 8px 20px var(--blue-glow);position:relative}
+    .brand-mark::before{content:'+';font-family:var(--display);font-weight:800;font-size:1.5rem;line-height:1}
+    .nav-links{display:flex;gap:26px;align-items:center;list-style:none}
+    .nav-links a{color:var(--ink-soft);font-size:.92rem;font-weight:500;transition:color .2s}
+    .nav-links a:hover{color:var(--blue-deep)}
+    .nav-cta{background:var(--blue-deep);color:#fff;padding:10px 22px;border-radius:100px;font-weight:600;box-shadow:0 8px 22px var(--blue-glow);white-space:nowrap}
+    .nav-cta:hover{background:var(--blue)}
+
+    /* ── BUTTONS ────────────────────────────────────────────── */
+    .btn{display:inline-flex;align-items:center;gap:8px;padding:14px 28px;border-radius:100px;font-size:.95rem;font-weight:600;transition:transform .15s,box-shadow .25s,background .25s}
+    .btn:hover{transform:translateY(-2px)}
+    .btn-primary{background:var(--blue-deep);color:#fff;box-shadow:0 12px 28px var(--blue-glow)}
+    .btn-primary:hover{background:var(--blue);box-shadow:0 16px 38px var(--blue-glow)}
+    .btn-ghost{background:transparent;color:var(--ink);border:1.5px solid var(--ink-line-md)}
+    .btn-ghost:hover{background:var(--cloud);border-color:var(--blue-deep);color:var(--blue-deep)}
+    .btn-emergency{background:var(--red);color:#fff;box-shadow:0 12px 28px rgba(239,68,68,.36)}
+    .btn-emergency:hover{background:#dc2626;box-shadow:0 16px 38px rgba(239,68,68,.5)}
+
+    /* ── HERO ───────────────────────────────────────────────── */
+    .hero{padding:64px 0 100px;position:relative;overflow:hidden;background:linear-gradient(180deg,#ffffff 0%,#f8fbfd 100%)}
+    .hero::before{content:'';position:absolute;top:-220px;right:-220px;width:600px;height:600px;border-radius:50%;background:radial-gradient(circle,var(--blue-tint) 0%,transparent 65%);pointer-events:none}
+    .hero::after{content:'';position:absolute;bottom:-160px;left:-160px;width:420px;height:420px;border-radius:50%;background:radial-gradient(circle,var(--mint-tint) 0%,transparent 65%);pointer-events:none}
+    .hero-grid{display:grid;grid-template-columns:1.05fr .95fr;gap:60px;align-items:center;position:relative}
+    .hero-eyebrow{display:inline-flex;align-items:center;gap:10px;font-size:.78rem;font-weight:600;letter-spacing:.04em;color:var(--blue-deep);background:var(--blue-tint);padding:9px 18px;border-radius:100px;margin-bottom:24px}
+    .hero-eyebrow::before{content:'';width:7px;height:7px;border-radius:50%;background:var(--mint);box-shadow:0 0 0 4px rgba(52,211,153,.25)}
+    .hero-title{font-family:var(--display);font-weight:800;font-size:clamp(2.6rem,5.5vw,4.6rem);line-height:1.05;letter-spacing:-.02em;color:var(--ink);margin-bottom:22px}
+    .hero-sub{font-size:1.06rem;color:var(--ink-soft);max-width:520px;margin-bottom:32px;line-height:1.75}
+    .hero-actions{display:flex;gap:14px;flex-wrap:wrap;margin-bottom:28px}
+    .hero-emergency-pill{display:inline-flex;align-items:center;gap:12px;padding:12px 18px;background:var(--white);border:1.5px solid var(--red-tint);border-radius:14px;box-shadow:0 14px 30px -18px rgba(239,68,68,.32)}
+    .hero-emergency-pill .ic{width:38px;height:38px;border-radius:50%;background:var(--red);color:#fff;display:flex;align-items:center;justify-content:center;font-size:1rem;flex-shrink:0;box-shadow:0 6px 16px rgba(239,68,68,.4)}
+    .hero-emergency-pill small{display:block;font-size:.7rem;color:var(--ink-mute);font-weight:600;letter-spacing:.06em;text-transform:uppercase}
+    .hero-emergency-pill b{display:block;font-family:var(--display);font-size:1.18rem;font-weight:800;color:var(--ink);letter-spacing:-.005em;margin-top:1px}
+
+    /* Hero illustration panel */
+    .hero-illo{position:relative;display:flex;justify-content:center;align-items:center}
+    .hero-disc{position:absolute;width:420px;height:420px;border-radius:50%;background:linear-gradient(160deg,var(--sky),#d6e9f7);z-index:0;box-shadow:inset 0 0 60px rgba(94,176,239,.15)}
+    .hero-doctor{position:relative;z-index:2;width:420px;height:420px}
+    .float-ic{position:absolute;z-index:3;background:var(--white);border-radius:16px;display:flex;align-items:center;gap:9px;padding:11px 14px;box-shadow:0 14px 34px -16px rgba(15,26,44,.16);border:1px solid var(--ink-line);font-size:.82rem;font-weight:600;color:var(--ink)}
+    .float-ic-1{top:8%;left:-4%;color:var(--red)}
+    .float-ic-2{top:42%;right:-8%;color:var(--mint-deep)}
+    .float-ic-3{bottom:5%;left:0;color:var(--blue-deep)}
+    .float-ic .dot{width:30px;height:30px;border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:.95rem;flex-shrink:0}
+    .float-ic-1 .dot{background:var(--red-tint);color:var(--red)}
+    .float-ic-2 .dot{background:var(--mint-tint);color:var(--mint-deep)}
+    .float-ic-3 .dot{background:var(--blue-tint);color:var(--blue-deep)}
+
+    /* ── TRUST STRIP ────────────────────────────────────────── */
+    .trust-strip{background:var(--ink);padding:34px 0;color:#fff}
+    .trust-strip-grid{display:grid;grid-template-columns:repeat(4,1fr);gap:24px;text-align:center}
+    .trust-stat-v{font-family:var(--display);font-size:clamp(1.7rem,2.6vw,2.4rem);font-weight:800;color:#fff;letter-spacing:-.015em;line-height:1}
+    .trust-stat-v span{color:var(--mint)}
+    .trust-stat-l{font-size:.84rem;color:rgba(255,255,255,.65);font-weight:500;margin-top:7px}
+
+    /* ── SECTION ────────────────────────────────────────────── */
+    .section-pad{padding:96px 0}
+    .section-head{text-align:left;max-width:760px;margin-bottom:54px}
+    .section-head.center{margin-left:auto;margin-right:auto;text-align:center}
+    .section-eyebrow{display:inline-block;font-family:var(--hand);font-size:1.3rem;font-weight:500;color:var(--blue-deep);margin-bottom:8px}
+    .section-title{font-family:var(--display);font-size:clamp(2rem,3.6vw,3.1rem);font-weight:800;line-height:1.15;letter-spacing:-.02em;color:var(--ink);margin-bottom:18px}
+    .section-body{font-size:1.02rem;color:var(--ink-soft);line-height:1.78;max-width:660px}
+
+    /* ── SPECIALTIES ────────────────────────────────────────── */
+    .specialties{background:var(--white)}
+    .spec-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(220px,1fr));gap:18px}
+    .spec-card{background:var(--white);border:1px solid var(--ink-line);border-radius:18px;padding:24px;transition:transform .25s,border-color .25s,box-shadow .25s;position:relative;overflow:hidden}
+    .spec-card:hover{transform:translateY(-4px);border-color:var(--blue);box-shadow:0 18px 36px -20px var(--blue-glow)}
+    .spec-icon{width:48px;height:48px;border-radius:14px;background:var(--blue-tint);color:var(--blue-deep);display:flex;align-items:center;justify-content:center;font-size:1.5rem;margin-bottom:14px}
+    .spec-name{font-family:var(--display);font-size:1.08rem;font-weight:700;color:var(--ink);margin-bottom:5px;letter-spacing:-.005em}
+    .spec-body{font-size:.84rem;color:var(--ink-soft);line-height:1.6}
+
+    /* ── DOCTORS ────────────────────────────────────────────── */
+    .doctors{background:var(--cloud)}
+    .doc-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(290px,1fr));gap:22px}
+    .doc-card{background:var(--white);border:1px solid var(--ink-line);border-radius:22px;overflow:hidden;transition:transform .3s,box-shadow .3s;display:flex;flex-direction:column}
+    .doc-card:hover{transform:translateY(-4px);box-shadow:0 22px 44px -22px rgba(15,26,44,.16)}
+    .doc-avatar{background:var(--sky);aspect-ratio:1/1;overflow:hidden;position:relative}
+    .doc-info{padding:22px 24px 26px}
+    .doc-name{font-family:var(--display);font-size:1.18rem;font-weight:700;color:var(--ink);letter-spacing:-.005em}
+    .doc-specialty{font-size:.86rem;color:var(--blue-deep);font-weight:600;margin-top:2px;margin-bottom:14px}
+    .doc-quals{font-size:.82rem;color:var(--ink-soft);line-height:1.55;margin-bottom:14px;padding-bottom:14px;border-bottom:1px dashed var(--ink-line-md)}
+    .doc-meta{display:flex;flex-direction:column;gap:6px;font-size:.78rem;color:var(--ink-soft)}
+    .doc-meta-row{display:flex;align-items:flex-start;gap:8px}
+    .doc-meta-row::before{content:'';width:6px;height:6px;border-radius:50%;background:var(--mint);margin-top:6px;flex-shrink:0}
+    .doc-meta-row b{font-weight:600;color:var(--ink);font-family:var(--display);font-size:.78rem;letter-spacing:.02em}
+
+    /* ── SERVICES ───────────────────────────────────────────── */
+    .services{background:var(--white)}
+    .svc-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(290px,1fr));gap:20px}
+    .svc-card{background:var(--cloud);border:1px solid var(--ink-line);border-radius:20px;padding:30px 28px;transition:transform .25s,box-shadow .25s}
+    .svc-card:hover{transform:translateY(-3px);background:var(--white);box-shadow:0 16px 36px -22px rgba(15,26,44,.12)}
+    .svc-icon{width:50px;height:50px;border-radius:14px;background:linear-gradient(135deg,var(--blue),var(--blue-deep));color:#fff;display:flex;align-items:center;justify-content:center;font-size:1.45rem;margin-bottom:16px;box-shadow:0 8px 20px var(--blue-glow)}
+    .svc-name{font-family:var(--display);font-size:1.22rem;font-weight:700;color:var(--ink);margin-bottom:8px;letter-spacing:-.005em}
+    .svc-body{font-size:.92rem;color:var(--ink-soft);line-height:1.7}
+
+    /* ── PROCESS ────────────────────────────────────────────── */
+    .process{background:var(--cloud)}
+    .process-grid{display:grid;grid-template-columns:repeat(4,1fr);gap:24px;position:relative}
+    .process-grid::before{content:'';position:absolute;top:48px;left:8%;right:8%;height:2px;background:repeating-linear-gradient(90deg,var(--blue) 0 6px,transparent 6px 14px);opacity:.4;z-index:0}
+    .process-step{position:relative;z-index:1;text-align:center;padding:0 8px}
+    .process-icon{width:100px;height:100px;border-radius:50%;background:var(--white);border:2px solid var(--blue);color:var(--blue-deep);font-size:2rem;display:flex;align-items:center;justify-content:center;margin:0 auto 22px;position:relative;box-shadow:0 14px 28px -14px var(--blue-glow)}
+    .process-num{position:absolute;top:-8px;right:-8px;width:32px;height:32px;border-radius:50%;background:var(--mint);color:#fff;font-family:var(--display);font-weight:800;font-size:.92rem;display:flex;align-items:center;justify-content:center;box-shadow:0 4px 10px rgba(52,211,153,.5)}
+    .process-title{font-family:var(--display);font-size:1.18rem;font-weight:700;color:var(--ink);margin-bottom:8px;letter-spacing:-.005em}
+    .process-body{font-size:.9rem;color:var(--ink-soft);line-height:1.7;max-width:240px;margin:0 auto 12px}
+    .process-duration{display:inline-block;font-family:var(--hand);font-size:1.08rem;font-weight:500;color:var(--mint-deep)}
+
+    /* ── PACKAGES ───────────────────────────────────────────── */
+    .pkg{background:var(--white)}
+    .pkg-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(290px,1fr));gap:22px;margin-bottom:26px}
+    .pkg-card{background:var(--white);border:1px solid var(--ink-line);border-radius:22px;padding:34px 30px;display:flex;flex-direction:column;transition:transform .3s,box-shadow .3s;position:relative;overflow:hidden}
+    .pkg-card::before{content:'';position:absolute;top:0;left:0;right:0;height:5px;background:linear-gradient(90deg,var(--blue),var(--mint));border-radius:22px 22px 0 0}
+    .pkg-card:nth-child(2){background:linear-gradient(160deg,var(--blue-deep),#1f5a8e);color:#fff;border:none;transform:translateY(-8px)}
+    .pkg-card:nth-child(2)::before{display:none}
+    .pkg-card:nth-child(2) .pkg-name,.pkg-card:nth-child(2) .pkg-price,.pkg-card:nth-child(2) .pkg-tests li{color:#fff}
+    .pkg-card:nth-child(2) .pkg-price-note,.pkg-card:nth-child(2) .pkg-ideal{color:rgba(255,255,255,.75)}
+    .pkg-card:nth-child(2) .pkg-tests li::before{color:var(--mint)}
+    .pkg-card:nth-child(2) .pkg-ideal{background:rgba(255,255,255,.08);border-color:rgba(255,255,255,.16)}
+    .pkg-card:hover{transform:translateY(-4px);box-shadow:0 24px 48px -22px rgba(15,26,44,.16)}
+    .pkg-card:nth-child(2):hover{transform:translateY(-12px)}
+    .pkg-name{font-family:var(--display);font-size:1.35rem;font-weight:700;color:var(--ink);margin-bottom:6px;letter-spacing:-.005em}
+    .pkg-price{font-family:var(--display);font-size:2.3rem;font-weight:800;color:var(--blue-deep);line-height:1;margin-bottom:6px;letter-spacing:-.015em}
+    .pkg-price-note{font-size:.84rem;color:var(--ink-mute);margin-bottom:18px;font-style:italic}
+    .pkg-ideal{font-size:.88rem;color:var(--ink-soft);padding:12px 16px;background:var(--cloud);border-radius:12px;margin-bottom:22px;border:1px dashed var(--ink-line-md)}
+    .pkg-tests{list-style:none;display:flex;flex-direction:column;gap:10px;flex:1}
+    .pkg-tests li{font-size:.92rem;color:var(--ink-soft);line-height:1.55;padding-left:24px;position:relative}
+    .pkg-tests li::before{content:'✓';position:absolute;left:0;top:0;color:var(--mint-deep);font-weight:800;font-size:.95rem}
+
+    /* ── ABOUT ──────────────────────────────────────────────── */
+    .about{background:var(--cloud)}
+    .about-grid{display:grid;grid-template-columns:1fr 1.15fr;gap:60px;align-items:start}
+    .about-card{background:var(--white);border:1px solid var(--ink-line);border-radius:24px;padding:34px;position:relative;overflow:hidden}
+    .about-card::after{content:'+';position:absolute;top:-22px;right:-22px;font-family:var(--display);font-size:8rem;font-weight:800;color:var(--blue-tint);line-height:1}
+    .about-body{font-size:1rem;color:var(--ink-soft);line-height:1.85;margin-bottom:24px}
+    .about-pillars{display:grid;grid-template-columns:1fr 1fr;gap:16px}
+    .about-pillar{background:var(--white);border:1px solid var(--ink-line);border-radius:14px;padding:18px}
+    .about-pillar-icon{width:38px;height:38px;border-radius:50%;background:var(--mint-tint);color:var(--mint-deep);display:flex;align-items:center;justify-content:center;font-size:1.1rem;margin-bottom:10px}
+    .about-pillar-title{font-family:var(--display);font-size:1rem;font-weight:700;color:var(--ink);margin-bottom:4px;letter-spacing:-.005em}
+    .about-pillar-body{font-size:.84rem;color:var(--ink-soft);line-height:1.6}
+
+    /* ── INSURERS ───────────────────────────────────────────── */
+    .insurers{background:var(--white);border-top:1px solid var(--ink-line)}
+    .insurers-pillrow{display:flex;flex-wrap:wrap;gap:10px;justify-content:center;margin-top:30px}
+    .insurer-pill{background:var(--cloud);border:1px solid var(--ink-line);border-radius:100px;padding:10px 18px;font-size:.88rem;font-weight:600;color:var(--ink);display:inline-flex;align-items:center;gap:8px;transition:transform .2s,border-color .2s}
+    .insurer-pill:hover{transform:translateY(-2px);border-color:var(--blue);color:var(--blue-deep)}
+    .insurer-pill::before{content:'✓';color:var(--mint-deep);font-weight:800}
+
+    /* ── TESTIMONIALS ──────────────────────────────────────── */
+    .testi{background:var(--cloud);border-top:1px solid var(--ink-line)}
+    .testi-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(300px,1fr));gap:22px}
+    .testi-card{background:var(--white);border:1px solid var(--ink-line);border-radius:20px;padding:30px;display:flex;flex-direction:column;transition:transform .25s,box-shadow .25s;position:relative}
+    .testi-card::before{content:'\201C';position:absolute;top:14px;right:24px;font-family:var(--display);font-size:5rem;font-weight:800;color:var(--blue-tint);line-height:1}
+    .testi-card:hover{transform:translateY(-3px);box-shadow:0 18px 36px -22px rgba(15,26,44,.14)}
+    .testi-product{font-family:var(--hand);font-size:1.12rem;color:var(--mint-deep);font-weight:500;margin-bottom:14px}
+    .testi-quote{font-size:.98rem;color:var(--ink);line-height:1.7;margin-bottom:22px;flex:1;position:relative;z-index:1}
+    .testi-author{display:flex;align-items:center;gap:12px;border-top:1px dashed var(--ink-line-md);padding-top:18px}
+    .testi-avatar{width:44px;height:44px;border-radius:50%;background:linear-gradient(135deg,var(--blue),var(--blue-deep));color:#fff;display:flex;align-items:center;justify-content:center;font-family:var(--display);font-weight:700;font-size:.92rem;flex-shrink:0}
+    .testi-name{display:block;font-weight:700;color:var(--ink);font-size:.94rem}
+    .testi-role{display:block;font-size:.82rem;color:var(--ink-mute);margin-top:2px}
+
+    /* ── EMERGENCY STRIP (between testi & grievance) ───────── */
+    .emerg{background:linear-gradient(135deg,#ef4444 0%,#dc2626 100%);color:#fff;padding:48px 0;position:relative;overflow:hidden}
+    .emerg::before{content:'';position:absolute;right:-160px;top:-160px;width:420px;height:420px;border-radius:50%;background:radial-gradient(circle,rgba(255,255,255,.14) 0%,transparent 70%);pointer-events:none}
+    .emerg::after{content:'+';position:absolute;left:5%;top:50%;transform:translateY(-50%);font-family:var(--display);font-weight:800;font-size:10rem;color:rgba(255,255,255,.07);line-height:1}
+    .emerg-inner{display:grid;grid-template-columns:1.3fr 1fr;gap:32px;align-items:center;position:relative}
+    .emerg-eyebrow{font-family:var(--hand);font-size:1.25rem;color:rgba(255,255,255,.9);margin-bottom:4px}
+    .emerg-title{font-family:var(--display);font-size:clamp(1.8rem,3vw,2.6rem);font-weight:800;line-height:1.18;letter-spacing:-.015em;color:#fff;margin-bottom:6px}
+    .emerg-sub{color:rgba(255,255,255,.82);font-size:1rem;line-height:1.65}
+    .emerg-phone{display:flex;flex-direction:column;align-items:flex-end;text-align:right;gap:8px}
+    .emerg-phone-num{font-family:var(--display);font-size:clamp(1.6rem,3vw,2.4rem);font-weight:800;color:#fff;letter-spacing:-.02em;line-height:1}
+    .emerg-phone-cap{font-size:.86rem;color:rgba(255,255,255,.72);font-weight:500}
+
+    /* ── GRIEVANCE ─────────────────────────────────────────── */
+    .grievance{background:var(--white)}
+    .gv-card{background:var(--cloud);border:1px solid var(--ink-line-md);border-radius:24px;padding:48px;box-shadow:0 18px 48px -24px rgba(15,26,44,.1)}
+    .gv-grid{display:grid;grid-template-columns:1fr 1.2fr;gap:48px;align-items:start}
+    .gv-officer{background:linear-gradient(160deg,var(--blue-deep),#1f5a8e);color:#fff;border-radius:18px;padding:32px;position:sticky;top:100px}
+    .gv-officer-eyebrow{font-family:var(--hand);font-size:1.08rem;color:var(--mint);margin-bottom:6px}
+    .gv-officer-name{font-family:var(--display);font-size:1.5rem;font-weight:700;margin-bottom:4px;letter-spacing:-.01em}
+    .gv-officer-role{color:rgba(255,255,255,.75);font-size:.92rem;margin-bottom:24px}
+    .gv-info{display:grid;gap:14px;padding-top:20px;border-top:1px dashed rgba(255,255,255,.18)}
+    .gv-info-row{display:grid;grid-template-columns:78px 1fr;gap:12px;font-size:.86rem}
+    .gv-info-key{color:rgba(255,255,255,.55);font-weight:500;text-transform:uppercase;letter-spacing:.05em;font-size:.7rem;padding-top:2px}
+    .gv-info-val{color:#fff;line-height:1.55;word-break:break-word}
+    .gv-escalation{display:flex;flex-direction:column;gap:14px}
+    .gv-step{background:var(--white);border:1px solid var(--ink-line);border-left:4px solid var(--blue);border-radius:14px;padding:20px 22px}
+    .gv-step-head{display:flex;align-items:baseline;justify-content:space-between;gap:10px;flex-wrap:wrap;margin-bottom:8px}
+    .gv-level{font-family:var(--display);font-size:1rem;font-weight:700;color:var(--blue-deep);letter-spacing:-.005em}
+    .gv-tat{font-family:var(--hand);font-size:1.05rem;font-weight:500;color:var(--mint-deep)}
+    .gv-step-body{font-size:.91rem;color:var(--ink-soft);line-height:1.7;margin-bottom:8px}
+    .gv-step-contact{font-size:.84rem;font-weight:500;font-family:ui-monospace,monospace;background:var(--blue-tint);padding:6px 10px;border-radius:6px;display:inline-block;color:var(--blue-deep)}
+
+    /* ── CTA BAND ──────────────────────────────────────────── */
+    .cta-band{background:linear-gradient(135deg,var(--blue) 0%,var(--blue-deep) 100%);color:#fff;padding:88px 0;position:relative;overflow:hidden}
+    .cta-band::before{content:'';position:absolute;right:-220px;top:-200px;width:560px;height:560px;border-radius:50%;background:radial-gradient(circle,rgba(255,255,255,.14) 0%,transparent 70%)}
+    .cta-band::after{content:'';position:absolute;left:-180px;bottom:-160px;width:420px;height:420px;border-radius:50%;background:radial-gradient(circle,rgba(52,211,153,.18) 0%,transparent 70%)}
+    .cta-inner{display:grid;grid-template-columns:1.4fr 1fr;gap:32px;align-items:center;position:relative}
+    .cta-title{font-family:var(--display);font-size:clamp(2rem,3.3vw,2.8rem);font-weight:800;line-height:1.2;margin-bottom:16px;letter-spacing:-.015em;color:#fff}
+    .cta-sub{color:rgba(255,255,255,.85);font-size:1.02rem;line-height:1.7}
+    .cta-actions{text-align:right;display:flex;flex-direction:column;align-items:flex-end;gap:10px}
+    .cta-actions .btn-primary{background:#fff;color:var(--blue-deep);box-shadow:0 14px 32px rgba(0,0,0,.2)}
+    .cta-actions .btn-primary:hover{background:#f5f9fd}
+    .cta-note{font-size:.78rem;color:rgba(255,255,255,.6)}
+    .cta-disclaim{font-size:.74rem;color:rgba(255,255,255,.58);margin-top:26px;font-style:italic;line-height:1.7;border-top:1px dashed rgba(255,255,255,.18);padding-top:22px}
+
+    /* ── CONTACT ───────────────────────────────────────────── */
+    .contact{background:var(--cloud);border-top:1px solid var(--ink-line)}
+    .contact-grid{display:grid;grid-template-columns:1fr 1.2fr;gap:60px;align-items:start}
+    .contact-info{margin-top:28px;padding-top:22px;border-top:1px dashed var(--ink-line-md);display:grid;gap:12px;font-size:.95rem;color:var(--ink-soft)}
+    .contact-info b{color:var(--ink);font-weight:700}
+    .form-card{background:var(--white);border:1px solid var(--ink-line);border-radius:20px;padding:36px;box-shadow:0 18px 44px -22px rgba(15,26,44,.1)}
+    .fg{display:flex;flex-direction:column;gap:6px;margin-bottom:18px}
+    .fg label{font-size:.84rem;font-weight:600;color:var(--ink)}
+    .fg input,.fg select,.fg textarea{padding:13px 16px;border:1.5px solid var(--ink-line-md);border-radius:12px;background:var(--white);font-family:inherit;font-size:.95rem;color:var(--ink);outline:none;transition:border-color .2s}
+    .fg input:focus,.fg select:focus,.fg textarea:focus{border-color:var(--blue-deep)}
+    .fg select option{background:#fff;color:var(--ink)}
+    .fg-row{display:grid;grid-template-columns:1fr 1fr;gap:12px}
+    .form-submit{width:100%;background:var(--blue-deep);color:#fff;padding:15px;border-radius:12px;font-size:.96rem;font-weight:700;transition:background .2s,transform .15s;box-shadow:0 10px 26px var(--blue-glow)}
+    .form-submit:hover{background:var(--blue);transform:translateY(-1px)}
+    .form-disclaim{font-size:.78rem;color:var(--ink-mute);margin-top:12px;line-height:1.6}
+
+    /* ── FOOTER ────────────────────────────────────────────── */
+    .footer{background:var(--ink);color:rgba(255,255,255,.62);padding:64px 0 0}
+    .footer-grid{display:grid;grid-template-columns:1.4fr 1fr 1fr 1fr;gap:44px;margin-bottom:44px}
+    .f-brand{font-family:var(--display);color:#fff;font-size:1.4rem;font-weight:800;margin-bottom:8px;letter-spacing:-.01em}
+    .f-tag{font-size:.86rem;color:rgba(255,255,255,.5);max-width:300px;line-height:1.7;margin-bottom:14px}
+    .f-reg{font-size:.78rem;font-weight:600;color:var(--mint);margin-bottom:6px}
+    .f-cert-row{display:flex;flex-wrap:wrap;gap:8px;margin-top:10px}
+    .f-cert{font-size:.7rem;font-weight:600;color:#fff;background:rgba(255,255,255,.06);border:1px solid rgba(255,255,255,.14);padding:6px 11px;border-radius:100px}
+    .f-col-title{font-family:var(--display);font-size:.92rem;font-weight:700;color:#fff;margin-bottom:16px;letter-spacing:-.005em}
+    .f-links{list-style:none;display:flex;flex-direction:column;gap:10px}
+    .f-links a{color:rgba(255,255,255,.55);font-size:.86rem;transition:color .2s}
+    .f-links a:hover{color:#fff}
+    .footer-disclaim{padding:24px 0;border-top:1px solid rgba(255,255,255,.08);font-size:.76rem;color:rgba(255,255,255,.5);line-height:1.85;font-style:italic}
+    .footer-bottom{border-top:1px solid rgba(255,255,255,.08);padding:20px 0;display:flex;justify-content:space-between;align-items:center;flex-wrap:wrap;gap:16px;font-size:.78rem;color:rgba(255,255,255,.42)}
+
+    /* ── RESPONSIVE ────────────────────────────────────────── */
+    @media(max-width:980px){
+      .hero-grid,.about-grid,.gv-grid,.cta-inner,.contact-grid,.emerg-inner{grid-template-columns:1fr;gap:48px}
+      .gv-officer{position:static}
+      .process-grid{grid-template-columns:repeat(2,1fr)}
+      .process-grid::before{display:none}
+      .trust-strip-grid{grid-template-columns:repeat(2,1fr);gap:24px}
+      .footer-grid{grid-template-columns:1fr 1fr;gap:32px}
+      .cta-actions,.emerg-phone{text-align:left;align-items:flex-start}
+      .hero-disc,.hero-doctor{width:360px;height:360px}
+      .pkg-card:nth-child(2){transform:none}
+      .pkg-card:nth-child(2):hover{transform:translateY(-4px)}
+    }
+    @media(max-width:640px){
+      .container{padding:0 22px}
+      .nav-inner{padding:14px 0}
+      .nav-links li:not(:last-child){display:none}
+      .brand{font-size:1.05rem;gap:10px}
+      .brand-mark{width:34px;height:34px;font-size:1rem}
+      .nav-cta{padding:8px 14px;font-size:.82rem}
+      .topbar{font-size:.68rem;padding:7px 0}
+      .topbar-inner{flex-direction:column;gap:6px;align-items:flex-start}
+      .topbar-info{gap:6px 12px}
+      .section-pad{padding:72px 0}
+      .process-grid{grid-template-columns:1fr}
+      .trust-strip-grid{grid-template-columns:1fr;gap:24px}
+      .footer-grid{grid-template-columns:1fr}
+      .fg-row{grid-template-columns:1fr}
+      .gv-card{padding:30px 22px}
+      .about-pillars{grid-template-columns:1fr}
+      .hero-disc,.hero-doctor{width:300px;height:300px}
+      .float-ic-1,.float-ic-2,.float-ic-3{display:none}
+    }
+  </style>
+</head>
+<body>
+
+<div class="topbar">
+  <div class="topbar-inner">
+    <div class="topbar-info">
+      <span>NMC: <b><%= esc(nmcRegV) %></b></span>
+      <span>NABH: <b><%= esc(nabhRegV) %></b></span>
+      <span>CEA: <b><%= esc(clinicalEstabRegV) %></b></span>
+    </div>
+    <a href="tel:<%= esc(emergencyPhoneV) %>" class="topbar-emergency">24×7 Emergency · <%= esc(emergencyPhoneV) %></a>
+  </div>
+</div>
+
+<nav class="nav">
+  <div class="container nav-inner">
+    <a href="#" class="brand">
+      <span class="brand-mark"></span>
+      <span><%= bn %></span>
+    </a>
+    <ul class="nav-links">
+      <li><a href="#specialties">Specialties</a></li>
+      <li><a href="#doctors">Doctors</a></li>
+      <li><a href="#services">Services</a></li>
+      <li><a href="#packages">Health Checks</a></li>
+      <li><a href="#contact" class="nav-cta"><%= esc(heroCtaPrimaryV) %></a></li>
+    </ul>
+  </div>
+</nav>
+
+<section class="hero">
+  <div class="container hero-grid">
+    <div class="reveal">
+      <div class="hero-eyebrow"><%= esc(heroEyebrowV) %></div>
+      <h1 class="hero-title"><%= esc(heroHeadlineLeadV) %> <em><%= esc(heroHeadlineEmphV) %></em></h1>
+      <p class="hero-sub"><%= esc(heroSubV) %></p>
+      <div class="hero-actions">
+        <a href="#contact" class="btn btn-primary"><%= esc(heroCtaPrimaryV) %> →</a>
+        <a href="#doctors" class="btn btn-ghost"><%= esc(heroCtaSecondaryV) %></a>
+      </div>
+      <a href="tel:<%= esc(emergencyPhoneV) %>" class="hero-emergency-pill">
+        <span class="ic">🚑</span>
+        <span><small>24×7 Emergency</small><b><%= esc(emergencyPhoneV) %></b></span>
+      </a>
+    </div>
+
+    <div class="hero-illo reveal">
+      <div class="hero-disc"></div>
+      <div class="float-ic float-ic-1">
+        <span class="dot">❤</span>
+        <span>NABH Accredited</span>
+      </div>
+      <div class="float-ic float-ic-2">
+        <span class="dot">+</span>
+        <span>28 Specialties</span>
+      </div>
+      <div class="float-ic float-ic-3">
+        <span class="dot">⏱</span>
+        <span>On-time appointments</span>
+      </div>
+      <div class="hero-doctor">
+        <svg viewBox="0 0 280 280" xmlns="http://www.w3.org/2000/svg" style="width:100%;height:100%;display:block">
+          <defs>
+            <linearGradient id="bgH" x1="0" y1="0" x2="0" y2="1"><stop offset="0%" stop-color="rgba(255,255,255,0)"/><stop offset="100%" stop-color="rgba(255,255,255,0)"/></linearGradient>
+            <linearGradient id="skinH" x1="0" y1="0" x2="0" y2="1"><stop offset="0%" stop-color="#f4c79a"/><stop offset="100%" stop-color="#e6b288"/></linearGradient>
+          </defs>
+          <!-- Body / lab coat -->
+          <path d="M 60 290 L 60 215 Q 90 175 140 175 Q 190 175 220 215 L 220 290 Z" fill="#ffffff" stroke="#cfdfee" stroke-width="2"/>
+          <!-- Coat collar V -->
+          <path d="M 122 175 L 140 205 L 158 175 L 156 222 L 124 222 Z" fill="#5eb0ef" opacity=".25"/>
+          <!-- Stethoscope around neck -->
+          <path d="M 114 178 Q 96 215 116 248" stroke="#34d399" stroke-width="3.5" fill="none" stroke-linecap="round"/>
+          <path d="M 166 178 Q 184 215 164 248" stroke="#34d399" stroke-width="3.5" fill="none" stroke-linecap="round"/>
+          <circle cx="140" cy="254" r="11" fill="#34d399"/>
+          <circle cx="140" cy="254" r="5" fill="#10b981"/>
+          <!-- ID badge clipped to coat -->
+          <rect x="186" y="208" width="26" height="32" rx="3" fill="#fff" stroke="#cfdfee" stroke-width="1.5"/>
+          <circle cx="199" cy="219" r="4.5" fill="#5eb0ef"/>
+          <line x1="190" y1="228" x2="208" y2="228" stroke="#5eb0ef" stroke-width="2"/>
+          <line x1="190" y1="233" x2="205" y2="233" stroke="#9ec5e6" stroke-width="1.5"/>
+          <!-- Neck -->
+          <rect x="128" y="138" width="24" height="42" rx="9" fill="url(#skinH)"/>
+          <path d="M 128 152 Q 140 160 152 152 L 152 178 L 128 178 Z" fill="rgba(0,0,0,.06)"/>
+          <!-- Head -->
+          <ellipse cx="140" cy="100" rx="50" ry="56" fill="url(#skinH)"/>
+          <!-- Hair -->
+          <path d="M 88 90 Q 84 38 140 38 Q 196 38 192 88 Q 198 70 188 56 Q 174 42 140 42 Q 106 42 92 56 Q 82 70 88 90 Z" fill="#3a2820"/>
+          <!-- Cheeks -->
+          <ellipse cx="108" cy="115" rx="7" ry="5" fill="#f48b94" opacity=".4"/>
+          <ellipse cx="172" cy="115" rx="7" ry="5" fill="#f48b94" opacity=".4"/>
+          <!-- Smile -->
+          <path d="M 124 122 Q 140 135 156 122" stroke="#2a1810" stroke-width="2.5" fill="none" stroke-linecap="round"/>
+          <!-- Eyes -->
+          <ellipse cx="122" cy="98" rx="4" ry="5" fill="#1f1208"/>
+          <ellipse cx="158" cy="98" rx="4" ry="5" fill="#1f1208"/>
+          <circle cx="124" cy="96" r="1.2" fill="#fff"/>
+          <circle cx="160" cy="96" r="1.2" fill="#fff"/>
+          <!-- Eyebrows -->
+          <path d="M 114 86 Q 122 81 130 86" stroke="#3a2820" stroke-width="2.5" fill="none" stroke-linecap="round"/>
+          <path d="M 150 86 Q 158 81 166 86" stroke="#3a2820" stroke-width="2.5" fill="none" stroke-linecap="round"/>
+          <!-- Pocket cross on coat -->
+          <rect x="86" y="228" width="22" height="22" rx="3" fill="#fff" stroke="#cfdfee" stroke-width="1.5"/>
+          <line x1="97" y1="234" x2="97" y2="244" stroke="#ef4444" stroke-width="2.5" stroke-linecap="round"/>
+          <line x1="92" y1="239" x2="102" y2="239" stroke="#ef4444" stroke-width="2.5" stroke-linecap="round"/>
+          <!-- Floating heart, plus -->
+          <g opacity=".85">
+            <path d="M 240 60 C 240 52 252 52 252 60 C 252 68 246 70 246 76 C 246 70 240 68 240 60 Z" fill="#fda4af"/>
+            <path d="M 28 80 L 38 80 M 33 75 L 33 85" stroke="#34d399" stroke-width="3" stroke-linecap="round"/>
+            <circle cx="244" cy="240" r="6" fill="#fbbf24" opacity=".6"/>
+            <circle cx="36" cy="240" r="5" fill="#5eb0ef" opacity=".6"/>
+          </g>
+        </svg>
+      </div>
+    </div>
+  </div>
+</section>
+
+<div class="trust-strip">
+  <div class="container">
+    <div class="trust-strip-grid">
+      <% trustStatsList.forEach(function(s){ %>
+        <div>
+          <div class="trust-stat-v"><%= esc(s.value) %></div>
+          <div class="trust-stat-l"><%= esc(s.label) %></div>
+        </div>
+      <% }); %>
+    </div>
+  </div>
+</div>
+
+<section id="specialties" class="specialties section-pad">
+  <div class="container">
+    <div class="section-head reveal">
+      <div class="section-eyebrow"><%= esc(specialtiesLabelV) %></div>
+      <h2 class="section-title"><%= esc(specialtiesHeadlineV) %></h2>
+      <p class="section-body"><%= esc(specialtiesBodyV) %></p>
+    </div>
+    <div class="spec-grid">
+      <% specialtiesList.forEach(function(s){ %>
+        <article class="spec-card reveal">
+          <div class="spec-icon"><%= esc(s.icon||'➕') %></div>
+          <h3 class="spec-name"><%= esc(s.name) %></h3>
+          <p class="spec-body"><%= esc(s.body) %></p>
+        </article>
+      <% }); %>
+    </div>
+  </div>
+</section>
+
+<section id="doctors" class="doctors section-pad">
+  <div class="container">
+    <div class="section-head reveal">
+      <div class="section-eyebrow"><%= esc(doctorsLabelV) %></div>
+      <h2 class="section-title"><%= esc(doctorsHeadlineV) %></h2>
+      <p class="section-body"><%= esc(doctorsBodyV) %></p>
+    </div>
+    <div class="doc-grid">
+      <% doctorsList.forEach(function(d){ %>
+        <article class="doc-card reveal">
+          <div class="doc-avatar"><%- avatarSvg(d.avatar || 'a') %></div>
+          <div class="doc-info">
+            <h3 class="doc-name"><%= esc(d.name) %></h3>
+            <div class="doc-specialty"><%= esc(d.specialty) %></div>
+            <div class="doc-quals"><%= esc(d.quals) %></div>
+            <div class="doc-meta">
+              <%if(d.years){%><div class="doc-meta-row"><span><b>Practice:</b> <%= esc(d.years) %></span></div><%}%>
+              <%if(d.nmcId){%><div class="doc-meta-row"><span><b>NMC / MC:</b> <%= esc(d.nmcId) %></span></div><%}%>
+              <%if(d.opd){%><div class="doc-meta-row"><span><b>OPD:</b> <%= esc(d.opd) %></span></div><%}%>
+            </div>
+          </div>
+        </article>
+      <% }); %>
+    </div>
+  </div>
+</section>
+
+<section id="services" class="services section-pad">
+  <div class="container">
+    <div class="section-head reveal">
+      <div class="section-eyebrow"><%= esc(servicesLabelV) %></div>
+      <h2 class="section-title"><%= esc(servicesHeadlineV) %></h2>
+      <p class="section-body"><%= esc(servicesBodyV) %></p>
+    </div>
+    <div class="svc-grid">
+      <% servicesList.forEach(function(s){ %>
+        <article class="svc-card reveal">
+          <div class="svc-icon"><%= esc(s.icon||'+') %></div>
+          <h3 class="svc-name"><%= esc(s.name) %></h3>
+          <p class="svc-body"><%= esc(s.body) %></p>
+        </article>
+      <% }); %>
+    </div>
+  </div>
+</section>
+
+<section class="process section-pad">
+  <div class="container">
+    <div class="section-head center reveal">
+      <div class="section-eyebrow"><%= esc(processLabelV) %></div>
+      <h2 class="section-title"><%= esc(processHeadlineV) %></h2>
+    </div>
+    <div class="process-grid">
+      <% processStepsList.forEach(function(s,i){ var n=String(i+1).padStart(2,'0'); %>
+        <div class="process-step reveal">
+          <div class="process-icon"><%= esc(s.icon||'●') %><span class="process-num"><%= n %></span></div>
+          <h3 class="process-title"><%= esc(s.title) %></h3>
+          <p class="process-body"><%= esc(s.body) %></p>
+          <%if(s.duration){%><span class="process-duration">~ <%= esc(s.duration) %></span><%}%>
+        </div>
+      <% }); %>
+    </div>
+  </div>
+</section>
+
+<section id="packages" class="pkg section-pad">
+  <div class="container">
+    <div class="section-head reveal">
+      <div class="section-eyebrow"><%= esc(packagesLabelV) %></div>
+      <h2 class="section-title"><%= esc(packagesHeadlineV) %></h2>
+      <p class="section-body"><%= esc(packagesBodyV) %></p>
+    </div>
+    <div class="pkg-grid">
+      <% healthPackagesList.forEach(function(p){ var tests = Array.isArray(p.tests) ? p.tests : []; %>
+        <article class="pkg-card reveal">
+          <div class="pkg-name"><%= esc(p.name) %></div>
+          <div class="pkg-price"><%= esc(p.price) %></div>
+          <%if(p.priceNote){%><div class="pkg-price-note"><%= esc(p.priceNote) %></div><%}%>
+          <%if(p.ideal){%><div class="pkg-ideal">★ <%= esc(p.ideal) %></div><%}%>
+          <%if(tests.length){%>
+            <ul class="pkg-tests">
+              <% tests.forEach(function(t){ %><li><%= esc(t.label||t) %></li><% }); %>
+            </ul>
+          <%}%>
+        </article>
+      <% }); %>
+    </div>
+  </div>
+</section>
+
+<section id="about" class="about section-pad">
+  <div class="container">
+    <div class="section-head reveal">
+      <div class="section-eyebrow"><%= esc(aboutLabelV) %></div>
+      <h2 class="section-title"><%= esc(aboutHeadlineLeadV) %> <em><%= esc(aboutHeadlineEmphV) %></em></h2>
+    </div>
+    <div class="about-grid">
+      <div class="about-card reveal">
+        <p class="about-body"><%= esc(aboutBodyV) %></p>
+      </div>
+      <div class="about-pillars reveal">
+        <% aboutPillarsList.forEach(function(p){ %>
+          <div class="about-pillar">
+            <div class="about-pillar-icon"><%= esc(p.icon||'◆') %></div>
+            <div class="about-pillar-title"><%= esc(p.title) %></div>
+            <div class="about-pillar-body"><%= esc(p.body) %></div>
+          </div>
+        <% }); %>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section class="insurers section-pad">
+  <div class="container">
+    <div class="section-head center reveal">
+      <div class="section-eyebrow"><%= esc(insurersLabelV) %></div>
+      <h2 class="section-title"><%= esc(insurersHeadlineV) %></h2>
+    </div>
+    <div class="insurers-pillrow reveal">
+      <% insurersList.forEach(function(i){ %>
+        <span class="insurer-pill"><%= esc(i.name) %></span>
+      <% }); %>
+    </div>
+  </div>
+</section>
+
+<section class="testi section-pad">
+  <div class="container">
+    <div class="section-head center reveal">
+      <div class="section-eyebrow">Stories from our patients</div>
+      <h2 class="section-title">Care that families <em>come back to.</em></h2>
+    </div>
+    <div class="testi-grid">
+      <% testimonialsList.forEach(function(t){ %>
+        <article class="testi-card reveal">
+          <%if(t.productUsed){%><div class="testi-product"><%= esc(t.productUsed) %></div><%}%>
+          <p class="testi-quote"><%= esc(t.quote) %></p>
+          <div class="testi-author">
+            <div class="testi-avatar"><%= initialsOf(t.name) %></div>
+            <div><span class="testi-name"><%= esc(t.name) %></span><%if(t.role){%><span class="testi-role"><%= esc(t.role) %></span><%}%></div>
+          </div>
+        </article>
+      <% }); %>
+    </div>
+  </div>
+</section>
+
+<section class="emerg">
+  <div class="container emerg-inner reveal">
+    <div>
+      <div class="emerg-eyebrow">When every minute counts —</div>
+      <h2 class="emerg-title">24×7 Emergency. Triage in 5 minutes.</h2>
+      <p class="emerg-sub">Cardiac, stroke, trauma and paediatric emergency teams are on call around the clock. Walk in or call — we’ll guide you the rest of the way.</p>
+    </div>
+    <a href="tel:<%= esc(emergencyPhoneV) %>" class="emerg-phone">
+      <span class="emerg-phone-num"><%= esc(emergencyPhoneV) %></span>
+      <span class="emerg-phone-cap">Tap to call · Free helpline</span>
+    </a>
+  </div>
+</section>
+
+<section id="grievance" class="grievance section-pad">
+  <div class="container">
+    <div class="section-head reveal">
+      <div class="section-eyebrow"><%= esc(grievanceLabelV) %></div>
+      <h2 class="section-title"><%= esc(grievanceHeadlineV) %></h2>
+      <p class="section-body"><%= esc(grievanceBodyV) %></p>
+    </div>
+    <div class="gv-card reveal">
+      <div class="gv-grid">
+        <aside class="gv-officer">
+          <div class="gv-officer-eyebrow">Patient grievance officer</div>
+          <div class="gv-officer-name"><%= esc(groNameV) %></div>
+          <div class="gv-officer-role"><%= esc(groRoleV) %></div>
+          <div class="gv-info">
+            <div class="gv-info-row"><span class="gv-info-key">Email</span><span class="gv-info-val"><%= esc(groEmailV) %></span></div>
+            <div class="gv-info-row"><span class="gv-info-key">Phone</span><span class="gv-info-val"><%= esc(groPhoneV) %></span></div>
+            <div class="gv-info-row"><span class="gv-info-key">Address</span><span class="gv-info-val"><%- esc(groAddressV).replace(/\n/g,'<br>') %></span></div>
+            <div class="gv-info-row"><span class="gv-info-key">Hours</span><span class="gv-info-val"><%= esc(groTimingsV) %></span></div>
+          </div>
+        </aside>
+        <div class="gv-escalation">
+          <% escalationLevelsList.forEach(function(e){ %>
+            <div class="gv-step">
+              <div class="gv-step-head">
+                <span class="gv-level"><%= esc(e.level) %></span>
+                <%if(e.tat){%><span class="gv-tat">~ <%= esc(e.tat) %></span><%}%>
+              </div>
+              <p class="gv-step-body"><%= esc(e.body) %></p>
+              <%if(e.contact){%><span class="gv-step-contact"><%= esc(e.contact) %></span><%}%>
+            </div>
+          <% }); %>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section class="cta-band">
+  <div class="container cta-inner">
+    <div class="reveal">
+      <h2 class="cta-title"><%= esc(ctaHeadlineV) %></h2>
+      <p class="cta-sub"><%= esc(ctaBodyV) %></p>
+      <p class="cta-disclaim"><%= MEDICAL_DISC %></p>
+    </div>
+    <div class="cta-actions reveal">
+      <a href="#contact" class="btn btn-primary"><%= esc(ctaButtonV) %> →</a>
+      <%if(ctaNoteV){%><span class="cta-note"><%= esc(ctaNoteV) %></span><%}%>
+    </div>
+  </div>
+</section>
+
+<section id="contact" class="contact section-pad">
+  <div class="container contact-grid">
+    <div class="reveal">
+      <div class="section-eyebrow">Book an appointment</div>
+      <h2 class="section-title">Tell us a little, we’ll <em>do the rest.</em></h2>
+      <p class="section-body">Pick a specialty and your preferred time. We will confirm the slot via SMS within an hour during OPD hours.</p>
+      <div class="contact-info">
+        <%if(emailV){%><div><b>Email:</b> <%= esc(emailV) %></div><%}%>
+        <%if(phoneV){%><div><b>Reception:</b> <%= esc(phoneV) %></div><%}%>
+        <div><b>Emergency 24/7:</b> <%= esc(emergencyPhoneV) %></div>
+        <%if(addressV){%><div><b>Address:</b> <%- esc(addressV).replace(/\n/g,'<br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;') %></div><%}%>
+        <%if(hoursV){%><div><b>Hours:</b> <%= esc(hoursV) %></div><%}%>
+      </div>
+    </div>
+    <div class="form-card reveal">
+      <form data-contact>
+        <div class="fg-row">
+          <div class="fg"><label>Patient name</label><input type="text" placeholder="Your full name" required></div>
+          <div class="fg"><label>Mobile</label><input type="tel" placeholder="+91 9XXXXXXXXX" required></div>
+        </div>
+        <div class="fg"><label>Email (for SMS confirmation backup)</label><input type="email" placeholder="you@example.com"></div>
+        <div class="fg">
+          <label>Specialty</label>
+          <select required>
+            <option value="" disabled selected>Pick a specialty</option>
+            <% specialtiesList.slice(0,8).forEach(function(s){ %><option><%= esc(s.name) %></option><% }); %>
+            <option>Other / not sure</option>
+          </select>
+        </div>
+        <div class="fg-row">
+          <div class="fg"><label>Preferred date</label><input type="date"></div>
+          <div class="fg">
+            <label>Preferred time</label>
+            <select>
+              <option>Morning (9 AM – 12 PM)</option>
+              <option selected>Afternoon (12 PM – 4 PM)</option>
+              <option>Evening (4 PM – 8 PM)</option>
+            </select>
+          </div>
+        </div>
+        <div class="fg"><label>Short note (symptoms / reason)</label><textarea rows="3" placeholder="A line or two helps us match the right consultant"></textarea></div>
+        <button type="submit" class="form-submit">Request appointment →</button>
+        <p class="form-disclaim">For emergencies please call <%= esc(emergencyPhoneV) %> directly. <%= MEDICAL_DISC %></p>
+      </form>
+    </div>
+  </div>
+</section>
+
+<footer class="footer">
+  <div class="container">
+    <div class="footer-grid">
+      <div>
+        <div class="f-brand"><%= bn %></div>
+        <p class="f-tag"><%= tagln %></p>
+        <div class="f-reg">NMC: <%= esc(nmcRegV) %></div>
+        <div class="f-reg">NABH: <%= esc(nabhRegV) %></div>
+        <%if(hospitalCinV){%><div class="f-reg">CIN: <%= esc(hospitalCinV) %></div><%}%>
+        <div class="f-cert-row">
+          <span class="f-cert">CEA: <%= esc(clinicalEstabRegV) %></span>
+          <span class="f-cert">BMW Auth.</span>
+          <span class="f-cert">Drug Lic.</span>
+        </div>
+      </div>
+      <div>
+        <p class="f-col-title">Care</p>
+        <ul class="f-links">
+          <li><a href="#specialties">Specialties</a></li>
+          <li><a href="#doctors">Our doctors</a></li>
+          <li><a href="#services">Services</a></li>
+          <li><a href="#packages">Health checks</a></li>
+        </ul>
+      </div>
+      <div>
+        <p class="f-col-title">Patient</p>
+        <ul class="f-links">
+          <li><a href="#contact">Book appointment</a></li>
+          <li><a href="tel:<%= esc(emergencyPhoneV) %>">24×7 Emergency</a></li>
+          <li><a href="#grievance">Grievance redressal</a></li>
+          <li><a href="#about">Patient charter</a></li>
+        </ul>
+      </div>
+      <div>
+        <p class="f-col-title">Regulatory</p>
+        <ul class="f-links">
+          <li><a href="https://www.nmc.org.in" target="_blank" rel="noopener">NMC ↗</a></li>
+          <li><a href="https://www.nabh.co" target="_blank" rel="noopener">NABH ↗</a></li>
+          <li><a href="#grievance">State Medical Council</a></li>
+          <li><a href="#grievance">DGHS</a></li>
+        </ul>
+      </div>
+    </div>
+    <div class="footer-disclaim">
+      <%= MEDICAL_DISC %> <%= EMERGENCY_DISC %> <%= NO_CURE_DISC %>
+      <br>All patient information on this website is illustrative. Real records are held under strict confidentiality per the Digital Personal Data Protection Act 2023.
+    </div>
+    <div class="footer-bottom">
+      <span>© <%= year %> <%= bn %>. All rights reserved.</span>
+      <span>Privacy · Terms · Patient Charter</span>
+    </div>
+  </div>
+</footer>
+
+<script>
+  var ro=new IntersectionObserver(function(es){
+    es.forEach(function(e){if(e.isIntersecting){e.target.classList.add('visible');ro.unobserve(e.target);}});
+  },{threshold:.06,rootMargin:'0px 0px -40px 0px'});
+  document.querySelectorAll('.reveal').forEach(function(el){ro.observe(el);});
+  document.querySelectorAll('a[href^="#"]').forEach(function(a){
+    a.addEventListener('click',function(e){
+      var t=document.querySelector(a.getAttribute('href'));
+      if(t){e.preventDefault();t.scrollIntoView({behavior:'smooth',block:'start'});}
+    });
+  });
+  var f=document.querySelector('[data-contact]');
+  if(f){f.addEventListener('submit',function(e){
+    e.preventDefault();
+    var b=f.querySelector('.form-submit');
+    b.textContent='Sending…';b.disabled=true;
+    setTimeout(function(){
+      var ok=document.createElement('div');
+      ok.style.cssText='background:rgba(52,211,153,.12);border:1px solid rgba(52,211,153,.34);color:#10b981;padding:15px 18px;border-radius:12px;font-size:.93rem;margin-bottom:14px;font-weight:600;font-family:Inter,sans-serif';
+      ok.textContent='✓ Request received. Our help-desk will confirm your slot within an hour during OPD hours.';
+      f.insertAdjacentElement('beforebegin',ok);
+      f.reset();b.textContent='Request appointment →';b.disabled=false;
+      setTimeout(function(){ok.remove();},8000);
+    },900);
+  });}
+</script>
+</body>
+</html>
