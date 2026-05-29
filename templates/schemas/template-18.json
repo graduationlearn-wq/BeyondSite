@@ -1,0 +1,319 @@
+{
+  "id": "template-18",
+  "name": "Diagnostic Lab / Pathology",
+  "extends": "_base",
+  "complianceReview": {
+    "title": "Diagnostic lab regulatory content — have your compliance officer review before publishing.",
+    "body": "This template includes your NABL accreditation (ISO 15189), CAP certification (if any), ICMR registration, Clinical Establishment Act registration, Bio-Medical Waste authorisation, and PCPNDT registration (mandatory for any ultrasound / pre-natal sex-determination–capable equipment). Reference ranges, sample requirements, and any clinical-interpretation copy must be reviewed by a pathologist before publishing. The Drugs and Magic Remedies Act prohibits cure or guaranteed-outcome claims for any test."
+  },
+  "sections": [
+    {
+      "id": "regulatoryDetails",
+      "title": "Lab Registrations",
+      "hint": {
+        "label": "NABL · CAP · ICMR · CEA · BMW · PCPNDT",
+        "description": "Diagnostic labs must display NABL accreditation (ISO 15189), Clinical Establishment Act state registration, Bio-Medical Waste authorisation, and — if you run ultrasound — PCPNDT registration. CAP, NABH-MIS, and ISO 9001 are optional but display them if you hold them."
+      },
+      "fields": [
+        { "id": "nablReg",            "label": "NABL Accreditation Number (ISO 15189)",  "type": "text", "max": 60, "placeholder": "NABL: MC-2023-4567" },
+        { "id": "capCert",            "label": "CAP Certification (if any)",              "type": "text", "max": 60, "placeholder": "CAP: 12345-01" },
+        { "id": "icmrReg",            "label": "ICMR Registration",                        "type": "text", "max": 60, "placeholder": "ICMR-2023-VRDL-345" },
+        { "id": "clinicalEstabReg",   "label": "Clinical Establishment Act Reg. (state)", "type": "text", "max": 60, "placeholder": "CEA/MH/2023/04891" },
+        { "id": "bmwReg",             "label": "Bio-Medical Waste Authorisation",          "type": "text", "max": 60, "placeholder": "MPCB-BMW-2023-789" },
+        { "id": "pcpndtReg",          "label": "PCPNDT Reg. (if running ultrasound)",     "type": "text", "max": 60, "placeholder": "PCPNDT/MH/2023/4567" },
+        { "id": "hospitalCin",        "label": "CIN (for corporate labs)",                "type": "text", "max": 30, "placeholder": "U85110MH2010PTC209876" }
+      ]
+    },
+    {
+      "id": "hero",
+      "title": "Hero",
+      "aiable": true,
+      "hint": {
+        "label": "Search-bar-first opening",
+        "description": "Lab patients want one thing: find their test, see the price, book it. Lead with a big test-search bar and a clear TAT promise. The right-hand panel shows an illustrated test-tube cluster.",
+        "mockupTarget": "header"
+      },
+      "fields": [
+        { "id": "heroEyebrow",            "label": "Trust pill above headline",     "type": "text",     "max": 80,  "placeholder": "NABL-accredited · Reports in 6 hours · Home collection", "aiable": true },
+        { "id": "heroHeadlineLead",       "label": "Headline — first part",         "type": "text",     "max": 60,  "placeholder": "Lab tests,",                                              "aiable": true },
+        { "id": "heroHeadlineEmph",       "label": "Headline — accent",             "type": "text",     "max": 40,  "placeholder": "decoded.",                                                "aiable": true },
+        { "id": "heroSub",                "label": "Sub-headline (25–40 words)",    "type": "textarea", "rows": 3,  "max": 240, "aiable": true },
+        { "id": "heroSearchPlaceholder",  "label": "Search input placeholder",      "type": "text",     "max": 120, "placeholder": "Search 3,400+ tests · e.g. Vitamin D, HbA1c, Thyroid Profile" },
+        { "id": "heroSearchCta",          "label": "Search button text",             "type": "text",     "max": 20,  "placeholder": "Search" },
+        { "id": "heroCtaPrimary",         "label": "Primary CTA",                   "type": "text",     "max": 30,  "placeholder": "Book Home Collection" },
+        { "id": "heroCtaSecondary",       "label": "Secondary CTA",                 "type": "text",     "max": 30,  "placeholder": "Browse Packages" },
+        { "id": "emergencyPhone",         "label": "24×7 helpline phone",           "type": "text",     "max": 30,  "placeholder": "+91 1800 000 411" },
+        {
+          "id": "trustStats", "label": "Trust strip stats",
+          "type": "repeater", "min": 3, "max": 5, "itemLabel": "Stat",
+          "item": [
+            { "id": "value", "label": "Big number",  "type": "text", "max": 30 },
+            { "id": "label", "label": "Caption",      "type": "text", "max": 60 }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "testCategories",
+      "title": "Test Categories (Periodic-table grid)",
+      "aiable": true,
+      "hint": {
+        "label": "All test categories",
+        "description": "Display every category of test you offer — Diabetes, Thyroid, Lipid, Liver, Kidney, Cardiac, Vitamin, Hormone, Allergy, Infection, Genetic, Imaging. Each card displays as a 'periodic-table-element' with a 2-letter symbol, count, and icon."
+      },
+      "fields": [
+        { "id": "categoriesLabel",    "label": "Section eyebrow",  "type": "text",     "max": 40,  "placeholder": "What we test" },
+        { "id": "categoriesHeadline", "label": "Section headline", "type": "text",     "max": 80,  "aiable": true },
+        { "id": "categoriesBody",     "label": "Section sub-copy", "type": "textarea", "rows": 2,  "max": 220, "aiable": true },
+        {
+          "id": "testCategories", "label": "Test category cards",
+          "type": "repeater", "min": 8, "max": 16, "itemLabel": "Category",
+          "item": [
+            { "id": "symbol", "label": "2-letter symbol (like an element)", "type": "text",  "max": 4, "placeholder": "Th" },
+            { "id": "name",   "label": "Full category name",                "type": "text",  "max": 40, "placeholder": "Thyroid" },
+            { "id": "count",  "label": "Tests in this category",            "type": "text",  "max": 10, "placeholder": "12" },
+            { "id": "icon",   "label": "Icon (emoji)",                       "type": "text",  "max": 4 },
+            { "id": "color",  "label": "Tint colour family",                  "type": "select", "options": ["blue","green","amber","purple","rose","teal","slate"] }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "popularTests",
+      "title": "Most-booked tests",
+      "aiable": true,
+      "hint": {
+        "label": "Top individual tests",
+        "description": "Show the most commonly ordered tests with sample type, TAT, and price. Patients hunting for a quick test land here directly."
+      },
+      "fields": [
+        { "id": "popularTestsLabel",    "label": "Section eyebrow",  "type": "text",     "max": 40,  "placeholder": "Most-booked tests" },
+        { "id": "popularTestsHeadline", "label": "Section headline", "type": "text",     "max": 80,  "aiable": true },
+        { "id": "popularTestsBody",     "label": "Section sub-copy", "type": "textarea", "rows": 2,  "max": 220, "aiable": true },
+        {
+          "id": "popularTests", "label": "Popular test cards",
+          "type": "repeater", "min": 4, "max": 8, "itemLabel": "Test",
+          "item": [
+            { "id": "name",      "label": "Test name",          "type": "text",     "max": 80, "placeholder": "Vitamin D (25-OH)" },
+            { "id": "code",      "label": "Lab code",            "type": "text",     "max": 20, "placeholder": "VD-25" },
+            { "id": "sample",    "label": "Sample type",         "type": "text",     "max": 30, "placeholder": "Blood (Serum)" },
+            { "id": "tat",       "label": "Turn-around time",   "type": "text",     "max": 30, "placeholder": "Same day" },
+            { "id": "fasting",   "label": "Fasting required?",   "type": "select",   "options": ["No","Yes (8–10 hrs)","Yes (12 hrs)"] },
+            { "id": "price",     "label": "Price",                "type": "text",     "max": 30, "placeholder": "₹1,099" },
+            { "id": "priceNote", "label": "Price caveat",         "type": "text",     "max": 60 }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "homeCollection",
+      "title": "Home Sample Collection",
+      "aiable": true,
+      "hint": {
+        "label": "Home collection feature card",
+        "description": "Patients heavily prefer home collection. Highlight the slot window, free pickup, sample-chain accuracy, and phlebotomist training."
+      },
+      "fields": [
+        { "id": "homeCollectionLabel",    "label": "Section eyebrow",  "type": "text",     "max": 40,  "placeholder": "Sample collection at home" },
+        { "id": "homeCollectionHeadline", "label": "Section headline", "type": "text",     "max": 100, "aiable": true },
+        { "id": "homeCollectionBody",     "label": "Section body (40–80 words)", "type": "textarea", "rows": 3, "max": 500, "aiable": true },
+        {
+          "id": "homeCollectionPerks", "label": "Feature bullet points",
+          "type": "repeater", "min": 3, "max": 6, "itemLabel": "Perk",
+          "item": [
+            { "id": "icon",  "label": "Icon (emoji)", "type": "text", "max": 4 },
+            { "id": "label", "label": "Perk text",     "type": "text", "max": 100 }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "process",
+      "title": "How a test works",
+      "aiable": true,
+      "hint": {
+        "label": "Patient journey",
+        "description": "Book → Sample collected → Lab processing → Digital report. Each step is short and tangible.",
+        "mockupTarget": "process"
+      },
+      "fields": [
+        { "id": "processLabel",    "label": "Section eyebrow",  "type": "text", "max": 40, "placeholder": "From booking to result" },
+        { "id": "processHeadline", "label": "Section headline", "type": "text", "max": 80, "aiable": true },
+        {
+          "id": "processSteps", "label": "Steps",
+          "type": "repeater", "min": 3, "max": 5, "itemLabel": "Step",
+          "item": [
+            { "id": "icon",     "label": "Icon (emoji)",                   "type": "text",     "max": 4 },
+            { "id": "title",    "label": "Step title",                     "type": "text",     "max": 50 },
+            { "id": "body",     "label": "Step description (15–25 words)", "type": "textarea", "rows": 2, "max": 220 },
+            { "id": "duration", "label": "Duration",                       "type": "text",     "max": 40, "placeholder": "5 minutes" }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "packages",
+      "title": "Health-Check Packages",
+      "aiable": true,
+      "hint": {
+        "label": "Preventive bundles",
+        "description": "Three bundles like Basic / Wellness / Senior. Each shows test count, key inclusions, and price. The middle plan is featured.",
+        "mockupTarget": "services"
+      },
+      "fields": [
+        { "id": "packagesLabel",    "label": "Section eyebrow",  "type": "text",     "max": 40,  "placeholder": "Save with packages" },
+        { "id": "packagesHeadline", "label": "Section headline", "type": "text",     "max": 80,  "aiable": true },
+        { "id": "packagesBody",     "label": "Section sub-copy", "type": "textarea", "rows": 2,  "max": 220, "aiable": true },
+        {
+          "id": "healthPackages", "label": "Package cards",
+          "type": "repeater", "min": 1, "max": 4, "itemLabel": "Package",
+          "item": [
+            { "id": "name",      "label": "Package name",   "type": "text", "max": 50,  "placeholder": "Wellness Plus" },
+            { "id": "price",     "label": "Price",          "type": "text", "max": 30,  "placeholder": "₹2,499" },
+            { "id": "priceNote", "label": "Price caveat",   "type": "text", "max": 60,  "placeholder": "All-inclusive · 88 parameters" },
+            { "id": "ideal",     "label": "Who it's for",   "type": "text", "max": 100, "placeholder": "Adults 25–45 · Annual baseline" },
+            {
+              "id": "tests", "label": "Tests / inclusions",
+              "type": "repeater", "min": 3, "max": 10, "itemLabel": "Test",
+              "item": [ { "id": "label", "label": "Test / inclusion", "type": "text", "max": 100 } ]
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "reports",
+      "title": "Digital Reports",
+      "aiable": true,
+      "hint": {
+        "label": "How reports work",
+        "description": "Patients value how reports are delivered: app + WhatsApp + email, pathologist comments, longitudinal tracking, doctor-share. Pair with a fake sample-report preview card."
+      },
+      "fields": [
+        { "id": "reportsLabel",    "label": "Section eyebrow",  "type": "text",     "max": 40,  "placeholder": "Reports that make sense" },
+        { "id": "reportsHeadline", "label": "Section headline", "type": "text",     "max": 80,  "aiable": true },
+        { "id": "reportsBody",     "label": "Section sub-copy", "type": "textarea", "rows": 3,  "max": 300, "aiable": true },
+        {
+          "id": "reportFeatures", "label": "Report feature bullets",
+          "type": "repeater", "min": 3, "max": 6, "itemLabel": "Feature",
+          "item": [
+            { "id": "icon",  "label": "Icon (emoji)", "type": "text", "max": 4 },
+            { "id": "title", "label": "Feature title", "type": "text", "max": 60 },
+            { "id": "body",  "label": "One-line body",  "type": "text", "max": 140 }
+          ]
+        },
+        { "id": "reportSampleNote", "label": "Sample-report caption", "type": "text", "max": 140, "placeholder": "A real sample report — colour-coded ranges, pathologist comment, doctor signature." }
+      ]
+    },
+    {
+      "id": "specialists",
+      "title": "Our Pathologists",
+      "aiable": true,
+      "hint": {
+        "label": "Lab specialists",
+        "description": "Real labs are run by real pathologists, biochemists, and microbiologists. Show their qualifications, NMC numbers, and what they head.",
+        "mockupTarget": "about"
+      },
+      "fields": [
+        { "id": "specialistsLabel",    "label": "Section eyebrow",  "type": "text",     "max": 40,  "placeholder": "The team behind every report" },
+        { "id": "specialistsHeadline", "label": "Section headline", "type": "text",     "max": 80,  "aiable": true },
+        { "id": "specialistsBody",     "label": "Section sub-copy", "type": "textarea", "rows": 2,  "max": 220, "aiable": true },
+        {
+          "id": "doctors", "label": "Specialist cards",
+          "type": "repeater", "min": 3, "max": 6, "itemLabel": "Specialist",
+          "item": [
+            { "id": "name",      "label": "Full name",                "type": "text",  "max": 80, "placeholder": "Dr. Ananya Verma" },
+            { "id": "specialty", "label": "Role / specialty",          "type": "text",  "max": 60, "placeholder": "Chief Pathologist · Histopathology" },
+            { "id": "quals",     "label": "Qualifications",            "type": "text",  "max": 100, "placeholder": "MBBS, MD (Pathology), DNB" },
+            { "id": "years",     "label": "Years of practice",         "type": "text",  "max": 40, "placeholder": "16 years" },
+            { "id": "nmcId",     "label": "NMC / State Council Reg.",  "type": "text",  "max": 40, "placeholder": "MMC-12345" },
+            { "id": "opd",       "label": "Department / scope",        "type": "text",  "max": 100, "placeholder": "Heads Histopathology & Cytology" },
+            { "id": "avatar",    "label": "Avatar style",              "type": "select", "options": ["a","b","c","d"] }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "testimonials",
+      "title": "Patient Stories",
+      "hint": {
+        "label": "Social proof",
+        "description": "Patient + clinician testimonials. Focus on accuracy, ease of collection, and report clarity — not on specific medical outcomes."
+      },
+      "fields": [
+        {
+          "id": "testimonials", "label": "Testimonials",
+          "type": "repeater", "min": 2, "max": 6, "itemLabel": "Testimonial",
+          "item": [
+            { "id": "quote",       "label": "Quote (30–60 words)",    "type": "textarea", "rows": 3, "max": 360 },
+            { "id": "name",        "label": "Name",                   "type": "text",     "max": 60 },
+            { "id": "role",        "label": "City / role",            "type": "text",     "max": 80 },
+            { "id": "productUsed", "label": "Service used",           "type": "text",     "max": 80, "placeholder": "Annual Wellness Package" }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "insurers",
+      "title": "Insurer & Corporate Partners",
+      "hint": {
+        "label": "TPAs & corporate wellness partners",
+        "description": "Empanelled insurers for cashless, plus corporate wellness partners."
+      },
+      "fields": [
+        { "id": "insurersLabel",    "label": "Section eyebrow",  "type": "text", "max": 40, "placeholder": "Cashless across India" },
+        { "id": "insurersHeadline", "label": "Section headline", "type": "text", "max": 80 },
+        {
+          "id": "insurers", "label": "Insurer / partner names",
+          "type": "repeater", "min": 3, "max": 18, "itemLabel": "Partner",
+          "item": [ { "id": "name", "label": "Insurer / TPA / company name", "type": "text", "max": 60 } ]
+        }
+      ]
+    },
+    {
+      "id": "grievance",
+      "title": "Patient Grievance Redressal",
+      "hint": {
+        "label": "Patient & sample-handling complaints",
+        "description": "Escalation: Lab Quality Officer → Medical Superintendent → NABL → State Medical Council / DHO. Per NABL norms, complaints should be addressed within 30 days."
+      },
+      "fields": [
+        { "id": "grievanceLabel",    "label": "Section eyebrow",            "type": "text",     "max": 40 },
+        { "id": "grievanceHeadline", "label": "Section headline",           "type": "text",     "max": 80 },
+        { "id": "grievanceBody",     "label": "Section body (40–80 words)", "type": "textarea", "rows": 3, "max": 500 },
+        { "id": "groName",    "label": "Quality / grievance officer name", "type": "text",     "max": 80 },
+        { "id": "groRole",    "label": "Officer role",                     "type": "text",     "max": 80 },
+        { "id": "groEmail",   "label": "Grievance email",                  "type": "text",     "max": 100 },
+        { "id": "groPhone",   "label": "Grievance phone",                  "type": "text",     "max": 40 },
+        { "id": "groAddress", "label": "Office address",                   "type": "textarea", "rows": 2, "max": 200 },
+        { "id": "groTimings", "label": "Office hours",                     "type": "text",     "max": 80 },
+        {
+          "id": "escalationLevels", "label": "Escalation matrix",
+          "type": "repeater", "min": 3, "max": 5, "itemLabel": "Level",
+          "item": [
+            { "id": "level",   "label": "Level label",    "type": "text",     "max": 80 },
+            { "id": "body",    "label": "Description",    "type": "textarea", "rows": 2, "max": 220 },
+            { "id": "contact", "label": "Contact / URL",  "type": "text",     "max": 140 },
+            { "id": "tat",     "label": "TAT",             "type": "text",     "max": 40 }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "cta",
+      "title": "Call to Action",
+      "aiable": true,
+      "hint": {
+        "label": "Closing CTA",
+        "description": "Frame around booking a test or home collection. Include the helpline.",
+        "mockupTarget": "cta"
+      },
+      "fields": [
+        { "id": "ctaHeadline", "label": "CTA headline",               "type": "text",     "max": 100, "aiable": true },
+        { "id": "ctaBody",     "label": "CTA sub-copy (15–25 words)", "type": "textarea", "rows": 2,  "max": 220, "aiable": true },
+        { "id": "ctaButton",   "label": "Button text",                "type": "text",     "max": 40 },
+        { "id": "ctaNote",     "label": "Fine print",                 "type": "text",     "max": 160 }
+      ]
+    }
+  ]
+}

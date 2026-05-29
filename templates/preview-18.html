@@ -1,0 +1,1676 @@
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Nidaan Diagnostics — Lab tests that make sense.</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@500;600;700&family=Inter:wght@300;400;500;600;700&family=JetBrains+Mono:wght@500;700&display=swap" rel="stylesheet">
+  <style>
+    *,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
+    :root{
+      --lab:        #0ea5e9;
+      --lab-soft:   #38bdf8;
+      --lab-deep:   #0369a1;
+      --lab-tint:   rgba(14,165,233,.1);
+      --lab-glow:   rgba(14,165,233,.28);
+      --beaker:     #22c55e;
+      --beaker-deep:#15803d;
+      --beaker-tint:rgba(34,197,94,.1);
+      --amber:      #f97316;
+      --amber-tint: rgba(249,115,22,.12);
+      --warning:    #facc15;
+      --rose:       #f43f5e;
+      --rose-tint:  rgba(244,63,94,.1);
+      --purple:     #a855f7;
+      --purple-tint:rgba(168,85,247,.1);
+      --paper:      #ffffff;
+      --bg:         #fafbfc;
+      --ice:        #f0f9ff;
+      --ice2:       #e0f2fe;
+      --ink:        #0f172a;
+      --ink-soft:   #475569;
+      --ink-mute:   rgba(15,23,42,.5);
+      --ink-line:   rgba(15,23,42,.07);
+      --ink-line-md:rgba(15,23,42,.12);
+      --green-flag: #16a34a;
+      --amber-flag: #f59e0b;
+      --red-flag:   #dc2626;
+      --display:    'Space Grotesk', system-ui, sans-serif;
+      --sans:       'Inter', system-ui, -apple-system, sans-serif;
+      --mono:       'JetBrains Mono', ui-monospace, monospace;
+    }
+    html{scroll-behavior:smooth}
+    body{font-family:var(--sans);background:var(--paper);color:var(--ink);line-height:1.7;-webkit-font-smoothing:antialiased}
+    a{color:inherit;text-decoration:none}
+    button{font-family:inherit;cursor:pointer;border:none}
+    em{font-style:normal;color:var(--lab-deep);background:linear-gradient(180deg,transparent 60%,var(--lab-tint) 60%);padding:0 .1em}
+    .container{max-width:1240px;margin:0 auto;padding:0 32px}
+    .reveal{opacity:0;transform:translateY(20px);transition:opacity .6s ease,transform .6s ease}
+    .reveal.visible{opacity:1;transform:translateY(0)}
+
+    /* ── TOPBAR ─────────────────────────────────────────────── */
+    .topbar{background:var(--ink);color:rgba(255,255,255,.78);font-size:.74rem;padding:9px 0}
+    .topbar-inner{display:flex;align-items:center;justify-content:space-between;gap:18px;flex-wrap:wrap;max-width:1240px;margin:0 auto;padding:0 32px}
+    .topbar-info{display:flex;gap:18px;flex-wrap:wrap;align-items:center}
+    .topbar-info b{font-weight:700;color:#fff}
+    .topbar-helpline{display:inline-flex;align-items:center;gap:8px;background:var(--beaker-tint);color:var(--beaker);padding:5px 12px;border-radius:100px;font-weight:700;font-size:.74rem}
+    .topbar-helpline::before{content:'☎';font-size:.85rem}
+
+    /* ── NAV ────────────────────────────────────────────────── */
+    .nav{position:sticky;top:0;z-index:50;background:rgba(255,255,255,.95);backdrop-filter:blur(14px);border-bottom:1px solid var(--ink-line)}
+    .nav-inner{display:flex;align-items:center;justify-content:space-between;padding:16px 0}
+    .brand{display:flex;align-items:center;gap:12px;font-family:var(--display);font-size:1.35rem;font-weight:700;color:var(--ink);letter-spacing:-.02em;white-space:nowrap}
+    .brand-mark{width:42px;height:42px;border-radius:11px;background:linear-gradient(135deg,var(--lab),var(--lab-deep));color:#fff;display:flex;align-items:center;justify-content:center;font-size:1.1rem;box-shadow:0 8px 20px var(--lab-glow);position:relative;overflow:hidden}
+    .brand-mark::before{content:'';position:absolute;width:18px;height:24px;background:#fff;border-radius:0 0 50% 50% / 0 0 22% 22%;top:8px;left:50%;transform:translateX(-50%);box-shadow:0 0 0 2px rgba(255,255,255,.25)}
+    .brand-mark::after{content:'';position:absolute;width:8px;height:10px;background:var(--amber);border-radius:0 0 50% 50% / 0 0 35% 35%;top:18px;left:50%;transform:translateX(-50%)}
+    .nav-links{display:flex;gap:26px;align-items:center;list-style:none}
+    .nav-links a{color:var(--ink-soft);font-size:.92rem;font-weight:500;transition:color .2s}
+    .nav-links a:hover{color:var(--lab-deep)}
+    .nav-cta{background:var(--lab-deep);color:#fff;padding:10px 22px;border-radius:100px;font-weight:600;box-shadow:0 8px 22px var(--lab-glow);white-space:nowrap}
+    .nav-cta:hover{background:var(--lab)}
+
+    /* ── BUTTONS ────────────────────────────────────────────── */
+    .btn{display:inline-flex;align-items:center;gap:8px;padding:14px 28px;border-radius:100px;font-size:.95rem;font-weight:600;transition:transform .15s,box-shadow .25s,background .25s}
+    .btn:hover{transform:translateY(-2px)}
+    .btn-primary{background:var(--lab-deep);color:#fff;box-shadow:0 12px 28px var(--lab-glow)}
+    .btn-primary:hover{background:var(--lab);box-shadow:0 16px 38px var(--lab-glow)}
+    .btn-ghost{background:transparent;color:var(--ink);border:1.5px solid var(--ink-line-md)}
+    .btn-ghost:hover{background:var(--ice);border-color:var(--lab-deep);color:var(--lab-deep)}
+    .btn-amber{background:var(--amber);color:#fff;box-shadow:0 12px 28px rgba(249,115,22,.36)}
+    .btn-amber:hover{background:#ea580c}
+
+    /* ── HERO ───────────────────────────────────────────────── */
+    .hero{padding:60px 0 100px;position:relative;overflow:hidden;background:linear-gradient(180deg,#ffffff 0%,#fafbfc 100%)}
+    .hero::before{content:'';position:absolute;top:-220px;right:-220px;width:600px;height:600px;border-radius:50%;background:radial-gradient(circle,var(--lab-tint) 0%,transparent 65%);pointer-events:none}
+    .hero::after{content:'';position:absolute;bottom:-160px;left:-160px;width:420px;height:420px;border-radius:50%;background:radial-gradient(circle,var(--beaker-tint) 0%,transparent 65%);pointer-events:none}
+    .hero-grid{display:grid;grid-template-columns:1.05fr .95fr;gap:60px;align-items:center;position:relative}
+    .hero-eyebrow{display:inline-flex;align-items:center;gap:10px;font-size:.78rem;font-weight:600;letter-spacing:.04em;color:var(--lab-deep);background:var(--lab-tint);padding:9px 18px;border-radius:100px;margin-bottom:24px}
+    .hero-eyebrow::before{content:'';width:7px;height:7px;border-radius:50%;background:var(--beaker);box-shadow:0 0 0 4px rgba(34,197,94,.2)}
+    .hero-title{font-family:var(--display);font-weight:700;font-size:clamp(2.6rem,5.5vw,4.6rem);line-height:1.05;letter-spacing:-.025em;color:var(--ink);margin-bottom:22px}
+    .hero-sub{font-size:1.06rem;color:var(--ink-soft);max-width:540px;margin-bottom:28px;line-height:1.78}
+
+    /* HERO SEARCH BAR — signature element */
+    .hero-search{background:var(--paper);border:1.5px solid var(--ink-line-md);border-radius:100px;padding:6px 6px 6px 22px;display:flex;align-items:center;gap:8px;max-width:580px;margin-bottom:18px;box-shadow:0 18px 40px -22px rgba(15,23,42,.16);transition:border-color .25s,box-shadow .25s}
+    .hero-search:focus-within{border-color:var(--lab-deep);box-shadow:0 18px 40px -16px var(--lab-glow)}
+    .hero-search svg{flex-shrink:0;color:var(--ink-mute);width:20px;height:20px}
+    .hero-search input{flex:1;border:none;background:transparent;font-family:inherit;font-size:.98rem;color:var(--ink);outline:none;padding:10px 0}
+    .hero-search input::placeholder{color:var(--ink-mute)}
+    .hero-search-btn{background:var(--lab-deep);color:#fff;padding:12px 24px;border-radius:100px;font-weight:600;font-size:.92rem;transition:background .2s;white-space:nowrap}
+    .hero-search-btn:hover{background:var(--lab)}
+    .hero-popular{display:flex;flex-wrap:wrap;gap:8px;align-items:center;margin-bottom:30px}
+    .hero-popular-label{font-size:.84rem;color:var(--ink-mute);font-weight:500}
+    .hero-popular-chip{background:var(--ice);border:1px solid var(--ink-line);color:var(--lab-deep);font-size:.82rem;font-weight:600;padding:5px 12px;border-radius:100px;transition:background .2s,border-color .2s}
+    .hero-popular-chip:hover{background:var(--ice2);border-color:var(--lab)}
+    .hero-actions{display:flex;gap:14px;flex-wrap:wrap}
+
+    /* Hero illustration — test-tube cluster */
+    .hero-illo{position:relative;display:flex;justify-content:center;align-items:center}
+    .hero-illo-disc{position:absolute;width:440px;height:440px;border-radius:50%;background:linear-gradient(160deg,var(--ice),var(--ice2));z-index:0}
+    .hero-illo-svg{position:relative;z-index:2;width:440px;height:440px}
+    .float-chip{position:absolute;z-index:3;background:var(--paper);border-radius:14px;display:flex;align-items:center;gap:10px;padding:10px 14px;box-shadow:0 14px 32px -16px rgba(15,23,42,.18);border:1px solid var(--ink-line);font-size:.82rem;font-weight:600;color:var(--ink)}
+    .float-chip-1{top:4%;left:-2%}
+    .float-chip-2{top:42%;right:-6%}
+    .float-chip-3{bottom:6%;left:6%}
+    .float-chip .dot{width:30px;height:30px;border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:.96rem;flex-shrink:0;font-weight:700}
+    .float-chip-1 .dot{background:var(--beaker-tint);color:var(--beaker-deep)}
+    .float-chip-2 .dot{background:var(--amber-tint);color:var(--amber)}
+    .float-chip-3 .dot{background:var(--lab-tint);color:var(--lab-deep)}
+
+    /* ── TRUST STRIP ────────────────────────────────────────── */
+    .trust-strip{background:var(--ink);padding:34px 0;color:#fff;position:relative;overflow:hidden}
+    .trust-strip::before{content:'';position:absolute;left:5%;top:50%;transform:translateY(-50%);font-family:var(--mono);font-weight:700;font-size:10rem;color:rgba(255,255,255,.04);line-height:1}
+    .trust-strip-grid{display:grid;grid-template-columns:repeat(4,1fr);gap:24px;text-align:center;position:relative}
+    .trust-stat-v{font-family:var(--display);font-size:clamp(1.7rem,2.6vw,2.4rem);font-weight:700;color:#fff;letter-spacing:-.02em;line-height:1}
+    .trust-stat-v span{color:var(--beaker)}
+    .trust-stat-l{font-size:.84rem;color:rgba(255,255,255,.65);font-weight:500;margin-top:7px}
+    .trust-accred{display:flex;flex-wrap:wrap;gap:10px;justify-content:center;margin-top:28px;padding-top:24px;border-top:1px solid rgba(255,255,255,.1)}
+    .accred-pill{font-family:var(--mono);font-size:.78rem;font-weight:600;color:#fff;background:rgba(255,255,255,.08);border:1px solid rgba(255,255,255,.18);padding:7px 14px;border-radius:6px;display:inline-flex;align-items:center;gap:6px}
+    .accred-pill::before{content:'✓';color:var(--beaker);font-weight:700}
+
+    /* ── SECTION ────────────────────────────────────────────── */
+    .section-pad{padding:96px 0}
+    .section-head{text-align:left;max-width:780px;margin-bottom:54px}
+    .section-head.center{margin-left:auto;margin-right:auto;text-align:center}
+    .section-eyebrow{display:inline-block;font-family:var(--mono);font-size:.78rem;font-weight:600;color:var(--lab-deep);background:var(--lab-tint);padding:6px 12px;border-radius:4px;margin-bottom:14px;text-transform:uppercase;letter-spacing:.06em}
+    .section-title{font-family:var(--display);font-size:clamp(2rem,3.6vw,3.1rem);font-weight:700;line-height:1.13;letter-spacing:-.025em;color:var(--ink);margin-bottom:16px}
+    .section-body{font-size:1.02rem;color:var(--ink-soft);line-height:1.78;max-width:680px}
+
+    /* ── PERIODIC-TABLE CATEGORIES ──────────────────────────── */
+    .categories{background:var(--bg)}
+    .cats-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(150px,1fr));gap:14px}
+    .cat-card{background:var(--paper);border:1.5px solid var(--ink-line);border-radius:14px;padding:18px;aspect-ratio:1/1;display:flex;flex-direction:column;justify-content:space-between;transition:transform .25s,border-color .25s,box-shadow .25s;cursor:pointer;position:relative;overflow:hidden}
+    .cat-card:hover{transform:translateY(-4px);box-shadow:0 18px 36px -22px rgba(15,23,42,.18)}
+    .cat-card-top{display:flex;justify-content:space-between;align-items:flex-start}
+    .cat-symbol{font-family:var(--display);font-size:1.55rem;font-weight:700;letter-spacing:-.02em;line-height:1}
+    .cat-count{font-family:var(--mono);font-size:.7rem;font-weight:600;color:var(--ink-mute);background:var(--ink-line);padding:3px 8px;border-radius:4px;letter-spacing:.04em}
+    .cat-icon{font-size:1.7rem;align-self:center;margin:2px 0}
+    .cat-name{font-family:var(--display);font-size:.94rem;font-weight:600;color:var(--ink);text-align:left;letter-spacing:-.005em}
+
+    /* ── POPULAR TESTS ──────────────────────────────────────── */
+    .pop{background:var(--paper)}
+    .pop-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(290px,1fr));gap:18px}
+    .pop-card{background:var(--paper);border:1px solid var(--ink-line);border-radius:16px;padding:24px;display:flex;flex-direction:column;transition:transform .25s,border-color .25s,box-shadow .25s;position:relative;overflow:hidden}
+    .pop-card::before{content:'';position:absolute;top:0;right:0;width:80px;height:80px;background:radial-gradient(circle at top right,var(--lab-tint),transparent 70%);pointer-events:none}
+    .pop-card:hover{transform:translateY(-3px);border-color:var(--lab);box-shadow:0 16px 32px -22px var(--lab-glow)}
+    .pop-card-head{display:flex;justify-content:space-between;align-items:flex-start;gap:12px;margin-bottom:14px;position:relative}
+    .pop-name{font-family:var(--display);font-size:1.08rem;font-weight:600;color:var(--ink);letter-spacing:-.01em;line-height:1.3}
+    .pop-code{font-family:var(--mono);font-size:.74rem;font-weight:600;color:var(--ink-mute);background:var(--ink-line);padding:4px 8px;border-radius:5px;flex-shrink:0}
+    .pop-meta{display:flex;flex-wrap:wrap;gap:6px;margin-bottom:16px;padding-bottom:14px;border-bottom:1px dashed var(--ink-line-md)}
+    .pop-tag{font-size:.74rem;font-weight:600;padding:4px 10px;border-radius:6px;letter-spacing:.02em}
+    .pop-tag-sample{background:var(--rose-tint);color:var(--rose)}
+    .pop-tag-tat{background:var(--beaker-tint);color:var(--beaker-deep)}
+    .pop-tag-fast{background:var(--amber-tint);color:var(--amber)}
+    .pop-foot{display:flex;justify-content:space-between;align-items:flex-end;gap:10px;margin-top:auto}
+    .pop-price{font-family:var(--display);font-size:1.6rem;font-weight:700;color:var(--lab-deep);line-height:1;letter-spacing:-.015em}
+    .pop-note{font-size:.74rem;color:var(--ink-mute);margin-top:4px;display:block}
+    .pop-book{background:var(--lab-deep);color:#fff;padding:9px 16px;border-radius:100px;font-size:.82rem;font-weight:600;transition:background .2s,transform .15s;white-space:nowrap}
+    .pop-book:hover{background:var(--lab);transform:translateY(-1px)}
+
+    /* ── HOME COLLECTION FEATURE ────────────────────────────── */
+    .home-coll{background:var(--bg)}
+    .home-coll-card{background:linear-gradient(160deg,var(--ink) 0%,#1e293b 100%);color:#fff;border-radius:28px;padding:60px;display:grid;grid-template-columns:1.1fr .9fr;gap:48px;align-items:center;position:relative;overflow:hidden;box-shadow:0 30px 60px -30px rgba(15,23,42,.4)}
+    .home-coll-card::before{content:'';position:absolute;right:-160px;top:-160px;width:480px;height:480px;border-radius:50%;background:radial-gradient(circle,rgba(14,165,233,.2) 0%,transparent 70%);pointer-events:none}
+    .home-coll-card::after{content:'';position:absolute;left:-120px;bottom:-160px;width:380px;height:380px;border-radius:50%;background:radial-gradient(circle,rgba(34,197,94,.15) 0%,transparent 70%);pointer-events:none}
+    .home-coll-card .section-eyebrow{background:rgba(14,165,233,.18);color:var(--lab-soft)}
+    .home-coll-title{font-family:var(--display);font-size:clamp(1.8rem,3vw,2.4rem);font-weight:700;line-height:1.18;letter-spacing:-.02em;color:#fff;margin-bottom:18px;position:relative}
+    .home-coll-body{color:rgba(255,255,255,.78);font-size:1rem;line-height:1.78;margin-bottom:30px;position:relative}
+    .home-coll-perks{display:grid;gap:14px;position:relative}
+    .home-coll-perk{display:flex;align-items:center;gap:14px;font-size:.95rem;color:rgba(255,255,255,.88)}
+    .home-coll-perk-ic{width:38px;height:38px;border-radius:11px;background:rgba(255,255,255,.06);border:1px solid rgba(255,255,255,.14);display:flex;align-items:center;justify-content:center;font-size:1rem;flex-shrink:0}
+    .home-coll-slot{background:#fff;color:var(--ink);border-radius:20px;padding:28px;position:relative;box-shadow:0 24px 50px -22px rgba(0,0,0,.4)}
+    .home-coll-slot-eyebrow{font-family:var(--mono);font-size:.74rem;font-weight:600;color:var(--ink-mute);text-transform:uppercase;letter-spacing:.06em;margin-bottom:10px}
+    .home-coll-slot-title{font-family:var(--display);font-size:1.32rem;font-weight:700;color:var(--ink);margin-bottom:18px;letter-spacing:-.01em}
+    .home-coll-slot-grid{display:grid;grid-template-columns:1fr 1fr;gap:8px;margin-bottom:18px}
+    .home-coll-slot-pill{background:var(--ice);border:1.5px solid var(--ink-line);border-radius:10px;padding:11px 14px;font-size:.86rem;font-weight:600;color:var(--ink);text-align:center;transition:border-color .2s,background .2s,color .2s;cursor:pointer}
+    .home-coll-slot-pill:hover{border-color:var(--lab-deep);background:var(--lab-tint);color:var(--lab-deep)}
+    .home-coll-slot-pill.active{background:var(--lab-deep);border-color:var(--lab-deep);color:#fff;box-shadow:0 6px 14px -4px var(--lab-glow)}
+    .home-coll-slot-foot{padding-top:18px;border-top:1px dashed var(--ink-line-md);display:flex;justify-content:space-between;align-items:center;font-size:.84rem;color:var(--ink-soft)}
+    .home-coll-slot-foot b{color:var(--ink);font-family:var(--display);font-weight:700;font-size:.92rem;letter-spacing:-.005em}
+
+    /* ── PROCESS ────────────────────────────────────────────── */
+    .process{background:var(--paper)}
+    .process-grid{display:grid;grid-template-columns:repeat(4,1fr);gap:24px;position:relative}
+    .process-grid::before{content:'';position:absolute;top:48px;left:8%;right:8%;height:2px;background:repeating-linear-gradient(90deg,var(--lab) 0 6px,transparent 6px 14px);opacity:.4;z-index:0}
+    .process-step{position:relative;z-index:1;text-align:center;padding:0 8px}
+    .process-icon{width:100px;height:100px;border-radius:50%;background:var(--paper);border:2px solid var(--lab);color:var(--lab-deep);font-size:2rem;display:flex;align-items:center;justify-content:center;margin:0 auto 22px;position:relative;box-shadow:0 14px 28px -14px var(--lab-glow)}
+    .process-num{position:absolute;top:-8px;right:-8px;width:30px;height:30px;border-radius:50%;background:var(--amber);color:#fff;font-family:var(--display);font-weight:700;font-size:.88rem;display:flex;align-items:center;justify-content:center;box-shadow:0 4px 10px rgba(249,115,22,.5)}
+    .process-title{font-family:var(--display);font-size:1.18rem;font-weight:700;color:var(--ink);margin-bottom:8px;letter-spacing:-.015em}
+    .process-body{font-size:.9rem;color:var(--ink-soft);line-height:1.7;max-width:240px;margin:0 auto 12px}
+    .process-duration{display:inline-block;font-family:var(--mono);font-size:.78rem;font-weight:600;color:var(--beaker-deep);background:var(--beaker-tint);padding:4px 12px;border-radius:100px;letter-spacing:.04em}
+
+    /* ── PACKAGES ───────────────────────────────────────────── */
+    .pkg{background:var(--bg)}
+    .pkg-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(290px,1fr));gap:22px}
+    .pkg-card{background:var(--paper);border:1px solid var(--ink-line);border-radius:22px;padding:34px 30px;display:flex;flex-direction:column;transition:transform .3s,box-shadow .3s;position:relative;overflow:hidden}
+    .pkg-card::before{content:'';position:absolute;top:0;left:0;right:0;height:5px;background:linear-gradient(90deg,var(--lab),var(--beaker));border-radius:22px 22px 0 0}
+    .pkg-card:nth-child(2){background:linear-gradient(160deg,var(--lab-deep) 0%,#0c4a6e 100%);color:#fff;border:none;transform:translateY(-8px)}
+    .pkg-card:nth-child(2)::before{display:none}
+    .pkg-card:nth-child(2) .pkg-name,.pkg-card:nth-child(2) .pkg-price,.pkg-card:nth-child(2) .pkg-tests li{color:#fff}
+    .pkg-card:nth-child(2) .pkg-price-note,.pkg-card:nth-child(2) .pkg-ideal{color:rgba(255,255,255,.75)}
+    .pkg-card:nth-child(2) .pkg-tests li::before{color:var(--beaker)}
+    .pkg-card:nth-child(2) .pkg-ideal{background:rgba(255,255,255,.08);border-color:rgba(255,255,255,.16)}
+    .pkg-card:hover{transform:translateY(-4px);box-shadow:0 24px 48px -22px rgba(15,23,42,.16)}
+    .pkg-card:nth-child(2):hover{transform:translateY(-12px)}
+    .pkg-name{font-family:var(--display);font-size:1.35rem;font-weight:700;color:var(--ink);margin-bottom:6px;letter-spacing:-.015em}
+    .pkg-price{font-family:var(--display);font-size:2.3rem;font-weight:700;color:var(--lab-deep);line-height:1;margin-bottom:6px;letter-spacing:-.02em}
+    .pkg-price-note{font-size:.84rem;color:var(--ink-mute);margin-bottom:18px;font-style:italic}
+    .pkg-ideal{font-size:.88rem;color:var(--ink-soft);padding:12px 16px;background:var(--ice);border-radius:12px;margin-bottom:22px;border:1px dashed var(--ink-line-md)}
+    .pkg-tests{list-style:none;display:flex;flex-direction:column;gap:10px;flex:1}
+    .pkg-tests li{font-size:.92rem;color:var(--ink-soft);line-height:1.55;padding-left:24px;position:relative}
+    .pkg-tests li::before{content:'✓';position:absolute;left:0;top:0;color:var(--beaker-deep);font-weight:700;font-size:.95rem}
+
+    /* ── REPORTS + SAMPLE REPORT PREVIEW ────────────────────── */
+    .reports{background:var(--paper)}
+    .reports-grid{display:grid;grid-template-columns:.95fr 1.05fr;gap:60px;align-items:center}
+    .reports-features{display:grid;grid-template-columns:1fr;gap:14px;margin-top:30px}
+    .rep-feat{display:flex;gap:14px;align-items:flex-start;padding:14px;border-radius:12px;background:var(--bg);border:1px solid var(--ink-line)}
+    .rep-feat-ic{width:38px;height:38px;border-radius:10px;background:var(--lab-tint);color:var(--lab-deep);display:flex;align-items:center;justify-content:center;font-size:1.05rem;flex-shrink:0}
+    .rep-feat-title{font-family:var(--display);font-size:1rem;font-weight:600;color:var(--ink);margin-bottom:2px;letter-spacing:-.005em}
+    .rep-feat-body{font-size:.84rem;color:var(--ink-soft);line-height:1.55}
+
+    /* The fake sample-report card */
+    .sample-report{background:var(--paper);border:1px solid var(--ink-line-md);border-radius:18px;padding:28px;box-shadow:0 24px 56px -28px rgba(15,23,42,.22);position:relative;overflow:hidden}
+    .sample-report::before{content:'SAMPLE';position:absolute;top:18px;right:-32px;font-family:var(--display);font-size:.7rem;font-weight:700;color:var(--amber);background:var(--amber-tint);border:1px solid var(--amber);padding:4px 36px;letter-spacing:.18em;transform:rotate(35deg);transform-origin:center}
+    .sample-report-head{display:flex;align-items:flex-start;justify-content:space-between;gap:16px;padding-bottom:18px;border-bottom:2px solid var(--ink);margin-bottom:14px}
+    .sample-report-brand{font-family:var(--display);font-size:1rem;font-weight:700;color:var(--ink);letter-spacing:-.005em}
+    .sample-report-brand small{display:block;font-size:.7rem;color:var(--ink-mute);font-weight:500;margin-top:2px;font-family:var(--sans)}
+    .sample-report-id{text-align:right;font-family:var(--mono);font-size:.7rem;color:var(--ink-mute)}
+    .sample-report-id b{color:var(--ink);display:block;font-size:.78rem}
+    .sample-report-patient{display:grid;grid-template-columns:1fr 1fr;gap:6px 18px;font-size:.78rem;color:var(--ink-soft);margin-bottom:18px;padding:12px;background:var(--ice);border-radius:8px}
+    .sample-report-patient b{color:var(--ink);font-weight:600;font-family:var(--mono);font-size:.72rem}
+    .sample-report-title{font-family:var(--display);font-size:.92rem;font-weight:700;color:var(--ink);margin-bottom:10px;letter-spacing:-.005em;padding-bottom:6px;border-bottom:1px dashed var(--ink-line-md)}
+    .sample-rows{display:flex;flex-direction:column;gap:0;margin-bottom:16px}
+    .sample-row{display:grid;grid-template-columns:1.5fr 1fr 1fr auto;gap:10px;padding:10px 0;border-bottom:1px solid var(--ink-line);font-size:.82rem;align-items:center}
+    .sample-row:first-child{font-family:var(--mono);font-size:.66rem;color:var(--ink-mute);text-transform:uppercase;letter-spacing:.06em;font-weight:600;padding:8px 0;background:var(--bg);border-radius:4px 4px 0 0;padding:8px 10px}
+    .sample-row .sr-name{font-weight:600;color:var(--ink)}
+    .sample-row .sr-val{font-family:var(--mono);font-weight:700;color:var(--ink);font-size:.88rem}
+    .sample-row .sr-ref{font-family:var(--mono);font-size:.74rem;color:var(--ink-mute)}
+    .sample-flag{font-family:var(--mono);font-size:.68rem;font-weight:700;padding:3px 8px;border-radius:4px;letter-spacing:.05em}
+    .flag-normal{background:rgba(22,163,74,.12);color:var(--green-flag)}
+    .flag-high{background:rgba(220,38,38,.12);color:var(--red-flag)}
+    .flag-borderline{background:rgba(245,158,11,.14);color:var(--amber-flag)}
+    .sample-report-comment{margin-top:8px;padding:14px 16px;background:var(--lab-tint);border-left:3px solid var(--lab-deep);border-radius:0 8px 8px 0;font-size:.82rem;color:var(--ink-soft);line-height:1.6}
+    .sample-report-comment b{display:block;color:var(--lab-deep);font-family:var(--display);font-size:.78rem;font-weight:700;margin-bottom:4px;letter-spacing:.02em;text-transform:uppercase}
+    .sample-report-sig{margin-top:16px;text-align:right;font-size:.74rem;color:var(--ink-mute);line-height:1.4}
+    .sample-report-sig b{color:var(--ink);font-family:var(--display);display:block;font-size:.85rem;font-weight:700;letter-spacing:-.005em}
+    .sample-report-caption{font-size:.78rem;color:var(--ink-mute);text-align:center;margin-top:18px;font-style:italic}
+
+    /* ── SPECIALISTS ────────────────────────────────────────── */
+    .specs{background:var(--bg)}
+    .specs-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(280px,1fr));gap:22px}
+    .spec-card{background:var(--paper);border:1px solid var(--ink-line);border-radius:22px;overflow:hidden;transition:transform .3s,box-shadow .3s;display:flex;flex-direction:column}
+    .spec-card:hover{transform:translateY(-4px);box-shadow:0 22px 44px -22px rgba(15,23,42,.16)}
+    .spec-avatar{background:var(--ice);aspect-ratio:1/1;overflow:hidden;position:relative}
+    .spec-info{padding:22px 24px 26px}
+    .spec-name{font-family:var(--display);font-size:1.16rem;font-weight:700;color:var(--ink);letter-spacing:-.01em}
+    .spec-specialty{font-size:.86rem;color:var(--lab-deep);font-weight:600;margin-top:2px;margin-bottom:14px}
+    .spec-quals{font-size:.82rem;color:var(--ink-soft);line-height:1.55;margin-bottom:14px;padding-bottom:14px;border-bottom:1px dashed var(--ink-line-md);font-family:var(--mono);font-size:.78rem}
+    .spec-meta{display:flex;flex-direction:column;gap:6px;font-size:.78rem;color:var(--ink-soft)}
+    .spec-meta-row{display:flex;align-items:flex-start;gap:8px}
+    .spec-meta-row::before{content:'';width:6px;height:6px;border-radius:50%;background:var(--beaker);margin-top:6px;flex-shrink:0}
+    .spec-meta-row b{font-weight:600;color:var(--ink);font-family:var(--display);font-size:.78rem;letter-spacing:.005em}
+
+    /* ── TESTIMONIALS ──────────────────────────────────────── */
+    .testi{background:var(--paper)}
+    .testi-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(300px,1fr));gap:22px}
+    .testi-card{background:var(--bg);border:1px solid var(--ink-line);border-radius:20px;padding:30px;display:flex;flex-direction:column;transition:transform .25s,box-shadow .25s;position:relative}
+    .testi-card::before{content:'\201C';position:absolute;top:14px;right:24px;font-family:var(--display);font-size:5rem;font-weight:700;color:var(--lab-tint);line-height:1}
+    .testi-card:hover{transform:translateY(-3px);background:var(--paper);box-shadow:0 18px 36px -22px rgba(15,23,42,.14)}
+    .testi-product{font-family:var(--mono);font-size:.74rem;font-weight:600;color:var(--beaker-deep);background:var(--beaker-tint);padding:5px 10px;border-radius:5px;letter-spacing:.04em;display:inline-block;margin-bottom:14px;text-transform:uppercase}
+    .testi-quote{font-size:.98rem;color:var(--ink);line-height:1.7;margin-bottom:22px;flex:1;position:relative;z-index:1}
+    .testi-author{display:flex;align-items:center;gap:12px;border-top:1px dashed var(--ink-line-md);padding-top:18px}
+    .testi-avatar{width:44px;height:44px;border-radius:50%;background:linear-gradient(135deg,var(--lab),var(--lab-deep));color:#fff;display:flex;align-items:center;justify-content:center;font-family:var(--display);font-weight:700;font-size:.92rem;flex-shrink:0}
+    .testi-name{display:block;font-weight:700;color:var(--ink);font-size:.94rem}
+    .testi-role{display:block;font-size:.82rem;color:var(--ink-mute);margin-top:2px}
+
+    /* ── INSURERS ──────────────────────────────────────────── */
+    .insurers{background:var(--bg);border-top:1px solid var(--ink-line)}
+    .insurers-row{display:flex;flex-wrap:wrap;gap:10px;justify-content:center;margin-top:32px}
+    .insurer-pill{background:var(--paper);border:1px solid var(--ink-line);border-radius:100px;padding:10px 18px;font-size:.88rem;font-weight:600;color:var(--ink);display:inline-flex;align-items:center;gap:8px;transition:transform .2s,border-color .2s}
+    .insurer-pill:hover{transform:translateY(-2px);border-color:var(--lab);color:var(--lab-deep)}
+    .insurer-pill::before{content:'✓';color:var(--beaker-deep);font-weight:800}
+
+    /* ── GRIEVANCE ─────────────────────────────────────────── */
+    .grievance{background:var(--paper);border-top:1px solid var(--ink-line)}
+    .gv-card{background:var(--bg);border:1px solid var(--ink-line-md);border-radius:24px;padding:48px;box-shadow:0 18px 48px -24px rgba(15,23,42,.1)}
+    .gv-grid{display:grid;grid-template-columns:1fr 1.2fr;gap:48px;align-items:start}
+    .gv-officer{background:linear-gradient(160deg,var(--lab-deep),#0c4a6e);color:#fff;border-radius:18px;padding:32px;position:sticky;top:100px}
+    .gv-officer-eyebrow{font-family:var(--mono);font-size:.74rem;font-weight:600;color:var(--lab-soft);margin-bottom:8px;text-transform:uppercase;letter-spacing:.06em}
+    .gv-officer-name{font-family:var(--display);font-size:1.5rem;font-weight:700;margin-bottom:4px;letter-spacing:-.01em}
+    .gv-officer-role{color:rgba(255,255,255,.75);font-size:.92rem;margin-bottom:24px}
+    .gv-info{display:grid;gap:14px;padding-top:20px;border-top:1px dashed rgba(255,255,255,.18)}
+    .gv-info-row{display:grid;grid-template-columns:78px 1fr;gap:12px;font-size:.86rem}
+    .gv-info-key{font-family:var(--mono);color:rgba(255,255,255,.55);font-weight:500;text-transform:uppercase;letter-spacing:.05em;font-size:.7rem;padding-top:2px}
+    .gv-info-val{color:#fff;line-height:1.55;word-break:break-word}
+    .gv-escalation{display:flex;flex-direction:column;gap:14px}
+    .gv-step{background:var(--paper);border:1px solid var(--ink-line);border-left:4px solid var(--lab);border-radius:14px;padding:20px 22px}
+    .gv-step-head{display:flex;align-items:baseline;justify-content:space-between;gap:10px;flex-wrap:wrap;margin-bottom:8px}
+    .gv-level{font-family:var(--display);font-size:1rem;font-weight:700;color:var(--lab-deep);letter-spacing:-.005em}
+    .gv-tat{font-family:var(--mono);font-size:.74rem;font-weight:600;color:var(--beaker-deep);background:var(--beaker-tint);padding:3px 9px;border-radius:5px;letter-spacing:.04em}
+    .gv-step-body{font-size:.91rem;color:var(--ink-soft);line-height:1.7;margin-bottom:8px}
+    .gv-step-contact{font-size:.84rem;font-weight:500;font-family:var(--mono);background:var(--lab-tint);padding:6px 10px;border-radius:6px;display:inline-block;color:var(--lab-deep)}
+
+    /* ── CTA BAND ──────────────────────────────────────────── */
+    .cta-band{background:linear-gradient(135deg,var(--lab) 0%,var(--lab-deep) 100%);color:#fff;padding:88px 0;position:relative;overflow:hidden}
+    .cta-band::before{content:'';position:absolute;right:-220px;top:-200px;width:560px;height:560px;border-radius:50%;background:radial-gradient(circle,rgba(255,255,255,.14) 0%,transparent 70%)}
+    .cta-band::after{content:'';position:absolute;left:-180px;bottom:-160px;width:420px;height:420px;border-radius:50%;background:radial-gradient(circle,rgba(34,197,94,.18) 0%,transparent 70%)}
+    .cta-inner{display:grid;grid-template-columns:1.4fr 1fr;gap:32px;align-items:center;position:relative}
+    .cta-title{font-family:var(--display);font-size:clamp(2rem,3.3vw,2.8rem);font-weight:700;line-height:1.2;margin-bottom:16px;letter-spacing:-.025em;color:#fff}
+    .cta-sub{color:rgba(255,255,255,.85);font-size:1.02rem;line-height:1.7}
+    .cta-actions{text-align:right;display:flex;flex-direction:column;align-items:flex-end;gap:10px}
+    .cta-actions .btn-primary{background:#fff;color:var(--lab-deep);box-shadow:0 14px 32px rgba(0,0,0,.2)}
+    .cta-actions .btn-primary:hover{background:#f0f9ff}
+    .cta-note{font-size:.78rem;color:rgba(255,255,255,.65)}
+    .cta-disclaim{font-size:.74rem;color:rgba(255,255,255,.58);margin-top:26px;font-style:italic;line-height:1.7;border-top:1px dashed rgba(255,255,255,.18);padding-top:22px}
+
+    /* ── CONTACT ───────────────────────────────────────────── */
+    .contact{background:var(--bg);border-top:1px solid var(--ink-line)}
+    .contact-grid{display:grid;grid-template-columns:1fr 1.2fr;gap:60px;align-items:start}
+    .contact-info{margin-top:28px;padding-top:22px;border-top:1px dashed var(--ink-line-md);display:grid;gap:12px;font-size:.95rem;color:var(--ink-soft)}
+    .contact-info b{color:var(--ink);font-weight:700}
+    .form-card{background:var(--paper);border:1px solid var(--ink-line);border-radius:20px;padding:36px;box-shadow:0 18px 44px -22px rgba(15,23,42,.1)}
+    .fg{display:flex;flex-direction:column;gap:6px;margin-bottom:18px}
+    .fg label{font-size:.84rem;font-weight:600;color:var(--ink)}
+    .fg input,.fg select,.fg textarea{padding:13px 16px;border:1.5px solid var(--ink-line-md);border-radius:12px;background:var(--paper);font-family:inherit;font-size:.95rem;color:var(--ink);outline:none;transition:border-color .2s}
+    .fg input:focus,.fg select:focus,.fg textarea:focus{border-color:var(--lab-deep)}
+    .fg select option{background:#fff;color:var(--ink)}
+    .fg-row{display:grid;grid-template-columns:1fr 1fr;gap:12px}
+    .form-submit{width:100%;background:var(--lab-deep);color:#fff;padding:15px;border-radius:12px;font-size:.96rem;font-weight:700;transition:background .2s,transform .15s;box-shadow:0 10px 26px var(--lab-glow)}
+    .form-submit:hover{background:var(--lab);transform:translateY(-1px)}
+    .form-disclaim{font-size:.78rem;color:var(--ink-mute);margin-top:12px;line-height:1.6}
+
+    /* ── FOOTER ────────────────────────────────────────────── */
+    .footer{background:var(--ink);color:rgba(255,255,255,.62);padding:64px 0 0}
+    .footer-grid{display:grid;grid-template-columns:1.4fr 1fr 1fr 1fr;gap:44px;margin-bottom:44px}
+    .f-brand{font-family:var(--display);color:#fff;font-size:1.4rem;font-weight:700;margin-bottom:8px;letter-spacing:-.02em}
+    .f-tag{font-size:.86rem;color:rgba(255,255,255,.5);max-width:300px;line-height:1.7;margin-bottom:14px}
+    .f-reg{font-family:var(--mono);font-size:.76rem;font-weight:600;color:var(--beaker);margin-bottom:6px;letter-spacing:.02em}
+    .f-cert-row{display:flex;flex-wrap:wrap;gap:8px;margin-top:10px}
+    .f-cert{font-family:var(--mono);font-size:.7rem;font-weight:600;color:#fff;background:rgba(255,255,255,.06);border:1px solid rgba(255,255,255,.14);padding:6px 11px;border-radius:5px}
+    .f-col-title{font-family:var(--display);font-size:.92rem;font-weight:700;color:#fff;margin-bottom:16px;letter-spacing:-.005em}
+    .f-links{list-style:none;display:flex;flex-direction:column;gap:10px}
+    .f-links a{color:rgba(255,255,255,.55);font-size:.86rem;transition:color .2s}
+    .f-links a:hover{color:#fff}
+    .footer-disclaim{padding:24px 0;border-top:1px solid rgba(255,255,255,.08);font-size:.76rem;color:rgba(255,255,255,.5);line-height:1.85;font-style:italic}
+    .footer-bottom{border-top:1px solid rgba(255,255,255,.08);padding:20px 0;display:flex;justify-content:space-between;align-items:center;flex-wrap:wrap;gap:16px;font-size:.78rem;color:rgba(255,255,255,.42)}
+
+    /* ── RESPONSIVE ────────────────────────────────────────── */
+    @media(max-width:980px){
+      .hero-grid,.reports-grid,.gv-grid,.cta-inner,.contact-grid{grid-template-columns:1fr;gap:48px}
+      .home-coll-card{grid-template-columns:1fr;padding:40px;gap:36px}
+      .gv-officer{position:static}
+      .process-grid{grid-template-columns:repeat(2,1fr)}
+      .process-grid::before{display:none}
+      .trust-strip-grid{grid-template-columns:repeat(2,1fr);gap:24px}
+      .footer-grid{grid-template-columns:1fr 1fr;gap:32px}
+      .cta-actions{text-align:left;align-items:flex-start}
+      .hero-illo-disc,.hero-illo-svg{width:360px;height:360px}
+      .pkg-card:nth-child(2){transform:none}
+      .pkg-card:nth-child(2):hover{transform:translateY(-4px)}
+    }
+    @media(max-width:640px){
+      .container{padding:0 22px}
+      .nav-inner{padding:14px 0}
+      .nav-links li:not(:last-child){display:none}
+      .brand{font-size:1.05rem;gap:10px}
+      .brand-mark{width:34px;height:34px;font-size:.95rem}
+      .nav-cta{padding:8px 14px;font-size:.82rem}
+      .topbar{font-size:.68rem;padding:7px 0}
+      .topbar-inner{flex-direction:column;gap:6px;align-items:flex-start}
+      .topbar-info{gap:6px 12px}
+      .section-pad{padding:72px 0}
+      .process-grid{grid-template-columns:1fr}
+      .trust-strip-grid{grid-template-columns:1fr;gap:24px}
+      .footer-grid{grid-template-columns:1fr}
+      .fg-row{grid-template-columns:1fr}
+      .gv-card{padding:30px 22px}
+      .home-coll-card{padding:32px 22px}
+      .hero-illo-disc,.hero-illo-svg{width:300px;height:300px}
+      .float-chip-1,.float-chip-2,.float-chip-3{display:none}
+      .cats-grid{grid-template-columns:repeat(2,1fr)}
+      .hero-search{padding:6px 6px 6px 18px}
+      .hero-search input{font-size:.88rem;padding:9px 0}
+      .hero-search-btn{padding:10px 16px;font-size:.82rem}
+      .sample-row{grid-template-columns:1.4fr 1fr auto;gap:6px;font-size:.74rem}
+      .sample-row .sr-ref{display:none}
+      .sample-report{padding:22px}
+      .home-coll-slot-grid{grid-template-columns:1fr}
+    }
+  </style>
+</head>
+<body>
+
+<div class="topbar">
+  <div class="topbar-inner">
+    <div class="topbar-info">
+      <span>NABL: MC-2023-4567</span>
+      <span>CAP: 12345-01</span>
+      <span>ICMR: <b>ICMR-2023-VRDL-345</b></span>
+    </div>
+    <a href="tel:+91 1800 000 411" class="topbar-helpline">24×7 Helpline · +91 1800 000 411</a>
+  </div>
+</div>
+
+<nav class="nav">
+  <div class="container nav-inner">
+    <a href="#" class="brand">
+      <span class="brand-mark"></span>
+      <span>Nidaan Diagnostics</span>
+    </a>
+    <ul class="nav-links">
+      <li><a href="#categories">Tests</a></li>
+      <li><a href="#packages">Packages</a></li>
+      <li><a href="#home-coll">Home Collection</a></li>
+      <li><a href="#specialists">Pathologists</a></li>
+      <li><a href="#contact" class="nav-cta">Book Home Collection</a></li>
+    </ul>
+  </div>
+</nav>
+
+<section class="hero">
+  <div class="container hero-grid">
+    <div class="reveal">
+      <div class="hero-eyebrow">NABL-accredited · Reports in 6 hours · Home collection</div>
+      <h1 class="hero-title">Lab tests, <em>decoded.</em></h1>
+      <p class="hero-sub">3,400+ tests across 12 specialties, with same-day reports for most. Home sample pickup in a 90-minute slot · at no extra charge.</p>
+      <form class="hero-search" onsubmit="event.preventDefault();document.querySelector('#popular-tests').scrollIntoView({behavior:'smooth'})">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/></svg>
+        <input type="text" placeholder="Search 3,400+ tests · e.g. Vitamin D, HbA1c, Thyroid Profile" aria-label="Search tests">
+        <button type="submit" class="hero-search-btn">Search</button>
+      </form>
+      <div class="hero-popular">
+        <span class="hero-popular-label">Popular:</span>
+        <a href="#popular-tests" class="hero-popular-chip">Vitamin D</a>
+        <a href="#popular-tests" class="hero-popular-chip">Thyroid</a>
+        <a href="#popular-tests" class="hero-popular-chip">HbA1c</a>
+        <a href="#popular-tests" class="hero-popular-chip">Lipid Profile</a>
+        <a href="#popular-tests" class="hero-popular-chip">CBC</a>
+      </div>
+      <div class="hero-actions">
+        <a href="#contact" class="btn btn-primary">Book Home Collection →</a>
+        <a href="#packages" class="btn btn-ghost">Browse Packages</a>
+      </div>
+    </div>
+
+    <div class="hero-illo reveal">
+      <div class="hero-illo-disc"></div>
+      <div class="float-chip float-chip-1">
+        <span class="dot">⏱</span>
+        <span>Same-day TAT</span>
+      </div>
+      <div class="float-chip float-chip-2">
+        <span class="dot">🚚</span>
+        <span>Home collection · Free</span>
+      </div>
+      <div class="float-chip float-chip-3">
+        <span class="dot">✓</span>
+        <span>Pathologist-verified</span>
+      </div>
+      <div class="hero-illo-svg">
+        <svg viewBox="0 0 320 320" xmlns="http://www.w3.org/2000/svg" style="width:100%;height:100%;display:block">
+          <defs>
+            <linearGradient id="liquidR" x1="0" y1="0" x2="0" y2="1"><stop offset="0%" stop-color="#fda4af"/><stop offset="100%" stop-color="#dc2626"/></linearGradient>
+            <linearGradient id="liquidA" x1="0" y1="0" x2="0" y2="1"><stop offset="0%" stop-color="#fbbf24"/><stop offset="100%" stop-color="#f97316"/></linearGradient>
+            <linearGradient id="liquidG" x1="0" y1="0" x2="0" y2="1"><stop offset="0%" stop-color="#86efac"/><stop offset="100%" stop-color="#22c55e"/></linearGradient>
+            <linearGradient id="liquidB" x1="0" y1="0" x2="0" y2="1"><stop offset="0%" stop-color="#7dd3fc"/><stop offset="100%" stop-color="#0ea5e9"/></linearGradient>
+            <linearGradient id="glassG" x1="0" y1="0" x2="1" y2="0"><stop offset="0%" stop-color="rgba(255,255,255,.6)"/><stop offset="50%" stop-color="rgba(255,255,255,.15)"/><stop offset="100%" stop-color="rgba(255,255,255,0)"/></linearGradient>
+          </defs>
+          <!-- DNA helix background decoration -->
+          <g opacity=".18" stroke="#0ea5e9" stroke-width="1.5" fill="none" stroke-linecap="round">
+            <path d="M 30 30 Q 60 60 30 90 Q 60 120 30 150 Q 60 180 30 210"/>
+            <path d="M 60 30 Q 30 60 60 90 Q 30 120 60 150 Q 30 180 60 210"/>
+            <line x1="33" y1="45" x2="57" y2="45"/>
+            <line x1="33" y1="75" x2="57" y2="75"/>
+            <line x1="33" y1="105" x2="57" y2="105"/>
+            <line x1="33" y1="135" x2="57" y2="135"/>
+            <line x1="33" y1="165" x2="57" y2="165"/>
+            <line x1="33" y1="195" x2="57" y2="195"/>
+          </g>
+          <g opacity=".15" stroke="#22c55e" stroke-width="1.5" fill="none" stroke-linecap="round">
+            <path d="M 270 280 Q 290 260 270 240"/>
+            <path d="M 290 280 Q 270 260 290 240"/>
+          </g>
+          <!-- Floating molecule icons -->
+          <g opacity=".7">
+            <circle cx="260" cy="70" r="4" fill="#f97316"/>
+            <circle cx="280" cy="80" r="3" fill="#22c55e"/>
+            <circle cx="270" cy="90" r="3.5" fill="#0ea5e9"/>
+            <line x1="262" y1="74" x2="278" y2="78" stroke="#0f172a" stroke-width="1" opacity=".4"/>
+            <line x1="270" y1="86" x2="262" y2="74" stroke="#0f172a" stroke-width="1" opacity=".4"/>
+          </g>
+          <!-- Rack/stand -->
+          <rect x="60" y="248" width="200" height="14" rx="3" fill="#475569"/>
+          <rect x="60" y="262" width="200" height="6" rx="2" fill="#334155"/>
+          <!-- 4 test tubes -->
+          <!-- Tube 1 RED -->
+          <g>
+            <rect x="78" y="80" width="40" height="172" rx="20" fill="#f8fafc" stroke="#cbd5e1" stroke-width="2"/>
+            <rect x="78" y="80" width="40" height="14" rx="3" fill="#1e293b"/>
+            <rect x="80" y="76" width="36" height="8" rx="2" fill="#475569"/>
+            <path d="M 80 130 Q 80 248 98 248 Q 116 248 116 130 L 116 248 L 80 248 Z" fill="url(#liquidR)" opacity=".9"/>
+            <ellipse cx="98" cy="130" rx="18" ry="3.5" fill="rgba(0,0,0,.18)"/>
+            <ellipse cx="98" cy="129" rx="18" ry="2.5" fill="#fecaca" opacity=".6"/>
+            <rect x="82" y="190" width="32" height="22" rx="2" fill="#fff" opacity=".95" stroke="#cbd5e1" stroke-width=".5"/>
+            <line x1="86" y1="198" x2="110" y2="198" stroke="#0f172a" stroke-width="1"/>
+            <line x1="86" y1="203" x2="105" y2="203" stroke="#94a3b8" stroke-width=".8"/>
+            <line x1="86" y1="208" x2="108" y2="208" stroke="#94a3b8" stroke-width=".8"/>
+            <rect x="82" y="84" width="36" height="166" rx="18" fill="url(#glassG)" opacity=".4"/>
+          </g>
+          <!-- Tube 2 AMBER (slightly taller) -->
+          <g>
+            <rect x="132" y="64" width="40" height="188" rx="20" fill="#f8fafc" stroke="#cbd5e1" stroke-width="2"/>
+            <rect x="132" y="64" width="40" height="14" rx="3" fill="#1e293b"/>
+            <rect x="134" y="60" width="36" height="8" rx="2" fill="#475569"/>
+            <path d="M 134 105 Q 134 248 152 248 Q 170 248 170 105 L 170 248 L 134 248 Z" fill="url(#liquidA)" opacity=".9"/>
+            <ellipse cx="152" cy="105" rx="18" ry="3.5" fill="rgba(0,0,0,.18)"/>
+            <ellipse cx="152" cy="104" rx="18" ry="2.5" fill="#fed7aa" opacity=".7"/>
+            <rect x="136" y="180" width="32" height="22" rx="2" fill="#fff" opacity=".95" stroke="#cbd5e1" stroke-width=".5"/>
+            <line x1="140" y1="188" x2="164" y2="188" stroke="#0f172a" stroke-width="1"/>
+            <line x1="140" y1="193" x2="159" y2="193" stroke="#94a3b8" stroke-width=".8"/>
+            <line x1="140" y1="198" x2="162" y2="198" stroke="#94a3b8" stroke-width=".8"/>
+            <rect x="136" y="68" width="36" height="182" rx="18" fill="url(#glassG)" opacity=".4"/>
+          </g>
+          <!-- Tube 3 GREEN -->
+          <g>
+            <rect x="186" y="86" width="40" height="166" rx="20" fill="#f8fafc" stroke="#cbd5e1" stroke-width="2"/>
+            <rect x="186" y="86" width="40" height="14" rx="3" fill="#1e293b"/>
+            <rect x="188" y="82" width="36" height="8" rx="2" fill="#475569"/>
+            <path d="M 188 142 Q 188 248 206 248 Q 224 248 224 142 L 224 248 L 188 248 Z" fill="url(#liquidG)" opacity=".9"/>
+            <ellipse cx="206" cy="142" rx="18" ry="3.5" fill="rgba(0,0,0,.18)"/>
+            <ellipse cx="206" cy="141" rx="18" ry="2.5" fill="#bbf7d0" opacity=".7"/>
+            <rect x="190" y="200" width="32" height="22" rx="2" fill="#fff" opacity=".95" stroke="#cbd5e1" stroke-width=".5"/>
+            <line x1="194" y1="208" x2="218" y2="208" stroke="#0f172a" stroke-width="1"/>
+            <line x1="194" y1="213" x2="213" y2="213" stroke="#94a3b8" stroke-width=".8"/>
+            <line x1="194" y1="218" x2="216" y2="218" stroke="#94a3b8" stroke-width=".8"/>
+            <rect x="190" y="90" width="36" height="160" rx="18" fill="url(#glassG)" opacity=".4"/>
+          </g>
+          <!-- Tube 4 BLUE -->
+          <g>
+            <rect x="240" y="98" width="40" height="154" rx="20" fill="#f8fafc" stroke="#cbd5e1" stroke-width="2"/>
+            <rect x="240" y="98" width="40" height="14" rx="3" fill="#1e293b"/>
+            <rect x="242" y="94" width="36" height="8" rx="2" fill="#475569"/>
+            <path d="M 242 158 Q 242 248 260 248 Q 278 248 278 158 L 278 248 L 242 248 Z" fill="url(#liquidB)" opacity=".9"/>
+            <ellipse cx="260" cy="158" rx="18" ry="3.5" fill="rgba(0,0,0,.18)"/>
+            <ellipse cx="260" cy="157" rx="18" ry="2.5" fill="#bae6fd" opacity=".7"/>
+            <rect x="244" y="210" width="32" height="22" rx="2" fill="#fff" opacity=".95" stroke="#cbd5e1" stroke-width=".5"/>
+            <line x1="248" y1="218" x2="272" y2="218" stroke="#0f172a" stroke-width="1"/>
+            <line x1="248" y1="223" x2="266" y2="223" stroke="#94a3b8" stroke-width=".8"/>
+            <line x1="248" y1="228" x2="269" y2="228" stroke="#94a3b8" stroke-width=".8"/>
+            <rect x="244" y="102" width="36" height="148" rx="18" fill="url(#glassG)" opacity=".4"/>
+          </g>
+          <!-- Falling droplet on tube 1 -->
+          <ellipse cx="98" cy="58" rx="3" ry="5" fill="#dc2626"/>
+          <!-- Floating dots -->
+          <circle cx="46" cy="270" r="3" fill="#fbbf24" opacity=".6"/>
+          <circle cx="284" cy="62" r="2.5" fill="#22c55e" opacity=".7"/>
+        </svg>
+      </div>
+    </div>
+  </div>
+</section>
+
+<div class="trust-strip">
+  <div class="container">
+    <div class="trust-strip-grid">
+      
+        <div>
+          <div class="trust-stat-v">3,400+</div>
+          <div class="trust-stat-l">Tests offered</div>
+        </div>
+      
+        <div>
+          <div class="trust-stat-v">180+</div>
+          <div class="trust-stat-l">Collection points</div>
+        </div>
+      
+        <div>
+          <div class="trust-stat-v">2.5 Cr</div>
+          <div class="trust-stat-l">Tests performed</div>
+        </div>
+      
+        <div>
+          <div class="trust-stat-v">6 hrs</div>
+          <div class="trust-stat-l">Avg report TAT</div>
+        </div>
+      
+    </div>
+    <div class="trust-accred">
+      <span class="accred-pill">NABL: MC-2023-4567</span>
+      <span class="accred-pill">CAP: 12345-01</span>
+      <span class="accred-pill">ICMR Registered</span>
+      <span class="accred-pill">ISO 15189</span>
+      <span class="accred-pill">ISO 9001</span>
+    </div>
+  </div>
+</div>
+
+<section id="categories" class="categories section-pad">
+  <div class="container">
+    <div class="section-head reveal">
+      <div class="section-eyebrow">What we test</div>
+      <h2 class="section-title">Tests organised the way you think about your body.</h2>
+      <p class="section-body">Pick a category, see what is included, get a price up-front. Every test card shows the sample type, fasting need, and turn-around time before you book.</p>
+    </div>
+    <div class="cats-grid">
+      
+        <article class="cat-card reveal" style="background:rgba(249,115,22,.12);border-color:rgba(249,115,22,.32)">
+          <div class="cat-card-top">
+            <div class="cat-symbol" style="color:#c2410c">Db</div>
+            <div class="cat-count">12 tests</div>
+          </div>
+          <div class="cat-icon">🍬</div>
+          <div class="cat-name">Diabetes</div>
+        </article>
+      
+        <article class="cat-card reveal" style="background:rgba(168,85,247,.1);border-color:rgba(168,85,247,.3)">
+          <div class="cat-card-top">
+            <div class="cat-symbol" style="color:#6b21a8">Th</div>
+            <div class="cat-count">8 tests</div>
+          </div>
+          <div class="cat-icon">🦋</div>
+          <div class="cat-name">Thyroid</div>
+        </article>
+      
+        <article class="cat-card reveal" style="background:rgba(244,63,94,.1);border-color:rgba(244,63,94,.3)">
+          <div class="cat-card-top">
+            <div class="cat-symbol" style="color:#9f1239">Lp</div>
+            <div class="cat-count">6 tests</div>
+          </div>
+          <div class="cat-icon">🩸</div>
+          <div class="cat-name">Lipid</div>
+        </article>
+      
+        <article class="cat-card reveal" style="background:rgba(34,197,94,.1);border-color:rgba(34,197,94,.3)">
+          <div class="cat-card-top">
+            <div class="cat-symbol" style="color:#15803d">Lv</div>
+            <div class="cat-count">14 tests</div>
+          </div>
+          <div class="cat-icon">🫀</div>
+          <div class="cat-name">Liver</div>
+        </article>
+      
+        <article class="cat-card reveal" style="background:rgba(20,184,166,.1);border-color:rgba(20,184,166,.3)">
+          <div class="cat-card-top">
+            <div class="cat-symbol" style="color:#0f766e">Kd</div>
+            <div class="cat-count">10 tests</div>
+          </div>
+          <div class="cat-icon">🫘</div>
+          <div class="cat-name">Kidney</div>
+        </article>
+      
+        <article class="cat-card reveal" style="background:rgba(244,63,94,.1);border-color:rgba(244,63,94,.3)">
+          <div class="cat-card-top">
+            <div class="cat-symbol" style="color:#9f1239">Cd</div>
+            <div class="cat-count">11 tests</div>
+          </div>
+          <div class="cat-icon">❤️</div>
+          <div class="cat-name">Cardiac</div>
+        </article>
+      
+        <article class="cat-card reveal" style="background:rgba(249,115,22,.12);border-color:rgba(249,115,22,.32)">
+          <div class="cat-card-top">
+            <div class="cat-symbol" style="color:#c2410c">Vt</div>
+            <div class="cat-count">15 tests</div>
+          </div>
+          <div class="cat-icon">☀️</div>
+          <div class="cat-name">Vitamins</div>
+        </article>
+      
+        <article class="cat-card reveal" style="background:rgba(168,85,247,.1);border-color:rgba(168,85,247,.3)">
+          <div class="cat-card-top">
+            <div class="cat-symbol" style="color:#6b21a8">Hr</div>
+            <div class="cat-count">22 tests</div>
+          </div>
+          <div class="cat-icon">🧬</div>
+          <div class="cat-name">Hormones</div>
+        </article>
+      
+        <article class="cat-card reveal" style="background:rgba(34,197,94,.1);border-color:rgba(34,197,94,.3)">
+          <div class="cat-card-top">
+            <div class="cat-symbol" style="color:#15803d">Ig</div>
+            <div class="cat-count">18 tests</div>
+          </div>
+          <div class="cat-icon">🌿</div>
+          <div class="cat-name">Allergy</div>
+        </article>
+      
+        <article class="cat-card reveal" style="background:rgba(14,165,233,.1);border-color:rgba(14,165,233,.3)">
+          <div class="cat-card-top">
+            <div class="cat-symbol" style="color:#0369a1">Mb</div>
+            <div class="cat-count">34 tests</div>
+          </div>
+          <div class="cat-icon">🦠</div>
+          <div class="cat-name">Infections</div>
+        </article>
+      
+        <article class="cat-card reveal" style="background:rgba(168,85,247,.1);border-color:rgba(168,85,247,.3)">
+          <div class="cat-card-top">
+            <div class="cat-symbol" style="color:#6b21a8">Gn</div>
+            <div class="cat-count">9 tests</div>
+          </div>
+          <div class="cat-icon">🧫</div>
+          <div class="cat-name">Genetic</div>
+        </article>
+      
+        <article class="cat-card reveal" style="background:rgba(100,116,139,.1);border-color:rgba(100,116,139,.3)">
+          <div class="cat-card-top">
+            <div class="cat-symbol" style="color:#334155">Im</div>
+            <div class="cat-count">24 tests</div>
+          </div>
+          <div class="cat-icon">🩻</div>
+          <div class="cat-name">Imaging</div>
+        </article>
+      
+    </div>
+  </div>
+</section>
+
+<section id="popular-tests" class="pop section-pad">
+  <div class="container">
+    <div class="section-head reveal">
+      <div class="section-eyebrow">Most-booked tests</div>
+      <h2 class="section-title">Skip the search · book a popular one.</h2>
+      <p class="section-body">The tests our patients most often look up. Price, sample type, fasting requirement and TAT are all listed up-front.</p>
+    </div>
+    <div class="pop-grid">
+      
+        <article class="pop-card reveal">
+          <div class="pop-card-head">
+            <h3 class="pop-name">Vitamin D (25-OH)</h3>
+            <span class="pop-code">VD-25</span>
+          </div>
+          <div class="pop-meta">
+            <span class="pop-tag pop-tag-sample">🩸 Blood (Serum)</span>
+            <span class="pop-tag pop-tag-tat">⏱ Same day</span>
+            
+          </div>
+          <div class="pop-foot">
+            <div>
+              <div class="pop-price">₹1,099</div>
+              <span class="pop-note">Reported by 9 PM if collected before 12 PM</span>
+            </div>
+            <a href="#contact" class="pop-book">Book</a>
+          </div>
+        </article>
+      
+        <article class="pop-card reveal">
+          <div class="pop-card-head">
+            <h3 class="pop-name">HbA1c (Glycated Haemoglobin)</h3>
+            <span class="pop-code">HBA1</span>
+          </div>
+          <div class="pop-meta">
+            <span class="pop-tag pop-tag-sample">🩸 Blood (EDTA)</span>
+            <span class="pop-tag pop-tag-tat">⏱ Same day</span>
+            
+          </div>
+          <div class="pop-foot">
+            <div>
+              <div class="pop-price">₹599</div>
+              <span class="pop-note">Reports your 3-month avg sugar</span>
+            </div>
+            <a href="#contact" class="pop-book">Book</a>
+          </div>
+        </article>
+      
+        <article class="pop-card reveal">
+          <div class="pop-card-head">
+            <h3 class="pop-name">Thyroid Profile (T3, T4, TSH)</h3>
+            <span class="pop-code">TFT</span>
+          </div>
+          <div class="pop-meta">
+            <span class="pop-tag pop-tag-sample">🩸 Blood (Serum)</span>
+            <span class="pop-tag pop-tag-tat">⏱ Same day</span>
+            
+          </div>
+          <div class="pop-foot">
+            <div>
+              <div class="pop-price">₹549</div>
+              <span class="pop-note">Pathologist comment included</span>
+            </div>
+            <a href="#contact" class="pop-book">Book</a>
+          </div>
+        </article>
+      
+        <article class="pop-card reveal">
+          <div class="pop-card-head">
+            <h3 class="pop-name">Lipid Profile</h3>
+            <span class="pop-code">LIP</span>
+          </div>
+          <div class="pop-meta">
+            <span class="pop-tag pop-tag-sample">🩸 Blood (Serum)</span>
+            <span class="pop-tag pop-tag-tat">⏱ Same day</span>
+            <span class="pop-tag pop-tag-fast">⚠ Yes (12 hrs)</span>
+          </div>
+          <div class="pop-foot">
+            <div>
+              <div class="pop-price">₹449</div>
+              <span class="pop-note">Cholesterol panel + TG + HDL + LDL</span>
+            </div>
+            <a href="#contact" class="pop-book">Book</a>
+          </div>
+        </article>
+      
+        <article class="pop-card reveal">
+          <div class="pop-card-head">
+            <h3 class="pop-name">Liver Function Test (LFT)</h3>
+            <span class="pop-code">LFT</span>
+          </div>
+          <div class="pop-meta">
+            <span class="pop-tag pop-tag-sample">🩸 Blood (Serum)</span>
+            <span class="pop-tag pop-tag-tat">⏱ Same day</span>
+            
+          </div>
+          <div class="pop-foot">
+            <div>
+              <div class="pop-price">₹499</div>
+              <span class="pop-note">ALT, AST, ALP, Bilirubin, Albumin</span>
+            </div>
+            <a href="#contact" class="pop-book">Book</a>
+          </div>
+        </article>
+      
+        <article class="pop-card reveal">
+          <div class="pop-card-head">
+            <h3 class="pop-name">CBC + ESR</h3>
+            <span class="pop-code">CBC</span>
+          </div>
+          <div class="pop-meta">
+            <span class="pop-tag pop-tag-sample">🩸 Blood (EDTA)</span>
+            <span class="pop-tag pop-tag-tat">⏱ Same day</span>
+            
+          </div>
+          <div class="pop-foot">
+            <div>
+              <div class="pop-price">₹299</div>
+              <span class="pop-note">Full haemogram + inflammation marker</span>
+            </div>
+            <a href="#contact" class="pop-book">Book</a>
+          </div>
+        </article>
+      
+        <article class="pop-card reveal">
+          <div class="pop-card-head">
+            <h3 class="pop-name">Urine Routine + Culture</h3>
+            <span class="pop-code">URC</span>
+          </div>
+          <div class="pop-meta">
+            <span class="pop-tag pop-tag-sample">🩸 Urine (Sterile)</span>
+            <span class="pop-tag pop-tag-tat">⏱ 48 hrs</span>
+            
+          </div>
+          <div class="pop-foot">
+            <div>
+              <div class="pop-price">₹399</div>
+              <span class="pop-note">Includes sensitivity if culture positive</span>
+            </div>
+            <a href="#contact" class="pop-book">Book</a>
+          </div>
+        </article>
+      
+        <article class="pop-card reveal">
+          <div class="pop-card-head">
+            <h3 class="pop-name">Allergy Panel (Indian Food)</h3>
+            <span class="pop-code">ALG-F</span>
+          </div>
+          <div class="pop-meta">
+            <span class="pop-tag pop-tag-sample">🩸 Blood (Serum)</span>
+            <span class="pop-tag pop-tag-tat">⏱ 48 hrs</span>
+            
+          </div>
+          <div class="pop-foot">
+            <div>
+              <div class="pop-price">₹3,999</div>
+              <span class="pop-note">24 food allergens · IgE specific</span>
+            </div>
+            <a href="#contact" class="pop-book">Book</a>
+          </div>
+        </article>
+      
+    </div>
+  </div>
+</section>
+
+<section id="home-coll" class="home-coll section-pad">
+  <div class="container">
+    <div class="home-coll-card reveal">
+      <div>
+        <div class="section-eyebrow">Sample collection at home</div>
+        <h2 class="home-coll-title">A phlebotomist at your door in a 90-minute window.</h2>
+        <p class="home-coll-body">Book your slot, share the address, and we send a trained phlebotomist with a sealed sample kit. Pickup is free across our service cities · no minimum order, no surprise charges.</p>
+        <div class="home-coll-perks">
+          
+            <div class="home-coll-perk">
+              <span class="home-coll-perk-ic">🚚</span>
+              <span>Free home pickup · No minimum order value</span>
+            </div>
+          
+            <div class="home-coll-perk">
+              <span class="home-coll-perk-ic">⏱</span>
+              <span>90-minute slot window · chosen by you</span>
+            </div>
+          
+            <div class="home-coll-perk">
+              <span class="home-coll-perk-ic">🧪</span>
+              <span>Sealed vacutainers · Sample-chain integrity preserved</span>
+            </div>
+          
+            <div class="home-coll-perk">
+              <span class="home-coll-perk-ic">🎓</span>
+              <span>Phlebotomists trained on standard SOP · ID-verified</span>
+            </div>
+          
+            <div class="home-coll-perk">
+              <span class="home-coll-perk-ic">🥶</span>
+              <span>Cold-chain transport · -4–C samples reach the lab in 90 mins</span>
+            </div>
+          
+            <div class="home-coll-perk">
+              <span class="home-coll-perk-ic">📲</span>
+              <span>SMS + WhatsApp confirmation · Live tracking on app</span>
+            </div>
+          
+        </div>
+      </div>
+      <div class="home-coll-slot">
+        <div class="home-coll-slot-eyebrow">Pick a slot</div>
+        <div class="home-coll-slot-title">Tomorrow · Morning slots open</div>
+        <div class="home-coll-slot-grid">
+          <div class="home-coll-slot-pill">06:30 – 08:00</div>
+          <div class="home-coll-slot-pill active">08:00 – 09:30</div>
+          <div class="home-coll-slot-pill">09:30 – 11:00</div>
+          <div class="home-coll-slot-pill">11:00 – 12:30</div>
+        </div>
+        <div class="home-coll-slot-foot">
+          <span>Collection fee</span>
+          <b>Free · No min. order</b>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section class="process section-pad">
+  <div class="container">
+    <div class="section-head center reveal">
+      <div class="section-eyebrow">From booking to result</div>
+      <h2 class="section-title">A test that just works.</h2>
+    </div>
+    <div class="process-grid">
+      
+        <div class="process-step reveal">
+          <div class="process-icon">📱<span class="process-num">01</span></div>
+          <h3 class="process-title">Book a test</h3>
+          <p class="process-body">Search 3,400+ tests, pick the time slot for home collection, and pay online. Or skip booking and walk into any centre.</p>
+          <span class="process-duration">⏱ 2 minutes</span>
+        </div>
+      
+        <div class="process-step reveal">
+          <div class="process-icon">💉<span class="process-num">02</span></div>
+          <h3 class="process-title">Sample collected</h3>
+          <p class="process-body">A trained phlebotomist arrives in your 90-min slot with a sealed kit. Most blood draws take under 5 minutes.</p>
+          <span class="process-duration">⏱ 5 minutes</span>
+        </div>
+      
+        <div class="process-step reveal">
+          <div class="process-icon">🔬<span class="process-num">03</span></div>
+          <h3 class="process-title">Lab processing</h3>
+          <p class="process-body">Samples enter our NABL-accredited lab under temperature-controlled transport. Pathologist signs off on every report.</p>
+          <span class="process-duration">⏱ 4–8 hours</span>
+        </div>
+      
+        <div class="process-step reveal">
+          <div class="process-icon">📋<span class="process-num">04</span></div>
+          <h3 class="process-title">Digital report</h3>
+          <p class="process-body">Delivered as a colour-coded PDF on app, WhatsApp and email. With a pathologist comment whenever a flag warrants one.</p>
+          <span class="process-duration">⏱ Same day</span>
+        </div>
+      
+    </div>
+  </div>
+</section>
+
+<section id="packages" class="pkg section-pad">
+  <div class="container">
+    <div class="section-head reveal">
+      <div class="section-eyebrow">Save with packages</div>
+      <h2 class="section-title">Health-check bundles that catch what matters.</h2>
+      <p class="section-body">Each package is curated by our chief pathologist and includes a free physician consult to walk you through the results. No up-sell, no auto-renewals.</p>
+    </div>
+    <div class="pkg-grid">
+      
+        <article class="pkg-card reveal">
+          <div class="pkg-name">Basic Wellness</div>
+          <div class="pkg-price">₹1,299</div>
+          <div class="pkg-price-note">All-inclusive · 48 parameters</div>
+          <div class="pkg-ideal">★ Adults 25–40 · First-time screening</div>
+          
+            <ul class="pkg-tests">
+              <li>CBC + ESR + Lipid Profile</li><li>Fasting blood sugar + HbA1c</li><li>Liver &amp; kidney function tests</li><li>Thyroid (TSH)</li><li>Urine routine</li><li>Free physician consultation</li>
+            </ul>
+          
+        </article>
+      
+        <article class="pkg-card reveal">
+          <div class="pkg-name">Wellness Plus</div>
+          <div class="pkg-price">₹2,499</div>
+          <div class="pkg-price-note">All-inclusive · 88 parameters</div>
+          <div class="pkg-ideal">★ Adults 35–55 · Mid-life baseline</div>
+          
+            <ul class="pkg-tests">
+              <li>Everything in Basic, plus:</li><li>Vitamin D + B12 + Folic Acid</li><li>Full thyroid panel (T3, T4, TSH)</li><li>Cardiac risk (hs-CRP, Homocysteine)</li><li>PSA / Pap smear (gender-specific)</li><li>Pathologist commentary on flags</li>
+            </ul>
+          
+        </article>
+      
+        <article class="pkg-card reveal">
+          <div class="pkg-name">Senior Care 60+</div>
+          <div class="pkg-price">₹4,499</div>
+          <div class="pkg-price-note">For adults 60+ · 120 parameters</div>
+          <div class="pkg-ideal">★ Adults 60+ · Comprehensive geriatric</div>
+          
+            <ul class="pkg-tests">
+              <li>Everything in Wellness Plus, plus:</li><li>HbA1c + fructosamine + iron studies</li><li>Bone profile (Calcium, Vit D, PTH)</li><li>Tumour markers (CEA, AFP, CA-125)</li><li>Cardiac (NT-proBNP, Troponin)</li><li>Geriatrician consult included</li>
+            </ul>
+          
+        </article>
+      
+    </div>
+  </div>
+</section>
+
+<section id="reports" class="reports section-pad">
+  <div class="container">
+    <div class="reports-grid">
+      <div class="reveal">
+        <div class="section-eyebrow">Reports that make sense</div>
+        <h2 class="section-title">A real report, not a sheet of numbers.</h2>
+        <p class="section-body">Every report you receive has reference ranges colour-coded, abnormal values flagged, and a pathologist comment whenever something needs context. You can view it on the app, on WhatsApp, or in your inbox.</p>
+        <div class="reports-features">
+          
+            <div class="rep-feat">
+              <div class="rep-feat-ic">🎨</div>
+              <div>
+                <div class="rep-feat-title">Colour-coded results</div>
+                <div class="rep-feat-body">Green for in-range, amber for borderline, red for out-of-range · at a glance.</div>
+              </div>
+            </div>
+          
+            <div class="rep-feat">
+              <div class="rep-feat-ic">💬</div>
+              <div>
+                <div class="rep-feat-title">Pathologist commentary</div>
+                <div class="rep-feat-body">Whenever a flag warrants context, the report explains why · in plain English.</div>
+              </div>
+            </div>
+          
+            <div class="rep-feat">
+              <div class="rep-feat-ic">📈</div>
+              <div>
+                <div class="rep-feat-title">Longitudinal tracking</div>
+                <div class="rep-feat-body">Past reports stack chronologically so trends become obvious · not buried in PDFs.</div>
+              </div>
+            </div>
+          
+            <div class="rep-feat">
+              <div class="rep-feat-ic">📲</div>
+              <div>
+                <div class="rep-feat-title">App + WhatsApp + Email</div>
+                <div class="rep-feat-body">Delivered three ways. Open from any device. Forward to your doctor in one tap.</div>
+              </div>
+            </div>
+          
+            <div class="rep-feat">
+              <div class="rep-feat-ic">🩺</div>
+              <div>
+                <div class="rep-feat-title">Share with your doctor</div>
+                <div class="rep-feat-body">One-click share with any consultant. They see your full history, not just today.</div>
+              </div>
+            </div>
+          
+            <div class="rep-feat">
+              <div class="rep-feat-ic">🔒</div>
+              <div>
+                <div class="rep-feat-title">DPDP Act compliant</div>
+                <div class="rep-feat-body">Reports stored encrypted, accessed only by you and the consultants you grant permission.</div>
+              </div>
+            </div>
+          
+        </div>
+      </div>
+      <div class="reveal">
+        <div class="sample-report">
+          <div class="sample-report-head">
+            <div class="sample-report-brand">Nidaan Diagnostics<small>NABL-accredited lab · NABL: MC-2023-4567</small></div>
+            <div class="sample-report-id"><b>Report #L24-08731</b>Generated · 24 May 2026 · 18:42</div>
+          </div>
+          <div class="sample-report-patient">
+            <div><b>NAME</b> ████████ ████████</div>
+            <div><b>AGE / SEX</b> 38 / F</div>
+            <div><b>UHID</b> NDX-19283745</div>
+            <div><b>REFERRED BY</b> Self</div>
+          </div>
+          <div class="sample-report-title">Wellness Plus · 88 parameters · Selected highlights</div>
+          <div class="sample-rows">
+            <div class="sample-row">
+              <span>Test</span>
+              <span>Result</span>
+              <span>Ref range</span>
+              <span>Flag</span>
+            </div>
+            <div class="sample-row">
+              <span class="sr-name">Vitamin D (25-OH)</span>
+              <span class="sr-val">18.2 <small style="color:var(--ink-mute);font-weight:500">ng/mL</small></span>
+              <span class="sr-ref">30 – 100</span>
+              <span class="sample-flag flag-high">LOW</span>
+            </div>
+            <div class="sample-row">
+              <span class="sr-name">HbA1c</span>
+              <span class="sr-val">5.4 <small style="color:var(--ink-mute);font-weight:500">%</small></span>
+              <span class="sr-ref">&lt; 5.7</span>
+              <span class="sample-flag flag-normal">NORMAL</span>
+            </div>
+            <div class="sample-row">
+              <span class="sr-name">Total Cholesterol</span>
+              <span class="sr-val">210 <small style="color:var(--ink-mute);font-weight:500">mg/dL</small></span>
+              <span class="sr-ref">&lt; 200</span>
+              <span class="sample-flag flag-borderline">BORDER</span>
+            </div>
+            <div class="sample-row">
+              <span class="sr-name">TSH</span>
+              <span class="sr-val">2.81 <small style="color:var(--ink-mute);font-weight:500">μIU/mL</small></span>
+              <span class="sr-ref">0.4 – 4.0</span>
+              <span class="sample-flag flag-normal">NORMAL</span>
+            </div>
+            <div class="sample-row">
+              <span class="sr-name">Haemoglobin</span>
+              <span class="sr-val">12.8 <small style="color:var(--ink-mute);font-weight:500">g/dL</small></span>
+              <span class="sr-ref">12.0 – 15.5</span>
+              <span class="sample-flag flag-normal">NORMAL</span>
+            </div>
+          </div>
+          <div class="sample-report-comment">
+            <b>Pathologist note</b>
+            Vitamin D is below the reference range — supplementation per your physician's guidance is suggested. Cholesterol is mildly elevated; a repeat lipid profile after lifestyle changes in 12 weeks would be sensible.
+          </div>
+          <div class="sample-report-sig">
+            Reviewed & signed digitally by
+            <b>Dr. Ananya Verma, MD (Pathology)</b>
+            MMC-12345 · Chief Pathologist
+          </div>
+        </div>
+        <p class="sample-report-caption">A real sample report · colour-coded ranges, pathologist comment, signature.</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section id="specialists" class="specs section-pad">
+  <div class="container">
+    <div class="section-head reveal">
+      <div class="section-eyebrow">The team behind every report</div>
+      <h2 class="section-title">Pathologists, biochemists and microbiologists you can name.</h2>
+      <p class="section-body">Every NABL-accredited lab is anchored by a chief pathologist who signs off on every report. Here is the bench that runs ours.</p>
+    </div>
+    <div class="specs-grid">
+      
+        <article class="spec-card reveal">
+          <div class="spec-avatar">
+      <svg viewBox="0 0 280 280" xmlns="http://www.w3.org/2000/svg" style="width:100%;height:100%;display:block">
+        <defs><linearGradient id="lbg-a" x1="0" y1="0" x2="0" y2="1"><stop offset="0%" stop-color="#f0f9ff"/><stop offset="100%" stop-color="#dbeafe"/></linearGradient></defs>
+        <rect width="280" height="280" fill="url(#lbg-a)"/>
+        <circle cx="140" cy="200" r="120" fill="#ffffff" opacity=".5"/>
+        <path d="M 70 280 L 70 220 Q 90 188 140 188 Q 190 188 210 220 L 210 280 Z" fill="#ffffff" stroke="#cbd5e1" stroke-width="2"/>
+        <path d="M 124 188 L 140 208 L 156 188 L 154 218 L 126 218 Z" fill="#0ea5e9" opacity=".22"/>
+        <!-- Stethoscope substituted with lab-flask icon over heart -->
+        <circle cx="140" cy="250" r="11" fill="#22c55e"/>
+        <path d="M 134 246 L 134 256 M 146 246 L 146 256 M 130 256 L 150 256" stroke="#fff" stroke-width="1.6" fill="none" stroke-linecap="round"/>
+        <!-- ID badge -->
+        <rect x="178" y="215" width="22" height="28" rx="3" fill="#fff" stroke="#cbd5e1" stroke-width="1.5"/>
+        <line x1="183" y1="222" x2="195" y2="222" stroke="#0ea5e9" stroke-width="2"/>
+        <line x1="183" y1="227" x2="192" y2="227" stroke="#94a3b8" stroke-width="1.5"/>
+        <line x1="183" y1="232" x2="194" y2="232" stroke="#94a3b8" stroke-width="1.5"/>
+        <rect x="128" y="155" width="24" height="38" rx="8" fill="#f4c79a"/>
+        <path d="M 128 168 Q 140 175 152 168 L 152 192 L 128 192 Z" fill="rgba(0,0,0,.06)"/>
+        <ellipse cx="140" cy="120" rx="46" ry="52" fill="#f4c79a"/>
+        <path d="M 92 100 Q 88 50 140 50 Q 192 50 188 96 Q 192 78 184 66 Q 170 52 140 52 Q 110 52 96 66 Q 88 78 92 100 Z M 94 106 Q 90 132 104 148 L 86 144 Q 84 122 94 106 Z" fill="#3a2820"/>
+        <ellipse cx="111" cy="132" rx="6" ry="4" fill="#f87171" opacity=".32"/>
+        <ellipse cx="169" cy="132" rx="6" ry="4" fill="#f87171" opacity=".32"/>
+        <path d="M 128 140 Q 140 150 152 140" stroke="#2a1810" stroke-width="2.2" fill="none" stroke-linecap="round"/>
+        <ellipse cx="124" cy="118" rx="3.5" ry="4.5" fill="#1f1208"/>
+        <ellipse cx="156" cy="118" rx="3.5" ry="4.5" fill="#1f1208"/>
+        <circle cx="125.5" cy="116" r="1" fill="#fff"/>
+        <circle cx="157.5" cy="116" r="1" fill="#fff"/>
+        
+        <g opacity=".75">
+          <path d="M 32 60 L 40 60 M 36 56 L 36 64" stroke="#22c55e" stroke-width="2.5" stroke-linecap="round"/>
+          <circle cx="248" cy="62" r="4" fill="#f97316" opacity=".7"/>
+          <circle cx="36" cy="240" r="4" fill="#0ea5e9" opacity=".55"/>
+        </g>
+      </svg>
+    </div>
+          <div class="spec-info">
+            <h3 class="spec-name">Dr. Ananya Verma</h3>
+            <div class="spec-specialty">Chief Pathologist</div>
+            <div class="spec-quals">MBBS, MD (Pathology), DNB</div>
+            <div class="spec-meta">
+              <div class="spec-meta-row"><span><b>Practice:</b> 18 years</span></div>
+              <div class="spec-meta-row"><span><b>NMC / MC:</b> MMC-12345</span></div>
+              <div class="spec-meta-row"><span><b>Scope:</b> Heads Histopathology &amp; Cytology</span></div>
+            </div>
+          </div>
+        </article>
+      
+        <article class="spec-card reveal">
+          <div class="spec-avatar">
+      <svg viewBox="0 0 280 280" xmlns="http://www.w3.org/2000/svg" style="width:100%;height:100%;display:block">
+        <defs><linearGradient id="lbg-b" x1="0" y1="0" x2="0" y2="1"><stop offset="0%" stop-color="#f0f9ff"/><stop offset="100%" stop-color="#dbeafe"/></linearGradient></defs>
+        <rect width="280" height="280" fill="url(#lbg-b)"/>
+        <circle cx="140" cy="200" r="120" fill="#ffffff" opacity=".5"/>
+        <path d="M 70 280 L 70 220 Q 90 188 140 188 Q 190 188 210 220 L 210 280 Z" fill="#ffffff" stroke="#cbd5e1" stroke-width="2"/>
+        <path d="M 124 188 L 140 208 L 156 188 L 154 218 L 126 218 Z" fill="#0ea5e9" opacity=".22"/>
+        <!-- Stethoscope substituted with lab-flask icon over heart -->
+        <circle cx="140" cy="250" r="11" fill="#22c55e"/>
+        <path d="M 134 246 L 134 256 M 146 246 L 146 256 M 130 256 L 150 256" stroke="#fff" stroke-width="1.6" fill="none" stroke-linecap="round"/>
+        <!-- ID badge -->
+        <rect x="178" y="215" width="22" height="28" rx="3" fill="#fff" stroke="#cbd5e1" stroke-width="1.5"/>
+        <line x1="183" y1="222" x2="195" y2="222" stroke="#0ea5e9" stroke-width="2"/>
+        <line x1="183" y1="227" x2="192" y2="227" stroke="#94a3b8" stroke-width="1.5"/>
+        <line x1="183" y1="232" x2="194" y2="232" stroke="#94a3b8" stroke-width="1.5"/>
+        <rect x="128" y="155" width="24" height="38" rx="8" fill="#e8b890"/>
+        <path d="M 128 168 Q 140 175 152 168 L 152 192 L 128 192 Z" fill="rgba(0,0,0,.06)"/>
+        <ellipse cx="140" cy="120" rx="46" ry="52" fill="#e8b890"/>
+        <path d="M 100 90 Q 95 55 140 55 Q 185 55 180 90 Q 184 78 178 70 Q 168 60 140 60 Q 112 60 102 70 Q 96 78 100 90 Z" fill="#2c2118"/>
+        <ellipse cx="111" cy="132" rx="6" ry="4" fill="#f87171" opacity=".32"/>
+        <ellipse cx="169" cy="132" rx="6" ry="4" fill="#f87171" opacity=".32"/>
+        <path d="M 128 140 Q 140 150 152 140" stroke="#2a1810" stroke-width="2.2" fill="none" stroke-linecap="round"/>
+        <ellipse cx="124" cy="118" rx="3.5" ry="4.5" fill="#1f1208"/>
+        <ellipse cx="156" cy="118" rx="3.5" ry="4.5" fill="#1f1208"/>
+        <circle cx="125.5" cy="116" r="1" fill="#fff"/>
+        <circle cx="157.5" cy="116" r="1" fill="#fff"/>
+        <rect x="116" y="92" width="20" height="14" rx="4" fill="none" stroke="#0f172a" stroke-width="2"/><rect x="144" y="92" width="20" height="14" rx="4" fill="none" stroke="#0f172a" stroke-width="2"/><line x1="136" y1="99" x2="144" y2="99" stroke="#0f172a" stroke-width="2"/>
+        <g opacity=".75">
+          <path d="M 32 60 L 40 60 M 36 56 L 36 64" stroke="#22c55e" stroke-width="2.5" stroke-linecap="round"/>
+          <circle cx="248" cy="62" r="4" fill="#f97316" opacity=".7"/>
+          <circle cx="36" cy="240" r="4" fill="#0ea5e9" opacity=".55"/>
+        </g>
+      </svg>
+    </div>
+          <div class="spec-info">
+            <h3 class="spec-name">Dr. Vikram Rao</h3>
+            <div class="spec-specialty">Senior Microbiologist</div>
+            <div class="spec-quals">MBBS, MD (Microbiology), Fellowship</div>
+            <div class="spec-meta">
+              <div class="spec-meta-row"><span><b>Practice:</b> 20 years</span></div>
+              <div class="spec-meta-row"><span><b>NMC / MC:</b> KMC-23456</span></div>
+              <div class="spec-meta-row"><span><b>Scope:</b> Heads Infectious Disease &amp; Mycology</span></div>
+            </div>
+          </div>
+        </article>
+      
+        <article class="spec-card reveal">
+          <div class="spec-avatar">
+      <svg viewBox="0 0 280 280" xmlns="http://www.w3.org/2000/svg" style="width:100%;height:100%;display:block">
+        <defs><linearGradient id="lbg-c" x1="0" y1="0" x2="0" y2="1"><stop offset="0%" stop-color="#f0f9ff"/><stop offset="100%" stop-color="#dbeafe"/></linearGradient></defs>
+        <rect width="280" height="280" fill="url(#lbg-c)"/>
+        <circle cx="140" cy="200" r="120" fill="#ffffff" opacity=".5"/>
+        <path d="M 70 280 L 70 220 Q 90 188 140 188 Q 190 188 210 220 L 210 280 Z" fill="#ffffff" stroke="#cbd5e1" stroke-width="2"/>
+        <path d="M 124 188 L 140 208 L 156 188 L 154 218 L 126 218 Z" fill="#0ea5e9" opacity=".22"/>
+        <!-- Stethoscope substituted with lab-flask icon over heart -->
+        <circle cx="140" cy="250" r="11" fill="#22c55e"/>
+        <path d="M 134 246 L 134 256 M 146 246 L 146 256 M 130 256 L 150 256" stroke="#fff" stroke-width="1.6" fill="none" stroke-linecap="round"/>
+        <!-- ID badge -->
+        <rect x="178" y="215" width="22" height="28" rx="3" fill="#fff" stroke="#cbd5e1" stroke-width="1.5"/>
+        <line x1="183" y1="222" x2="195" y2="222" stroke="#0ea5e9" stroke-width="2"/>
+        <line x1="183" y1="227" x2="192" y2="227" stroke="#94a3b8" stroke-width="1.5"/>
+        <line x1="183" y1="232" x2="194" y2="232" stroke="#94a3b8" stroke-width="1.5"/>
+        <rect x="128" y="155" width="24" height="38" rx="8" fill="#ddb088"/>
+        <path d="M 128 168 Q 140 175 152 168 L 152 192 L 128 192 Z" fill="rgba(0,0,0,.06)"/>
+        <ellipse cx="140" cy="120" rx="46" ry="52" fill="#ddb088"/>
+        <path d="M 90 110 Q 86 48 140 48 Q 194 48 190 108 Q 195 88 188 72 Q 174 56 140 56 Q 106 56 92 72 Q 85 88 90 110 Z M 86 120 Q 78 150 92 168 L 70 162 Q 70 136 86 120 Z M 194 120 Q 202 150 188 168 L 210 162 Q 210 136 194 120 Z" fill="#1a1208"/>
+        <ellipse cx="111" cy="132" rx="6" ry="4" fill="#f87171" opacity=".32"/>
+        <ellipse cx="169" cy="132" rx="6" ry="4" fill="#f87171" opacity=".32"/>
+        <path d="M 128 140 Q 140 150 152 140" stroke="#2a1810" stroke-width="2.2" fill="none" stroke-linecap="round"/>
+        <ellipse cx="124" cy="118" rx="3.5" ry="4.5" fill="#1f1208"/>
+        <ellipse cx="156" cy="118" rx="3.5" ry="4.5" fill="#1f1208"/>
+        <circle cx="125.5" cy="116" r="1" fill="#fff"/>
+        <circle cx="157.5" cy="116" r="1" fill="#fff"/>
+        
+        <g opacity=".75">
+          <path d="M 32 60 L 40 60 M 36 56 L 36 64" stroke="#22c55e" stroke-width="2.5" stroke-linecap="round"/>
+          <circle cx="248" cy="62" r="4" fill="#f97316" opacity=".7"/>
+          <circle cx="36" cy="240" r="4" fill="#0ea5e9" opacity=".55"/>
+        </g>
+      </svg>
+    </div>
+          <div class="spec-info">
+            <h3 class="spec-name">Dr. Priya Nair</h3>
+            <div class="spec-specialty">Senior Biochemist</div>
+            <div class="spec-quals">MSc, PhD (Clinical Biochemistry)</div>
+            <div class="spec-meta">
+              <div class="spec-meta-row"><span><b>Practice:</b> 14 years</span></div>
+              <div class="spec-meta-row"><span><b>NMC / MC:</b> TNMC-34567</span></div>
+              <div class="spec-meta-row"><span><b>Scope:</b> Heads Endocrine &amp; Metabolic panels</span></div>
+            </div>
+          </div>
+        </article>
+      
+        <article class="spec-card reveal">
+          <div class="spec-avatar">
+      <svg viewBox="0 0 280 280" xmlns="http://www.w3.org/2000/svg" style="width:100%;height:100%;display:block">
+        <defs><linearGradient id="lbg-d" x1="0" y1="0" x2="0" y2="1"><stop offset="0%" stop-color="#f0f9ff"/><stop offset="100%" stop-color="#dbeafe"/></linearGradient></defs>
+        <rect width="280" height="280" fill="url(#lbg-d)"/>
+        <circle cx="140" cy="200" r="120" fill="#ffffff" opacity=".5"/>
+        <path d="M 70 280 L 70 220 Q 90 188 140 188 Q 190 188 210 220 L 210 280 Z" fill="#ffffff" stroke="#cbd5e1" stroke-width="2"/>
+        <path d="M 124 188 L 140 208 L 156 188 L 154 218 L 126 218 Z" fill="#0ea5e9" opacity=".22"/>
+        <!-- Stethoscope substituted with lab-flask icon over heart -->
+        <circle cx="140" cy="250" r="11" fill="#22c55e"/>
+        <path d="M 134 246 L 134 256 M 146 246 L 146 256 M 130 256 L 150 256" stroke="#fff" stroke-width="1.6" fill="none" stroke-linecap="round"/>
+        <!-- ID badge -->
+        <rect x="178" y="215" width="22" height="28" rx="3" fill="#fff" stroke="#cbd5e1" stroke-width="1.5"/>
+        <line x1="183" y1="222" x2="195" y2="222" stroke="#0ea5e9" stroke-width="2"/>
+        <line x1="183" y1="227" x2="192" y2="227" stroke="#94a3b8" stroke-width="1.5"/>
+        <line x1="183" y1="232" x2="194" y2="232" stroke="#94a3b8" stroke-width="1.5"/>
+        <rect x="128" y="155" width="24" height="38" rx="8" fill="#d9a679"/>
+        <path d="M 128 168 Q 140 175 152 168 L 152 192 L 128 192 Z" fill="rgba(0,0,0,.06)"/>
+        <ellipse cx="140" cy="120" rx="46" ry="52" fill="#d9a679"/>
+        <path d="M 104 86 Q 100 52 140 52 Q 180 52 176 86 Q 180 76 174 68 Q 164 58 140 58 Q 116 58 106 68 Q 100 76 104 86 Z" fill="#1f1208"/>
+        <ellipse cx="111" cy="132" rx="6" ry="4" fill="#f87171" opacity=".32"/>
+        <ellipse cx="169" cy="132" rx="6" ry="4" fill="#f87171" opacity=".32"/>
+        <path d="M 128 140 Q 140 150 152 140" stroke="#2a1810" stroke-width="2.2" fill="none" stroke-linecap="round"/>
+        <ellipse cx="124" cy="118" rx="3.5" ry="4.5" fill="#1f1208"/>
+        <ellipse cx="156" cy="118" rx="3.5" ry="4.5" fill="#1f1208"/>
+        <circle cx="125.5" cy="116" r="1" fill="#fff"/>
+        <circle cx="157.5" cy="116" r="1" fill="#fff"/>
+        <rect x="116" y="92" width="20" height="14" rx="4" fill="none" stroke="#0f172a" stroke-width="2"/><rect x="144" y="92" width="20" height="14" rx="4" fill="none" stroke="#0f172a" stroke-width="2"/><line x1="136" y1="99" x2="144" y2="99" stroke="#0f172a" stroke-width="2"/>
+        <g opacity=".75">
+          <path d="M 32 60 L 40 60 M 36 56 L 36 64" stroke="#22c55e" stroke-width="2.5" stroke-linecap="round"/>
+          <circle cx="248" cy="62" r="4" fill="#f97316" opacity=".7"/>
+          <circle cx="36" cy="240" r="4" fill="#0ea5e9" opacity=".55"/>
+        </g>
+      </svg>
+    </div>
+          <div class="spec-info">
+            <h3 class="spec-name">Dr. Arun Kapoor</h3>
+            <div class="spec-specialty">Consultant Haematologist</div>
+            <div class="spec-quals">MBBS, MD (Pathology), Fellowship Haem</div>
+            <div class="spec-meta">
+              <div class="spec-meta-row"><span><b>Practice:</b> 15 years</span></div>
+              <div class="spec-meta-row"><span><b>NMC / MC:</b> DMC-45678</span></div>
+              <div class="spec-meta-row"><span><b>Scope:</b> Heads Haematology &amp; Coagulation</span></div>
+            </div>
+          </div>
+        </article>
+      
+    </div>
+  </div>
+</section>
+
+<section class="testi section-pad">
+  <div class="container">
+    <div class="section-head center reveal">
+      <div class="section-eyebrow">Patients & clinicians</div>
+      <h2 class="section-title">Care quietly trusted by <em>those who notice the details.</em></h2>
+    </div>
+    <div class="testi-grid">
+      
+        <article class="testi-card reveal">
+          <div class="testi-product">Senior package · Home collection</div>
+          <p class="testi-quote">The phlebotomist arrived in exactly the slot I picked, was patient with my elderly father, and the report was on WhatsApp before dinner. The pathologist had added a one-line comment that actually helped my GP plan the next step.</p>
+          <div class="testi-author">
+            <div class="testi-avatar">SI</div>
+            <div><span class="testi-name">Sneha Iyer</span><span class="testi-role">Bandra · 38, family caregiver</span></div>
+          </div>
+        </article>
+      
+        <article class="testi-card reveal">
+          <div class="testi-product">Diabetes panel · Recurring</div>
+          <p class="testi-quote">I have been ordering my regular labs from Nidaan for three years now. The longitudinal view in the app means my endocrinologist can see my HbA1c trend without me sending him five PDFs.</p>
+          <div class="testi-author">
+            <div class="testi-avatar">RP</div>
+            <div><span class="testi-name">Rohit Phadnis</span><span class="testi-role">Powai · 47, Type-2 diabetic</span></div>
+          </div>
+        </article>
+      
+        <article class="testi-card reveal">
+          <div class="testi-product">Clinician referral channel</div>
+          <p class="testi-quote">As a clinician I refer most of my patients here. The reports are consistently formatted, the reference ranges are age-appropriate, and the pathology team picks up the phone when I want to clarify a flag.</p>
+          <div class="testi-author">
+            <div class="testi-avatar">KS</div>
+            <div><span class="testi-name">Dr. Karthik S.</span><span class="testi-role">Andheri · Internal Medicine</span></div>
+          </div>
+        </article>
+      
+    </div>
+  </div>
+</section>
+
+<section class="insurers section-pad">
+  <div class="container">
+    <div class="section-head center reveal">
+      <div class="section-eyebrow">Cashless across India</div>
+      <h2 class="section-title">Empanelled with 32 insurers and 60+ corporate wellness partners.</h2>
+    </div>
+    <div class="insurers-row reveal">
+      
+        <span class="insurer-pill">Star Health</span>
+      
+        <span class="insurer-pill">Niva Bupa</span>
+      
+        <span class="insurer-pill">HDFC ERGO Health</span>
+      
+        <span class="insurer-pill">ICICI Lombard</span>
+      
+        <span class="insurer-pill">Bajaj Allianz</span>
+      
+        <span class="insurer-pill">Aditya Birla Health</span>
+      
+        <span class="insurer-pill">Care Health</span>
+      
+        <span class="insurer-pill">New India</span>
+      
+        <span class="insurer-pill">TATA AIG</span>
+      
+        <span class="insurer-pill">CGHS</span>
+      
+        <span class="insurer-pill">ECHS</span>
+      
+        <span class="insurer-pill">MediAssist TPA</span>
+      
+        <span class="insurer-pill">Paramount TPA</span>
+      
+        <span class="insurer-pill">Vidal Health TPA</span>
+      
+        <span class="insurer-pill">Infosys Wellness</span>
+      
+        <span class="insurer-pill">TCS Wellness</span>
+      
+        <span class="insurer-pill">HDFC Bank</span>
+      
+        <span class="insurer-pill">Wipro Health</span>
+      
+    </div>
+  </div>
+</section>
+
+<section id="grievance" class="grievance section-pad">
+  <div class="container">
+    <div class="section-head reveal">
+      <div class="section-eyebrow">Patient Care · Grievance Redressal</div>
+      <h2 class="section-title">A clear path if something feels off.</h2>
+      <p class="section-body">Nidaan Diagnostics maintains a 4-tier grievance pathway as required under NABL and the Clinical Establishment Act. All complaints are acknowledged within 24 hours.</p>
+    </div>
+    <div class="gv-card reveal">
+      <div class="gv-grid">
+        <aside class="gv-officer">
+          <div class="gv-officer-eyebrow">Quality Officer</div>
+          <div class="gv-officer-name">Ms. Rashmi Khanna</div>
+          <div class="gv-officer-role">Quality &amp; Grievance Officer</div>
+          <div class="gv-info">
+            <div class="gv-info-row"><span class="gv-info-key">Email</span><span class="gv-info-val">quality@nidaandiagnostics.in</span></div>
+            <div class="gv-info-row"><span class="gv-info-key">Phone</span><span class="gv-info-val">+91 22 4000 2000</span></div>
+            <div class="gv-info-row"><span class="gv-info-key">Address</span><span class="gv-info-val">Nidaan Diagnostics<br>Bandra-Kurla Complex, Mumbai · 400051<br>Maharashtra</span></div>
+            <div class="gv-info-row"><span class="gv-info-key">Hours</span><span class="gv-info-val">Mon–Sat · 10 AM · 6 PM IST</span></div>
+          </div>
+        </aside>
+        <div class="gv-escalation">
+          
+            <div class="gv-step">
+              <div class="gv-step-head">
+                <span class="gv-level">Level 1 · Quality Officer</span>
+                <span class="gv-tat">Within 3 days</span>
+              </div>
+              <p class="gv-step-body">First stop for any concern about a report, sample handling, or staff. Most cases close here.</p>
+              <span class="gv-step-contact">quality@nidaandiagnostics.in · +91 22 4000 2000</span>
+            </div>
+          
+            <div class="gv-step">
+              <div class="gv-step-head">
+                <span class="gv-level">Level 2 · Medical Director</span>
+                <span class="gv-tat">Within 10 days</span>
+              </div>
+              <p class="gv-step-body">Escalate to the Medical Director with your ticket reference if unresolved.</p>
+              <span class="gv-step-contact">director@nidaandiagnostics.in</span>
+            </div>
+          
+            <div class="gv-step">
+              <div class="gv-step-head">
+                <span class="gv-level">Level 3 · NABL</span>
+                <span class="gv-tat">Per NABL norms</span>
+              </div>
+              <p class="gv-step-body">For concerns about NABL/ISO 15189 compliance, lodge directly with NABL.</p>
+              <span class="gv-step-contact">complaint@nabl.qcin.org</span>
+            </div>
+          
+            <div class="gv-step">
+              <div class="gv-step-head">
+                <span class="gv-level">Level 4 · State Medical Council / DHO</span>
+                <span class="gv-tat">Per CEA norms</span>
+              </div>
+              <p class="gv-step-body">For Clinical Establishment Act violations, escalate to the District Health Officer / DGHS.</p>
+              <span class="gv-step-contact">dho-mumbai.maharashtra.gov.in</span>
+            </div>
+          
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section class="cta-band">
+  <div class="container cta-inner">
+    <div class="reveal">
+      <h2 class="cta-title">Book a test · at home, today.</h2>
+      <p class="cta-sub">Search a single test or a complete package. Free home pickup in a 90-minute slot you pick. Most reports arrive the same day.</p>
+      <p class="cta-disclaim">Test results are diagnostic information, not medical advice. Always discuss your reports with a qualified medical professional before making treatment decisions.</p>
+    </div>
+    <div class="cta-actions reveal">
+      <a href="#contact" class="btn btn-primary">Book Home Collection →</a>
+      <span class="cta-note">24–7 Helpline: +91 1800 000 411 · NABL NABL: MC-2023-4567</span>
+    </div>
+  </div>
+</section>
+
+<section id="contact" class="contact section-pad">
+  <div class="container contact-grid">
+    <div class="reveal">
+      <div class="section-eyebrow">Book a test</div>
+      <h2 class="section-title">Tell us what you need — <em>we'll do the rest.</em></h2>
+      <p class="section-body">Pick a test or package and your preferred home-collection slot. We confirm via SMS within minutes during business hours.</p>
+      <div class="contact-info">
+        <div><b>Email:</b> hello@nidaandiagnostics.in</div>
+        <div><b>Reception:</b> +91 22 4000 2000</div>
+        <div><b>24×7 Helpline:</b> +91 1800 000 411</div>
+        <div><b>Address:</b> Bandra-Kurla Complex<br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Mumbai, Maharashtra 400051</div>
+        <div><b>Hours:</b> Collection centres: Mon–Sat · 7 AM · 9 PM · Helpline 24/7</div>
+      </div>
+    </div>
+    <div class="form-card reveal">
+      <form data-contact>
+        <div class="fg-row">
+          <div class="fg"><label>Patient name</label><input type="text" placeholder="Your full name" required></div>
+          <div class="fg"><label>Mobile</label><input type="tel" placeholder="+91 9XXXXXXXXX" required></div>
+        </div>
+        <div class="fg"><label>Email (for report delivery)</label><input type="email" placeholder="you@example.com"></div>
+        <div class="fg">
+          <label>What do you want to book?</label>
+          <select required>
+            <option value="" disabled selected>Pick a test or package</option>
+            <option>Vitamin D (25-OH)</option><option>HbA1c (Glycated Haemoglobin)</option><option>Thyroid Profile (T3, T4, TSH)</option><option>Lipid Profile</option><option>Liver Function Test (LFT)</option><option>CBC + ESR</option>
+            <option>Basic Wellness Package</option><option>Wellness Plus Package</option><option>Senior Care 60+ Package</option>
+            <option>Custom panel — let's discuss</option>
+          </select>
+        </div>
+        <div class="fg-row">
+          <div class="fg"><label>Preferred date</label><input type="date"></div>
+          <div class="fg">
+            <label>Preferred slot</label>
+            <select>
+              <option>06:30 – 08:00</option>
+              <option selected>08:00 – 09:30</option>
+              <option>09:30 – 11:00</option>
+              <option>11:00 – 12:30</option>
+              <option>16:00 – 18:00</option>
+            </select>
+          </div>
+        </div>
+        <div class="fg"><label>Pickup address</label><textarea rows="2" placeholder="Flat / building / area / city / pincode"></textarea></div>
+        <button type="submit" class="form-submit">Book Home Collection →</button>
+        <p class="form-disclaim">By submitting, you agree to be contacted by Nidaan Diagnostics. Test results are diagnostic information, not medical advice. Always discuss your reports with a qualified medical professional before making treatment decisions.</p>
+      </form>
+    </div>
+  </div>
+</section>
+
+<footer class="footer">
+  <div class="container">
+    <div class="footer-grid">
+      <div>
+        <div class="f-brand">Nidaan Diagnostics</div>
+        <p class="f-tag">Lab tests that make sense.</p>
+        <div class="f-reg">NABL: MC-2023-4567</div>
+        <div class="f-reg">CAP: 12345-01</div>
+        <div class="f-reg">ICMR: ICMR-2023-VRDL-345</div>
+        <div class="f-reg">CEA: CEA/MH/2023/04891</div>
+        <div class="f-reg">BMW: MPCB-BMW-2023-789</div>
+        <div class="f-reg">PCPNDT: PCPNDT/MH/2023/4567</div>
+        
+        <div class="f-cert-row">
+          <span class="f-cert">ISO 15189</span>
+          <span class="f-cert">ISO 9001</span>
+          <span class="f-cert">CAP</span>
+        </div>
+      </div>
+      <div>
+        <p class="f-col-title">Tests</p>
+        <ul class="f-links">
+          <li><a href="#categories">Diabetes</a></li><li><a href="#categories">Thyroid</a></li><li><a href="#categories">Lipid</a></li><li><a href="#categories">Liver</a></li><li><a href="#categories">Kidney</a></li><li><a href="#categories">Cardiac</a></li>
+        </ul>
+      </div>
+      <div>
+        <p class="f-col-title">Patient</p>
+        <ul class="f-links">
+          <li><a href="#home-coll">Home collection</a></li>
+          <li><a href="#packages">Health packages</a></li>
+          <li><a href="#reports">Digital reports</a></li>
+          <li><a href="#grievance">Grievance redressal</a></li>
+        </ul>
+      </div>
+      <div>
+        <p class="f-col-title">Regulatory</p>
+        <ul class="f-links">
+          <li><a href="https://www.nabl-india.org" target="_blank" rel="noopener">NABL ↗</a></li>
+          <li><a href="https://www.cap.org" target="_blank" rel="noopener">CAP ↗</a></li>
+          <li><a href="https://www.icmr.gov.in" target="_blank" rel="noopener">ICMR ↗</a></li>
+          <li><a href="#grievance">State Medical Council</a></li>
+        </ul>
+      </div>
+    </div>
+    <div class="footer-disclaim">
+      Test results are diagnostic information, not medical advice. Always discuss your reports with a qualified medical professional before making treatment decisions. Reference ranges are population averages and may vary by age, sex, ethnicity, and clinical context. Interpret only with your treating physician. We do not claim cures or guaranteed outcomes for any test (per Drugs and Magic Remedies (Objectionable Advertisements) Act). Pre-natal sex determination is illegal under the PCPNDT Act, 1994 and we strictly do not perform it.
+      <br>All sample reports, patient data and results shown on this website are illustrative. Real reports are delivered only to the registered patient and shared per their explicit consent under the Digital Personal Data Protection Act 2023.
+    </div>
+    <div class="footer-bottom">
+      <span>© 2026 Nidaan Diagnostics. All rights reserved.</span>
+      <span>Privacy · Terms · Patient Charter</span>
+    </div>
+  </div>
+</footer>
+
+<script>
+  var ro=new IntersectionObserver(function(es){
+    es.forEach(function(e){if(e.isIntersecting){e.target.classList.add('visible');ro.unobserve(e.target);}});
+  },{threshold:.06,rootMargin:'0px 0px -40px 0px'});
+  document.querySelectorAll('.reveal').forEach(function(el){ro.observe(el);});
+  document.querySelectorAll('a[href^="#"]').forEach(function(a){
+    a.addEventListener('click',function(e){
+      var t=document.querySelector(a.getAttribute('href'));
+      if(t){e.preventDefault();t.scrollIntoView({behavior:'smooth',block:'start'});}
+    });
+  });
+  // Slot picker visual feedback
+  document.querySelectorAll('.home-coll-slot-pill').forEach(function(p){
+    p.addEventListener('click',function(){
+      document.querySelectorAll('.home-coll-slot-pill').forEach(function(x){x.classList.remove('active');});
+      p.classList.add('active');
+    });
+  });
+  var f=document.querySelector('[data-contact]');
+  if(f){f.addEventListener('submit',function(e){
+    e.preventDefault();
+    var b=f.querySelector('.form-submit');
+    b.textContent='Booking…';b.disabled=true;
+    setTimeout(function(){
+      var ok=document.createElement('div');
+      ok.style.cssText='background:rgba(34,197,94,.12);border:1px solid rgba(34,197,94,.34);color:#15803d;padding:15px 18px;border-radius:12px;font-size:.93rem;margin-bottom:14px;font-weight:600;font-family:Inter,sans-serif';
+      ok.textContent='✓ Booking confirmed. Our team will SMS you the phlebotomist details within an hour.';
+      f.insertAdjacentElement('beforebegin',ok);
+      f.reset();b.textContent='Book Home Collection →';b.disabled=false;
+      setTimeout(function(){ok.remove();},8000);
+    },900);
+  });}
+</script>
+</body>
+</html>

@@ -139,7 +139,15 @@ function buildTemplateData(payload = {}) {
     'specialtiesLabel','specialtiesHeadline','specialtiesBody',
     'doctorsLabel','doctorsHeadline','doctorsBody',
     'packagesLabel','packagesHeadline','packagesBody',
-    'insurersLabel','insurersHeadline'
+    'insurersLabel','insurersHeadline',
+    // Round T — Diagnostic Lab / Pathology (template-18)
+    'nablReg','capCert','icmrReg','pcpndtReg',
+    'heroSearchPlaceholder','heroSearchCta',
+    'categoriesLabel','categoriesHeadline','categoriesBody',
+    'popularTestsLabel','popularTestsHeadline','popularTestsBody',
+    'homeCollectionLabel','homeCollectionHeadline','homeCollectionBody',
+    'reportsLabel','reportsHeadline','reportsBody','reportSampleNote',
+    'specialistsLabel','specialistsHeadline','specialistsBody'
   ];
   for (const k of strKeys) if (data[k] === undefined) data[k] = '';
 
@@ -166,7 +174,9 @@ function buildTemplateData(payload = {}) {
     // Round R — SEBI RIA / Investment Adviser (template-16)
     'feePlans','articles',
     // Round S — Healthcare Clinic / Hospital (template-17)
-    'specialties','doctors','healthPackages','insurers'
+    'specialties','doctors','healthPackages','insurers',
+    // Round T — Diagnostic Lab / Pathology (template-18)
+    'testCategories','popularTests','homeCollectionPerks','reportFeatures'
   ];
   for (const k of arrKeys) if (!Array.isArray(data[k])) data[k] = [];
 
