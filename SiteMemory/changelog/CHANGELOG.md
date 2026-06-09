@@ -6,6 +6,172 @@ Round-by-round history of every meaningful change. **Append-only** — new round
 
 ---
 
+## Round V — 2026-06-09
+
+**UAT live on Render. Prisma + Alpine compatibility crisis fully resolved. Mobile polish pass across older templates. Mojibake audit + repair across `preview-test.js`.**
+
+**Touched:** `prisma/schema.prisma` · `Dockerfile` · `server.js` · `templates/preview-test.js` · `templates/website-template-{4,5,9,14,15,16}.ejs` · `public/index.html` · `public/style.css` · `SiteMemory/01_CURRENT_STATE.md` · `SiteMemory/templates/_registry.md`
+
+### Shipped
+
+- **Render UAT environment live** at `https://beyondsite-uat.onrender.com` (Singapore free tier, Docker-based, auto-deploys off `main`). First public URL the tech team can hit.
+- **Prisma on Alpine fixed** — two-part fix:
+  1. `prisma/schema.prisma` declares `binaryTargets = ["native", "linux-musl-openssl-3.0.x"]` so `npx prisma generate` produces the OpenSSL-3 engine binary alongside the native one.
+  2. `Dockerfile` `apk add --no-cache openssl libc6-compat` in both builder and runtime stages so `libssl.so.3` is resolvable at runtime and `libc6-compat` provides the glibc shims the Prisma engine needs on musl.
+- **`/health` endpoint gated on `DATABASE_URL`** — `server.js:178` previously pinged Prisma on every health check, returned 503 when env var was unset, and triggered Render's SIGTERM loop. Fix: `if (db && process.env.DATABASE_URL) { ... }`. UAT now reports `{database: "not configured"}` with HTTP 200 in in-memory mode.
+- **Mobile topbar collapse** — templates 5, 9, 14, 15, 16 had `.topbar` regulatory strips that were squeezing on mobile. At ≤640px: `.topbar-info` stacks vertically, `.topbar-links` hidden (duplicate of nav + footer anyway), font shrunk to `.68rem`.
+- **Web3 (template-4) mobile nav fix** — Helix Protocol CTA was disappearing off-screen on 360px viewports because no media-query collapsed the inner nav-links. Added `≤600px` rule hiding middle links, shrinking logo to `1rem`, padding nav to `0 16px`. Brand also got `white-space:nowrap` to prevent "Helix Protocol" splitting onto two lines.
+- **SEBI RIA (template-16) nav CTA wrap fix** — default `heroCtaPrimary` was "Book a free intro call" (5 words) which wrapped to 2 lines on mobile. Shortened to "Book a call" (3 words) in both schema default and preview-test sample. Added `white-space:nowrap` to `.nav-cta`. Tablet (≤980px) and mobile (≤640px) breakpoints now shrink brand font + nav-cta padding to give the title bar breathing room.
+- **Mojibake repair** — `preview-test.js` had 784 broken characters from copy-paste during the template-16/17/18 sample-data writes (UTF-8 strings double-encoded as cp1252). Three-pass fix script in Python: (1) cp1252→UTF-8 reversal on non-ASCII runs handled 746 punctuation+emoji cases; (2) byte-level reversal with custom cp1252-aware mapping caught the remaining 38 emoji prefixes; (3) targeted restoration of middle dots in string literals (the second pass over-converted some legit `·` field separators into em-dashes). Final state: zero mojibake or U+FFFD in any source file or rendered preview.
+
+### Why this mattered
+
+- **Public URL unlocks the demo.** Senior can click through the whole flow without us screen-sharing. Production deploy is unblocked.
+- **The Prisma/Alpine combo is a known footgun** for Docker-deployed Prisma apps. The two-part fix is the canonical answer and worth carrying forward to `DEPLOYMENT.md` for whoever wires up production.
+- **Mobile UAT actually works.** Before the topbar + Web3 + SEBI-RIA fixes, three templates looked broken on mobile preview. Now all 19 are clean across desktop, tablet, and mobile breakpoints.
+- **Mojibake repair caught a class of bug that could have silently shipped** garbled text to customers — every preview render would have been wrong for the recent templates. Caught it before any live demo.
+
+### Verification
+
+- `node -c server.js` clean
+- `cd templates && node preview-test.js` → 19/19 rendered cleanly
+- `npx jest __tests__/server-routes.test.js -t "19 templates"` → ✓ (768 ms)
+- Mojibake scan across all sources → empty
+- Render UAT live, `/health` returns 200, full UI flow works end-to-end
+
+### Technical debt incurred / open
+
+- `DEPLOYMENT.md` not yet updated with the Alpine + Prisma gotchas — should add a "Prisma on Alpine" subsection before production deploy.
+- Free tier sleeps after 15 min — first hit is ~30s slow. Move to Starter ($7/mo) before sharing externally beyond UAT.
+- Old `template-heph-prev` / `template-turtlemint-prev` CSS classes still in `public/style.css` — low priority.
+
+---
+
+## Round U — 2026-06-09
+
+**Template-19 shipped: Loan DSA / Direct Sales Agent. Deep indigo + electric lime aesthetic. Interactive EMI calculator, mobile-first.**
+
+**Touched:** `templates/schemas/template-19.json` (new) · `templates/website-template-19.ejs` (new) · `server.js` · `templates/preview-test.js` · `src/lib/utils.js` · `public/index.html` · `public/style.css` · `prisma/seed.js` · `__tests__/server-routes.test.js`
+
+### Shipped
+
+- **Template-19 (Loan DSA / DhanSetu Loans)** — 13 sections covering DSA registrations, hero with live EMI calculator, loan-types grid (8 products: Personal, Home, Business, LAP, Education, Car, Two-Wheeler, Gold), partner-lender list (12 banks/NBFCs with monogram avatars), rate-comparison table, application process (4 steps), eligibility check (interactive sliders for income/loan/CIBIL), accordion documents checklist (3 groups: salaried / self-employed / home-loan extras), why-choose pillars, borrower testimonials, mandatory RBI/IBA disclosures, 4-tier grievance (Customer Care → Compliance Officer → Lender Bank → RBI Sachet / Banking Ombudsman), CTA, contact form.
+- **Killer signature elements:**
+  - **Live EMI calculator** in the hero — real `<input type="range">` sliders for amount/tenure/rate, JS recomputes EMI + interest + total on input; server-side initial render so it looks great pre-JS.
+  - **Comparison table → swipeable cards on mobile** — `display:none` on the desktop table at ≤640px, horizontal-scroll cards with scroll-snap take over.
+  - **Sticky bottom mobile CTA bar** — `position:fixed` lime button + green WhatsApp shortcut (`wa.me/` link auto-stripped of non-digits) on ≤640px. Respects `env(safe-area-inset-bottom)` for iOS notch. Body gets `padding-bottom:84px` so content never hides behind it.
+  - **Live eligibility checker** — three more sliders with heuristic-driven result card that turns orange when CIBIL < 650 or loan > 5× annual income.
+  - **Accordion document checklist** — clean chevron rotation, `aria-expanded` set correctly, first group open by default.
+- **Compliance baked in (RBI Outsourcing + IBA Code + DPDP Act 2023)** — `₹0 customer fees` disclosure repeated in 3 places, "lender has final say", "no guaranteed approvals" (loan-scam protection), DPDP data handling, IBA Code of Conduct (2007) adherence in footer.
+- **Picker placement** — Card sits inside `#hiddenTemplates` (Show-More section). Thumbnail features a mini indigo EMI calculator card with `₹15,432` mono number, slider tracks with lime dots, and rate tiles (HDFC 8.4%, ICICI 8.7%, lime "Apply" tile).
+
+### Why this mattered
+
+- **First mobile-first template by design.** Every other template added mobile rules as an afterthought. Template-19's slider, accordion, sticky CTA, swipe cards were designed for mobile and adapted for desktop.
+- **Closes the Indian regulated-finance moat.** Templates 14, 15, 16, 19 now cover the four most common SEBI-or-RBI-registered customer-facing finance verticals (MF distributor, stock broker, RIA, loan DSA).
+
+### Verification
+
+- 19/19 templates rendered cleanly
+- `returns schema for all 19 templates ✓` (768 ms)
+- 40/43 server-route tests pass (3 unchanged pre-existing Prisma binary failures on this Linux sandbox — they pass on Windows)
+- Empty-locals render: 99 KB self-contained HTML
+- All RBI / IBA / Empanelment disclosures visible in footer
+
+---
+
+## Round T — 2026-06-08
+
+**Template-18 shipped: Diagnostic Lab / Pathology. Lab-bench aesthetic with the four killer signature elements.**
+
+**Touched:** `templates/schemas/template-18.json` (new) · `templates/website-template-18.ejs` (new) · `server.js` · `templates/preview-test.js` · `src/lib/utils.js` · `public/index.html` · `public/style.css` · `prisma/seed.js` · `__tests__/server-routes.test.js`
+
+### Shipped
+
+- **Template-18 (Diagnostic Lab / Nidaan Diagnostics)** — 13 sections covering lab registrations (NABL ISO 15189 + CAP + ICMR + CEA + BMW + PCPNDT), hero with prominent test-search bar, test categories grid (12 categories) styled like a periodic table, popular individual tests (8 with codes, sample type, TAT, fasting, price), home-collection feature card with slot picker, application process, health-check packages (3 tiers), digital-report features + **fake sample-report card**, pathologist team, testimonials, insurer/corporate partners, 4-tier grievance (Quality Officer → Med Director → NABL → State Council / DHO), CTA.
+- **The four signature visual elements:**
+  - **Hero search bar** — real pill-shaped input with magnifying-glass SVG, "Search 3,400+ tests" placeholder, focus-state with glowing border. Below: clickable popular-test chips.
+  - **Inline SVG test-tube cluster** — 4 tubes in a rack with red/amber/green/blue gradient liquids, dark caps, white labels, glass-highlight overlay, meniscus ellipse, falling droplet, DNA-helix backdrop, floating molecule trio.
+  - **Periodic-table category grid** — 12 square cards each styled as an element: 2-letter symbol top-left, test-count badge in mono top-right, emoji icon centered, full name bottom-left. 7 color families tinted by category type.
+  - **Fake sample-report card** — Real pathology-report layout with rotated "SAMPLE" stamp, redacted patient row, 5 result rows with color-coded flags (LOW/NORMAL/BORDERLINE), pathologist note in blue-bordered comment box, signature line.
+- **Compliance baked in** — NABL/CAP/ICMR/CEA/BMW/PCPNDT all displayed; mandatory medical disclaimer, reference-range disclaimer, no-cure-claims notice (Drugs & Magic Remedies Act), and **explicit PCPNDT illegality notice** ("Pre-natal sex determination is illegal under the PCPNDT Act, 1994 and we strictly do not perform it.").
+- **Picker placement** — Inside `#hiddenTemplates` before the Healthcare Clinic card. Thumbnail with 4-tube mini cluster + 4 periodic-table category tiles in mono labels.
+
+### Verification
+
+- 18/18 templates rendered cleanly
+- Empty-locals render: 103 KB self-contained HTML
+- All 6 mandatory regulatory IDs (NABL, CAP, ICMR, CEA, BMW, PCPNDT) present in defaults
+
+---
+
+## Round S — 2026-06-07
+
+**Template-17 shipped: Healthcare Clinic / Hospital. Clean white + soft blue + mint, cartoon doctor SVGs.**
+
+**Touched:** `templates/schemas/template-17.json` (new) · `templates/website-template-17.ejs` (new) · `server.js` · `templates/preview-test.js` · `src/lib/utils.js` · `public/index.html` · `public/style.css` · `prisma/seed.js` · `__tests__/server-routes.test.js`
+
+### Shipped
+
+- **Template-17 (Healthcare Clinic / Aarogya Hospital)** — 12 sections covering hospital registrations (NMC + NABH + Clinical Establishment Act + BMW + Drug Licence), hero with cartoon-doctor SVG + emergency phone pill, specialties grid (12 departments), doctor cards with illustrated avatars + qualifications + NMC reg + OPD timings, services, patient journey (4 steps), health-check packages, hospital story + care pillars, empanelled insurers (14 partners), patient testimonials, bright red 24×7 emergency strip, 4-tier patient grievance, CTA, contact form with date/time slot picker.
+- **Inline SVG cartoon medical illustrations** — all original, no external assets:
+  - Full-body friendly doctor in hero with lab coat, stethoscope, ID badge with photo strip, red-cross pocket pin
+  - 4 doctor avatar variants (a/b/c/d) — different skin tones, hair, with/without glasses, same warm style
+  - Floating decorative SVG hearts, plus-signs, pills, dots in hero
+  - "+" cross brand mark in nav, also as faint watermark in about card
+- **Compliance baked in** — NMC + NABH + CEA + BMW + drug-licence all displayed; medical-advice disclaimer in every footer + form; "emergency: call helpline" disclaimer; **Drugs & Magic Remedies Act** notice (no cure claims); DPDP Act 2023 confidentiality.
+- **Picker placement** — Inside `#hiddenTemplates` after Portfolio. Thumbnail features cartoon-doctor bust on soft blue disc + 3 specialty icons + blue cross tile.
+
+### Verification
+
+- 17/17 templates rendered cleanly
+- Empty-locals render: 88 KB self-contained HTML
+- 7 inline doctor SVG variants embed correctly
+
+---
+
+## Round R — 2026-06-06
+
+**Template-16 shipped: SEBI RIA / Investment Adviser. Warm sage + cream + peach aesthetic for a casual advisor-website feel.**
+
+**Touched:** `templates/schemas/template-16.json` (new) · `templates/website-template-16.ejs` (new) · `server.js` · `templates/preview-test.js` · `src/lib/utils.js` · `public/index.html` · `public/style.css` · `prisma/seed.js` · `__tests__/server-routes.test.js`
+
+### Shipped
+
+- **Template-16 (SEBI RIA / Saaransh Advisory)** — 12 sections covering SEBI INA registration + BASL membership + NISM Series-X-A/X-B, hero with portrait card + hand-signed pull-quote, fees with two side-by-side plan cards (Flat Fee + AUA-Linked, respecting the SEBI 2.5% / ₹1.25L cap), approach pillars (fiduciary, fee-only, evidence-based, calm), services (6: financial planning, goal planning, investment advisory, tax planning, estate review, insurance review), how we work together (4 steps), adviser story + credentials, journal articles, polaroid-style testimonials, 4-tier grievance (Adviser → BASL → SCORES → SMART ODR), required disclosures (6 docs), CTA.
+- **Warm/casual aesthetic by design** — Sage green #6b9080 + cream + peach palette, Fraunces serif headings + Inter body + **Caveat handwriting** for accents (the adviser's pull quote, "tat" labels), inline SVG portrait + hand-signed quote, **polaroid-tilted testimonial cards** with rotation per card, asymmetric pillar grid (odd cards offset 8px), rounded everything 16–24px, soft pastel discs behind hero illustration.
+- **Compliance baked in** — SEBI INA reg + BASL + NISM displayed throughout; fee cap notice (2.5% AUA OR ₹1,25,000 fixed); mandatory risk + past-performance disclaimers; "fee-only, no commissions" repeated in 3 places; 4-tier escalation (Adviser → BASL → SCORES → SMART ODR); 6 required disclosure documents grid.
+- **Picker placement** — Top visible grid (6th card) alongside Stock Broker. Thumbnail features cartoon adviser portrait with hand-quote line on soft peach disc.
+
+### Verification
+
+- 16/16 templates rendered cleanly
+- Empty-locals render: 62 KB self-contained HTML
+- Has SEBI INA fallback, risk disclaimer, fee-cap notice, SCORES, SMART ODR, BASL all present
+
+---
+
+## Round Q — 2026-06-05
+
+**Template-15 shipped: Stock Broker / Demat. Groww-style violet + white aesthetic with phone-mockup hero.**
+
+**Touched:** `templates/schemas/template-15.json` (new) · `templates/website-template-15.ejs` (new) · `server.js` · `templates/preview-test.js` · `src/lib/utils.js` · `public/index.html` · `public/style.css` · `prisma/seed.js` · `__tests__/server-routes.test.js`
+
+### Shipped
+
+- **Template-15 (Stock Broker / Stallion Capital)** — 12 sections covering broker registrations (SEBI INZ + NSE/BSE/MCX member + CDSL/NSDL DP ID + CIN + AMFI ARN for direct MF), hero with **inline SVG phone mockup** showing live stock tickers, trust statistic strip (dark), products grid (8: Stocks, F&O, Mutual Funds, IPO, ETFs, Bonds, MTF, Commodities), why-choose pillars (6), open-Demat process (4 steps: sign up → Aadhaar eKYC → eSign with PAN → start investing), investor calculators (6), full brokerage schedule table, regulator + exchange badges row, investor testimonials, **5-tier grievance escalation** (Customer Care → Compliance → Exchange → SEBI SCORES → SMART ODR), Investor Charter + RDD + MITC downloads list, CTA, contact form.
+- **Groww-style aesthetic** — Violet (#5500eb) + white palette, Plus Jakarta Sans display + Inter body + JetBrains Mono for codes. Inline SVG phone mockup with stock ticker rows (RELIANCE, TCS, HDFCBANK, INFY, ITC) and sparkline graph. Floating chips: "NIFTY 50 +1.24%", "SIP ₹500/mo".
+- **Compliance baked in** — Full **ATTENTION INVESTORS** block in footer (5 SEBI-mandated bullet points about unauthorised transactions, KYC, IPO payments, upfront margin, monthly CDSL statements), brokerage-cap disclaimer, risk disclaimers, no-guaranteed-returns notice, SEBI SCORES + SMART ODR + State Medical Council escalation paths.
+- **Picker placement** — Top visible grid (5th card) alongside Insurance Market and MF Distributor. Thumbnail with mini violet topbar, candlestick SVG, "+1.84%" mono delta, and 4 specialty tiles (📈, 📊, 🪙, 🚀).
+
+### Verification
+
+- 15/15 templates rendered cleanly
+- Empty-locals render: 64 KB self-contained HTML
+- `returns schema for all 15 templates ✓` (passes in CI)
+
+---
+
 ## Round P — 2026-05-21
 
 **RBAC fully wired — `requireRole()` now enforces roles server-side on all protected routes. Demo credentials moved to env vars (no hardcoded creds in source). Session tokens now encode role properly.**

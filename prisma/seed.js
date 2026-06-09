@@ -32,7 +32,8 @@ const TEMPLATES = [
   { templateId: 'template-15', displayName: 'Stock Broker / Demat',      isPublished: true  },
   { templateId: 'template-16', displayName: 'SEBI RIA / Investment Adviser',   isPublished: true },
   { templateId: 'template-17', displayName: 'Healthcare Clinic / Hospital',    isPublished: true  },
-  { templateId: 'template-18', displayName: 'Diagnostic Lab / Pathology',      isPublished: true  }
+  { templateId: 'template-18', displayName: 'Diagnostic Lab / Pathology',      isPublished: true  },
+  { templateId: 'template-19', displayName: 'Loan DSA / Direct Sales Agent',  isPublished: true  }
 ];
 
 async function seedTemplates() {

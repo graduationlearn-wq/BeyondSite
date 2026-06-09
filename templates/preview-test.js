@@ -121,7 +121,15 @@ function buildTemplateData(payload = {}) {
     'popularTestsLabel','popularTestsHeadline','popularTestsBody',
     'homeCollectionLabel','homeCollectionHeadline','homeCollectionBody',
     'reportsLabel','reportsHeadline','reportsBody','reportSampleNote',
-    'specialistsLabel','specialistsHeadline','specialistsBody'
+    'specialistsLabel','specialistsHeadline','specialistsBody',
+    // Round U — Loan DSA / Direct Sales Agent (template-19)
+    'dsaRbiReg','dsaIbaCode','dsaCin','dsaGst','dsaUdyam',
+    'whatsappNumber','whatsappCta','noFeeBadge',
+    'calcDefaultAmount','calcDefaultTenure','calcDefaultRate',
+    'loanTypesLabel','loanTypesHeadline','loanTypesBody',
+    'lendersListLabel','lendersListHeadline','lendersListBody',
+    'comparisonLabel','comparisonHeadline','comparisonBody',
+    'documentsLabel','documentsHeadline','documentsBody'
   ];
   for (const k of strKeys) if (data[k] === undefined) data[k] = '';
 
@@ -155,7 +163,9 @@ function buildTemplateData(payload = {}) {
                    // Round S — Healthcare Clinic / Hospital (template-17)
                    'specialties','doctors','healthPackages','insurers',
                    // Round T — Diagnostic Lab / Pathology (template-18)
-                   'testCategories','popularTests','homeCollectionPerks','reportFeatures'];
+                   'testCategories','popularTests','homeCollectionPerks','reportFeatures',
+                   // Round U — Loan DSA / Direct Sales Agent (template-19)
+                   'loanTypes','lenders','comparisonRows','documentGroups'];
   for (const k of arrKeys) if (!Array.isArray(data[k])) data[k] = [];
   return data;
 }
@@ -1895,6 +1905,177 @@ function diagnosticLabSample() {
   };
 }
 
+function loanDsaSample() {
+  return {
+    ...commonSample,
+    businessName: 'DhanSetu Loans',
+    tagline: 'One application. All the offers.',
+    _description: 'DhanSetu Loans is an authorised Direct Sales Agent (DSA) empanelled with 18 banks and NBFCs across India. Founded in 2017 in Mumbai. We help borrowers compare pre-qualified loan offers across multiple lenders and pick the best fit — at zero cost to the customer, since our commission is paid by the lender on successful disbursal.',
+    primaryColor: '#1e1b4b',
+    foundedYear: '2017',
+    tone: 'confident, honest, mobile-first',
+    email: 'hello@dhansetuloans.in',
+    phone: '+91 22 4000 7000',
+    address: 'Lower Parel\nMumbai, Maharashtra 400013',
+    hours: 'Mon–Sat · 10 AM – 8 PM · WhatsApp 24/7',
+    dsaRbiReg: 'Empanelled DSA · HDFC · ICICI · Axis · Bajaj Finserv',
+    dsaIbaCode: 'Adherent to IBA Code of Conduct for DSAs (2007)',
+    dsaCin: 'U67100MH2017PTC298654',
+    dsaGst: '27AAACR1234M1Z5',
+    dsaUdyam: 'UDYAM-MH-19-0009876',
+    whatsappNumber: '+91 98XXXX1212',
+    whatsappCta: 'Chat on WhatsApp',
+    noFeeBadge: '₹0 charges to you · Lender pays our commission',
+    calcDefaultAmount: '500000',
+    calcDefaultTenure: '36',
+    calcDefaultRate: '11.5',
+    heroEyebrow: 'Empanelled with 18 banks · Zero customer fees · Loans from ₹50K',
+    heroHeadlineLead: 'One application,',
+    heroHeadlineEmph: 'all the offers.',
+    heroSub: 'Compare offers from 18 banks and NBFCs in a single application. We do not charge you anything — the lender pays our commission on disbursal.',
+    heroCtaPrimary: 'Get Loan Offers',
+    heroCtaSecondary: 'Calculate EMI',
+    trustStats: [
+      { value: '18',      label: 'Partner banks & NBFCs' },
+      { value: '₹420Cr',  label: 'Loans facilitated' },
+      { value: '12,000+', label: 'Borrowers helped' },
+      { value: '48 hrs',  label: 'Avg. disbursal TAT' }
+    ],
+    loanTypesLabel: 'Find your loan',
+    loanTypesHeadline: 'A loan for every life decision.',
+    loanTypesBody: 'Tap a product to see all the lenders we represent for it — and the best rate they have quoted for borrowers like you.',
+    loanTypes: [
+      { icon: '👤', name: 'Personal Loan', rate: '10.50% p.a.', amount: '₹50K – ₹40L', tat: '48 hours',  color: 'indigo', body: 'Unsecured loan for any need — wedding, travel, medical, or consolidating credit-card debt.' },
+      { icon: '🏠', name: 'Home Loan',     rate: '8.40% p.a.',  amount: '₹5L – ₹10Cr', tat: '7–14 days', color: 'sky',    body: 'New purchase, ready-to-move, or self-construction. Tenure up to 30 years.' },
+      { icon: '💼', name: 'Business Loan', rate: '12.00% p.a.', amount: '₹2L – ₹2Cr',  tat: '3–7 days',  color: 'lime',   body: 'For working capital, expansion, or equipment. Collateral-free up to ₹50L for MSMEs.' },
+      { icon: '🏘', name: 'Loan Against Property', rate: '9.25% p.a.', amount: '₹10L – ₹5Cr', tat: '10–15 days', color: 'amber', body: 'Secured loan against residential or commercial property. Funds for any purpose.' },
+      { icon: '🎓', name: 'Education Loan',rate: '8.65% p.a.',  amount: '₹50K – ₹1.5Cr', tat: '7–14 days', color: 'teal', body: 'Domestic and overseas studies. Moratorium during course + 6 months grace period.' },
+      { icon: '🚗', name: 'Car Loan',      rate: '8.85% p.a.',  amount: '₹1L – ₹1Cr',  tat: '24–72 hrs', color: 'violet', body: 'New and pre-owned cars. Up to 100% on-road financing with select banks.' },
+      { icon: '🛵', name: 'Two-Wheeler Loan', rate: '9.50% p.a.', amount: '₹15K – ₹5L', tat: 'Same day', color: 'rose', body: 'Quick, paperless approvals. Insurance and accessories can be bundled in.' },
+      { icon: '🪙', name: 'Gold Loan',     rate: '8.95% p.a.',  amount: '₹10K – ₹1.5Cr', tat: '60 minutes', color: 'peach', body: 'Gold-secured loan with quick in-branch disbursal. LTV up to 75% of gold value.' }
+    ],
+    lendersListLabel: 'Compare across lenders',
+    lendersListHeadline: 'We represent 18 lenders. You pick.',
+    lendersListBody: 'Per RBI norms, we disclose every lender we hold a DSA agreement with. Compare rates, get pre-qualified, and pick the offer that actually fits.',
+    lenders: [
+      { name: 'HDFC Bank',        type: 'Bank', loanTypes: 'Personal · Home · Car · LAP',       rateFrom: '8.40% p.a.', monogram: 'H' },
+      { name: 'ICICI Bank',       type: 'Bank', loanTypes: 'Personal · Home · Business',         rateFrom: '8.75% p.a.', monogram: 'I' },
+      { name: 'Axis Bank',        type: 'Bank', loanTypes: 'Personal · Home · Car · LAP',       rateFrom: '8.65% p.a.', monogram: 'A' },
+      { name: 'Kotak Mahindra',   type: 'Bank', loanTypes: 'Personal · Business · Car',         rateFrom: '10.99% p.a.', monogram: 'K' },
+      { name: 'SBI',              type: 'Bank', loanTypes: 'Home · Education · Personal',       rateFrom: '8.50% p.a.', monogram: 'S' },
+      { name: 'Bajaj Finserv',    type: 'NBFC', loanTypes: 'Personal · Business · Two-wheeler', rateFrom: '11.50% p.a.', monogram: 'B' },
+      { name: 'Tata Capital',     type: 'NBFC', loanTypes: 'Personal · Business · LAP',         rateFrom: '11.25% p.a.', monogram: 'T' },
+      { name: 'L&T Finance',      type: 'NBFC', loanTypes: 'Two-wheeler · Personal · Business', rateFrom: '12.00% p.a.', monogram: 'L' },
+      { name: 'IDFC First',       type: 'Bank', loanTypes: 'Personal · Home · Car',             rateFrom: '10.49% p.a.', monogram: 'I' },
+      { name: 'Yes Bank',         type: 'Bank', loanTypes: 'Personal · Home · LAP',             rateFrom: '10.99% p.a.', monogram: 'Y' },
+      { name: 'AU Small Finance', type: 'SFB',  loanTypes: 'Personal · Business · Two-wheeler', rateFrom: '11.99% p.a.', monogram: 'U' },
+      { name: 'Muthoot Finance',  type: 'NBFC', loanTypes: 'Gold · Personal',                   rateFrom: '8.95% p.a.', monogram: 'M' }
+    ],
+    comparisonLabel: 'All rates, one screen',
+    comparisonHeadline: 'Rate sheet for borrowers who hate spreadsheets.',
+    comparisonBody: 'Best starting rate by loan type across our partner lenders, refreshed monthly. Your actual rate depends on credit score, income, and lender policy.',
+    comparisonRows: [
+      { loanType: 'Personal Loan',    best: '10.50% p.a.', bestBy: 'HDFC Bank',   median: '11.75% p.a.', tat: '48 hours',  minAmount: '₹50K', maxAmount: '₹40L' },
+      { loanType: 'Home Loan',        best: '8.40% p.a.',  bestBy: 'HDFC Bank',   median: '8.85% p.a.',  tat: '7–14 days', minAmount: '₹5L',  maxAmount: '₹10Cr' },
+      { loanType: 'Business Loan',    best: '12.00% p.a.', bestBy: 'L&T Finance', median: '13.50% p.a.', tat: '3–7 days',  minAmount: '₹2L',  maxAmount: '₹2Cr' },
+      { loanType: 'LAP',              best: '9.25% p.a.',  bestBy: 'Axis Bank',   median: '10.50% p.a.', tat: '10–15 days', minAmount: '₹10L', maxAmount: '₹5Cr' },
+      { loanType: 'Car Loan',         best: '8.85% p.a.',  bestBy: 'HDFC Bank',   median: '9.50% p.a.',  tat: '24–72 hrs', minAmount: '₹1L',  maxAmount: '₹1Cr' },
+      { loanType: 'Education Loan',   best: '8.65% p.a.',  bestBy: 'SBI',         median: '10.25% p.a.', tat: '7–14 days', minAmount: '₹50K', maxAmount: '₹1.5Cr' },
+      { loanType: 'Two-Wheeler Loan', best: '9.50% p.a.',  bestBy: 'L&T Finance', median: '11.00% p.a.', tat: 'Same day',  minAmount: '₹15K', maxAmount: '₹5L' },
+      { loanType: 'Gold Loan',        best: '8.95% p.a.',  bestBy: 'Muthoot',     median: '11.50% p.a.', tat: '60 minutes', minAmount: '₹10K', maxAmount: '₹1.5Cr' }
+    ],
+    processLabel: 'Quick. Paperless. Fair.',
+    processHeadline: 'How an application works here.',
+    processSteps: [
+      { icon: '📝', title: 'Tell us once',        body: 'Share basic details — name, income, loan amount, purpose. We pre-qualify you across all empanelled lenders in one form.', duration: '5 minutes' },
+      { icon: '📂', title: 'Pick an offer',       body: 'You see the actual offers — interest rate, processing fee, EMI, tenure — from each willing lender. Pick the one that fits.', duration: 'Same day' },
+      { icon: '✅', title: 'Approval & sanction', body: 'Lender runs credit checks, asks for documents (Aadhaar/PAN/CKYC, ITR if needed), and issues a digital sanction letter.', duration: '1–3 days' },
+      { icon: '💸', title: 'Disbursal',           body: 'On signing, the lender disburses directly to your bank account or seller. We do not handle a single rupee in the flow.', duration: '24–48 hrs' }
+    ],
+    eligibilityLabel: 'Quick eligibility check',
+    eligibilityHeadline: 'Who lenders typically approve.',
+    eligibilityBody: 'These are the most common eligibility thresholds across our partner lenders. Final criteria depend on the specific lender and product.',
+    eligibilityCriteria: [
+      { icon: '🎂', title: 'Age 21 – 65 years',     body: 'Minimum age 21 at application; maximum age 65 at loan maturity. NRIs accepted by select lenders.' },
+      { icon: '💰', title: 'Income ₹25,000+/month', body: 'Net monthly income from salary or business. Higher income may unlock larger amounts and better rates.' },
+      { icon: '📊', title: 'Credit score 700+',     body: 'CIBIL 700+ is a typical threshold. Some lenders accept 650+ at a higher rate.' },
+      { icon: '🧾', title: 'Employment 2+ years',    body: 'Salaried: 2 years total + 6 months in current job. Self-employed: 2+ years in current business.' }
+    ],
+    documentsLabel: 'Keep these handy',
+    documentsHeadline: 'A short, predictable document list.',
+    documentsBody: 'We make sure your application is complete the first time. Below is the standard set most lenders ask for — plus what changes if you are self-employed or applying for a home loan.',
+    documentGroups: [
+      { icon: '👨', title: 'If you are salaried', items: [
+        { label: 'PAN card · Aadhaar card' },
+        { label: 'Last 3 months salary slips' },
+        { label: 'Last 6 months bank statement' },
+        { label: 'Latest Form 16 OR last 2 years ITR' },
+        { label: 'Address proof (Aadhaar / utility / rent agreement)' }
+      ] },
+      { icon: '🧑', title: 'If you are self-employed', items: [
+        { label: 'PAN card · Aadhaar card' },
+        { label: 'Last 3 years ITR + computation' },
+        { label: 'Last 12 months bank statement (current + savings)' },
+        { label: 'Business proof (GST/Udyam/incorporation)' },
+        { label: 'Profit & Loss + Balance Sheet (CA-certified for ₹25L+)' }
+      ] },
+      { icon: '🏠', title: 'Extra for Home Loan / LAP', items: [
+        { label: 'Property documents — sale agreement, title deed' },
+        { label: 'Property tax receipts (last 3 years)' },
+        { label: 'NOC from society / builder' },
+        { label: 'Approved building plan' },
+        { label: 'For purchase: allotment letter + cost sheet' }
+      ] }
+    ],
+    whyChooseLabel: 'Why customers pick a DSA',
+    whyChooseHeadline: 'A neutral guide through a confusing market.',
+    whyChooseBody: 'Different lenders quote different rates for the same profile. A good DSA shops the market for you — and bills the lender, not you.',
+    whyChoosePoints: [
+      { icon: '💯', title: '₹0 customer fees',           body: 'You never pay us. Lenders pay our commission only when your loan disburses. Our incentive is to find you a fit, not push you a product.' },
+      { icon: '🏦', title: 'Multiple lender shopping',   body: 'One pre-qualification, multiple offers. Stop filling 4 different bank applications and chasing 4 different relationship managers.' },
+      { icon: '📑', title: 'Paperwork sherpa',           body: 'We tell you exactly what each lender wants, in what format. No back-and-forth. No surprise re-submissions.' },
+      { icon: '⚖',  title: 'Honest about your odds',    body: 'If your profile will not clear a lender gate, we say so. We will not apply you to four banks and damage your CIBIL with hard pulls.' },
+      { icon: '🔒', title: 'Data shared per DPDP Act',   body: 'Your details go only to lenders you authorise. Encrypted in transit and at rest. Right to delete on request.' },
+      { icon: '🤝', title: 'IBA Code-of-Conduct compliant', body: 'No coercion, no false promises, no bundling. We follow IBA DSA code — and you can audit our process anytime.' }
+    ],
+    testimonials: [
+      { quote: 'I had been ping-ponging between two banks for six weeks. DhanSetu pre-qualified me at four lenders in one form, walked me through the trade-offs, and the disbursal happened in three working days. They never asked me for a single rupee.', name: 'Pranav Singh',  role: 'Pune · 33, software engineer',    productUsed: 'Personal Loan · Axis Bank' },
+      { quote: 'When my home-loan paperwork hit a property-document issue, the DSA team called the bank, the lawyer, and the society secretary on a single conference call. The bank manager said he had not seen that level of paperwork prep in years.', name: 'Anita Rao',     role: 'Bengaluru · 41, mid-career professional', productUsed: 'Home Loan · HDFC Bank' },
+      { quote: 'I run a small kitchenware export business. Two banks had quietly declined me. DhanSetu told me my CA-certified P&L was the issue, helped me fix it, and the third lender approved in five days. Calm, honest, no upsell.',                       name: 'Yusuf Patel',   role: 'Surat · 47, MSME owner',          productUsed: 'Business Loan · Tata Capital' }
+    ],
+    disclosuresLabel: 'What you should know',
+    disclosuresHeadline: 'The bits banks bury in fine print.',
+    disclosuresBody: 'Mandatory disclosures every customer should read before applying. We surface these up-front rather than in the consent screen of a 14-page form.',
+    riskDocs: [
+      { icon: '💯', title: 'You pay us nothing',         body: 'Our commission is paid by the lender on successful disbursal. DhanSetu Loans never charges the customer.' },
+      { icon: '⚖',  title: 'Lender has final say',      body: 'Loan approval is at the lender sole discretion. Rates and amounts on this site are indicative — your actual offer depends on credit appraisal.' },
+      { icon: '💸', title: 'Lender charges still apply', body: 'Processing fees, GST, stamp duty, prepayment charges, and other levies are collected by the lender per their published schedule.' },
+      { icon: '📜', title: 'Documents stay with lender', body: 'KYC, income, and CKYC records you submit are held by the lender per RBI norms. We do not retain originals.' },
+      { icon: '🛡', title: 'DPDP Act 2023 compliant',    body: 'Your personal data is processed only for the loan you are seeking. Right to access, correct, or delete on written request.' },
+      { icon: '🚪', title: 'No guaranteed approvals',    body: 'We do not guarantee any loan. Beware of anyone — DSA or otherwise — claiming guaranteed approval in exchange for an upfront fee.' }
+    ],
+    grievanceLabel: 'Customer Care · Grievance Redressal',
+    grievanceHeadline: 'A clear path if anything ever goes wrong.',
+    grievanceBody: 'DhanSetu Loans follows a 4-tier escalation per RBI Master Direction on Outsourcing. All complaints are acknowledged within 24 hours.',
+    groName: 'Mr. Sanjay Mehta',
+    groRole: 'Principal Compliance Officer',
+    groEmail: 'compliance@dhansetuloans.in',
+    groPhone: '+91 22 4000 7000',
+    groAddress: 'DhanSetu Loans\nLower Parel, Mumbai — 400013\nMaharashtra',
+    groTimings: 'Mon–Sat · 10 AM – 6 PM IST',
+    escalationLevels: [
+      { level: 'Level 1 · Customer Care',        body: 'Raise a ticket via chat, email, or phone. First-response under 8 hours; most cases close in 48.', contact: 'care@dhansetuloans.in',                       tat: 'Within 48 hours' },
+      { level: 'Level 2 · Compliance Officer',   body: 'Unresolved? Escalate to the Principal Compliance Officer with your ticket reference.',           contact: 'compliance@dhansetuloans.in',                 tat: 'Within 7 days' },
+      { level: 'Level 3 · Lender Bank Officer',  body: 'For lender-related issues, escalate directly to that bank Grievance Officer (we share contacts).', contact: 'Lender-specific · provided on request', tat: 'Per RBI norms' },
+      { level: 'Level 4 · RBI Sachet / Ombudsman', body: 'For unresolved complaints, register with RBI Sachet portal or escalate to the Banking Ombudsman.', contact: 'sachet.rbi.org.in · cms.rbi.org.in',     tat: 'Per RBI norms' }
+    ],
+    ctaHeadline: 'See your loan offers in 5 minutes — at zero cost to you.',
+    ctaBody: 'Tell us once. We pre-qualify you across 18 banks and NBFCs. You compare. You pick. You pay nothing to us.',
+    ctaButton: 'Get Loan Offers',
+    ctaNote: 'Zero customer fees · IBA Code compliant · RBI-aligned DSA'
+  };
+}
+
 // ── Per-template data picker ──────────────────────────────────
 function sampleFor(templateId) {
   if (templateId === 'template-2')  return agencySample();
@@ -1914,6 +2095,7 @@ function sampleFor(templateId) {
   if (templateId === 'template-16') return sebiRiaSample();
   if (templateId === 'template-17') return hospitalSample();
   if (templateId === 'template-18') return diagnosticLabSample();
+  if (templateId === 'template-19') return loanDsaSample();
   return commonSample;
 }
 
@@ -1950,14 +2132,14 @@ function errorPage(n, message) {
 
 // ── Write individual preview files ───────────────────────────────
 const OUTDIR = __dirname;
-const TEMPLATES = [1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18];
+const TEMPLATES = [1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19];
 const NAMES = {
   1: 'Editorial',   2: 'Agency',     3: 'Terminal',  4: 'Web3',
   5: 'Local',       6: 'BFSI',       7: 'Startup',   8: 'Insurance',
   9: 'NBFC',       10: 'Restaurant', 11: 'Portfolio',
   12: 'InsurTech SaaS', 13: 'Insurance Market', 14: 'MF Distributor',
   15: 'Stock Broker', 16: 'SEBI RIA', 17: 'Healthcare Clinic',
-  18: 'Diagnostic Lab'
+  18: 'Diagnostic Lab', 19: 'Loan DSA'
 };
 
 const results = TEMPLATES.map(n => {

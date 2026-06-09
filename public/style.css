@@ -922,6 +922,16 @@ select option:hover {
 .template-ria-prev { background: linear-gradient(180deg, #faf6ef 0%, #fcf3e2 100%); display: flex; flex-direction: column; }
 .tp-ria-topbar { height: 6px; background: linear-gradient(90deg, #6b9080, #c79e4c); flex-shrink: 0; }
 
+/* Template 19 — Loan DSA / Direct Sales Agent (deep indigo + electric lime + cream, EMI calc mini) */
+.template-dsa-prev { background: linear-gradient(180deg, #ffffff 0%, #fafafa 100%); display: flex; flex-direction: column; }
+.tp-dsa-topbar { height: 6px; background: linear-gradient(90deg, #1e1b4b 0%, #312e81 50%, #84cc16 100%); flex-shrink: 0; }
+.tp-dsa-calc { background: #1e1b4b; border-radius: 5px; padding: 4px 5px; position: relative; box-shadow: 0 4px 8px -2px rgba(30,27,75,.3); display: flex; flex-direction: column; gap: 2px; }
+.tp-dsa-calc-label { width: 18px; height: 2px; background: rgba(132,204,22,.5); border-radius: 1px; }
+.tp-dsa-calc-emi { font-family: ui-monospace, monospace; font-size: 7px; color: #fff; font-weight: 800; line-height: 1; letter-spacing: -.02em; }
+.tp-dsa-calc-bar { width: 100%; height: 1.5px; background: rgba(132,204,22,.3); border-radius: 100px; position: relative; margin-top: 1px; }
+.tp-dsa-calc-bar::after { content: ''; position: absolute; top: -1px; left: 60%; width: 3.5px; height: 3.5px; border-radius: 50%; background: #84cc16; box-shadow: 0 0 0 1px #fff; }
+.tp-dsa-calc-bar2::after { left: 40%; }
+
 /* Template 18 — Diagnostic Lab / Pathology (lab-blue + amber + beaker green, test tubes) */
 .template-lab-prev { background: linear-gradient(180deg, #ffffff 0%, #fafbfc 100%); display: flex; flex-direction: column; }
 .tp-lab-topbar { height: 6px; background: linear-gradient(90deg, #0ea5e9, #22c55e, #f97316); flex-shrink: 0; }

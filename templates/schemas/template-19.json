@@ -1,0 +1,324 @@
+{
+  "id": "template-19",
+  "name": "Loan DSA / Direct Sales Agent",
+  "extends": "_base",
+  "complianceReview": {
+    "title": "Loan DSA regulatory content — have your compliance officer review before publishing.",
+    "body": "This template includes your DSA registration / agreement with each lender bank, RBI Master Direction on Outsourcing of Financial Services compliance, IBA (Indian Banks' Association) Code of Conduct for DSAs, and the RBI Sachet + Banking Ombudsman grievance escalation. Mandatory disclosures: DSAs do not charge fees to customers (commission is paid by the lender), final loan approval is at the lender's sole discretion, and processing/other fees are charged by the lender per their schedule. The Drugs and Magic Remedies Act is NOT applicable here; the Misleading Advertisement (Loan) framework applies — never publish guaranteed-approval or rate claims you cannot honour."
+  },
+  "sections": [
+    {
+      "id": "regulatoryDetails",
+      "title": "DSA Registrations",
+      "hint": {
+        "label": "RBI · IBA · Partner banks · CKYC",
+        "description": "DSAs are intermediaries appointed by lender banks/NBFCs under RBI's Outsourcing of Financial Services Master Direction. List your registered office, IBA Code of Conduct adherence, partner-lender count, and any state-level registrations (e.g. Maharashtra Money-Lenders Act for some agents)."
+      },
+      "fields": [
+        { "id": "dsaRbiReg",       "label": "DSA registered office / lender code (display)", "type": "text", "max": 80, "placeholder": "Empanelled DSA · HDFC · ICICI · Axis · Bajaj Finserv" },
+        { "id": "dsaIbaCode",      "label": "IBA Code of Conduct compliance",                  "type": "text", "max": 80, "placeholder": "Adherent to IBA Code of Conduct for DSAs (2007)" },
+        { "id": "dsaCin",          "label": "CIN",                                              "type": "text", "max": 30, "placeholder": "U67100MH2017PTC298654" },
+        { "id": "dsaGst",          "label": "GSTIN",                                            "type": "text", "max": 30, "placeholder": "27AAACR1234M1Z5" },
+        { "id": "dsaUdyam",        "label": "Udyam / MSME registration (optional)",            "type": "text", "max": 40, "placeholder": "UDYAM-MH-19-0009876" }
+      ]
+    },
+    {
+      "id": "hero",
+      "title": "Hero",
+      "aiable": true,
+      "hint": {
+        "label": "EMI-calculator-first opening",
+        "description": "Customers want one thing: 'how much will this cost me per month?'. The hero leads with a live EMI calculator and a 'no customer fees' badge. Lender logo strip floats below. Sticky bottom CTA appears on mobile.",
+        "mockupTarget": "header"
+      },
+      "fields": [
+        { "id": "heroEyebrow",       "label": "Trust pill above headline",        "type": "text",     "max": 80,  "placeholder": "Empanelled with 18 banks · Zero customer fees · Loans from ₹50K",   "aiable": true },
+        { "id": "heroHeadlineLead",  "label": "Headline — first part",            "type": "text",     "max": 60,  "placeholder": "One application,",                                                  "aiable": true },
+        { "id": "heroHeadlineEmph",  "label": "Headline — accent",                "type": "text",     "max": 40,  "placeholder": "all the offers.",                                                    "aiable": true },
+        { "id": "heroSub",           "label": "Sub-headline (25–40 words)",       "type": "textarea", "rows": 3,  "max": 240, "aiable": true },
+        { "id": "heroCtaPrimary",    "label": "Primary CTA",                      "type": "text",     "max": 30,  "placeholder": "Get Loan Offers" },
+        { "id": "heroCtaSecondary",  "label": "Secondary CTA",                    "type": "text",     "max": 30,  "placeholder": "Calculate EMI" },
+        { "id": "whatsappNumber",    "label": "WhatsApp number",                  "type": "text",     "max": 30,  "placeholder": "+91 9XXXXXXXXX" },
+        { "id": "whatsappCta",       "label": "WhatsApp CTA text",                "type": "text",     "max": 30,  "placeholder": "Chat on WhatsApp" },
+        { "id": "noFeeBadge",        "label": "No-fee badge text",                "type": "text",     "max": 60,  "placeholder": "₹0 charges to you · Lender pays our commission" },
+
+        { "id": "calcDefaultAmount", "label": "EMI calc · default loan amount", "type": "text", "max": 20, "placeholder": "500000" },
+        { "id": "calcDefaultTenure", "label": "EMI calc · default tenure (months)", "type": "text", "max": 10, "placeholder": "36" },
+        { "id": "calcDefaultRate",   "label": "EMI calc · default rate (%)", "type": "text", "max": 10, "placeholder": "11.5" },
+
+        {
+          "id": "trustStats", "label": "Trust strip stats",
+          "type": "repeater", "min": 3, "max": 5, "itemLabel": "Stat",
+          "item": [
+            { "id": "value", "label": "Big number",  "type": "text", "max": 30 },
+            { "id": "label", "label": "Caption",      "type": "text", "max": 60 }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "loanTypes",
+      "title": "Loan Types",
+      "aiable": true,
+      "hint": {
+        "label": "Loan product cards",
+        "description": "Cards for each loan product you broker — Personal, Home, Business, LAP, Car, Two-Wheeler, Education, Gold. Each shows starting rate, amount range, and approval timeline.",
+        "mockupTarget": "services"
+      },
+      "fields": [
+        { "id": "loanTypesLabel",    "label": "Section eyebrow",  "type": "text",     "max": 40,  "placeholder": "Find your loan" },
+        { "id": "loanTypesHeadline", "label": "Section headline", "type": "text",     "max": 80,  "aiable": true },
+        { "id": "loanTypesBody",     "label": "Section sub-copy", "type": "textarea", "rows": 2,  "max": 220, "aiable": true },
+        {
+          "id": "loanTypes", "label": "Loan type cards",
+          "type": "repeater", "min": 4, "max": 10, "itemLabel": "Loan type",
+          "item": [
+            { "id": "icon",   "label": "Icon (emoji)",         "type": "text",     "max": 4 },
+            { "id": "name",   "label": "Loan name",            "type": "text",     "max": 40, "placeholder": "Personal Loan" },
+            { "id": "rate",   "label": "Starting rate",        "type": "text",     "max": 30, "placeholder": "10.5% p.a." },
+            { "id": "amount", "label": "Amount range",         "type": "text",     "max": 40, "placeholder": "₹50K – ₹40L" },
+            { "id": "tat",    "label": "Disbursal TAT",        "type": "text",     "max": 40, "placeholder": "48 hours" },
+            { "id": "body",   "label": "Description (15–22 w)","type": "text",     "max": 160 },
+            { "id": "color",  "label": "Tint colour family",   "type": "select",   "options": ["indigo","lime","amber","rose","teal","violet","sky","peach"] }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "lenders",
+      "title": "Partner Lenders",
+      "aiable": true,
+      "hint": {
+        "label": "Empanelled banks & NBFCs",
+        "description": "Banks and NBFCs you have a DSA agreement with. Display rates competitively. Per RBI, you must disclose lenders you represent."
+      },
+      "fields": [
+        { "id": "lendersListLabel",    "label": "Section eyebrow",  "type": "text",     "max": 40,  "placeholder": "Compare across lenders" },
+        { "id": "lendersListHeadline", "label": "Section headline", "type": "text",     "max": 80,  "aiable": true },
+        { "id": "lendersListBody",     "label": "Section sub-copy", "type": "textarea", "rows": 2,  "max": 220, "aiable": true },
+        {
+          "id": "lenders", "label": "Lender cards",
+          "type": "repeater", "min": 4, "max": 16, "itemLabel": "Lender",
+          "item": [
+            { "id": "name",       "label": "Lender name",      "type": "text",     "max": 50, "placeholder": "HDFC Bank" },
+            { "id": "type",       "label": "Type",             "type": "select",   "options": ["Bank","NBFC","SFB","Co-op Bank","HFC"] },
+            { "id": "loanTypes",  "label": "Loan types offered (comma)", "type": "text", "max": 120, "placeholder": "Personal · Home · Business" },
+            { "id": "rateFrom",   "label": "Rate from",         "type": "text",     "max": 20, "placeholder": "10.5% p.a." },
+            { "id": "monogram",   "label": "Monogram letter (single)", "type": "text",     "max": 2 }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "comparison",
+      "title": "Rate Comparison Table",
+      "aiable": true,
+      "hint": {
+        "label": "Side-by-side rate sheet",
+        "description": "A clean comparison table by loan type with starting rates from 6-8 lenders. The table morphs into swipeable cards on mobile."
+      },
+      "fields": [
+        { "id": "comparisonLabel",    "label": "Section eyebrow",  "type": "text",     "max": 40,  "placeholder": "All rates, one screen" },
+        { "id": "comparisonHeadline", "label": "Section headline", "type": "text",     "max": 80,  "aiable": true },
+        { "id": "comparisonBody",     "label": "Section sub-copy", "type": "textarea", "rows": 2,  "max": 220, "aiable": true },
+        {
+          "id": "comparisonRows", "label": "Comparison rows",
+          "type": "repeater", "min": 4, "max": 10, "itemLabel": "Loan row",
+          "item": [
+            { "id": "loanType", "label": "Loan type",     "type": "text", "max": 40, "placeholder": "Personal Loan" },
+            { "id": "best",     "label": "Best rate (from)", "type": "text", "max": 20, "placeholder": "10.50% p.a." },
+            { "id": "bestBy",   "label": "Best by (lender)", "type": "text", "max": 40, "placeholder": "HDFC Bank" },
+            { "id": "median",   "label": "Median rate",   "type": "text", "max": 20, "placeholder": "11.75% p.a." },
+            { "id": "tat",      "label": "Disbursal TAT", "type": "text", "max": 30, "placeholder": "48 hours" },
+            { "id": "minAmount","label": "Min amount",    "type": "text", "max": 20, "placeholder": "₹50,000" },
+            { "id": "maxAmount","label": "Max amount",    "type": "text", "max": 20, "placeholder": "₹40 Lakh" }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "process",
+      "title": "How an application works",
+      "aiable": true,
+      "hint": {
+        "label": "Application journey",
+        "description": "Apply → Documents → Approval → Disbursal. Visual stepper with hours timeline. Reassuring around documents and CKYC.",
+        "mockupTarget": "process"
+      },
+      "fields": [
+        { "id": "processLabel",    "label": "Section eyebrow",  "type": "text", "max": 40, "placeholder": "Quick. Paperless. Fair." },
+        { "id": "processHeadline", "label": "Section headline", "type": "text", "max": 80, "aiable": true },
+        {
+          "id": "processSteps", "label": "Steps",
+          "type": "repeater", "min": 3, "max": 5, "itemLabel": "Step",
+          "item": [
+            { "id": "icon",     "label": "Icon (emoji)",                   "type": "text",     "max": 4 },
+            { "id": "title",    "label": "Step title",                     "type": "text",     "max": 50 },
+            { "id": "body",     "label": "Step description (15–25 words)", "type": "textarea", "rows": 2, "max": 220 },
+            { "id": "duration", "label": "Duration",                       "type": "text",     "max": 40, "placeholder": "5 minutes" }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "eligibility",
+      "title": "Eligibility & Calculator",
+      "aiable": true,
+      "hint": {
+        "label": "Eligibility criteria",
+        "description": "What lenders look for: age, income, credit score, employment. Pair with an eligibility checker mini-form on the page."
+      },
+      "fields": [
+        { "id": "eligibilityLabel",    "label": "Section eyebrow",  "type": "text",     "max": 40,  "placeholder": "Quick eligibility check" },
+        { "id": "eligibilityHeadline", "label": "Section headline", "type": "text",     "max": 80,  "aiable": true },
+        { "id": "eligibilityBody",     "label": "Section sub-copy", "type": "textarea", "rows": 2,  "max": 220, "aiable": true },
+        {
+          "id": "eligibilityCriteria", "label": "Eligibility cards",
+          "type": "repeater", "min": 3, "max": 6, "itemLabel": "Criterion",
+          "item": [
+            { "id": "icon",  "label": "Icon (emoji)",                "type": "text", "max": 4 },
+            { "id": "title", "label": "Criterion",                   "type": "text", "max": 60, "placeholder": "Age 21 – 65 years" },
+            { "id": "body",  "label": "Description (15–22 words)",   "type": "text", "max": 140 }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "documents",
+      "title": "Documents Checklist",
+      "aiable": true,
+      "hint": {
+        "label": "Document list (accordion on mobile)",
+        "description": "Salaried vs self-employed checklists, plus extras for home/business loans. Renders as an accordion on mobile."
+      },
+      "fields": [
+        { "id": "documentsLabel",    "label": "Section eyebrow",  "type": "text",     "max": 40,  "placeholder": "Keep these handy" },
+        { "id": "documentsHeadline", "label": "Section headline", "type": "text",     "max": 80,  "aiable": true },
+        { "id": "documentsBody",     "label": "Section sub-copy", "type": "textarea", "rows": 2,  "max": 220, "aiable": true },
+        {
+          "id": "documentGroups", "label": "Document groups",
+          "type": "repeater", "min": 2, "max": 5, "itemLabel": "Group",
+          "item": [
+            { "id": "title", "label": "Group title", "type": "text", "max": 50, "placeholder": "If you're salaried" },
+            { "id": "icon",  "label": "Icon (emoji)", "type": "text", "max": 4 },
+            {
+              "id": "items", "label": "Documents",
+              "type": "repeater", "min": 3, "max": 10, "itemLabel": "Item",
+              "item": [ { "id": "label", "label": "Document line", "type": "text", "max": 100 } ]
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "whyChoose",
+      "title": "Why a DSA",
+      "aiable": true,
+      "hint": {
+        "label": "What DSAs do for the customer",
+        "description": "Compare offers across lenders, no fee to customer, paperwork help, lender-shopping. Frame around the customer outcome."
+      },
+      "fields": [
+        { "id": "whyChooseLabel",    "label": "Section eyebrow",  "type": "text",     "max": 40,  "placeholder": "Why customers pick a DSA" },
+        { "id": "whyChooseHeadline", "label": "Section headline", "type": "text",     "max": 80,  "aiable": true },
+        { "id": "whyChooseBody",     "label": "Section sub-copy", "type": "textarea", "rows": 2,  "max": 220, "aiable": true },
+        {
+          "id": "whyChoosePoints", "label": "Why-choose points",
+          "type": "repeater", "min": 4, "max": 6, "itemLabel": "Pillar",
+          "item": [
+            { "id": "icon",  "label": "Icon (emoji)",                "type": "text", "max": 4 },
+            { "id": "title", "label": "Title",                       "type": "text", "max": 50 },
+            { "id": "body",  "label": "Description (15–25 words)",   "type": "text", "max": 200 }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "testimonials",
+      "title": "Customer Stories",
+      "hint": {
+        "label": "Customer stories",
+        "description": "Borrower stories. Mention what loan type, how long it took, and what the experience was like. Never publish actual loan amounts or rates approved — those are private."
+      },
+      "fields": [
+        {
+          "id": "testimonials", "label": "Testimonials",
+          "type": "repeater", "min": 2, "max": 6, "itemLabel": "Testimonial",
+          "item": [
+            { "id": "quote",       "label": "Quote (30–60 words)",    "type": "textarea", "rows": 3, "max": 360 },
+            { "id": "name",        "label": "Name",                   "type": "text",     "max": 60 },
+            { "id": "role",        "label": "City / context",         "type": "text",     "max": 80 },
+            { "id": "productUsed", "label": "Loan type",              "type": "text",     "max": 80, "placeholder": "Home Loan · HDFC" }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "disclosures",
+      "title": "Mandatory Disclosures",
+      "hint": {
+        "label": "DSA compliance disclosures",
+        "description": "RBI-mandated DSA disclosures: no fee to customer, lender pays commission, final approval at lender discretion, processing fee charged by lender, no rate guarantee."
+      },
+      "fields": [
+        { "id": "disclosuresLabel",    "label": "Section eyebrow",  "type": "text",     "max": 40,  "placeholder": "What you should know" },
+        { "id": "disclosuresHeadline", "label": "Section headline", "type": "text",     "max": 80 },
+        { "id": "disclosuresBody",     "label": "Section sub-copy", "type": "textarea", "rows": 2,  "max": 220 },
+        {
+          "id": "riskDocs", "label": "Disclosure rows",
+          "type": "repeater", "min": 3, "max": 8, "itemLabel": "Disclosure",
+          "item": [
+            { "id": "icon",  "label": "Icon (emoji)",         "type": "text", "max": 4 },
+            { "id": "title", "label": "Disclosure title",     "type": "text", "max": 80 },
+            { "id": "body",  "label": "Plain-language body",  "type": "text", "max": 200 }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "grievance",
+      "title": "Grievance Redressal",
+      "hint": {
+        "label": "RBI Sachet · Banking Ombudsman",
+        "description": "DSAs must escalate complaints through: DSA → Lender Bank Grievance Officer → RBI Sachet (sachet.rbi.org.in) → RBI Banking Ombudsman. Per RBI norms."
+      },
+      "fields": [
+        { "id": "grievanceLabel",    "label": "Section eyebrow",            "type": "text",     "max": 40 },
+        { "id": "grievanceHeadline", "label": "Section headline",           "type": "text",     "max": 80 },
+        { "id": "grievanceBody",     "label": "Section body (40–80 words)", "type": "textarea", "rows": 3, "max": 500 },
+        { "id": "groName",    "label": "Compliance officer name", "type": "text",     "max": 80 },
+        { "id": "groRole",    "label": "Officer role",            "type": "text",     "max": 80 },
+        { "id": "groEmail",   "label": "Grievance email",         "type": "text",     "max": 100 },
+        { "id": "groPhone",   "label": "Grievance phone",         "type": "text",     "max": 40 },
+        { "id": "groAddress", "label": "Office address",          "type": "textarea", "rows": 2, "max": 200 },
+        { "id": "groTimings", "label": "Office hours",            "type": "text",     "max": 80 },
+        {
+          "id": "escalationLevels", "label": "Escalation matrix",
+          "type": "repeater", "min": 3, "max": 5, "itemLabel": "Level",
+          "item": [
+            { "id": "level",   "label": "Level label",    "type": "text",     "max": 80 },
+            { "id": "body",    "label": "Description",    "type": "textarea", "rows": 2, "max": 220 },
+            { "id": "contact", "label": "Contact / URL",  "type": "text",     "max": 140 },
+            { "id": "tat",     "label": "TAT",             "type": "text",     "max": 40 }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "cta",
+      "title": "Call to Action",
+      "aiable": true,
+      "hint": {
+        "label": "Closing CTA",
+        "description": "Frame around getting loan offers without commitment. Mention zero customer fees again.",
+        "mockupTarget": "cta"
+      },
+      "fields": [
+        { "id": "ctaHeadline", "label": "CTA headline",               "type": "text",     "max": 100, "aiable": true },
+        { "id": "ctaBody",     "label": "CTA sub-copy (15–25 words)", "type": "textarea", "rows": 2,  "max": 220, "aiable": true },
+        { "id": "ctaButton",   "label": "Button text",                "type": "text",     "max": 40 },
+        { "id": "ctaNote",     "label": "Fine print",                 "type": "text",     "max": 160 }
+      ]
+    }
+  ]
+}

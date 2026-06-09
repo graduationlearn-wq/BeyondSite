@@ -147,7 +147,15 @@ function buildTemplateData(payload = {}) {
     'popularTestsLabel','popularTestsHeadline','popularTestsBody',
     'homeCollectionLabel','homeCollectionHeadline','homeCollectionBody',
     'reportsLabel','reportsHeadline','reportsBody','reportSampleNote',
-    'specialistsLabel','specialistsHeadline','specialistsBody'
+    'specialistsLabel','specialistsHeadline','specialistsBody',
+    // Round U — Loan DSA / Direct Sales Agent (template-19)
+    'dsaRbiReg','dsaIbaCode','dsaCin','dsaGst','dsaUdyam',
+    'whatsappNumber','whatsappCta','noFeeBadge',
+    'calcDefaultAmount','calcDefaultTenure','calcDefaultRate',
+    'loanTypesLabel','loanTypesHeadline','loanTypesBody',
+    'lendersListLabel','lendersListHeadline','lendersListBody',
+    'comparisonLabel','comparisonHeadline','comparisonBody',
+    'documentsLabel','documentsHeadline','documentsBody'
   ];
   for (const k of strKeys) if (data[k] === undefined) data[k] = '';
 
@@ -176,7 +184,9 @@ function buildTemplateData(payload = {}) {
     // Round S — Healthcare Clinic / Hospital (template-17)
     'specialties','doctors','healthPackages','insurers',
     // Round T — Diagnostic Lab / Pathology (template-18)
-    'testCategories','popularTests','homeCollectionPerks','reportFeatures'
+    'testCategories','popularTests','homeCollectionPerks','reportFeatures',
+    // Round U — Loan DSA / Direct Sales Agent (template-19)
+    'loanTypes','lenders','comparisonRows','documentGroups'
   ];
   for (const k of arrKeys) if (!Array.isArray(data[k])) data[k] = [];
 

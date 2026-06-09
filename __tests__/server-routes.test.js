@@ -151,8 +151,8 @@ describe('Server Routes', () => {
       expect(res.status).toBe(404);
     });
 
-    test('returns schema for all 18 templates', async () => {
-      for (let i = 1; i <= 18; i++) {
+    test('returns schema for all 19 templates', async () => {
+      for (let i = 1; i <= 19; i++) {
         const res = await request(app).get(`/api/schema/template-${i}`);
         expect(res.status).toBe(200);
         expect(res.body.id).toBe(`template-${i}`);

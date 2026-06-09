@@ -1,0 +1,1380 @@
+<%
+  // ── SAFE LOCALS (Round U — Loan DSA / Direct Sales Agent, template-19) ────
+  const L = locals || {};
+  const esc = (s) => (s == null ? '' : String(s));
+  const def = (v, d) => (v && String(v).trim() ? v : d);
+
+  const bn      = esc(L.businessName) || 'DhanSetu Loans';
+  const tagln   = esc(L.tagline)      || 'One application. All the offers.';
+  const accent  = L.primaryColor      || '#1e1b4b';
+  const year    = L.year              || new Date().getFullYear();
+  const founded = esc(L.foundedYear)  || '2017';
+
+  // Regulatory
+  const dsaRbiRegV  = def(L.dsaRbiReg,  'Empanelled DSA · HDFC · ICICI · Axis · Bajaj Finserv');
+  const dsaIbaCodeV = def(L.dsaIbaCode, 'Adherent to IBA Code of Conduct for DSAs (2007)');
+  const dsaCinV     = def(L.dsaCin,     'U67100MH2017PTC298654');
+  const dsaGstV     = def(L.dsaGst,     '27AAACR1234M1Z5');
+  const dsaUdyamV   = def(L.dsaUdyam,   'UDYAM-MH-19-0009876');
+
+  // Mandatory disclaimers
+  const RBI_DISC      = 'Per RBI Master Direction on Outsourcing of Financial Services, ' + bn + ' is an authorised DSA representing one or more lender banks/NBFCs and does NOT itself lend money.';
+  const FEE_DISC      = 'DSAs do not charge fees to customers. Our commission is paid by the lender bank/NBFC on successful disbursal of your loan.';
+  const APPROVAL_DISC = 'Loan approval is at the sole discretion of the lender. Quoted rates and amounts are indicative and subject to lender credit appraisal and prevailing policies.';
+  const PROCESSING_DISC = 'Processing fees, GST, stamp duty, and other charges are levied by the lender per their published schedule and are NOT received by ' + bn + '.';
+
+  // Hero
+  const heroEyebrowV      = def(L.heroEyebrow,      'Empanelled with 18 banks · Zero customer fees · Loans from ₹50K');
+  const heroHeadlineLeadV = def(L.heroHeadlineLead, 'One application,');
+  const heroHeadlineEmphV = def(L.heroHeadlineEmph, 'all the offers.');
+  const heroSubV          = def(L.heroSub,          'Compare offers from 18 banks and NBFCs in a single application. We do not charge you anything — the lender pays our commission on disbursal.');
+  const heroCtaPrimaryV   = def(L.heroCtaPrimary,   'Get Loan Offers');
+  const heroCtaSecondaryV = def(L.heroCtaSecondary, 'Calculate EMI');
+  const whatsappNumberV   = def(L.whatsappNumber,   '+91 98XXXX1212');
+  const whatsappCtaV      = def(L.whatsappCta,      'Chat on WhatsApp');
+  const noFeeBadgeV       = def(L.noFeeBadge,       '₹0 charges to you · Lender pays our commission');
+
+  // Calculator defaults
+  const calcDefaultAmountV = parseInt(def(L.calcDefaultAmount, '500000'), 10);
+  const calcDefaultTenureV = parseInt(def(L.calcDefaultTenure, '36'),     10);
+  const calcDefaultRateV   = parseFloat(def(L.calcDefaultRate,'11.5'));
+
+  const trustStatsList = (Array.isArray(L.trustStats) && L.trustStats.length)
+    ? L.trustStats
+    : [
+        { value: '18',    label: 'Partner banks & NBFCs' },
+        { value: '₹420Cr',label: 'Loans facilitated' },
+        { value: '12,000+',label:'Borrowers helped' },
+        { value: '48 hrs',label: 'Avg. disbursal TAT' }
+      ];
+
+  // Loan types
+  const loanTypesLabelV    = def(L.loanTypesLabel,    'Find your loan');
+  const loanTypesHeadlineV = def(L.loanTypesHeadline, 'A loan for every life decision.');
+  const loanTypesBodyV     = def(L.loanTypesBody,     'Tap a product to see all the lenders we represent for it — and the best rate they’ve quoted for borrowers like you.');
+  const loanTypesList = (Array.isArray(L.loanTypes) && L.loanTypes.length)
+    ? L.loanTypes
+    : [
+        { icon: '👤', name: 'Personal Loan',  rate: '10.50% p.a.', amount: '₹50K – ₹40L',  tat: '48 hours',  color: 'indigo', body: 'Unsecured loan for any need — wedding, travel, medical, or consolidating credit-card debt.' },
+        { icon: '🏠', name: 'Home Loan',       rate: '8.40% p.a.',  amount: '₹5L – ₹10Cr',  tat: '7–14 days', color: 'sky',    body: 'New purchase, ready-to-move, or self-construction. Tenure up to 30 years.' },
+        { icon: '💼', name: 'Business Loan',   rate: '12.00% p.a.', amount: '₹2L – ₹2Cr',   tat: '3–7 days',  color: 'lime',   body: 'For working capital, expansion, or equipment. Collateral-free up to ₹50L for MSMEs.' },
+        { icon: '🏘',  name: 'Loan Against Property', rate: '9.25% p.a.', amount: '₹10L – ₹5Cr', tat: '10–15 days', color: 'amber',  body: 'Secured loan against residential or commercial property. Funds for any purpose.' },
+        { icon: '🎓', name: 'Education Loan',  rate: '8.65% p.a.',  amount: '₹50K – ₹1.5Cr', tat: '7–14 days', color: 'teal',   body: 'Domestic and overseas studies. Moratorium during course + 6 months grace period.' },
+        { icon: '🚗', name: 'Car Loan',        rate: '8.85% p.a.',  amount: '₹1L – ₹1Cr',   tat: '24–72 hrs', color: 'violet', body: 'New and pre-owned cars. Up to 100% on-road financing with select banks.' },
+        { icon: '🛵', name: 'Two-Wheeler Loan',rate: '9.50% p.a.',  amount: '₹15K – ₹5L',   tat: 'Same day',  color: 'rose',   body: 'Quick, paperless approvals. Insurance and accessories can be bundled in.' },
+        { icon: '🪙', name: 'Gold Loan',       rate: '8.95% p.a.',  amount: '₹10K – ₹1.5Cr',tat: '60 minutes',color: 'peach',  body: 'Gold-secured loan with quick in-branch disbursal. LTV up to 75% of gold value.' }
+      ];
+
+  // Lenders
+  const lendersListLabelV    = def(L.lendersListLabel,    'Compare across lenders');
+  const lendersListHeadlineV = def(L.lendersListHeadline, 'We represent 18 lenders. You pick.');
+  const lendersListBodyV     = def(L.lendersListBody,     'Per RBI norms, we disclose every lender we hold a DSA agreement with. Compare rates, get pre-qualified, and pick the offer that actually fits.');
+  const lendersList = (Array.isArray(L.lenders) && L.lenders.length)
+    ? L.lenders
+    : [
+        { name: 'HDFC Bank',        type: 'Bank', loanTypes: 'Personal · Home · Car · LAP',     rateFrom: '8.40% p.a.', monogram: 'H' },
+        { name: 'ICICI Bank',       type: 'Bank', loanTypes: 'Personal · Home · Business',       rateFrom: '8.75% p.a.', monogram: 'I' },
+        { name: 'Axis Bank',        type: 'Bank', loanTypes: 'Personal · Home · Car · LAP',     rateFrom: '8.65% p.a.', monogram: 'A' },
+        { name: 'Kotak Mahindra',   type: 'Bank', loanTypes: 'Personal · Business · Car',       rateFrom: '10.99% p.a.',monogram: 'K' },
+        { name: 'SBI',              type: 'Bank', loanTypes: 'Home · Education · Personal',     rateFrom: '8.50% p.a.', monogram: 'S' },
+        { name: 'Bajaj Finserv',    type: 'NBFC', loanTypes: 'Personal · Business · Two-wheeler', rateFrom: '11.50% p.a.', monogram: 'B' },
+        { name: 'Tata Capital',     type: 'NBFC', loanTypes: 'Personal · Business · LAP',       rateFrom: '11.25% p.a.',monogram: 'T' },
+        { name: 'L&T Finance',      type: 'NBFC', loanTypes: 'Two-wheeler · Personal · Business', rateFrom: '12.00% p.a.', monogram: 'L' },
+        { name: 'IDFC First',       type: 'Bank', loanTypes: 'Personal · Home · Car',           rateFrom: '10.49% p.a.',monogram: 'I' },
+        { name: 'Yes Bank',         type: 'Bank', loanTypes: 'Personal · Home · LAP',           rateFrom: '10.99% p.a.',monogram: 'Y' },
+        { name: 'AU Small Finance', type: 'SFB',  loanTypes: 'Personal · Business · Two-wheeler', rateFrom: '11.99% p.a.', monogram: 'U' },
+        { name: 'Muthoot Finance',  type: 'NBFC', loanTypes: 'Gold · Personal',                 rateFrom: '8.95% p.a.', monogram: 'M' }
+      ];
+
+  // Comparison table
+  const comparisonLabelV    = def(L.comparisonLabel,    'All rates, one screen');
+  const comparisonHeadlineV = def(L.comparisonHeadline, 'Rate sheet for borrowers who hate spreadsheets.');
+  const comparisonBodyV     = def(L.comparisonBody,     'Best starting rate by loan type across our partner lenders, refreshed monthly. Your actual rate depends on credit score, income, and lender policy.');
+  const comparisonRowsList  = (Array.isArray(L.comparisonRows) && L.comparisonRows.length)
+    ? L.comparisonRows
+    : [
+        { loanType: 'Personal Loan',      best: '10.50% p.a.', bestBy: 'HDFC Bank',     median: '11.75% p.a.', tat: '48 hours',  minAmount: '₹50K',  maxAmount: '₹40L' },
+        { loanType: 'Home Loan',          best: '8.40% p.a.',  bestBy: 'HDFC Bank',     median: '8.85% p.a.',  tat: '7–14 days', minAmount: '₹5L',   maxAmount: '₹10Cr' },
+        { loanType: 'Business Loan',      best: '12.00% p.a.', bestBy: 'L&T Finance',   median: '13.50% p.a.', tat: '3–7 days',  minAmount: '₹2L',   maxAmount: '₹2Cr' },
+        { loanType: 'LAP',                best: '9.25% p.a.',  bestBy: 'Axis Bank',     median: '10.50% p.a.', tat: '10–15 days',minAmount: '₹10L',  maxAmount: '₹5Cr' },
+        { loanType: 'Car Loan',           best: '8.85% p.a.',  bestBy: 'HDFC Bank',     median: '9.50% p.a.',  tat: '24–72 hrs', minAmount: '₹1L',   maxAmount: '₹1Cr' },
+        { loanType: 'Education Loan',     best: '8.65% p.a.',  bestBy: 'SBI',           median: '10.25% p.a.', tat: '7–14 days', minAmount: '₹50K',  maxAmount: '₹1.5Cr' },
+        { loanType: 'Two-Wheeler Loan',   best: '9.50% p.a.',  bestBy: 'L&T Finance',   median: '11.00% p.a.', tat: 'Same day',  minAmount: '₹15K',  maxAmount: '₹5L' },
+        { loanType: 'Gold Loan',          best: '8.95% p.a.',  bestBy: 'Muthoot',       median: '11.50% p.a.', tat: '60 minutes',minAmount: '₹10K',  maxAmount: '₹1.5Cr' }
+      ];
+
+  // Process
+  const processLabelV    = def(L.processLabel,    'Quick. Paperless. Fair.');
+  const processHeadlineV = def(L.processHeadline, 'How an application works here.');
+  const processStepsList = (Array.isArray(L.processSteps) && L.processSteps.length)
+    ? L.processSteps
+    : [
+        { icon: '📝', title: 'Tell us once',          body: 'Share basic details — name, income, loan amount, purpose. We pre-qualify you across all empanelled lenders in one form.',         duration: '5 minutes' },
+        { icon: '📂', title: 'Pick an offer',         body: 'You see the actual offers — interest rate, processing fee, EMI, tenure — from each willing lender. Pick the one that fits.',     duration: 'Same day' },
+        { icon: '✅', title: 'Approval & sanction',   body: 'Lender runs credit checks, asks for documents (Aadhaar/PAN/CKYC, ITR if needed), and issues a digital sanction letter.',          duration: '1–3 days' },
+        { icon: '💸', title: 'Disbursal',             body: 'On signing, the lender disburses directly to your bank account or seller. We do not handle a single rupee in the flow.',         duration: '24–48 hrs' }
+      ];
+
+  // Eligibility
+  const eligibilityLabelV    = def(L.eligibilityLabel,    'Quick eligibility check');
+  const eligibilityHeadlineV = def(L.eligibilityHeadline, 'Who lenders typically approve.');
+  const eligibilityBodyV     = def(L.eligibilityBody,     'These are the most common eligibility thresholds across our partner lenders. Final criteria depend on the specific lender and product.');
+  const eligibilityCriteriaList = (Array.isArray(L.eligibilityCriteria) && L.eligibilityCriteria.length)
+    ? L.eligibilityCriteria
+    : [
+        { icon: '🎂', title: 'Age 21 – 65 years',          body: 'Minimum age 21 at application; maximum age 65 at loan maturity. NRIs accepted by select lenders.' },
+        { icon: '💰', title: 'Income ₹25,000+/month',       body: 'Net monthly income from salary or business. Higher income may unlock larger amounts and better rates.' },
+        { icon: '📊', title: 'Credit score 700+',           body: 'CIBIL 700+ is a typical threshold. Some lenders accept 650+ at a higher rate.' },
+        { icon: '🧾', title: 'Employment 2+ years',          body: 'Salaried: 2 years total + 6 months in current job. Self-employed: 2+ years in current business.' }
+      ];
+
+  // Documents
+  const documentsLabelV    = def(L.documentsLabel,    'Keep these handy');
+  const documentsHeadlineV = def(L.documentsHeadline, 'A short, predictable document list.');
+  const documentsBodyV     = def(L.documentsBody,     'We make sure your application is complete the first time. Below is the standard set most lenders ask for — plus what changes if you are self-employed or applying for a home loan.');
+  const documentGroupsList = (Array.isArray(L.documentGroups) && L.documentGroups.length)
+    ? L.documentGroups
+    : [
+        { icon: '👨‍💼', title: 'If you’re salaried', items: [
+          { label: 'PAN card · Aadhaar card' },
+          { label: 'Last 3 months’ salary slips' },
+          { label: 'Last 6 months’ bank statement' },
+          { label: 'Latest Form 16 OR last 2 years’ ITR' },
+          { label: 'Address proof (Aadhaar / utility / rent agreement)' }
+        ] },
+        { icon: '🧑‍💼', title: 'If you’re self-employed', items: [
+          { label: 'PAN card · Aadhaar card' },
+          { label: 'Last 3 years’ ITR + computation' },
+          { label: 'Last 12 months’ bank statement (current + savings)' },
+          { label: 'Business proof (GST/Udyam/incorporation)' },
+          { label: 'Profit & Loss + Balance Sheet (CA-certified for ₹25L+)' }
+        ] },
+        { icon: '🏠', title: 'Extra for Home Loan / LAP', items: [
+          { label: 'Property documents — sale agreement, title deed' },
+          { label: 'Property tax receipts (last 3 years)' },
+          { label: 'NOC from society / builder' },
+          { label: 'Approved building plan' },
+          { label: 'For purchase: allotment letter + cost sheet' }
+        ] }
+      ];
+
+  // Why Choose
+  const whyChooseLabelV    = def(L.whyChooseLabel,    'Why customers pick a DSA');
+  const whyChooseHeadlineV = def(L.whyChooseHeadline, 'A neutral guide through a confusing market.');
+  const whyChooseBodyV     = def(L.whyChooseBody,     'Different lenders quote different rates for the same profile. A good DSA shops the market for you — and bills the lender, not you.');
+  const whyChoosePointsList = (Array.isArray(L.whyChoosePoints) && L.whyChoosePoints.length)
+    ? L.whyChoosePoints
+    : [
+        { icon: '💯', title: '₹0 customer fees',              body: 'You never pay us. Lenders pay our commission only when your loan disburses. Our incentive is to find you a fit, not push you a product.' },
+        { icon: '🏦', title: 'Multiple lender shopping',      body: 'One pre-qualification, multiple offers. Stop filling 4 different bank applications and chasing 4 different relationship managers.' },
+        { icon: '📑', title: 'Paperwork sherpa',                body: 'We tell you exactly what each lender wants, in what format. No back-and-forth. No surprise re-submissions.' },
+        { icon: '⚖',  title: 'Honest about your odds',         body: 'If your profile won’t clear a lender’s gate, we say so. We won’t apply you to four banks and damage your CIBIL with hard pulls.' },
+        { icon: '🔒', title: 'Data shared per DPDP Act',       body: 'Your details go only to lenders you authorise. Encrypted in transit and at rest. Right to delete on request.' },
+        { icon: '🤝', title: 'IBA Code-of-Conduct compliant',   body: 'No coercion, no false promises, no bundling. We follow IBA’s DSA code — and you can audit our process anytime.' }
+      ];
+
+  // Testimonials
+  const testimonialsList = (Array.isArray(L.testimonials) && L.testimonials.length)
+    ? L.testimonials
+    : [
+        { quote: 'I had been ping-ponging between two banks for six weeks. DhanSetu pre-qualified me at four lenders in one form, walked me through the trade-offs, and the disbursal happened in three working days. They never asked me for a single rupee.', name: 'Pranav Singh',  role: 'Pune · 33, software engineer',    productUsed: 'Personal Loan · Axis Bank' },
+        { quote: 'When my home-loan paperwork hit a property-document issue, the DSA team called the bank, the lawyer, and the society secretary on a single conference call. The bank manager said he hadn’t seen that level of paperwork prep in years.', name: 'Anita Rao',     role: 'Bengaluru · 41, mid-career professional', productUsed: 'Home Loan · HDFC Bank' },
+        { quote: 'I run a small kitchenware export business. Two banks had quietly declined me. DhanSetu told me my CA-certified P&L was the issue, helped me fix it, and the third lender approved in five days. Calm, honest, no upsell.',                       name: 'Yusuf Patel',   role: 'Surat · 47, MSME owner',          productUsed: 'Business Loan · Tata Capital' }
+      ];
+
+  // Disclosures
+  const disclosuresLabelV    = def(L.disclosuresLabel,    'What you should know');
+  const disclosuresHeadlineV = def(L.disclosuresHeadline, 'The bits banks bury in fine print.');
+  const disclosuresBodyV     = def(L.disclosuresBody,     'Mandatory disclosures every customer should read before applying. We surface these up-front rather than in the consent screen of a 14-page form.');
+  const disclosuresList      = (Array.isArray(L.riskDocs) && L.riskDocs.length)
+    ? L.riskDocs
+    : [
+        { icon: '💯', title: 'You pay us nothing',           body: 'Our commission is paid by the lender on successful disbursal. ' + bn + ' never charges the customer.' },
+        { icon: '⚖',  title: 'Lender has final say',         body: 'Loan approval is at the lender’s sole discretion. Rates and amounts on this site are indicative — your actual offer depends on credit appraisal.' },
+        { icon: '💸', title: 'Lender charges still apply',   body: 'Processing fees, GST, stamp duty, prepayment charges, and other levies are collected by the lender per their published schedule.' },
+        { icon: '📜', title: 'Documents stay with lender',   body: 'KYC, income, and CKYC records you submit are held by the lender per RBI norms. We do not retain originals.' },
+        { icon: '🛡', title: 'DPDP Act 2023 compliant',       body: 'Your personal data is processed only for the loan you are seeking. Right to access, correct, or delete on written request.' },
+        { icon: '🪪', title: 'No guaranteed approvals',       body: 'We do not guarantee any loan. Beware of anyone — DSA or otherwise — claiming guaranteed approval in exchange for an upfront fee.' }
+      ];
+
+  // Grievance
+  const grievanceLabelV    = def(L.grievanceLabel,    'Customer Care · Grievance Redressal');
+  const grievanceHeadlineV = def(L.grievanceHeadline, 'A clear path if anything ever goes wrong.');
+  const grievanceBodyV     = def(L.grievanceBody,     bn + ' follows a 4-tier escalation per RBI Master Direction on Outsourcing. All complaints are acknowledged within 24 hours.');
+  const groNameV    = def(L.groName,    'Mr. Sanjay Mehta');
+  const groRoleV    = def(L.groRole,    'Principal Compliance Officer');
+  const groEmailV   = def(L.groEmail,   'compliance@dhansetuloans.in');
+  const groPhoneV   = def(L.groPhone,   '+91 22 4000 7000');
+  const groAddressV = def(L.groAddress, bn + '\nLower Parel, Mumbai — 400013\nMaharashtra');
+  const groTimingsV = def(L.groTimings, 'Mon–Sat · 10 AM – 6 PM IST');
+  const escalationLevelsList = (Array.isArray(L.escalationLevels) && L.escalationLevels.length)
+    ? L.escalationLevels
+    : [
+        { level: 'Level 1 · Customer Care',          body: 'Raise a ticket via chat, email, or phone. First-response under 8 hours; most cases close in 48.', contact: 'care@dhansetuloans.in',                       tat: 'Within 48 hours' },
+        { level: 'Level 2 · Compliance Officer',     body: 'Unresolved? Escalate to the Principal Compliance Officer with your ticket reference.',          contact: 'compliance@dhansetuloans.in',                 tat: 'Within 7 days' },
+        { level: 'Level 3 · Lender Bank Officer',    body: 'For lender-related issues, escalate directly to that bank’s Grievance Officer (we share contacts).', contact: 'Lender-specific · provided on request',     tat: 'Per RBI norms' },
+        { level: 'Level 4 · RBI Sachet · Ombudsman',  body: 'For unresolved complaints, register with RBI Sachet portal or escalate to the Banking Ombudsman.',  contact: 'sachet.rbi.org.in · cms.rbi.org.in',           tat: 'Per RBI norms' }
+      ];
+
+  // CTA
+  const ctaHeadlineV = def(L.ctaHeadline, 'See your loan offers in 5 minutes — at zero cost to you.');
+  const ctaBodyV     = def(L.ctaBody,     'Tell us once. We pre-qualify you across 18 banks and NBFCs. You compare. You pick. You pay nothing to us.');
+  const ctaButtonV   = def(L.ctaButton,   'Get Loan Offers');
+  const ctaNoteV     = def(L.ctaNote,     'Zero customer fees · IBA Code compliant · RBI-aligned DSA');
+
+  // Contact
+  const emailV   = esc(L.email)   || 'hello@dhansetuloans.in';
+  const phoneV   = esc(L.phone)   || '+91 22 4000 7000';
+  const addressV = esc(L.address) || 'Lower Parel, Mumbai 400013';
+  const hoursV   = esc(L.hours)   || 'Mon–Sat · 10 AM – 8 PM · WhatsApp 24/7';
+
+  function initialsOf(name) {
+    if (!name) return '·';
+    const parts = String(name).trim().split(/\s+/);
+    const a = (parts[0] || '')[0] || '';
+    const b = (parts[1] || '')[0] || (parts[0] || '').slice(1, 2);
+    return (a + b).toUpperCase();
+  }
+
+  function loanColor(c) {
+    const map = {
+      indigo: { bg: '#eef2ff', text: '#3730a3', border: '#c7d2fe' },
+      sky:    { bg: '#e0f2fe', text: '#075985', border: '#bae6fd' },
+      lime:   { bg: '#ecfccb', text: '#365314', border: '#bef264' },
+      amber:  { bg: '#fef3c7', text: '#92400e', border: '#fde68a' },
+      teal:   { bg: '#ccfbf1', text: '#115e59', border: '#99f6e4' },
+      violet: { bg: '#f3e8ff', text: '#6b21a8', border: '#e9d5ff' },
+      rose:   { bg: '#ffe4e6', text: '#9f1239', border: '#fecdd3' },
+      peach:  { bg: '#fed7aa', text: '#9a3412', border: '#fdba74' }
+    };
+    return map[c] || map.indigo;
+  }
+
+  // Format Indian-style number
+  function fmtRupee(n) {
+    if (!n && n !== 0) return '';
+    const s = Math.round(n).toString();
+    if (s.length <= 3) return '₹' + s;
+    const last3 = s.slice(-3);
+    const rest = s.slice(0, -3);
+    return '₹' + rest.replace(/\B(?=(\d{2})+(?!\d))/g, ',') + ',' + last3;
+  }
+
+  // Compute initial EMI (server-side, becomes the default value before JS runs)
+  function initialEmi(p, t, r) {
+    if (!p || !t || !r) return 0;
+    const monthlyRate = (r / 100) / 12;
+    const numerator = p * monthlyRate * Math.pow(1 + monthlyRate, t);
+    const denominator = Math.pow(1 + monthlyRate, t) - 1;
+    return denominator ? Math.round(numerator / denominator) : 0;
+  }
+  const initialEmiV = initialEmi(calcDefaultAmountV, calcDefaultTenureV, calcDefaultRateV);
+  const initialTotalV = initialEmiV * calcDefaultTenureV;
+  const initialInterestV = initialTotalV - calcDefaultAmountV;
+%>
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title><%= bn %> — <%= tagln %></title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Sora:wght@400;500;600;700;800&family=Inter:wght@300;400;500;600;700&family=JetBrains+Mono:wght@500;700&display=swap" rel="stylesheet">
+  <style>
+    *,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
+    :root{
+      --indigo:      <%= accent %>;
+      --indigo-soft: #312e81;
+      --indigo-deep: #0f0a1f;
+      --indigo-tint: rgba(30,27,75,.08);
+      --indigo-glow: rgba(30,27,75,.28);
+      --lime:        #84cc16;
+      --lime-deep:   #4d7c0f;
+      --lime-tint:   rgba(132,204,22,.14);
+      --lime-glow:   rgba(132,204,22,.4);
+      --cream:       #fef3c7;
+      --cream-deep:  #fde68a;
+      --coral:       #fb923c;
+      --coral-tint:  rgba(251,146,60,.16);
+      --green:       #16a34a;
+      --green-tint:  rgba(22,163,74,.12);
+      --rose:        #f43f5e;
+      --rose-tint:   rgba(244,63,94,.1);
+      --paper:       #ffffff;
+      --bg:          #fafafa;
+      --ink:         #0f172a;
+      --ink-soft:    #475569;
+      --ink-mute:    rgba(15,23,42,.55);
+      --ink-line:    rgba(15,23,42,.08);
+      --ink-line-md: rgba(15,23,42,.14);
+      --display:     'Sora', system-ui, sans-serif;
+      --sans:        'Inter', system-ui, -apple-system, sans-serif;
+      --mono:        'JetBrains Mono', ui-monospace, monospace;
+    }
+    html{scroll-behavior:smooth}
+    body{font-family:var(--sans);background:var(--paper);color:var(--ink);line-height:1.7;-webkit-font-smoothing:antialiased;padding-bottom:env(safe-area-inset-bottom)}
+    a{color:inherit;text-decoration:none}
+    button{font-family:inherit;cursor:pointer;border:none}
+    em{font-style:normal;color:var(--lime-deep);position:relative;display:inline-block}
+    em::after{content:'';position:absolute;left:0;right:0;bottom:.06em;height:.32em;background:var(--lime-tint);border-radius:100px;z-index:-1}
+    .container{max-width:1240px;margin:0 auto;padding:0 32px}
+    .reveal{opacity:0;transform:translateY(20px);transition:opacity .6s ease,transform .6s ease}
+    .reveal.visible{opacity:1;transform:translateY(0)}
+
+    /* ── TOPBAR ─────────────────────────────────────────────── */
+    .topbar{background:var(--indigo-deep);color:rgba(255,255,255,.8);font-size:.74rem;padding:9px 0}
+    .topbar-inner{display:flex;align-items:center;justify-content:space-between;gap:18px;flex-wrap:wrap;max-width:1240px;margin:0 auto;padding:0 32px}
+    .topbar-info{display:flex;gap:18px;flex-wrap:wrap;align-items:center}
+    .topbar-info b{font-weight:700;color:#fff}
+    .topbar-badge{display:inline-flex;align-items:center;gap:8px;background:var(--lime);color:var(--indigo-deep);padding:5px 12px;border-radius:100px;font-weight:700;font-size:.74rem}
+    .topbar-badge::before{content:'';width:7px;height:7px;border-radius:50%;background:var(--indigo-deep);box-shadow:0 0 0 3px var(--lime)}
+
+    /* ── NAV ────────────────────────────────────────────────── */
+    .nav{position:sticky;top:0;z-index:50;background:rgba(255,255,255,.95);backdrop-filter:blur(14px);border-bottom:1px solid var(--ink-line)}
+    .nav-inner{display:flex;align-items:center;justify-content:space-between;padding:16px 0}
+    .brand{display:flex;align-items:center;gap:12px;font-family:var(--display);font-size:1.32rem;font-weight:800;color:var(--ink);letter-spacing:-.02em;white-space:nowrap}
+    .brand-mark{width:42px;height:42px;border-radius:12px;background:linear-gradient(135deg,var(--indigo),var(--indigo-soft));color:var(--lime);display:flex;align-items:center;justify-content:center;font-family:var(--display);font-weight:800;font-size:1.25rem;box-shadow:0 8px 22px var(--indigo-glow);letter-spacing:-.04em}
+    .nav-links{display:flex;gap:26px;align-items:center;list-style:none}
+    .nav-links a{color:var(--ink-soft);font-size:.92rem;font-weight:500;transition:color .2s}
+    .nav-links a:hover{color:var(--indigo)}
+    .nav-cta{background:var(--lime);color:var(--indigo-deep);padding:10px 22px;border-radius:100px;font-weight:700;box-shadow:0 8px 22px var(--lime-glow);white-space:nowrap;font-size:.92rem}
+    .nav-cta:hover{background:var(--lime-deep);color:#fff}
+
+    /* ── BUTTONS ────────────────────────────────────────────── */
+    .btn{display:inline-flex;align-items:center;gap:8px;padding:14px 28px;border-radius:14px;font-size:.95rem;font-weight:700;transition:transform .15s,box-shadow .25s,background .25s;min-height:48px;line-height:1.2}
+    .btn:hover{transform:translateY(-2px)}
+    .btn-primary{background:var(--lime);color:var(--indigo-deep);box-shadow:0 12px 28px var(--lime-glow)}
+    .btn-primary:hover{background:var(--lime-deep);color:#fff;box-shadow:0 16px 38px var(--lime-glow)}
+    .btn-ink{background:var(--indigo);color:#fff;box-shadow:0 12px 28px var(--indigo-glow)}
+    .btn-ink:hover{background:var(--indigo-soft)}
+    .btn-ghost{background:transparent;color:var(--ink);border:1.5px solid var(--ink-line-md)}
+    .btn-ghost:hover{background:var(--cream);border-color:var(--indigo);color:var(--indigo)}
+    .btn-wa{background:#25d366;color:#fff;box-shadow:0 12px 28px rgba(37,211,102,.4)}
+    .btn-wa:hover{background:#1eaa54}
+
+    /* ── HERO ───────────────────────────────────────────────── */
+    .hero{padding:48px 0 80px;position:relative;overflow:hidden;background:linear-gradient(180deg,#ffffff 0%,#fafafa 100%)}
+    .hero::before{content:'';position:absolute;top:-220px;right:-220px;width:600px;height:600px;border-radius:50%;background:radial-gradient(circle,var(--lime-tint) 0%,transparent 65%);pointer-events:none}
+    .hero::after{content:'';position:absolute;bottom:-160px;left:-160px;width:420px;height:420px;border-radius:50%;background:radial-gradient(circle,var(--indigo-tint) 0%,transparent 65%);pointer-events:none}
+    .hero-grid{display:grid;grid-template-columns:1fr 1fr;gap:60px;align-items:center;position:relative}
+    .hero-eyebrow{display:inline-flex;align-items:center;gap:10px;font-size:.78rem;font-weight:600;letter-spacing:.04em;color:var(--indigo);background:var(--indigo-tint);padding:9px 18px;border-radius:100px;margin-bottom:22px}
+    .hero-eyebrow::before{content:'';width:7px;height:7px;border-radius:50%;background:var(--lime);box-shadow:0 0 0 4px var(--lime-tint)}
+    .hero-title{font-family:var(--display);font-weight:800;font-size:clamp(2.4rem,5vw,4.4rem);line-height:1.04;letter-spacing:-.03em;color:var(--ink);margin-bottom:20px}
+    .hero-sub{font-size:1.04rem;color:var(--ink-soft);max-width:520px;margin-bottom:26px;line-height:1.75}
+    .hero-actions{display:flex;gap:12px;flex-wrap:wrap;margin-bottom:24px}
+    .hero-nofee{display:inline-flex;align-items:center;gap:12px;background:var(--lime-tint);border:1.5px solid var(--lime);border-radius:14px;padding:12px 16px;font-size:.88rem;color:var(--lime-deep);font-weight:600;line-height:1.4}
+    .hero-nofee b{font-family:var(--display);font-weight:800;color:var(--indigo)}
+    .hero-nofee-ic{width:34px;height:34px;border-radius:50%;background:var(--lime);color:var(--indigo-deep);display:flex;align-items:center;justify-content:center;font-family:var(--display);font-size:1rem;font-weight:800;flex-shrink:0}
+
+    /* ── EMI CALCULATOR ─────────────────────────────────────── */
+    .calc-card{background:var(--indigo);color:#fff;border-radius:24px;padding:32px;box-shadow:0 32px 64px -32px var(--indigo-glow), 0 16px 32px -16px var(--indigo-glow);position:relative;overflow:hidden}
+    .calc-card::before{content:'';position:absolute;top:-80px;right:-80px;width:240px;height:240px;border-radius:50%;background:radial-gradient(circle,var(--lime-tint) 0%,transparent 70%);pointer-events:none}
+    .calc-card::after{content:'EMI CALCULATOR';position:absolute;top:14px;right:18px;font-family:var(--mono);font-size:.65rem;font-weight:700;letter-spacing:.18em;color:rgba(132,204,22,.65)}
+    .calc-result{margin-bottom:24px;position:relative}
+    .calc-result-label{font-family:var(--mono);font-size:.7rem;font-weight:600;color:rgba(255,255,255,.55);letter-spacing:.12em;text-transform:uppercase;margin-bottom:6px}
+    .calc-result-emi{font-family:var(--display);font-size:clamp(2.5rem,4.5vw,3.4rem);font-weight:800;color:#fff;line-height:1;letter-spacing:-.025em;margin-bottom:6px;display:flex;align-items:baseline;gap:10px}
+    .calc-result-emi small{font-family:var(--sans);font-size:.95rem;font-weight:500;color:rgba(255,255,255,.7);letter-spacing:0}
+    .calc-result-summary{display:grid;grid-template-columns:1fr 1fr;gap:6px;font-size:.84rem;color:rgba(255,255,255,.7);margin-top:14px;padding-top:14px;border-top:1px dashed rgba(255,255,255,.18)}
+    .calc-result-summary b{display:block;color:var(--lime);font-family:var(--mono);font-weight:700;font-size:.95rem;margin-top:2px}
+    .calc-sliders{display:flex;flex-direction:column;gap:18px;position:relative}
+    .calc-row label{display:flex;justify-content:space-between;align-items:center;font-size:.84rem;color:rgba(255,255,255,.8);margin-bottom:8px;font-weight:500}
+    .calc-row label b{font-family:var(--mono);color:#fff;font-weight:700;font-size:.95rem;background:rgba(132,204,22,.18);padding:3px 9px;border-radius:6px;letter-spacing:-.005em}
+    .calc-slider{-webkit-appearance:none;appearance:none;width:100%;height:6px;border-radius:100px;background:rgba(255,255,255,.16);outline:none;margin:8px 0 0;cursor:pointer}
+    .calc-slider::-webkit-slider-thumb{-webkit-appearance:none;appearance:none;width:24px;height:24px;border-radius:50%;background:var(--lime);box-shadow:0 4px 14px var(--lime-glow);cursor:pointer;border:3px solid #fff}
+    .calc-slider::-moz-range-thumb{width:24px;height:24px;border-radius:50%;background:var(--lime);box-shadow:0 4px 14px var(--lime-glow);cursor:pointer;border:3px solid #fff}
+    .calc-slider:focus::-webkit-slider-thumb{outline:2px solid var(--cream);outline-offset:2px}
+    .calc-bounds{display:flex;justify-content:space-between;font-family:var(--mono);font-size:.7rem;color:rgba(255,255,255,.45);margin-top:5px}
+    .calc-foot{margin-top:22px;padding-top:18px;border-top:1px dashed rgba(255,255,255,.18);font-size:.78rem;color:rgba(255,255,255,.6);font-style:italic;line-height:1.55}
+
+    /* Lender ribbon (floating below calc on desktop) */
+    .lender-ribbon{display:flex;gap:10px;margin-top:22px;overflow-x:auto;padding-bottom:6px;scroll-snap-type:x mandatory;-webkit-overflow-scrolling:touch}
+    .lender-ribbon::-webkit-scrollbar{display:none}
+    .lender-ribbon{scrollbar-width:none}
+    .lender-chip{flex-shrink:0;background:var(--paper);border:1px solid var(--ink-line);border-radius:100px;padding:7px 14px;font-family:var(--mono);font-size:.78rem;font-weight:600;color:var(--ink);display:flex;align-items:center;gap:8px;scroll-snap-align:start}
+    .lender-chip b{color:var(--lime-deep);font-weight:700}
+
+    /* ── TRUST STRIP ────────────────────────────────────────── */
+    .trust-strip{background:var(--cream);padding:28px 0;border-top:1px solid var(--cream-deep);border-bottom:1px solid var(--cream-deep)}
+    .trust-strip-grid{display:grid;grid-template-columns:repeat(4,1fr);gap:24px;text-align:center}
+    .trust-stat-v{font-family:var(--display);font-size:clamp(1.5rem,2.4vw,2.1rem);font-weight:800;color:var(--indigo);letter-spacing:-.02em;line-height:1}
+    .trust-stat-l{font-size:.8rem;color:var(--ink-mute);font-weight:500;margin-top:6px}
+
+    /* ── SECTION ────────────────────────────────────────────── */
+    .section-pad{padding:88px 0}
+    .section-head{text-align:left;max-width:760px;margin-bottom:48px}
+    .section-head.center{margin-left:auto;margin-right:auto;text-align:center}
+    .section-eyebrow{display:inline-block;font-family:var(--mono);font-size:.76rem;font-weight:700;color:var(--lime-deep);background:var(--lime-tint);padding:6px 12px;border-radius:6px;margin-bottom:14px;text-transform:uppercase;letter-spacing:.08em}
+    .section-title{font-family:var(--display);font-size:clamp(2rem,3.5vw,3rem);font-weight:800;line-height:1.13;letter-spacing:-.025em;color:var(--ink);margin-bottom:16px}
+    .section-body{font-size:1.02rem;color:var(--ink-soft);line-height:1.78;max-width:660px}
+
+    /* ── LOAN TYPES ─────────────────────────────────────────── */
+    .loans{background:var(--paper)}
+    .loans-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(280px,1fr));gap:18px}
+    .loan-card{background:var(--paper);border:1.5px solid var(--ink-line);border-radius:20px;padding:28px;display:flex;flex-direction:column;transition:transform .25s,border-color .25s,box-shadow .25s;position:relative;overflow:hidden;min-height:240px}
+    .loan-card::before{content:'';position:absolute;top:0;left:0;right:0;height:4px;background:linear-gradient(90deg,var(--indigo),var(--lime));border-radius:20px 20px 0 0;opacity:0;transition:opacity .3s}
+    .loan-card:hover{transform:translateY(-4px);border-color:var(--indigo);box-shadow:0 22px 44px -22px var(--indigo-glow)}
+    .loan-card:hover::before{opacity:1}
+    .loan-head{display:flex;align-items:flex-start;justify-content:space-between;gap:14px;margin-bottom:14px}
+    .loan-icon{width:54px;height:54px;border-radius:14px;display:flex;align-items:center;justify-content:center;font-size:1.6rem;flex-shrink:0}
+    .loan-name{font-family:var(--display);font-size:1.18rem;font-weight:700;color:var(--ink);letter-spacing:-.015em;line-height:1.3;margin-bottom:4px}
+    .loan-rate{font-family:var(--mono);font-size:.84rem;font-weight:700;color:var(--lime-deep);letter-spacing:-.005em}
+    .loan-rate small{color:var(--ink-mute);font-weight:500;letter-spacing:0}
+    .loan-body{font-size:.88rem;color:var(--ink-soft);line-height:1.65;margin-bottom:14px;flex:1}
+    .loan-meta{display:flex;gap:10px;flex-wrap:wrap;padding-top:14px;border-top:1px dashed var(--ink-line-md);font-size:.78rem;color:var(--ink-soft)}
+    .loan-meta-row{display:flex;flex-direction:column;gap:2px;flex:1;min-width:0}
+    .loan-meta-row b{color:var(--ink);font-family:var(--mono);font-size:.82rem;font-weight:700}
+    .loan-meta-row span{font-size:.7rem;text-transform:uppercase;letter-spacing:.06em;color:var(--ink-mute);font-weight:500}
+
+    /* ── LENDERS ────────────────────────────────────────────── */
+    .lenders{background:var(--bg)}
+    .lenders-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(240px,1fr));gap:14px}
+    .lender-card{background:var(--paper);border:1px solid var(--ink-line);border-radius:14px;padding:20px 18px;display:flex;align-items:center;gap:14px;transition:transform .25s,border-color .25s,box-shadow .25s}
+    .lender-card:hover{transform:translateY(-2px);border-color:var(--indigo);box-shadow:0 14px 28px -16px var(--indigo-glow)}
+    .lender-mono{width:46px;height:46px;border-radius:12px;background:linear-gradient(135deg,var(--indigo),var(--indigo-soft));color:var(--lime);display:flex;align-items:center;justify-content:center;font-family:var(--display);font-size:1.3rem;font-weight:800;letter-spacing:-.02em;flex-shrink:0}
+    .lender-name{font-family:var(--display);font-size:.98rem;font-weight:700;color:var(--ink);letter-spacing:-.005em;margin-bottom:3px}
+    .lender-meta{display:flex;align-items:center;gap:8px;font-size:.72rem;color:var(--ink-mute)}
+    .lender-type{font-family:var(--mono);background:var(--indigo-tint);color:var(--indigo);font-weight:700;padding:2px 8px;border-radius:4px;font-size:.66rem;letter-spacing:.04em}
+    .lender-rate{font-family:var(--mono);font-size:.78rem;color:var(--lime-deep);font-weight:700;margin-top:4px;display:block}
+
+    /* ── COMPARISON TABLE ───────────────────────────────────── */
+    .comp{background:var(--paper)}
+    .comp-card{background:var(--paper);border:1px solid var(--ink-line-md);border-radius:20px;overflow:hidden;box-shadow:0 18px 44px -24px rgba(15,23,42,.18)}
+    .comp-head{background:var(--indigo);color:#fff;padding:22px 28px;display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:14px}
+    .comp-head-title{font-family:var(--display);font-size:1.05rem;font-weight:700;letter-spacing:-.005em}
+    .comp-head-note{font-family:var(--mono);font-size:.72rem;color:rgba(255,255,255,.6);letter-spacing:.04em;text-transform:uppercase}
+    .comp-table{width:100%;border-collapse:collapse;display:table}
+    .comp-table thead{background:var(--bg)}
+    .comp-table th,.comp-table td{padding:16px 28px;text-align:left;border-bottom:1px solid var(--ink-line);font-size:.92rem}
+    .comp-table th{font-family:var(--mono);font-weight:700;color:var(--ink-mute);font-size:.7rem;letter-spacing:.1em;text-transform:uppercase}
+    .comp-table tr:last-child td{border-bottom:none}
+    .comp-table tr:hover td{background:rgba(132,204,22,.04)}
+    .comp-loan{font-family:var(--display);font-weight:700;color:var(--ink);letter-spacing:-.005em}
+    .comp-rate{font-family:var(--mono);font-weight:700;color:var(--lime-deep);font-size:.95rem;display:flex;flex-direction:column;gap:2px}
+    .comp-rate small{font-family:var(--sans);font-size:.7rem;color:var(--ink-mute);font-weight:500}
+    .comp-median{font-family:var(--mono);color:var(--ink-soft);font-weight:600;font-size:.88rem}
+    .comp-tat{font-family:var(--mono);font-size:.78rem;color:var(--ink);background:var(--cream);padding:4px 10px;border-radius:5px;font-weight:600;display:inline-block;letter-spacing:-.005em}
+    .comp-amount{font-family:var(--mono);font-size:.86rem;color:var(--ink-soft)}
+    .comp-foot{padding:16px 28px;background:var(--bg);font-size:.78rem;color:var(--ink-mute);font-style:italic;border-top:1px solid var(--ink-line);line-height:1.55}
+
+    /* Mobile cards (hidden on desktop) */
+    .comp-cards{display:none}
+    .comp-mobile-card{background:var(--paper);border:1px solid var(--ink-line);border-radius:16px;padding:20px;flex-shrink:0;width:280px;scroll-snap-align:start}
+    .comp-mobile-card .cmc-loan{font-family:var(--display);font-size:1.05rem;font-weight:700;color:var(--ink);margin-bottom:14px;letter-spacing:-.005em}
+    .comp-mobile-card .cmc-row{display:grid;grid-template-columns:auto 1fr;gap:6px 12px;font-size:.84rem;margin-bottom:14px}
+    .comp-mobile-card .cmc-key{font-family:var(--mono);font-size:.7rem;color:var(--ink-mute);font-weight:600;text-transform:uppercase;letter-spacing:.06em;padding-top:2px}
+    .comp-mobile-card .cmc-val{color:var(--ink);font-weight:600}
+    .comp-mobile-card .cmc-val.rate{font-family:var(--mono);color:var(--lime-deep);font-weight:700}
+    .comp-mobile-card .cmc-val.tat{font-family:var(--mono);background:var(--cream);padding:2px 8px;border-radius:5px;display:inline-block;font-size:.76rem;font-weight:600;width:fit-content}
+
+    /* ── PROCESS ────────────────────────────────────────────── */
+    .process{background:var(--bg)}
+    .process-grid{display:grid;grid-template-columns:repeat(4,1fr);gap:22px;position:relative}
+    .process-grid::before{content:'';position:absolute;top:48px;left:8%;right:8%;height:2px;background:repeating-linear-gradient(90deg,var(--indigo) 0 6px,transparent 6px 14px);opacity:.35;z-index:0}
+    .process-step{position:relative;z-index:1;text-align:center;padding:0 8px}
+    .process-icon{width:100px;height:100px;border-radius:50%;background:var(--paper);border:2px solid var(--indigo);color:var(--indigo);font-size:2rem;display:flex;align-items:center;justify-content:center;margin:0 auto 22px;position:relative;box-shadow:0 14px 28px -14px var(--indigo-glow)}
+    .process-num{position:absolute;top:-8px;right:-8px;width:32px;height:32px;border-radius:50%;background:var(--lime);color:var(--indigo-deep);font-family:var(--display);font-weight:800;font-size:.92rem;display:flex;align-items:center;justify-content:center;box-shadow:0 4px 10px var(--lime-glow)}
+    .process-title{font-family:var(--display);font-size:1.18rem;font-weight:700;color:var(--ink);margin-bottom:8px;letter-spacing:-.015em}
+    .process-body{font-size:.9rem;color:var(--ink-soft);line-height:1.7;max-width:240px;margin:0 auto 12px}
+    .process-duration{display:inline-block;font-family:var(--mono);font-size:.74rem;font-weight:700;color:var(--lime-deep);background:var(--lime-tint);padding:4px 12px;border-radius:100px;letter-spacing:.04em}
+
+    /* ── ELIGIBILITY ────────────────────────────────────────── */
+    .elig{background:var(--paper)}
+    .elig-grid{display:grid;grid-template-columns:1fr 1fr;gap:48px;align-items:start}
+    .elig-cards{display:grid;grid-template-columns:1fr 1fr;gap:14px}
+    .elig-card{background:var(--bg);border:1px solid var(--ink-line);border-radius:14px;padding:22px}
+    .elig-card-icon{width:42px;height:42px;border-radius:12px;background:var(--lime-tint);color:var(--lime-deep);display:flex;align-items:center;justify-content:center;font-size:1.25rem;margin-bottom:12px}
+    .elig-card-title{font-family:var(--display);font-size:1rem;font-weight:700;color:var(--ink);margin-bottom:5px;letter-spacing:-.005em}
+    .elig-card-body{font-size:.84rem;color:var(--ink-soft);line-height:1.6}
+
+    /* Eligibility quick-check form */
+    .elig-form{background:linear-gradient(160deg,var(--indigo),var(--indigo-soft));color:#fff;border-radius:24px;padding:32px;box-shadow:0 24px 50px -24px var(--indigo-glow);position:relative;overflow:hidden}
+    .elig-form::before{content:'CHECK IF YOU QUALIFY';position:absolute;top:14px;right:18px;font-family:var(--mono);font-size:.65rem;font-weight:700;letter-spacing:.18em;color:rgba(132,204,22,.7)}
+    .elig-form-title{font-family:var(--display);font-size:1.25rem;font-weight:700;margin-bottom:22px;letter-spacing:-.015em;color:#fff}
+    .elig-form-row{margin-bottom:18px}
+    .elig-form-row label{display:flex;justify-content:space-between;align-items:center;font-size:.86rem;color:rgba(255,255,255,.85);margin-bottom:8px;font-weight:500}
+    .elig-form-row label b{font-family:var(--mono);color:#fff;font-weight:700;background:rgba(132,204,22,.18);padding:3px 9px;border-radius:6px;font-size:.85rem}
+    .elig-result{margin-top:22px;padding:18px;background:rgba(132,204,22,.14);border-left:3px solid var(--lime);border-radius:0 12px 12px 0}
+    .elig-result-title{font-family:var(--display);font-weight:700;color:var(--lime);font-size:.86rem;text-transform:uppercase;letter-spacing:.08em;margin-bottom:6px}
+    .elig-result-body{color:rgba(255,255,255,.92);font-size:.92rem;line-height:1.6}
+
+    /* ── DOCUMENTS (accordion) ─────────────────────────────── */
+    .docs{background:var(--bg)}
+    .docs-acc{display:grid;gap:14px}
+    .doc-group{background:var(--paper);border:1px solid var(--ink-line);border-radius:18px;overflow:hidden;transition:border-color .25s,box-shadow .25s}
+    .doc-group.open{border-color:var(--indigo);box-shadow:0 16px 32px -20px var(--indigo-glow)}
+    .doc-group-head{display:flex;align-items:center;justify-content:space-between;gap:16px;padding:22px 26px;cursor:pointer;user-select:none;background:none;width:100%;text-align:left;border:none;color:var(--ink);font-family:inherit}
+    .doc-group-head-l{display:flex;align-items:center;gap:14px}
+    .doc-group-icon{width:42px;height:42px;border-radius:12px;background:var(--cream);color:var(--indigo);display:flex;align-items:center;justify-content:center;font-size:1.2rem;flex-shrink:0}
+    .doc-group-title{font-family:var(--display);font-size:1.08rem;font-weight:700;letter-spacing:-.01em}
+    .doc-group-chev{width:32px;height:32px;border-radius:50%;background:var(--bg);display:flex;align-items:center;justify-content:center;color:var(--ink-soft);transition:transform .3s,background .25s;font-size:1rem;font-weight:600;flex-shrink:0}
+    .doc-group.open .doc-group-chev{transform:rotate(180deg);background:var(--lime);color:var(--indigo-deep)}
+    .doc-group-body{max-height:0;overflow:hidden;transition:max-height .35s ease;padding:0 26px}
+    .doc-group.open .doc-group-body{max-height:600px;padding-bottom:24px}
+    .doc-items{list-style:none;display:flex;flex-direction:column;gap:10px;padding-top:6px}
+    .doc-items li{display:flex;align-items:flex-start;gap:10px;font-size:.93rem;color:var(--ink-soft);line-height:1.55}
+    .doc-items li::before{content:'';width:18px;height:18px;border-radius:5px;background:var(--lime);color:var(--indigo-deep);display:flex;align-items:center;justify-content:center;font-size:.74rem;font-weight:800;flex-shrink:0;margin-top:3px}
+    .doc-items li::before{content:'✓';font-family:var(--display)}
+
+    /* ── WHY ────────────────────────────────────────────────── */
+    .why{background:var(--paper)}
+    .why-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(290px,1fr));gap:20px}
+    .why-card{background:var(--paper);border:1px solid var(--ink-line);border-radius:18px;padding:28px;display:flex;flex-direction:column;gap:12px;transition:transform .25s,box-shadow .25s,border-color .25s}
+    .why-card:hover{transform:translateY(-3px);border-color:var(--lime);box-shadow:0 16px 32px -20px var(--lime-glow)}
+    .why-icon{width:48px;height:48px;border-radius:12px;background:var(--lime);color:var(--indigo-deep);display:flex;align-items:center;justify-content:center;font-size:1.35rem;font-weight:700;box-shadow:0 8px 18px var(--lime-glow)}
+    .why-title{font-family:var(--display);font-size:1.1rem;font-weight:700;color:var(--ink);letter-spacing:-.01em}
+    .why-body{font-size:.9rem;color:var(--ink-soft);line-height:1.7}
+
+    /* ── TESTIMONIALS ──────────────────────────────────────── */
+    .testi{background:var(--bg)}
+    .testi-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(300px,1fr));gap:22px}
+    .testi-card{background:var(--paper);border:1px solid var(--ink-line);border-radius:20px;padding:30px;display:flex;flex-direction:column;transition:transform .25s,box-shadow .25s;position:relative}
+    .testi-card::before{content:'\201C';position:absolute;top:14px;right:24px;font-family:var(--display);font-size:5rem;font-weight:800;color:var(--lime-tint);line-height:1}
+    .testi-card:hover{transform:translateY(-3px);box-shadow:0 18px 36px -22px rgba(15,23,42,.14)}
+    .testi-product{font-family:var(--mono);font-size:.72rem;font-weight:700;color:var(--indigo);background:var(--indigo-tint);padding:5px 10px;border-radius:5px;letter-spacing:.04em;display:inline-block;margin-bottom:14px;text-transform:uppercase}
+    .testi-quote{font-size:.98rem;color:var(--ink);line-height:1.7;margin-bottom:22px;flex:1;position:relative;z-index:1}
+    .testi-author{display:flex;align-items:center;gap:12px;border-top:1px dashed var(--ink-line-md);padding-top:18px}
+    .testi-avatar{width:44px;height:44px;border-radius:50%;background:linear-gradient(135deg,var(--indigo),var(--indigo-soft));color:var(--lime);display:flex;align-items:center;justify-content:center;font-family:var(--display);font-weight:800;font-size:.92rem;flex-shrink:0}
+    .testi-name{display:block;font-weight:700;color:var(--ink);font-size:.94rem}
+    .testi-role{display:block;font-size:.82rem;color:var(--ink-mute);margin-top:2px}
+
+    /* ── DISCLOSURES ───────────────────────────────────────── */
+    .disc{background:var(--cream);border-top:1px solid var(--cream-deep)}
+    .disc-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(290px,1fr));gap:16px}
+    .disc-card{background:var(--paper);border:1px solid rgba(15,23,42,.1);border-radius:16px;padding:22px;display:flex;gap:14px;align-items:flex-start}
+    .disc-icon{width:38px;height:38px;border-radius:50%;background:var(--lime);color:var(--indigo-deep);display:flex;align-items:center;justify-content:center;font-size:1.05rem;font-weight:800;flex-shrink:0}
+    .disc-title{font-family:var(--display);font-size:1rem;font-weight:700;color:var(--ink);margin-bottom:5px;letter-spacing:-.005em}
+    .disc-body{font-size:.86rem;color:var(--ink-soft);line-height:1.6}
+
+    /* ── GRIEVANCE ─────────────────────────────────────────── */
+    .grievance{background:var(--bg)}
+    .gv-card{background:var(--paper);border:1px solid var(--ink-line-md);border-radius:24px;padding:48px;box-shadow:0 18px 48px -24px rgba(15,23,42,.1)}
+    .gv-grid{display:grid;grid-template-columns:1fr 1.2fr;gap:48px;align-items:start}
+    .gv-officer{background:linear-gradient(160deg,var(--indigo),var(--indigo-deep));color:#fff;border-radius:18px;padding:32px;position:sticky;top:100px}
+    .gv-officer-eyebrow{font-family:var(--mono);font-size:.74rem;font-weight:600;color:var(--lime);margin-bottom:8px;text-transform:uppercase;letter-spacing:.06em}
+    .gv-officer-name{font-family:var(--display);font-size:1.5rem;font-weight:700;margin-bottom:4px;letter-spacing:-.015em}
+    .gv-officer-role{color:rgba(255,255,255,.75);font-size:.92rem;margin-bottom:24px}
+    .gv-info{display:grid;gap:14px;padding-top:20px;border-top:1px dashed rgba(255,255,255,.18)}
+    .gv-info-row{display:grid;grid-template-columns:74px 1fr;gap:12px;font-size:.86rem}
+    .gv-info-key{font-family:var(--mono);color:rgba(255,255,255,.55);font-weight:500;text-transform:uppercase;letter-spacing:.05em;font-size:.7rem;padding-top:2px}
+    .gv-info-val{color:#fff;line-height:1.55;word-break:break-word}
+    .gv-escalation{display:flex;flex-direction:column;gap:14px}
+    .gv-step{background:var(--paper);border:1px solid var(--ink-line);border-left:4px solid var(--lime);border-radius:14px;padding:20px 22px}
+    .gv-step-head{display:flex;align-items:baseline;justify-content:space-between;gap:10px;flex-wrap:wrap;margin-bottom:8px}
+    .gv-level{font-family:var(--display);font-size:1rem;font-weight:700;color:var(--indigo);letter-spacing:-.005em}
+    .gv-tat{font-family:var(--mono);font-size:.72rem;font-weight:700;color:var(--lime-deep);background:var(--lime-tint);padding:3px 9px;border-radius:5px;letter-spacing:.04em}
+    .gv-step-body{font-size:.91rem;color:var(--ink-soft);line-height:1.7;margin-bottom:8px}
+    .gv-step-contact{font-size:.84rem;font-weight:500;font-family:var(--mono);background:var(--indigo-tint);padding:6px 10px;border-radius:6px;display:inline-block;color:var(--indigo)}
+
+    /* ── CTA BAND ──────────────────────────────────────────── */
+    .cta-band{background:linear-gradient(135deg,var(--indigo) 0%,var(--indigo-deep) 100%);color:#fff;padding:88px 0;position:relative;overflow:hidden}
+    .cta-band::before{content:'';position:absolute;right:-220px;top:-200px;width:560px;height:560px;border-radius:50%;background:radial-gradient(circle,var(--lime-tint) 0%,transparent 70%)}
+    .cta-band::after{content:'';position:absolute;left:-180px;bottom:-160px;width:420px;height:420px;border-radius:50%;background:radial-gradient(circle,rgba(254,243,199,.16) 0%,transparent 70%)}
+    .cta-inner{display:grid;grid-template-columns:1.4fr 1fr;gap:32px;align-items:center;position:relative}
+    .cta-title{font-family:var(--display);font-size:clamp(2rem,3.3vw,2.8rem);font-weight:800;line-height:1.15;margin-bottom:16px;letter-spacing:-.025em;color:#fff}
+    .cta-sub{color:rgba(255,255,255,.85);font-size:1.02rem;line-height:1.7}
+    .cta-actions{text-align:right;display:flex;flex-direction:column;align-items:flex-end;gap:10px}
+    .cta-note{font-size:.78rem;color:rgba(255,255,255,.6)}
+    .cta-disclaim{font-size:.74rem;color:rgba(255,255,255,.58);margin-top:24px;font-style:italic;line-height:1.7;border-top:1px dashed rgba(255,255,255,.18);padding-top:22px}
+
+    /* ── CONTACT ───────────────────────────────────────────── */
+    .contact{background:var(--bg);border-top:1px solid var(--ink-line)}
+    .contact-grid{display:grid;grid-template-columns:1fr 1.2fr;gap:60px;align-items:start}
+    .contact-info{margin-top:28px;padding-top:22px;border-top:1px dashed var(--ink-line-md);display:grid;gap:12px;font-size:.95rem;color:var(--ink-soft)}
+    .contact-info b{color:var(--ink);font-weight:700}
+    .form-card{background:var(--paper);border:1px solid var(--ink-line);border-radius:20px;padding:36px;box-shadow:0 18px 44px -22px rgba(15,23,42,.1)}
+    .fg{display:flex;flex-direction:column;gap:6px;margin-bottom:18px}
+    .fg label{font-size:.84rem;font-weight:600;color:var(--ink)}
+    .fg input,.fg select,.fg textarea{padding:14px 16px;border:1.5px solid var(--ink-line-md);border-radius:12px;background:var(--paper);font-family:inherit;font-size:.95rem;color:var(--ink);outline:none;transition:border-color .2s;min-height:48px}
+    .fg input:focus,.fg select:focus,.fg textarea:focus{border-color:var(--indigo)}
+    .fg select option{background:#fff;color:var(--ink)}
+    .fg-row{display:grid;grid-template-columns:1fr 1fr;gap:12px}
+    .form-submit{width:100%;background:var(--lime);color:var(--indigo-deep);padding:16px;border-radius:14px;font-size:.98rem;font-weight:800;transition:background .2s,transform .15s;box-shadow:0 12px 28px var(--lime-glow);min-height:54px;font-family:var(--display);letter-spacing:-.005em}
+    .form-submit:hover{background:var(--lime-deep);color:#fff;transform:translateY(-1px)}
+    .form-disclaim{font-size:.78rem;color:var(--ink-mute);margin-top:12px;line-height:1.6}
+
+    /* ── STICKY MOBILE CTA BAR ─────────────────────────────── */
+    .mobile-cta{display:none}
+
+    /* ── FOOTER ────────────────────────────────────────────── */
+    .footer{background:var(--indigo-deep);color:rgba(255,255,255,.65);padding:64px 0 0}
+    .footer-grid{display:grid;grid-template-columns:1.4fr 1fr 1fr 1fr;gap:44px;margin-bottom:44px}
+    .f-brand{font-family:var(--display);color:#fff;font-size:1.45rem;font-weight:800;margin-bottom:8px;letter-spacing:-.025em}
+    .f-tag{font-size:.86rem;color:rgba(255,255,255,.5);max-width:300px;line-height:1.7;margin-bottom:14px}
+    .f-reg{font-family:var(--mono);font-size:.76rem;font-weight:600;color:var(--lime);margin-bottom:6px;letter-spacing:.02em}
+    .f-cert-row{display:flex;flex-wrap:wrap;gap:8px;margin-top:10px}
+    .f-cert{font-family:var(--mono);font-size:.7rem;font-weight:600;color:#fff;background:rgba(132,204,22,.14);border:1px solid rgba(132,204,22,.3);padding:6px 11px;border-radius:5px}
+    .f-col-title{font-family:var(--display);font-size:.95rem;font-weight:700;color:#fff;margin-bottom:16px;letter-spacing:-.005em}
+    .f-links{list-style:none;display:flex;flex-direction:column;gap:10px}
+    .f-links a{color:rgba(255,255,255,.55);font-size:.86rem;transition:color .2s}
+    .f-links a:hover{color:var(--lime)}
+    .footer-disclaim{padding:24px 0;border-top:1px solid rgba(255,255,255,.08);font-size:.76rem;color:rgba(255,255,255,.5);line-height:1.85;font-style:italic}
+    .footer-bottom{border-top:1px solid rgba(255,255,255,.08);padding:20px 0;display:flex;justify-content:space-between;align-items:center;flex-wrap:wrap;gap:16px;font-size:.78rem;color:rgba(255,255,255,.42)}
+
+    /* ── RESPONSIVE — tablet ────────────────────────────────── */
+    @media(max-width:980px){
+      .hero-grid,.elig-grid,.gv-grid,.cta-inner,.contact-grid{grid-template-columns:1fr;gap:42px}
+      .gv-officer{position:static}
+      .process-grid{grid-template-columns:repeat(2,1fr)}
+      .process-grid::before{display:none}
+      .trust-strip-grid{grid-template-columns:repeat(2,1fr);gap:20px}
+      .footer-grid{grid-template-columns:1fr 1fr;gap:32px}
+      .cta-actions{text-align:left;align-items:flex-start}
+      .elig-cards{grid-template-columns:1fr 1fr}
+    }
+
+    /* ── RESPONSIVE — mobile (the heart of this template) ──── */
+    @media(max-width:640px){
+      .container{padding:0 18px}
+      body{padding-bottom:84px}  /* room for sticky CTA */
+
+      /* Nav */
+      .nav-inner{padding:12px 0}
+      .nav-links li:not(:last-child){display:none}
+      .brand{font-size:1rem;gap:9px}
+      .brand-mark{width:32px;height:32px;font-size:1rem}
+      .nav-cta{padding:8px 14px;font-size:.78rem}
+      .topbar{font-size:.66rem;padding:6px 0}
+      .topbar-inner{flex-direction:column;gap:5px;align-items:flex-start;padding:0 18px}
+      .topbar-info{gap:6px 12px;font-size:.66rem}
+
+      /* Hero */
+      .hero{padding:36px 0 56px}
+      .hero-title{font-size:2.1rem;line-height:1.07}
+      .hero-sub{font-size:.95rem;line-height:1.65;margin-bottom:22px}
+      .hero-actions{display:flex;flex-direction:column;gap:10px;width:100%}
+      .hero-actions .btn{width:100%;justify-content:center}
+      .hero-nofee{font-size:.82rem;padding:10px 12px}
+      .hero-nofee-ic{width:30px;height:30px;font-size:.9rem}
+      .hero-eyebrow{font-size:.7rem;padding:7px 13px}
+
+      /* Calc card — full width, simplified */
+      .calc-card{padding:24px 22px;border-radius:20px}
+      .calc-result-emi{font-size:2.4rem;flex-wrap:wrap}
+      .calc-result-summary{font-size:.78rem;gap:4px}
+
+      /* Trust strip */
+      .trust-strip{padding:22px 0}
+      .trust-strip-grid{grid-template-columns:repeat(2,1fr);gap:16px}
+      .trust-stat-v{font-size:1.45rem}
+      .trust-stat-l{font-size:.74rem;margin-top:4px}
+
+      /* Sections */
+      .section-pad{padding:60px 0}
+      .section-head{margin-bottom:32px}
+      .section-title{font-size:1.75rem}
+      .section-body{font-size:.94rem;line-height:1.7}
+      .section-eyebrow{font-size:.66rem}
+
+      /* Loan cards — single column, compact */
+      .loans-grid{grid-template-columns:1fr;gap:14px}
+      .loan-card{padding:22px 20px;min-height:0}
+      .loan-icon{width:48px;height:48px;font-size:1.35rem;border-radius:12px}
+      .loan-name{font-size:1.06rem}
+      .loan-body{font-size:.86rem;margin-bottom:12px}
+
+      /* Lender grid — 2 cols on mobile */
+      .lenders-grid{grid-template-columns:1fr 1fr;gap:10px}
+      .lender-card{padding:14px 12px;gap:10px}
+      .lender-mono{width:38px;height:38px;font-size:1.1rem}
+      .lender-name{font-size:.85rem;line-height:1.25}
+      .lender-meta{font-size:.66rem;gap:6px}
+      .lender-type{font-size:.6rem;padding:1px 6px}
+
+      /* Comparison: hide table, show swipeable cards */
+      .comp-table{display:none}
+      .comp-foot{display:none}
+      .comp-head-note{display:none}
+      .comp-cards{display:flex;gap:12px;overflow-x:auto;-webkit-overflow-scrolling:touch;scroll-snap-type:x mandatory;padding:20px 18px 22px;background:var(--bg)}
+      .comp-cards::-webkit-scrollbar{display:none}
+      .comp-cards{scrollbar-width:none}
+      .comp-head{padding:18px 22px;font-size:.95rem}
+
+      /* Process — single column */
+      .process-grid{grid-template-columns:1fr;gap:32px}
+      .process-icon{width:80px;height:80px;font-size:1.65rem;margin-bottom:16px}
+      .process-num{width:28px;height:28px;font-size:.8rem;top:-6px;right:-6px}
+
+      /* Eligibility — single column, cards full width */
+      .elig-cards{grid-template-columns:1fr;gap:10px}
+      .elig-card{padding:18px}
+      .elig-form{padding:24px 20px}
+      .elig-form-title{font-size:1.1rem;margin-bottom:18px}
+
+      /* Documents */
+      .doc-group-head{padding:18px 20px}
+      .doc-group-icon{width:38px;height:38px;font-size:1.08rem}
+      .doc-group-title{font-size:1rem}
+      .doc-group-body{padding:0 20px}
+      .doc-group.open .doc-group-body{padding-bottom:20px}
+      .doc-items li{font-size:.88rem}
+
+      /* Why */
+      .why-grid{grid-template-columns:1fr;gap:12px}
+      .why-card{padding:22px 20px;flex-direction:row;align-items:flex-start;gap:14px}
+      .why-icon{margin-bottom:0;width:42px;height:42px;font-size:1.15rem;flex-shrink:0}
+      .why-title{font-size:1rem}
+      .why-body{font-size:.86rem}
+
+      /* Testi */
+      .testi-grid{grid-template-columns:1fr;gap:14px}
+      .testi-card{padding:24px 20px}
+      .testi-quote{font-size:.92rem}
+
+      /* Disclosures */
+      .disc-grid{grid-template-columns:1fr;gap:12px}
+      .disc-card{padding:18px}
+
+      /* Grievance */
+      .gv-card{padding:24px 18px;border-radius:18px}
+      .gv-officer{padding:24px 22px;border-radius:14px}
+      .gv-step{padding:16px 18px}
+
+      /* CTA + contact */
+      .cta-band{padding:60px 0}
+      .cta-title{font-size:1.65rem}
+      .cta-sub{font-size:.92rem}
+      .form-card{padding:24px 20px}
+      .fg-row{grid-template-columns:1fr}
+
+      /* Footer */
+      .footer-grid{grid-template-columns:1fr}
+      .footer-bottom{flex-direction:column;align-items:flex-start;gap:10px}
+
+      /* STICKY MOBILE CTA — the killer mobile feature */
+      .mobile-cta{display:flex;position:fixed;bottom:0;left:0;right:0;background:var(--paper);border-top:1px solid var(--ink-line);padding:10px 16px calc(10px + env(safe-area-inset-bottom));gap:8px;z-index:99;box-shadow:0 -8px 24px -8px rgba(15,23,42,.16);align-items:stretch}
+      .mobile-cta .btn{flex:1;padding:13px 14px;font-size:.88rem;min-height:48px;border-radius:12px;gap:6px}
+      .mobile-cta-wa{flex:0 0 48px;border-radius:12px;background:#25d366;color:#fff;display:flex;align-items:center;justify-content:center;font-size:1.4rem;box-shadow:0 6px 14px rgba(37,211,102,.4)}
+    }
+  </style>
+</head>
+<body>
+
+<div class="topbar">
+  <div class="topbar-inner">
+    <div class="topbar-info">
+      <span>CIN: <b><%= esc(dsaCinV) %></b></span>
+      <span>GSTIN: <b><%= esc(dsaGstV) %></b></span>
+    </div>
+    <div class="topbar-badge"><%= esc(noFeeBadgeV) %></div>
+  </div>
+</div>
+
+<nav class="nav">
+  <div class="container nav-inner">
+    <a href="#" class="brand">
+      <span class="brand-mark"><%= bn.charAt(0).toUpperCase() %></span>
+      <span><%= bn %></span>
+    </a>
+    <ul class="nav-links">
+      <li><a href="#loans">Loans</a></li>
+      <li><a href="#lenders">Lenders</a></li>
+      <li><a href="#comp">Rates</a></li>
+      <li><a href="#elig">Eligibility</a></li>
+      <li><a href="#contact" class="nav-cta"><%= esc(heroCtaPrimaryV) %></a></li>
+    </ul>
+  </div>
+</nav>
+
+<section class="hero">
+  <div class="container hero-grid">
+    <div class="reveal">
+      <div class="hero-eyebrow"><%= esc(heroEyebrowV) %></div>
+      <h1 class="hero-title"><%= esc(heroHeadlineLeadV) %> <em><%= esc(heroHeadlineEmphV) %></em></h1>
+      <p class="hero-sub"><%= esc(heroSubV) %></p>
+      <div class="hero-actions">
+        <a href="#contact" class="btn btn-primary"><%= esc(heroCtaPrimaryV) %> →</a>
+        <a href="#calc" class="btn btn-ghost"><%= esc(heroCtaSecondaryV) %></a>
+      </div>
+      <div class="hero-nofee">
+        <span class="hero-nofee-ic">₹0</span>
+        <span><b>You pay us nothing.</b> Lender pays our commission only on disbursal.</span>
+      </div>
+    </div>
+
+    <div class="reveal" id="calc">
+      <div class="calc-card">
+        <div class="calc-result">
+          <div class="calc-result-label">Your monthly EMI</div>
+          <div class="calc-result-emi" id="calcEmi"><%= fmtRupee(initialEmiV) %><small>/ month</small></div>
+          <div class="calc-result-summary">
+            <div>Total interest <b id="calcInterest"><%= fmtRupee(initialInterestV) %></b></div>
+            <div>Total payable <b id="calcTotal"><%= fmtRupee(initialTotalV) %></b></div>
+          </div>
+        </div>
+        <div class="calc-sliders">
+          <div class="calc-row">
+            <label>Loan amount <b id="calcAmountVal"><%= fmtRupee(calcDefaultAmountV) %></b></label>
+            <input type="range" min="50000" max="10000000" step="10000" value="<%= calcDefaultAmountV %>" class="calc-slider" id="calcAmount">
+            <div class="calc-bounds"><span>₹50K</span><span>₹1Cr</span></div>
+          </div>
+          <div class="calc-row">
+            <label>Tenure <b id="calcTenureVal"><%= calcDefaultTenureV %> months</b></label>
+            <input type="range" min="6" max="240" step="6" value="<%= calcDefaultTenureV %>" class="calc-slider" id="calcTenure">
+            <div class="calc-bounds"><span>6 mo</span><span>240 mo</span></div>
+          </div>
+          <div class="calc-row">
+            <label>Interest rate <b id="calcRateVal"><%= calcDefaultRateV.toFixed(2) %>% p.a.</b></label>
+            <input type="range" min="6" max="24" step="0.05" value="<%= calcDefaultRateV %>" class="calc-slider" id="calcRate">
+            <div class="calc-bounds"><span>6%</span><span>24%</span></div>
+          </div>
+        </div>
+        <div class="calc-foot">Indicative only · Your actual rate depends on credit profile, lender policy, and product.</div>
+      </div>
+      <!-- Lender ribbon (scrollable on mobile) -->
+      <div class="lender-ribbon">
+        <% lendersList.slice(0,8).forEach(function(l){ %>
+          <a href="#lenders" class="lender-chip"><%= esc(l.name) %><b><%= esc(l.rateFrom) %></b></a>
+        <% }); %>
+      </div>
+    </div>
+  </div>
+</section>
+
+<div class="trust-strip">
+  <div class="container">
+    <div class="trust-strip-grid">
+      <% trustStatsList.forEach(function(s){ %>
+        <div>
+          <div class="trust-stat-v"><%= esc(s.value) %></div>
+          <div class="trust-stat-l"><%= esc(s.label) %></div>
+        </div>
+      <% }); %>
+    </div>
+  </div>
+</div>
+
+<section id="loans" class="loans section-pad">
+  <div class="container">
+    <div class="section-head reveal">
+      <div class="section-eyebrow"><%= esc(loanTypesLabelV) %></div>
+      <h2 class="section-title"><%= esc(loanTypesHeadlineV) %></h2>
+      <p class="section-body"><%= esc(loanTypesBodyV) %></p>
+    </div>
+    <div class="loans-grid">
+      <% loanTypesList.forEach(function(l){ var col=loanColor(l.color); %>
+        <article class="loan-card reveal">
+          <div class="loan-head">
+            <div class="loan-icon" style="background:<%= col.bg %>;color:<%= col.text %>;border:1px solid <%= col.border %>"><%= esc(l.icon||'💸') %></div>
+            <div style="flex:1;min-width:0">
+              <div class="loan-name"><%= esc(l.name) %></div>
+              <div class="loan-rate">From <%= esc(l.rate) %> <small>p.a.</small></div>
+            </div>
+          </div>
+          <p class="loan-body"><%= esc(l.body) %></p>
+          <div class="loan-meta">
+            <div class="loan-meta-row"><span>Amount</span><b><%= esc(l.amount) %></b></div>
+            <div class="loan-meta-row"><span>TAT</span><b><%= esc(l.tat) %></b></div>
+          </div>
+        </article>
+      <% }); %>
+    </div>
+  </div>
+</section>
+
+<section id="lenders" class="lenders section-pad">
+  <div class="container">
+    <div class="section-head reveal">
+      <div class="section-eyebrow"><%= esc(lendersListLabelV) %></div>
+      <h2 class="section-title"><%= esc(lendersListHeadlineV) %></h2>
+      <p class="section-body"><%= esc(lendersListBodyV) %></p>
+    </div>
+    <div class="lenders-grid">
+      <% lendersList.forEach(function(l){ %>
+        <article class="lender-card reveal">
+          <div class="lender-mono"><%= esc(l.monogram || (l.name||'?').charAt(0).toUpperCase()) %></div>
+          <div style="flex:1;min-width:0">
+            <div class="lender-name"><%= esc(l.name) %></div>
+            <div class="lender-meta">
+              <span class="lender-type"><%= esc(l.type) %></span>
+              <span><%= esc(l.loanTypes) %></span>
+            </div>
+            <div class="lender-rate">From <%= esc(l.rateFrom) %></div>
+          </div>
+        </article>
+      <% }); %>
+    </div>
+  </div>
+</section>
+
+<section id="comp" class="comp section-pad">
+  <div class="container">
+    <div class="section-head reveal">
+      <div class="section-eyebrow"><%= esc(comparisonLabelV) %></div>
+      <h2 class="section-title"><%= esc(comparisonHeadlineV) %></h2>
+      <p class="section-body"><%= esc(comparisonBodyV) %></p>
+    </div>
+    <div class="comp-card reveal">
+      <div class="comp-head">
+        <div class="comp-head-title">Rate sheet · By loan type</div>
+        <div class="comp-head-note">Refreshed monthly · Indicative</div>
+      </div>
+      <!-- Desktop: table -->
+      <table class="comp-table">
+        <thead>
+          <tr><th>Loan</th><th>Best rate</th><th>Median</th><th>TAT</th><th>Range</th></tr>
+        </thead>
+        <tbody>
+          <% comparisonRowsList.forEach(function(r){ %>
+            <tr>
+              <td class="comp-loan"><%= esc(r.loanType) %></td>
+              <td class="comp-rate"><%= esc(r.best) %><small><%= esc(r.bestBy) %></small></td>
+              <td class="comp-median"><%= esc(r.median) %></td>
+              <td><span class="comp-tat"><%= esc(r.tat) %></span></td>
+              <td class="comp-amount"><%= esc(r.minAmount) %> – <%= esc(r.maxAmount) %></td>
+            </tr>
+          <% }); %>
+        </tbody>
+      </table>
+      <!-- Mobile: swipeable cards -->
+      <div class="comp-cards">
+        <% comparisonRowsList.forEach(function(r){ %>
+          <div class="comp-mobile-card">
+            <div class="cmc-loan"><%= esc(r.loanType) %></div>
+            <div class="cmc-row">
+              <span class="cmc-key">Best</span>
+              <span class="cmc-val rate"><%= esc(r.best) %><br><small style="font-family:var(--sans);font-size:.7rem;color:var(--ink-mute);font-weight:500"><%= esc(r.bestBy) %></small></span>
+              <span class="cmc-key">Median</span>
+              <span class="cmc-val" style="font-family:var(--mono)"><%= esc(r.median) %></span>
+              <span class="cmc-key">TAT</span>
+              <span class="cmc-val tat"><%= esc(r.tat) %></span>
+              <span class="cmc-key">Range</span>
+              <span class="cmc-val" style="font-family:var(--mono);font-size:.78rem"><%= esc(r.minAmount) %> – <%= esc(r.maxAmount) %></span>
+            </div>
+          </div>
+        <% }); %>
+      </div>
+      <div class="comp-foot">Best/median rates indicated as starting rates by partner lenders. Your actual rate is determined by the lender based on credit profile and policies in effect at the time of application.</div>
+    </div>
+  </div>
+</section>
+
+<section class="process section-pad">
+  <div class="container">
+    <div class="section-head center reveal">
+      <div class="section-eyebrow"><%= esc(processLabelV) %></div>
+      <h2 class="section-title"><%= esc(processHeadlineV) %></h2>
+    </div>
+    <div class="process-grid">
+      <% processStepsList.forEach(function(s,i){ var n=String(i+1).padStart(2,'0'); %>
+        <div class="process-step reveal">
+          <div class="process-icon"><%= esc(s.icon||'●') %><span class="process-num"><%= n %></span></div>
+          <h3 class="process-title"><%= esc(s.title) %></h3>
+          <p class="process-body"><%= esc(s.body) %></p>
+          <%if(s.duration){%><span class="process-duration"><%= esc(s.duration) %></span><%}%>
+        </div>
+      <% }); %>
+    </div>
+  </div>
+</section>
+
+<section id="elig" class="elig section-pad">
+  <div class="container">
+    <div class="section-head reveal">
+      <div class="section-eyebrow"><%= esc(eligibilityLabelV) %></div>
+      <h2 class="section-title"><%= esc(eligibilityHeadlineV) %></h2>
+      <p class="section-body"><%= esc(eligibilityBodyV) %></p>
+    </div>
+    <div class="elig-grid">
+      <div class="elig-cards reveal">
+        <% eligibilityCriteriaList.forEach(function(e){ %>
+          <article class="elig-card">
+            <div class="elig-card-icon"><%= esc(e.icon||'✓') %></div>
+            <h3 class="elig-card-title"><%= esc(e.title) %></h3>
+            <p class="elig-card-body"><%= esc(e.body) %></p>
+          </article>
+        <% }); %>
+      </div>
+      <!-- Quick check form -->
+      <div class="elig-form reveal">
+        <div class="elig-form-title">Quick eligibility check</div>
+        <div class="elig-form-row">
+          <label>Monthly income <b id="eligIncomeVal">₹50,000</b></label>
+          <input type="range" min="15000" max="500000" step="5000" value="50000" class="calc-slider" id="eligIncome">
+          <div class="calc-bounds"><span>₹15K</span><span>₹5L</span></div>
+        </div>
+        <div class="elig-form-row">
+          <label>Loan needed <b id="eligLoanVal">₹5,00,000</b></label>
+          <input type="range" min="50000" max="10000000" step="10000" value="500000" class="calc-slider" id="eligLoan">
+          <div class="calc-bounds"><span>₹50K</span><span>₹1Cr</span></div>
+        </div>
+        <div class="elig-form-row">
+          <label>CIBIL score <b id="eligScoreVal">750</b></label>
+          <input type="range" min="500" max="900" step="5" value="750" class="calc-slider" id="eligScore">
+          <div class="calc-bounds"><span>500</span><span>900</span></div>
+        </div>
+        <div class="elig-result" id="eligResult">
+          <div class="elig-result-title">Likely eligible</div>
+          <div class="elig-result-body" id="eligResultBody">Based on your inputs, most of our partner lenders should consider your application. Apply to see firm offers.</div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section class="docs section-pad">
+  <div class="container">
+    <div class="section-head reveal">
+      <div class="section-eyebrow"><%= esc(documentsLabelV) %></div>
+      <h2 class="section-title"><%= esc(documentsHeadlineV) %></h2>
+      <p class="section-body"><%= esc(documentsBodyV) %></p>
+    </div>
+    <div class="docs-acc reveal">
+      <% documentGroupsList.forEach(function(g,i){ var items = Array.isArray(g.items)?g.items:[]; %>
+        <div class="doc-group <%= i===0 ? 'open' : '' %>">
+          <button type="button" class="doc-group-head" aria-expanded="<%= i===0 ? 'true' : 'false' %>">
+            <div class="doc-group-head-l">
+              <span class="doc-group-icon"><%= esc(g.icon||'📂') %></span>
+              <span class="doc-group-title"><%= esc(g.title) %></span>
+            </div>
+            <span class="doc-group-chev">▾</span>
+          </button>
+          <div class="doc-group-body">
+            <ul class="doc-items">
+              <% items.forEach(function(it){ %><li><span><%= esc(it.label||it) %></span></li><% }); %>
+            </ul>
+          </div>
+        </div>
+      <% }); %>
+    </div>
+  </div>
+</section>
+
+<section class="why section-pad">
+  <div class="container">
+    <div class="section-head reveal">
+      <div class="section-eyebrow"><%= esc(whyChooseLabelV) %></div>
+      <h2 class="section-title"><%= esc(whyChooseHeadlineV) %></h2>
+      <p class="section-body"><%= esc(whyChooseBodyV) %></p>
+    </div>
+    <div class="why-grid">
+      <% whyChoosePointsList.forEach(function(w){ %>
+        <article class="why-card reveal">
+          <div class="why-icon"><%= esc(w.icon||'★') %></div>
+          <div>
+            <h3 class="why-title"><%= esc(w.title) %></h3>
+            <p class="why-body"><%= esc(w.body) %></p>
+          </div>
+        </article>
+      <% }); %>
+    </div>
+  </div>
+</section>
+
+<section class="testi section-pad">
+  <div class="container">
+    <div class="section-head center reveal">
+      <div class="section-eyebrow">Borrower stories</div>
+      <h2 class="section-title">Real loans, <em>real outcomes.</em></h2>
+    </div>
+    <div class="testi-grid">
+      <% testimonialsList.forEach(function(t){ %>
+        <article class="testi-card reveal">
+          <%if(t.productUsed){%><div class="testi-product"><%= esc(t.productUsed) %></div><%}%>
+          <p class="testi-quote"><%= esc(t.quote) %></p>
+          <div class="testi-author">
+            <div class="testi-avatar"><%= initialsOf(t.name) %></div>
+            <div><span class="testi-name"><%= esc(t.name) %></span><%if(t.role){%><span class="testi-role"><%= esc(t.role) %></span><%}%></div>
+          </div>
+        </article>
+      <% }); %>
+    </div>
+  </div>
+</section>
+
+<section class="disc section-pad">
+  <div class="container">
+    <div class="section-head reveal">
+      <div class="section-eyebrow"><%= esc(disclosuresLabelV) %></div>
+      <h2 class="section-title"><%= esc(disclosuresHeadlineV) %></h2>
+      <p class="section-body"><%= esc(disclosuresBodyV) %></p>
+    </div>
+    <div class="disc-grid">
+      <% disclosuresList.forEach(function(d){ %>
+        <article class="disc-card reveal">
+          <div class="disc-icon"><%= esc(d.icon||'!') %></div>
+          <div><div class="disc-title"><%= esc(d.title) %></div><div class="disc-body"><%= esc(d.body) %></div></div>
+        </article>
+      <% }); %>
+    </div>
+  </div>
+</section>
+
+<section id="grievance" class="grievance section-pad">
+  <div class="container">
+    <div class="section-head reveal">
+      <div class="section-eyebrow"><%= esc(grievanceLabelV) %></div>
+      <h2 class="section-title"><%= esc(grievanceHeadlineV) %></h2>
+      <p class="section-body"><%= esc(grievanceBodyV) %></p>
+    </div>
+    <div class="gv-card reveal">
+      <div class="gv-grid">
+        <aside class="gv-officer">
+          <div class="gv-officer-eyebrow">Compliance officer</div>
+          <div class="gv-officer-name"><%= esc(groNameV) %></div>
+          <div class="gv-officer-role"><%= esc(groRoleV) %></div>
+          <div class="gv-info">
+            <div class="gv-info-row"><span class="gv-info-key">Email</span><span class="gv-info-val"><%= esc(groEmailV) %></span></div>
+            <div class="gv-info-row"><span class="gv-info-key">Phone</span><span class="gv-info-val"><%= esc(groPhoneV) %></span></div>
+            <div class="gv-info-row"><span class="gv-info-key">Address</span><span class="gv-info-val"><%- esc(groAddressV).replace(/\n/g,'<br>') %></span></div>
+            <div class="gv-info-row"><span class="gv-info-key">Hours</span><span class="gv-info-val"><%= esc(groTimingsV) %></span></div>
+          </div>
+        </aside>
+        <div class="gv-escalation">
+          <% escalationLevelsList.forEach(function(e){ %>
+            <div class="gv-step">
+              <div class="gv-step-head">
+                <span class="gv-level"><%= esc(e.level) %></span>
+                <%if(e.tat){%><span class="gv-tat"><%= esc(e.tat) %></span><%}%>
+              </div>
+              <p class="gv-step-body"><%= esc(e.body) %></p>
+              <%if(e.contact){%><span class="gv-step-contact"><%= esc(e.contact) %></span><%}%>
+            </div>
+          <% }); %>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section class="cta-band">
+  <div class="container cta-inner">
+    <div class="reveal">
+      <h2 class="cta-title"><%= esc(ctaHeadlineV) %></h2>
+      <p class="cta-sub"><%= esc(ctaBodyV) %></p>
+      <p class="cta-disclaim"><%= RBI_DISC %></p>
+    </div>
+    <div class="cta-actions reveal">
+      <a href="#contact" class="btn btn-primary"><%= esc(ctaButtonV) %> →</a>
+      <%if(ctaNoteV){%><span class="cta-note"><%= esc(ctaNoteV) %></span><%}%>
+    </div>
+  </div>
+</section>
+
+<section id="contact" class="contact section-pad">
+  <div class="container contact-grid">
+    <div class="reveal">
+      <div class="section-eyebrow">Apply now</div>
+      <h2 class="section-title">Tell us once, see <em>all your offers.</em></h2>
+      <p class="section-body">One short form — we send your profile to the lenders whose products fit you. They come back with firm pre-qualified offers within hours.</p>
+      <div class="contact-info">
+        <%if(emailV){%><div><b>Email:</b> <%= esc(emailV) %></div><%}%>
+        <%if(phoneV){%><div><b>Phone:</b> <%= esc(phoneV) %></div><%}%>
+        <div><b>WhatsApp:</b> <%= esc(whatsappNumberV) %></div>
+        <%if(addressV){%><div><b>Address:</b> <%- esc(addressV).replace(/\n/g,'<br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;') %></div><%}%>
+        <%if(hoursV){%><div><b>Hours:</b> <%= esc(hoursV) %></div><%}%>
+      </div>
+    </div>
+    <div class="form-card reveal">
+      <form data-contact>
+        <div class="fg-row">
+          <div class="fg"><label>Your name</label><input type="text" placeholder="Full name" required></div>
+          <div class="fg"><label>Mobile</label><input type="tel" placeholder="+91 9XXXXXXXXX" required></div>
+        </div>
+        <div class="fg"><label>Email</label><input type="email" placeholder="you@example.com" required></div>
+        <div class="fg">
+          <label>Loan type</label>
+          <select required>
+            <option value="" disabled selected>Pick a loan</option>
+            <% loanTypesList.forEach(function(l){ %><option><%= esc(l.name) %></option><% }); %>
+          </select>
+        </div>
+        <div class="fg-row">
+          <div class="fg"><label>Amount (₹)</label><input type="text" placeholder="e.g. 500000"></div>
+          <div class="fg">
+            <label>Employment</label>
+            <select>
+              <option selected>Salaried</option>
+              <option>Self-employed (business)</option>
+              <option>Self-employed (professional)</option>
+              <option>Freelancer / Gig</option>
+              <option>Retired / Other</option>
+            </select>
+          </div>
+        </div>
+        <button type="submit" class="form-submit">Get my offers →</button>
+        <p class="form-disclaim"><%= FEE_DISC %> <%= APPROVAL_DISC %></p>
+      </form>
+    </div>
+  </div>
+</section>
+
+<footer class="footer">
+  <div class="container">
+    <div class="footer-grid">
+      <div>
+        <div class="f-brand"><%= bn %></div>
+        <p class="f-tag"><%= tagln %></p>
+        <div class="f-reg"><%= esc(dsaRbiRegV) %></div>
+        <div class="f-reg"><%= esc(dsaIbaCodeV) %></div>
+        <div class="f-reg">CIN: <%= esc(dsaCinV) %></div>
+        <div class="f-reg">GSTIN: <%= esc(dsaGstV) %></div>
+        <%if(dsaUdyamV){%><div class="f-reg"><%= esc(dsaUdyamV) %></div><%}%>
+        <div class="f-cert-row">
+          <span class="f-cert">IBA Code · DSA</span>
+          <span class="f-cert">RBI Outsourcing</span>
+          <span class="f-cert">DPDP 2023</span>
+        </div>
+      </div>
+      <div>
+        <p class="f-col-title">Loans</p>
+        <ul class="f-links">
+          <% loanTypesList.slice(0,6).forEach(function(l){ %><li><a href="#loans"><%= esc(l.name) %></a></li><% }); %>
+        </ul>
+      </div>
+      <div>
+        <p class="f-col-title">Customer</p>
+        <ul class="f-links">
+          <li><a href="#comp">Compare rates</a></li>
+          <li><a href="#elig">Eligibility</a></li>
+          <li><a href="#calc">EMI Calculator</a></li>
+          <li><a href="#grievance">Grievance redressal</a></li>
+        </ul>
+      </div>
+      <div>
+        <p class="f-col-title">Regulatory</p>
+        <ul class="f-links">
+          <li><a href="https://www.rbi.org.in" target="_blank" rel="noopener">RBI ↗</a></li>
+          <li><a href="https://sachet.rbi.org.in" target="_blank" rel="noopener">RBI Sachet ↗</a></li>
+          <li><a href="https://cms.rbi.org.in" target="_blank" rel="noopener">Banking Ombudsman ↗</a></li>
+          <li><a href="https://www.iba.org.in" target="_blank" rel="noopener">IBA ↗</a></li>
+        </ul>
+      </div>
+    </div>
+    <div class="footer-disclaim">
+      <%= RBI_DISC %> <%= FEE_DISC %> <%= APPROVAL_DISC %> <%= PROCESSING_DISC %>
+      <br>All rates, amounts, and tenures shown on this website are indicative. The final offer depends on the lender’s credit policy in effect at the time of application. We process personal data only under your authorisation, per the Digital Personal Data Protection Act 2023.
+    </div>
+    <div class="footer-bottom">
+      <span>© <%= year %> <%= bn %>. All rights reserved.</span>
+      <span>Privacy · Terms · Disclosures</span>
+    </div>
+  </div>
+</footer>
+
+<!-- Sticky mobile CTA bar -->
+<div class="mobile-cta">
+  <a href="https://wa.me/<%= esc(whatsappNumberV).replace(/[^0-9]/g,'') %>" class="mobile-cta-wa" aria-label="WhatsApp">💬</a>
+  <a href="#contact" class="btn btn-primary">Get Loan Offers →</a>
+</div>
+
+<script>
+  // Reveal animations
+  var ro=new IntersectionObserver(function(es){
+    es.forEach(function(e){if(e.isIntersecting){e.target.classList.add('visible');ro.unobserve(e.target);}});
+  },{threshold:.06,rootMargin:'0px 0px -40px 0px'});
+  document.querySelectorAll('.reveal').forEach(function(el){ro.observe(el);});
+
+  // Smooth scroll
+  document.querySelectorAll('a[href^="#"]').forEach(function(a){
+    a.addEventListener('click',function(e){
+      var t=document.querySelector(a.getAttribute('href'));
+      if(t){e.preventDefault();t.scrollIntoView({behavior:'smooth',block:'start'});}
+    });
+  });
+
+  // ── EMI Calculator ──
+  function fmtRupee(n){
+    if(!n && n!==0) return '₹0';
+    n=Math.round(n);
+    var s=n.toString();
+    if(s.length<=3) return '₹'+s;
+    var last3=s.slice(-3), rest=s.slice(0,-3);
+    return '₹'+rest.replace(/\B(?=(\d{2})+(?!\d))/g,',')+','+last3;
+  }
+  function calcEmi(p,t,r){
+    var mr=(r/100)/12;
+    if(!mr || !t) return p/t;
+    var n=p*mr*Math.pow(1+mr,t);
+    var d=Math.pow(1+mr,t)-1;
+    return d?Math.round(n/d):0;
+  }
+  function updateCalc(){
+    var p=parseFloat(document.getElementById('calcAmount').value);
+    var t=parseFloat(document.getElementById('calcTenure').value);
+    var r=parseFloat(document.getElementById('calcRate').value);
+    var emi=calcEmi(p,t,r);
+    var total=emi*t;
+    var interest=total-p;
+    document.getElementById('calcAmountVal').textContent=fmtRupee(p);
+    document.getElementById('calcTenureVal').textContent=t+' months';
+    document.getElementById('calcRateVal').textContent=r.toFixed(2)+'% p.a.';
+    document.getElementById('calcEmi').innerHTML=fmtRupee(emi)+'<small>/ month</small>';
+    document.getElementById('calcInterest').textContent=fmtRupee(interest);
+    document.getElementById('calcTotal').textContent=fmtRupee(total);
+  }
+  ['calcAmount','calcTenure','calcRate'].forEach(function(id){
+    var el=document.getElementById(id);
+    if(el) el.addEventListener('input',updateCalc);
+  });
+
+  // ── Eligibility live check ──
+  function updateElig(){
+    var income=parseInt(document.getElementById('eligIncome').value);
+    var loan=parseInt(document.getElementById('eligLoan').value);
+    var score=parseInt(document.getElementById('eligScore').value);
+    document.getElementById('eligIncomeVal').textContent=fmtRupee(income);
+    document.getElementById('eligLoanVal').textContent=fmtRupee(loan);
+    document.getElementById('eligScoreVal').textContent=score;
+    // Heuristic
+    var ratio=loan/(income*60); // loan vs 5yr income
+    var resultTitle='Likely eligible', resultBody='Based on your inputs, most of our partner lenders should consider your application. Apply to see firm offers.';
+    var resultEl=document.getElementById('eligResult');
+    if(score<650){
+      resultTitle='Limited options';
+      resultBody='A CIBIL score below 650 means most prime lenders will decline. We can route you to lenders who accept lower scores — at a higher rate.';
+      resultEl.style.borderLeftColor='#fb923c';
+      document.querySelector('.elig-result-title').style.color='#fb923c';
+    } else if(ratio>1){
+      resultTitle='Loan too large';
+      resultBody='Your requested loan exceeds the EMI burden lenders typically allow. Consider a smaller amount or a longer tenure to improve your odds.';
+      resultEl.style.borderLeftColor='#fb923c';
+      document.querySelector('.elig-result-title').style.color='#fb923c';
+    } else {
+      resultEl.style.borderLeftColor='#84cc16';
+      document.querySelector('.elig-result-title').style.color='#84cc16';
+    }
+    document.querySelector('.elig-result-title').textContent=resultTitle;
+    document.getElementById('eligResultBody').textContent=resultBody;
+  }
+  ['eligIncome','eligLoan','eligScore'].forEach(function(id){
+    var el=document.getElementById(id);
+    if(el) el.addEventListener('input',updateElig);
+  });
+
+  // ── Document accordion ──
+  document.querySelectorAll('.doc-group-head').forEach(function(h){
+    h.addEventListener('click',function(){
+      var g=h.parentElement;
+      var willOpen=!g.classList.contains('open');
+      // accordion: close others
+      document.querySelectorAll('.doc-group').forEach(function(x){
+        x.classList.remove('open');
+        var btn=x.querySelector('.doc-group-head');
+        if(btn) btn.setAttribute('aria-expanded','false');
+      });
+      if(willOpen){
+        g.classList.add('open');
+        h.setAttribute('aria-expanded','true');
+      }
+    });
+  });
+
+  // ── Contact form fake submit ──
+  var f=document.querySelector('[data-contact]');
+  if(f){f.addEventListener('submit',function(e){
+    e.preventDefault();
+    var b=f.querySelector('.form-submit');
+    b.textContent='Sending…';b.disabled=true;
+    setTimeout(function(){
+      var ok=document.createElement('div');
+      ok.style.cssText='background:rgba(132,204,22,.14);border:1px solid rgba(132,204,22,.4);color:#4d7c0f;padding:15px 18px;border-radius:12px;font-size:.93rem;margin-bottom:14px;font-weight:600;font-family:Inter,sans-serif';
+      ok.textContent='✓ Request received. We will pre-qualify you across our partner lenders and reply within a few hours.';
+      f.insertAdjacentElement('beforebegin',ok);
+      f.reset();b.textContent='Get my offers →';b.disabled=false;
+      setTimeout(function(){ok.remove();},8000);
+    },900);
+  });}
+</script>
+</body>
+</html>
