@@ -98,6 +98,14 @@ function buildDummyAccounts() {
 
 const DUMMY_USERS = buildDummyAccounts();
 
+// ─────────────────────────────────────────────────────────────────
+// In-memory user store for registrations during UAT / demo.
+// New sign-ups via /api/register land here. Lost on every server
+// restart — fine for UAT, NOT for production. Real auth (Auth0 +
+// Prisma + bcrypt) replaces this per the HANDOFF block above.
+// ─────────────────────────────────────────────────────────────────
+const REGISTERED_USERS = new Map();
+
 function generateSessionToken(email, role) {
   const payload = Buffer.from(JSON.stringify({ email, role, ts: Date.now() })).toString('base64url');
   const sig = crypto
@@ -113,7 +121,8 @@ app.post('/api/login', async (req, res) => {
     return res.status(400).json({ error: 'Email and password are required.' });
   }
   const normalEmail = String(email).toLowerCase().trim();
-  const account = DUMMY_USERS[normalEmail];
+  // Check dummy whitelist first, then the in-memory register store.
+  const account = DUMMY_USERS[normalEmail] || REGISTERED_USERS.get(normalEmail);
   if (!account || account.password !== password) {
     return res.status(401).json({ error: 'Invalid email or password.' });
   }
@@ -167,8 +176,23 @@ app.post('/api/register', (req, res) => {
   if (password.length < 8) {
     return res.status(400).json({ error: 'Password must be at least 8 characters.' });
   }
-  // TODO: save to database with hashed password (Auth0 / MySQL integration)
-  logger.info({ email }, 'User registered');
+
+  const normalEmail = email.toLowerCase().trim();
+
+  // Reject if email already taken (dummy whitelist OR previous registration)
+  if (DUMMY_USERS[normalEmail] || REGISTERED_USERS.has(normalEmail)) {
+    return res.status(409).json({ error: 'An account with this email already exists. Please log in instead.' });
+  }
+
+  // UAT in-memory store. Replace with bcrypt + Prisma user.create when wiring real auth.
+  // HANDOFF: hash the password (bcrypt.hashSync(password, 10)) before persisting.
+  REGISTERED_USERS.set(normalEmail, {
+    password,
+    isAdmin: false,
+    name: `${firstName} ${lastName}`
+  });
+
+  logger.info({ email: normalEmail }, 'User registered (in-memory)');
   res.json({ success: true, redirect: '/login?registered=true' });
 });
 
