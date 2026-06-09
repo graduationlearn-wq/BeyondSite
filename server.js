@@ -176,7 +176,7 @@ app.get('/health', async (req, res) => {
   const health = { status: 'ok', timestamp: new Date().toISOString(), checks: {} };
   try {
     const { prisma: db } = require('./src/lib/database');
-    if (db) {
+    if (db && process.env.DATABASE_URL) {
       await db.$queryRaw`SELECT 1`;
       health.checks.database = 'ok';
     } else {
@@ -375,6 +375,17 @@ const AI_PROMPTS = {
     calculators: ({biz,desc})      => `For SEBI-registered stock broker "${biz}": "${desc}". Return ONLY JSON: { "calculatorsHeadline":"<8-12 word section headline>", "calculatorsBody":"<25-35 word sub-copy>", "calculators":[{"icon":"<1 emoji>","name":"<2-3 word calculator name>","body":"<15-25 word body>"}] } with 5-6 calculators covering SIP, Lumpsum, Brokerage, Margin, FD, EMI.`,
     cta:         ({biz,desc})      => `For SEBI-registered stock broker "${biz}": "${desc}". Return ONLY JSON: { "ctaHeadline":"<8-12 word headline about opening a free demat account>", "ctaBody":"<20-30 word supporting line about Aadhaar eKYC, eSign, no charges>", "ctaButton":"<2-3 word action e.g. Open Free Account>", "ctaNote":"<short reassurance e.g. No account opening charges · SEBI Registered>" }`
   },
+  'template-19': { // Loan DSA / Direct Sales Agent (RBI Outsourcing + IBA Code)
+    hero:          ({biz,desc,tone}) => `For RBI-aligned Loan DSA "${biz}" (${tone} tone — confident, honest, mobile-first): "${desc}". Return ONLY JSON: { "heroEyebrow":"<trust pill max 14 words e.g. Empanelled with 18 banks · Zero customer fees · Loans from ₹50K>", "heroHeadlineLead":"<2-4 word line 1 e.g. One application,>", "heroHeadlineEmph":"<2-4 word accent ending with period e.g. all the offers.>", "heroSub":"<25-40 word sub about pre-qualifying across multiple lenders with one form and zero customer fees>" }`,
+    loanTypes:     ({biz,desc})      => `For Loan DSA "${biz}": "${desc}". Return ONLY JSON: { "loanTypesHeadline":"<8-12 word section headline>", "loanTypesBody":"<25-35 word sub-copy>" } — only headline and body; loan-type cards are user-filled.`,
+    lenders:       ({biz,desc})      => `For Loan DSA "${biz}": "${desc}". Return ONLY JSON: { "lendersListHeadline":"<8-12 word section headline>", "lendersListBody":"<25-35 word sub-copy about RBI-mandated lender disclosure>" } — only headline and body.`,
+    comparison:    ({biz,desc})      => `For Loan DSA "${biz}": "${desc}". Return ONLY JSON: { "comparisonHeadline":"<7-12 word headline about rate transparency>", "comparisonBody":"<25-35 word sub-copy noting indicative rates and credit-policy disclaimer>" } — only headline and body.`,
+    process:       ({biz,desc,tone}) => `For Loan DSA "${biz}" (${tone}): "${desc}". Return ONLY JSON: { "processHeadline":"<8-12 word headline e.g. How an application works here.>", "processSteps":[{"icon":"<1 emoji>","title":"<2-3 word step>","body":"<15-25 word body>","duration":"<short e.g. 5 minutes>"}] } with EXACTLY 4 steps: tell us once → pick an offer → approval & sanction → disbursal.`,
+    eligibility:   ({biz,desc})      => `For Loan DSA "${biz}": "${desc}". Return ONLY JSON: { "eligibilityHeadline":"<7-12 word section headline>", "eligibilityBody":"<25-35 word sub-copy>", "eligibilityCriteria":[{"icon":"<1 emoji>","title":"<4-8 word criterion e.g. Age 21 – 65 years>","body":"<15-22 word body>"}] } with EXACTLY 4 criteria covering age, income, credit score, and employment.`,
+    documents:     ({biz,desc})      => `For Loan DSA "${biz}": "${desc}". Return ONLY JSON: { "documentsHeadline":"<7-12 word section headline>", "documentsBody":"<30-50 word sub-copy reassuring borrowers about the document list>" } — only headline and body; groups are user-filled.`,
+    whyChoose:     ({biz,desc})      => `For Loan DSA "${biz}": "${desc}". Return ONLY JSON: { "whyChooseHeadline":"<8-12 word headline that frames DSAs as neutral guides>", "whyChooseBody":"<25-35 word sub-copy>", "whyChoosePoints":[{"icon":"<1 emoji>","title":"<2-5 word title>","body":"<20-30 word body>"}] } with EXACTLY 6 points covering zero customer fees, multiple lender shopping, paperwork help, honest assessment, data protection, IBA code of conduct.`,
+    cta:           ({biz,desc})      => `For Loan DSA "${biz}": "${desc}". Return ONLY JSON: { "ctaHeadline":"<8-14 word headline about getting offers at no customer cost>", "ctaBody":"<20-30 word supporting line>", "ctaButton":"<2-4 word action e.g. Get Loan Offers>", "ctaNote":"<short reassurance e.g. Zero customer fees · IBA Code compliant>" }`
+  },
   'template-18': { // Diagnostic Lab / Pathology (NABL + CAP + ICMR + CEA + BMW + PCPNDT)
     hero:          ({biz,desc,tone}) => `For NABL-accredited diagnostic lab "${biz}" (${tone} tone — clean, scientific, reassuring): "${desc}". Return ONLY JSON: { "heroEyebrow":"<trust pill max 12 words e.g. NABL-accredited · Reports in 6 hours · Home collection>", "heroHeadlineLead":"<2-4 word line 1 e.g. Lab tests,>", "heroHeadlineEmph":"<1-3 word accent ending with period e.g. decoded.>", "heroSub":"<30-45 word sub mentioning test count, TAT, home collection>" }`,
     testCategories:({biz,desc})      => `For NABL-accredited diagnostic lab "${biz}": "${desc}". Return ONLY JSON: { "categoriesHeadline":"<8-12 word section headline>", "categoriesBody":"<25-35 word sub-copy>" } — produce only headline and body; the category cards are user-filled.`,
@@ -541,6 +552,7 @@ const TEMPLATE_NAMES = {
   'template-16': 'SEBI RIA / Investment Adviser',
   'template-17': 'Healthcare Clinic / Hospital',
   'template-18': 'Diagnostic Lab / Pathology',
+  'template-19': 'Loan DSA / Direct Sales Agent',
 };
 
 function buildChatSystemPrompt(context = {}) {
