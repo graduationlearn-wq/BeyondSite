@@ -26,6 +26,12 @@ RUN addgroup -g 1001 -S nodejs && adduser -S nodejs -u 1001
 COPY --from=builder /app/node_modules ./node_modules
 COPY --chown=nodejs:nodejs . .
 
+# Generate the static template previews — served by /template-previews/:slug
+# The hover-preview modal on the picker page renders these. If skipped, every
+# preview shows the "Preview not yet generated" placeholder in production.
+RUN cd templates && node preview-test.js && \
+    chown -R nodejs:nodejs /app/templates
+
 USER nodejs
 
 EXPOSE 3000

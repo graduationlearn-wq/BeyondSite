@@ -62,18 +62,18 @@
     <section class="stats-row">
       <div class="stat-card">
         <div class="stat-label">Total Paid</div>
-        <div class="stat-value"><span class="currency">$</span><span id="statPaid">126</span></div>
-        <div class="stat-meta">across 14 generations</div>
+        <div class="stat-value"><span class="currency">₹</span><span id="statPaid">0</span></div>
+        <div class="stat-meta" id="statPaidMeta">No generations yet</div>
       </div>
       <div class="stat-card">
         <div class="stat-label">Sites Generated</div>
-        <div class="stat-value" id="statSites">14</div>
-        <div class="stat-meta">last on May 12, 2026</div>
+        <div class="stat-value" id="statSites">0</div>
+        <div class="stat-meta" id="statSitesMeta">Build your first one</div>
       </div>
       <div class="stat-card">
         <div class="stat-label">Member Since</div>
-        <div class="stat-value">Apr 2026</div>
-        <div class="stat-meta">1 month ago</div>
+        <div class="stat-value" id="statMemberSince">—</div>
+        <div class="stat-meta" id="statMemberSinceMeta">Just joined</div>
       </div>
     </section>
 
@@ -81,7 +81,7 @@
     <section class="section">
       <div class="section-head">
         <h2 class="section-title">My Templates</h2>
-        <span class="section-meta">6 generated · click to re-open</span>
+        <span class="section-meta" id="templatesGridMeta">0 generated</span>
       </div>
       <div class="templates-grid" id="templatesGrid">
         <!-- Populated by JS -->
@@ -110,48 +110,14 @@
     <section class="section">
       <div class="section-head">
         <h2 class="section-title">Recent Activity</h2>
-        <span class="section-meta">Last 5</span>
+        <span class="section-meta" id="activityMeta">No activity yet</span>
       </div>
-      <div class="activity">
-        <div class="activity-row">
-          <div class="activity-icon">⚡</div>
-          <div>
-            <div class="activity-text"><strong>Generated NBFC website</strong></div>
-            <div class="activity-meta">Meridian Capital · 3 days ago</div>
-          </div>
-          <div class="activity-amount">$9.00</div>
-        </div>
-        <div class="activity-row">
-          <div class="activity-icon">⚡</div>
-          <div>
-            <div class="activity-text"><strong>Generated Restaurant website</strong></div>
-            <div class="activity-meta">Trattoria Verde · 6 days ago</div>
-          </div>
-          <div class="activity-amount">$9.00</div>
-        </div>
-        <div class="activity-row">
-          <div class="activity-icon">⚡</div>
-          <div>
-            <div class="activity-text"><strong>Generated Insurance Advisor website</strong></div>
-            <div class="activity-meta">Ananya Sharma & Associates · 11 days ago</div>
-          </div>
-          <div class="activity-amount">$9.00</div>
-        </div>
-        <div class="activity-row">
-          <div class="activity-icon">⚡</div>
-          <div>
-            <div class="activity-text"><strong>Generated Portfolio website</strong></div>
-            <div class="activity-meta">Aria Mehta · 18 days ago</div>
-          </div>
-          <div class="activity-amount">$9.00</div>
-        </div>
-        <div class="activity-row">
-          <div class="activity-icon">⚡</div>
-          <div>
-            <div class="activity-text"><strong>Generated InsurTech SaaS website</strong></div>
-            <div class="activity-meta">Stratus · 24 days ago</div>
-          </div>
-          <div class="activity-amount">$9.00</div>
+      <div class="activity" id="activityList">
+        <div class="activity-empty" style="padding:36px 24px;text-align:center;color:var(--text-soft,#94a3b8);border:1px dashed var(--border,rgba(255,255,255,.12));border-radius:14px">
+          <div style="font-size:1.4rem;margin-bottom:8px">⚡</div>
+          <div style="font-weight:600;color:var(--text,#e2e8f0);margin-bottom:4px">No activity yet</div>
+          <div style="font-size:.86rem">Generated websites and payments will appear here.</div>
+          <a href="/" class="btn btn-primary" style="margin-top:18px;display:inline-block">Build your first site →</a>
         </div>
       </div>
     </section>
@@ -215,29 +181,50 @@
       }
     })();
 
-    // ── MY TEMPLATES — sample data ────────────────────────────
-    const myTemplates = [
-      { name: 'Meridian Capital',          base: 'NBFC / Lender',          icon: '🏦', date: '3 days ago',   status: 'published' },
-      { name: 'Trattoria Verde',           base: 'Restaurant / Café',      icon: '🍽',  date: '6 days ago',   status: 'published' },
-      { name: 'Ananya Sharma & Associates', base: 'Insurance Advisor',      icon: '🛡',  date: '11 days ago',  status: 'published' },
-      { name: 'Aria Mehta',                base: 'Portfolio / Freelancer', icon: '✍',   date: '18 days ago',  status: 'published' },
-      { name: 'Stratus',                   base: 'InsurTech SaaS',         icon: '⚡',  date: '24 days ago',  status: 'published' },
-      { name: 'Untitled Project',          base: 'Restaurant / Café',      icon: '📝',  date: 'In progress', status: 'draft'     }
-    ];
+    // ── MY TEMPLATES — load from real session state ─────────────
+    // In-memory only for UAT — replace with `GET /api/drafts` when
+    // database persistence is wired in production. For now the user
+    // starts with an empty state and the grid stays empty until we
+    // surface real draft + download data.
+    const myTemplates = [];
+
     const grid = document.getElementById('templatesGrid');
-    grid.innerHTML = myTemplates.map(t => `
-      <article class="template-card">
-        <div class="template-thumb">${t.icon}</div>
-        <div class="template-info">
-          <h3 class="template-name">${t.name}</h3>
-          <p class="template-base">Based on ${t.base}</p>
-          <div class="template-foot">
-            <span class="template-date">⏱ ${t.date}</span>
-            <span class="template-status ${t.status}">${t.status === 'draft' ? 'Draft' : 'Published'}</span>
+    const gridMeta = document.getElementById('templatesGridMeta');
+
+    if (!myTemplates.length) {
+      grid.innerHTML = `
+        <article class="template-card template-card-empty" style="grid-column:1/-1;padding:36px 24px;text-align:center;border:1px dashed var(--border,rgba(255,255,255,.12));border-radius:14px">
+          <div style="font-size:1.8rem;margin-bottom:10px">🪄</div>
+          <h3 class="template-name" style="margin-bottom:6px">No templates yet</h3>
+          <p class="template-base" style="margin-bottom:18px">Pick a template, fill the form, preview, pay, and the result lands here.</p>
+          <a href="/" class="btn btn-primary">Start a new site →</a>
+        </article>
+      `;
+      gridMeta.textContent = '0 generated';
+    } else {
+      gridMeta.textContent = `${myTemplates.length} generated · click to re-open`;
+      grid.innerHTML = myTemplates.map(t => `
+        <article class="template-card">
+          <div class="template-thumb">${t.icon}</div>
+          <div class="template-info">
+            <h3 class="template-name">${t.name}</h3>
+            <p class="template-base">Based on ${t.base}</p>
+            <div class="template-foot">
+              <span class="template-date">⏱ ${t.date}</span>
+              <span class="template-status ${t.status}">${t.status === 'draft' ? 'Draft' : 'Published'}</span>
+            </div>
           </div>
-        </div>
-      </article>
-    `).join('');
+        </article>
+      `).join('');
+    }
+
+    // ── MEMBER SINCE — derive from login timestamp ──────────────
+    (function () {
+      const monthShort = ['Jan','Feb','Mar','Apr','May','Jun','Jul','Aug','Sep','Oct','Nov','Dec'];
+      const now = new Date();
+      const el = document.getElementById('statMemberSince');
+      if (el) el.textContent = `${monthShort[now.getMonth()]} ${now.getFullYear()}`;
+    })();
 
     // ── ACCOUNT ACTIONS ──────────────────────────────────────
     function logoutNow() {

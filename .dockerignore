@@ -45,5 +45,9 @@ coverage/
 # Relic config (not read by app)
 config.yaml
 
-# Generated preview files (regenerate with preview-test.js)
-templates/preview-*.html
+# Generated preview files — DON'T exclude them.
+# They are regenerated during the Docker build (see Dockerfile builder stage)
+# and required at runtime by the hover-preview modal at
+# `/template-previews/preview-:slug.html`. If excluded, every preview returns
+# the "Preview not yet generated" placeholder in production.
+# templates/preview-*.html
