@@ -114,8 +114,12 @@ describe('Server Routes', () => {
     });
 
     test('sanitizes HTML from input fields', async () => {
+      // Use a unique email so this test doesn't collide with the previous
+      // "returns success with valid registration" case (which already
+      // registered test@test.com). The duplicate-email guard in /api/register
+      // is correct behaviour; the test just needs its own address.
       const res = await request(app).post('/api/register').send({
-        firstName: '<script>alert(1)</script>', lastName: 'User', email: 'test@test.com', password: 'validpass123'
+        firstName: '<script>alert(1)</script>', lastName: 'User', email: 'sanitize-test@test.com', password: 'validpass123'
       });
       expect(res.status).toBe(200);
       expect(res.body.success).toBe(true);

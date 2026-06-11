@@ -7,21 +7,30 @@ try {
   logger = console;
 }
 
-try {
-  const { PrismaClient } = require('@prisma/client');
-  prisma = new PrismaClient({
-    log: [
-      { level: 'warn', emit: 'event' },
-      { level: 'error', emit: 'event' }
-    ]
-  });
+// Only instantiate the Prisma client when DATABASE_URL is actually set.
+// Otherwise every query path throws "Environment variable not found:
+// DATABASE_URL" at runtime, pollutes logs/CI output, and serves no purpose
+// — every consumer already guards with `if (prisma) { ... }` and falls back
+// to the in-memory mode used in tests + UAT.
+if (process.env.DATABASE_URL) {
+  try {
+    const { PrismaClient } = require('@prisma/client');
+    prisma = new PrismaClient({
+      log: [
+        { level: 'warn', emit: 'event' },
+        { level: 'error', emit: 'event' }
+      ]
+    });
 
-  if (prisma.$on) {
-    prisma.$on('warn', (e) => logger.warn('Prisma warning:', e));
-    prisma.$on('error', (e) => logger.error('Prisma error:', e));
+    if (prisma.$on) {
+      prisma.$on('warn', (e) => logger.warn('Prisma warning:', e));
+      prisma.$on('error', (e) => logger.error('Prisma error:', e));
+    }
+  } catch (e) {
+    logger.warn('Prisma client not available, database features disabled');
   }
-} catch (e) {
-  logger.warn('Prisma client not available, database features disabled');
+} else {
+  logger.warn('DATABASE_URL not set, running without database');
 }
 
 async function connectDatabase() {
